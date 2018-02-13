@@ -10,7 +10,69 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /*Jenny's changes from here */
     public Animation anim;
     PlayerState playerState;
+    int playerLevel;
 
+    List<ItemWeapons> Equipment = new List<ItemWeapons>();
+
+    public int Level
+    {
+        get
+        {
+            return playerLevel;
+        }
+
+        set
+        {
+            playerLevel = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "Player";
+        }
+    }
+
+    public int Health
+    {
+        get
+        {
+            return Health;
+        }
+
+        set
+        {
+            Health = value;
+        }
+    }
+
+    public float Attack
+    {
+        get
+        {
+            return Attack;
+        }
+
+        set
+        {
+            Attack = value;
+        }
+    }
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return MoveSpeed;
+        }
+
+        set
+        {
+            MoveSpeed = value;
+        }
+    }
 
     enum PlayerState
     {
@@ -27,12 +89,14 @@ public class PlayerManager : MonoBehaviour, StatsBase
     // Use this for initialization
     void Start ()
     {
-      
+        DebugPlayerStats();
 
-        Debug.Log("Name : " + GetName());
-        Debug.Log("playerHealth : " + GetHealth());
-        Debug.Log("Att : " + GetAttack());
-        Debug.Log("MoveSpeed : " + GetMoveSpeed());
+        //Test
+        Equipment.Add(new Sword());
+        foreach (ItemWeapons weapon in Equipment)
+        {
+            weapon.isEquipped = true;
+        }
     }
 	
 	// Update is called once per frame
@@ -43,6 +107,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         AnimationUpdate();
 
         // transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * rotateSpeed);
+        EquipmentUpdate();
     }
 
     /* Movement of Player - temporary */
@@ -53,13 +118,13 @@ public class PlayerManager : MonoBehaviour, StatsBase
         {
             playerState = PlayerState.WALK;
 
-            transform.position += transform.forward * GetMoveSpeed() * Time.deltaTime;
+            transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.S))
         {
             playerState = PlayerState.WALK;
 
-            transform.position -= transform.forward * GetMoveSpeed() * Time.deltaTime;
+            transform.position -= transform.forward * MoveSpeed * Time.deltaTime;
         }
 
         // Left / Right
@@ -67,13 +132,13 @@ public class PlayerManager : MonoBehaviour, StatsBase
         {
             playerState = PlayerState.WALK;
 
-            transform.position -= transform.right * GetMoveSpeed() * Time.deltaTime;
+            transform.position -= transform.right * MoveSpeed * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             playerState = PlayerState.WALK;
 
-            transform.position += transform.right * GetMoveSpeed() * Time.deltaTime;
+            transform.position += transform.right * MoveSpeed * Time.deltaTime;
         }
         else
         playerState = PlayerState.IDLE;
@@ -114,23 +179,23 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
     /* to here */
-    public string GetName()
+
+    void EquipmentUpdate()
     {
-        return "player";
+        foreach(ItemWeapons weapon in Equipment)
+        {
+            if (weapon.isEquipped)
+            {
+                Attack += weapon.Attack;
+            }
+        }
     }
 
-    public int GetHealth()
+    void DebugPlayerStats()
     {
-        return 100;
-    }
-
-    public float GetAttack()
-    {
-        return 10f; ;
-    }
-
-    public float GetMoveSpeed()
-    {
-        return 20f;
+        Debug.Log("Name : " + Name);
+        Debug.Log("playerHealth : " + Health);
+        Debug.Log("Att : " + Attack);
+        Debug.Log("MoveSpeed : " + MoveSpeed);
     }
 }
