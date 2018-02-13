@@ -10,7 +10,18 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /*Jenny's changes from here */
     public Animation anim;
     PlayerState playerState;
-    int playerLevel;
+
+    //Stats
+    [SerializeField]
+    int playerLevel = 1;
+    [SerializeField]
+    int health = 100;
+    [SerializeField]
+    float attack = 10;
+    [SerializeField]
+    float defense = 10;
+    [SerializeField]
+    float movespeed = 10;
 
     List<ItemWeapons> Equipment = new List<ItemWeapons>();
 
@@ -39,12 +50,12 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         get
         {
-            return Health;
+            return health;
         }
 
         set
         {
-            Health = value;
+            health = value;
         }
     }
 
@@ -52,12 +63,25 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         get
         {
-            return Attack;
+            return attack;
         }
 
         set
         {
-            Attack = value;
+            attack = value;
+        }
+    }
+
+    public float Defense
+    {
+        get
+        {
+            return defense;
+        }
+
+        set
+        {
+            defense = value;
         }
     }
 
@@ -65,12 +89,12 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         get
         {
-            return MoveSpeed;
+            return movespeed;
         }
 
         set
         {
-            MoveSpeed = value;
+            movespeed = value;
         }
     }
 
@@ -113,6 +137,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /* Movement of Player - temporary */
     private void Movement()
     {
+        playerState = PlayerState.IDLE;
+
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
@@ -120,7 +146,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             playerState = PlayerState.WALK;
 
@@ -128,20 +154,18 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
 
         // Left / Right
-        else if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             playerState = PlayerState.WALK;
 
             transform.position -= transform.right * MoveSpeed * Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             playerState = PlayerState.WALK;
 
             transform.position += transform.right * MoveSpeed * Time.deltaTime;
         }
-        else
-        playerState = PlayerState.IDLE;
     }
     /*Jenny's changes from here*/
     private void AnimationUpdate()
