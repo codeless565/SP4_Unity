@@ -5,13 +5,13 @@ using UnityEngine;
 /* Stats of Objects */
 public interface StatsBase
 {
-    int Level
-    {
-        get;set;
-    }
     string Name
     {
         get;
+    }
+    int Level
+    {
+        get;set;
     }
     int Health
     {
@@ -20,6 +20,10 @@ public interface StatsBase
     float Attack
     {
         get;set;
+    }
+    float Defense
+    {
+        get; set;
     }
     float MoveSpeed
     {
