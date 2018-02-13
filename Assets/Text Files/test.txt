@@ -1,5 +1,4 @@
 Hi, welcome to ***.
-this is a line
-trying. 
-test
-test
+Move using WASD keys.
+Left click to Hit Enemy. Try it!
+Press C to change weapons.
