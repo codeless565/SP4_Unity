@@ -2,6 +2,12 @@ Library/CurrentLayout.dwlt
 Assembly-CSharp.csproj
 Library/ScriptAssemblies/Assembly-CSharp.dll
 Library/ScriptAssemblies/Assembly-CSharp.dll.mdb
+<<<<<<< HEAD
 .vs/
 SP4.sln
 obj/
+=======
+Temp/
+obj/
+.vs/
+>>>>>>> 4ae36b53373fa4d3c1702ab3fe778e71edbf8595
