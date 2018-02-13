@@ -1,33 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Handles Behaviour of Player ( Movement, Attack, etc )
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviour, StatsBase
 {
-    /* Stats */
-   private string playerName;
-   private int playerHealth;
-   private float playerAtt;
-   private float playerDef;
-   private float moveSpeed;
-
     //private float rotateAngle;
 
 	// Use this for initialization
 	void Start ()
     {
-        moveSpeed = 5f;
-        playerName = "player";
-        playerHealth = 100;
-        playerAtt = 10f;
-        playerDef = 10f;
+      
 
-        Debug.Log("Name : " + playerName);
-        Debug.Log("playerHealth : " + playerHealth);
-        Debug.Log("Att : " + playerAtt);
-        Debug.Log("Def : " + playerDef);
-        Debug.Log("MoveSpeed : " + moveSpeed);
+        Debug.Log("Name : " + GetName());
+        Debug.Log("playerHealth : " + GetHealth());
+        Debug.Log("Att : " + GetAttack());
+        Debug.Log("MoveSpeed : " + GetMoveSpeed());
     }
 	
 	// Update is called once per frame
@@ -45,57 +34,41 @@ public class PlayerManager : MonoBehaviour
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
-            transform.position += transform.up * moveSpeed * Time.deltaTime;
+            transform.position += transform.forward * GetMoveSpeed() * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position -= transform.up * moveSpeed * Time.deltaTime;
+            transform.position -= transform.forward * GetMoveSpeed() * Time.deltaTime;
         }
 
         // Left / Right
         if (Input.GetKey(KeyCode.A))
         {
-            transform.position -= transform.right * moveSpeed * Time.deltaTime;
+            transform.position -= transform.right * GetMoveSpeed() * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.position += transform.right * moveSpeed * Time.deltaTime;
+            transform.position += transform.right * GetMoveSpeed() * Time.deltaTime;
         }
     }
 
-    /* Setters */
-    public void SetPlayerName(string _name)
+    public string GetName()
     {
-        playerName = _name;
-    }
-    public void SetPlayerHealth(int _health)
-    {
-        playerHealth = _health;
-    }
-    public void SetPlayerAttack(float _att)
-    {
-        playerAtt = _att;
-    }
-    public void SetPlayerDefense(float _def)
-    {
-        playerDef = _def;
+        return "player";
     }
 
-    /* Getters */
-    public string GetPlayerName()
+    public int GetHealth()
     {
-        return playerName;
+        return 100;
     }
-    public int GetPlayerHealth()
+
+    public float GetAttack()
     {
-        return playerHealth;
+        return 10f; ;
     }
-    public float GetPlayerAttack()
+
+    public float GetMoveSpeed()
     {
-        return playerAtt;
-    }
-    public float GetPlayerDefense()
-    {
-        return playerDef;
+        return 20f;
     }
 }
