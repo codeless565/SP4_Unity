@@ -182,10 +182,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     private void ChangeWeapon()
     {
-        if(Input.GetKey(KeyCode.C))
-        {
-            Equipment =
-        }
     }
 
     private void AnimationUpdate()
