@@ -19,8 +19,7 @@ public class PlayerStatsMenu : MonoBehaviour
         //                     "Att : " + PlayerManager.GetPlayerAttack() + "\n" + 
         //                     "Def : " + PlayerManager.GetPlayerDefense() + "\n";
 
-        sampleText.text = "Name : " + GetComponent<PlayerManager>().GetPlayerName() + "\n" +
-                           "Health : " + GetComponent<PlayerManager>().GetPlayerHealth() + "\n";
+        sampleText.text = "Name : " + GetComponent<PlayerManager>().GetName() + "\n";
     }
 
 
