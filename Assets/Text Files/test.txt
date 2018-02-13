@@ -2,3 +2,5 @@ Hi, welcome to ***.
 Move using WASD keys.
 Left click to Hit Enemy. Try it!
 Press C to change weapons.
+Press I when near an item or NPC to intereact.
+You are ready now. Move on.

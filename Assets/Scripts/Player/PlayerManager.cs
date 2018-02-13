@@ -10,6 +10,19 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /*Jenny's changes from here */
     public Animation anim;
     PlayerState playerState;
+    public bool canMove;
+
+    enum PlayerState
+    {
+        IDLE,
+        WALK,
+        SWISH, //attack1
+        DOUBLE, //attack2
+        HACK, //attack3
+        HIT,
+        DIE,
+    };
+    /*to here*/
 
     //Stats
     [SerializeField]
@@ -98,17 +111,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
 
-    enum PlayerState
-    {
-        IDLE,
-        WALK,
-        SWISH, //attack1
-        DOUBLE, //attack2
-        HACK, //attack3
-        HIT,
-        DIE,
-    };
-    /*to here*/
 
     // Use this for initialization
     void Start ()
@@ -126,8 +128,16 @@ public class PlayerManager : MonoBehaviour, StatsBase
 	// Update is called once per frame
 	void Update ()
     {
-        Movement();
+        if (playerState == PlayerState.IDLE)
+        {
+            anim.Play("Idle_1");
+        } //Player's default animation
 
+        if (!canMove)
+            return;
+
+        Movement();
+        PlayerAttacks();
         AnimationUpdate();
 
         // transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * rotateSpeed);
@@ -137,34 +147,33 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /* Movement of Player - temporary */
     private void Movement()
     {
-        playerState = PlayerState.IDLE;
 
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
             playerState = PlayerState.WALK;
-
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
             playerState = PlayerState.WALK;
-
             transform.position -= transform.forward * MoveSpeed * Time.deltaTime;
         }
 
         // Left / Right
-        if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A))
         {
             playerState = PlayerState.WALK;
-
             transform.position -= transform.right * MoveSpeed * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.D))
+       else  if (Input.GetKey(KeyCode.D))
         {
             playerState = PlayerState.WALK;
-
             transform.position += transform.right * MoveSpeed * Time.deltaTime;
+        }
+        else
+        {
+            playerState = PlayerState.IDLE;
         }
         
     }
@@ -172,11 +181,11 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     private void PlayerAttacks()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
-            playerState = PlayerState.HIT;
+            playerState = PlayerState.SWISH;
         }
-        else
+        else if(playerState != PlayerState.WALK)
             playerState = PlayerState.IDLE;
     }
 
@@ -184,7 +193,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         if(Input.GetKey(KeyCode.C))
         {
-            Equipment =
+            
         }
     }
 
