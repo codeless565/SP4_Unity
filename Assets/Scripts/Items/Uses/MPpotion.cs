@@ -4,9 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MPpotion : MonoBehaviour, ItemBase
+public class MPpotion : MonoBehaviour, ItemUses
 {
     Image ItemImage;
+    bool used;
+
+    public bool isUsed
+    {
+        get
+        {
+            return used;
+        }
+
+        set
+        {
+            used = value;
+        }
+    }
 
     public int getCost()
     {
@@ -18,19 +32,70 @@ public class MPpotion : MonoBehaviour, ItemBase
         return ItemImage;
     }
 
-    public string getName()
-    {
-        return "MPpotion";
-    }
-
     public string getType()
     {
         return "Uses";
     }
 
-    public bool Owned()
+
+
+    public int Level
     {
-        Debug.Log("MPpotion Owned not done");
-        return true;
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+            Level = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "MPpotion";
+        }
+    }
+
+    public int Health
+    {
+        get
+        {
+            return Health;
+        }
+
+        set
+        {
+            Health = value;
+        }
+    }
+
+    public float Attack
+    {
+        get
+        {
+            return Attack;
+        }
+
+        set
+        {
+            Attack = value;
+        }
+    }
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return MoveSpeed;
+        }
+
+        set
+        {
+            MoveSpeed = value;
+        }
     }
 }
