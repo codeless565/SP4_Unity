@@ -4,10 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sword : ItemWeapons
+public class Sword : MonoBehaviour,ItemWeapons
 {
-    Image ItemImage;
+    Sprite ItemImage;
     bool equipped;
+
+    public Sword()
+    {
+        ItemImage = GameObject.Find("WeaponObjectHolder").GetComponent<WeaponObjectHolder>().Sword;
+    }
 
     public bool isEquipped
     {
@@ -27,7 +32,7 @@ public class Sword : ItemWeapons
         return 1000;
     }
 
-    public Image getItemImage()
+    public Sprite getItemImage()
     {
         return ItemImage;
     }

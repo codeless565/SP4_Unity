@@ -113,7 +113,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
     // Use this for initialization
     void Start ()
     {
-        DebugPlayerStats();
+        //DebugPlayerStats();
 
         //Test
         Equipment.Add(new Sword());

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public interface ItemBase : StatsBase
 {
-    Image getItemImage();
+    Sprite getItemImage();
 
     string getType();
     

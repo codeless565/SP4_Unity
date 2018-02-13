@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HPpotion : MonoBehaviour, ItemUses
 {
-    Image ItemImage;
+    Sprite ItemImage;
     bool used;
 
     public bool isUsed
@@ -95,7 +95,7 @@ public class HPpotion : MonoBehaviour, ItemUses
         }
     }
 
-    public Image getItemImage()
+    public Sprite getItemImage()
     {
         return ItemImage;
     }

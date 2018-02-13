@@ -30,18 +30,22 @@ public class ItemManager
     // Use this for initialization
     void Awake()
     {
-        WeaponList.Add(Sword);
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
 
 
         UsesList.Add(HPpotion);
         UsesList.Add(MPpotion);
-    }
-
-    public ItemWeapons AddingWeapon(ItemWeapons weapon)
-    {
-        if (WeaponList.Contains(weapon))
-            return weapon;
-
-        return null;
     }
 }
