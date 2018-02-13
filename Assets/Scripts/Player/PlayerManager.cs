@@ -184,7 +184,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         if(Input.GetKey(KeyCode.C))
         {
-            Equipment =
+            
         }
     }
 
