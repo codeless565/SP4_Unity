@@ -3,27 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour {
+    /* TODO
+     * Spawn Check with other structures
+     * spawn exit last and check with all existing structures
+     */
 
-	// Use this for initialization
-	void Start () {
-        GameObject GameLevel = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().GameLevel;
-        GameObject Floor  = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().Floor;
-    
-        GameObject Wall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().StoneWall;
-        GameObject Pillar = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().StonePillar;
+    private GameObject GameLevel;
+    private GameObject Floor;
+
+    float m_FloorGridSize;
+    float m_FloorGridOffSet;
+
+    // Use this for initialization
+    void Start () {
+        GameLevel = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().GameLevel;
+        Floor     = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().Floor;
 
         //Size of grid 10x10
-        float FloorGridSize = Floor.transform.localScale.x * 0.1f;
-        float FloorGridOffSet = Floor.transform.localScale.x * 0.05f;
+        m_FloorGridSize   = Floor.transform.localScale.x * 0.1f;
+        m_FloorGridOffSet = Floor.transform.localScale.x * 0.05f;
 
-        ////Pillars
-        //for (int i = 0; i < 10; ++i)
-        //{
-        //    int posX = (int)((Random.value * 0.8f) * 10);
-        //    int posY = (int)((Random.value * 0.8f) * 10);
-        //    Vector3 pos = new Vector3(posX * FloorGridSize, 0, posY * FloorGridSize);
-        //    Instantiate(Pillar, pos, transform.rotation, GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
-        //}
+        GenerateWalls();
+        GenerateExit_Item();
+    }
+
+    // Update is called once per frame
+    void Update () {
+		
+	}
+        
+    private void GenerateWalls()
+    {
+        GameObject Wall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().StoneWall;
 
         //Grid Occupancies
         bool[] gridX_occupied = new bool[(int)(Floor.transform.localScale.x * 0.1)];
@@ -45,7 +56,7 @@ public class LevelGenerator : MonoBehaviour {
             gridX_occupied[posX] = true;
             gridY_occupied[posY] = true;
 
-            Vector3 pos = new Vector3(posX * FloorGridSize + FloorGridOffSet, 0, posY * FloorGridSize);
+            Vector3 pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize);
             Instantiate(Wall, pos, transform.rotation, GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
         }
 
@@ -65,18 +76,62 @@ public class LevelGenerator : MonoBehaviour {
             gridX_occupied[posX] = true;
             gridY_occupied[posY] = true;
 
-            Vector3 pos = new Vector3(posX * FloorGridSize, 0, posY * FloorGridSize + FloorGridOffSet);
+            Vector3 pos = new Vector3(posX * m_FloorGridSize, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
             Instantiate(Wall, pos, Quaternion.Euler(new Vector3(0, 90, 0)), GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    private void GenerateExit_Item()
+    {
 
-    /* TODO
-     * Spawn Check with other structures
-     * spawn exit last and check with all existing structures
-     */
+        //Grid Occupancies
+        bool[] gridX_occupied = new bool[(int)(Floor.transform.localScale.x * 0.1)];
+        bool[] gridY_occupied = new bool[(int)(Floor.transform.localScale.x * 0.1)];
+
+        //Exit
+        GameObject Exit = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().Exit;
+        for (int i = 0; i < 1; ++i)
+        {
+            int safetyCount = 0;
+            int posX;
+            int posY;
+            do
+            {
+                ++safetyCount;
+                posX = (int)(Random.value * 10);
+                posY = (int)(Random.value * 10);
+            } while ((gridX_occupied[posX] && gridY_occupied[posY]) && safetyCount < 50);
+
+            gridX_occupied[posX] = true;
+            gridY_occupied[posY] = true;
+
+            Vector3 pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
+            Instantiate(Exit, pos, Quaternion.Euler(new Vector3(0, 90, 0)), GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
+        }
+
+        //Chests
+        GameObject Chest = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().WoodenChest;
+
+        int ChestSpawns = (int)(Random.value * 10);
+
+        for (int i = 0; i < ChestSpawns; ++i)
+        {
+            int safetyCount = 0;
+            int posX;
+            int posY;
+            do
+            {
+                ++safetyCount;
+                posX = (int)(Random.value * 10);
+                posY = (int)(Random.value * 10);
+            } while ((gridX_occupied[posX] && gridY_occupied[posY]) && safetyCount < 50);
+
+            gridX_occupied[posX] = true;
+            gridY_occupied[posY] = true;
+
+            Vector3 pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
+            Instantiate(Chest, pos, Quaternion.Euler(new Vector3(0, 180, 0)), GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
+        }
+
+    }
 }
