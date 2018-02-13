@@ -86,6 +86,19 @@ public class MPpotion : MonoBehaviour, ItemUses
         }
     }
 
+    public float Defense
+    {
+        get
+        {
+            return Defense;
+        }
+
+        set
+        {
+            Defense = value;
+        }
+    }
+
     public float MoveSpeed
     {
         get

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sword : MonoBehaviour , ItemWeapons
+public class Sword : ItemWeapons
 {
     Image ItemImage;
     bool equipped;
@@ -84,6 +84,19 @@ public class Sword : MonoBehaviour , ItemWeapons
         }
     }
 
+    public float Defense
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+            Defense = value;
+        }
+    }
+
     public float MoveSpeed
     {
         get
@@ -96,4 +109,5 @@ public class Sword : MonoBehaviour , ItemWeapons
             MoveSpeed = value;
         }
     }
+
 }
