@@ -4,7 +4,22 @@ using UnityEngine;
 
 public class ItemManager
 {
-    public List<ItemBase> items = new List<ItemBase>();
+    // Singleton
+    private static ItemManager instance;
+    private ItemManager() { Awake(); }
+    public static ItemManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new ItemManager();
+            }
+            return instance;
+        }
+    }
+
+
     public List<ItemWeapons> WeaponList = new List<ItemWeapons>();
     public List<ItemUses> UsesList = new List<ItemUses>();
 
