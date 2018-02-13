@@ -34,7 +34,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
     public void TutorialButtonPressed()
     {
         // Transit to LoadingScreen
-        //StartCoroutine(LoadingScreenToSceneTutorial());
+        StartCoroutine(LoadingScreenToSceneTutorial());
     }
 
     // When Back Button is Pressed.
@@ -68,23 +68,23 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
     }
 
     // Loading to SceneTutorial
-    //IEnumerator LoadingScreenToSceneTutorial()
-    //{
-    //    LoadingScreen.SetActive(true);
-    //    async = SceneManager.LoadSceneAsync("SceneTutorial");
-    //    async.allowSceneActivation = false;
+    IEnumerator LoadingScreenToSceneTutorial()
+    {
+        LoadingScreen.SetActive(true);
+        async = SceneManager.LoadSceneAsync("SceneTutorial");
+        async.allowSceneActivation = false;
 
-    //    // If SceneGame is not loaded fully.
-    //    while (async.isDone == false)
-    //    {
-    //        m_progressBar.value = async.progress;
-    //        // When GameScene is loaded.
-    //        if (async.progress == 0.9f)
-    //        {
-    //            m_progressBar.value = 1f;
-    //            async.allowSceneActivation = true;
-    //        }
-    //        yield return null;
-    //    }
-    //}
+        // If SceneGame is not loaded fully.
+        while (async.isDone == false)
+        {
+            m_progressBar.value = async.progress;
+            // When GameScene is loaded.
+            if (async.progress == 0.9f)
+            {
+                m_progressBar.value = 1f;
+                async.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+    }
 }

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public interface ItemBase
+public interface ItemBase : StatsBase
 {
     Image getItemImage();
 
-    string getName();
     string getType();
     
     int getCost();
-
-    bool Owned();
 }
 
 //  Item Types

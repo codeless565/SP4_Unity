@@ -4,9 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sword : MonoBehaviour , ItemBase
+public class Sword : MonoBehaviour , ItemWeapons
 {
     Image ItemImage;
+    bool equipped;
+
+    public bool isEquipped
+    {
+        get
+        {
+            return equipped;
+        }
+
+        set
+        {
+            equipped = value;
+        }
+    }
 
     public int getCost()
     {
@@ -18,19 +32,68 @@ public class Sword : MonoBehaviour , ItemBase
         return ItemImage;
     }
 
-    public string getName()
-    {
-        return "Sword";
-    }
-
     public string getType()
     {
         return "Weapons";
     }
 
-    public bool Owned()
+    public int Level
     {
-        Debug.Log("Sword Owned not done");
-        return true;
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+            Level = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "Sword";
+        }
+    }
+
+    public int Health
+    {
+        get
+        {
+            return Health;
+        }
+
+        set
+        {
+            Health = value;
+        }
+    }
+
+    public float Attack
+    {
+        get
+        {
+            return 100;
+        }
+
+        set
+        {
+            Attack = value;
+        }
+    }
+
+    public float MoveSpeed
+    {
+        get
+        {
+            return MoveSpeed;
+        }
+
+        set
+        {
+            MoveSpeed = value;
+        }
     }
 }
