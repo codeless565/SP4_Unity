@@ -7,9 +7,25 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour, StatsBase
 {
     //private float rotateAngle;
+    /*Jenny's changes from here */
+    public Animation anim;
+    PlayerState playerState;
 
-	// Use this for initialization
-	void Start ()
+
+    enum PlayerState
+    {
+        IDLE,
+        WALK,
+        SWISH, //attack1
+        DOUBLE, //attack2
+        HACK, //attack3
+        HIT,
+        DIE,
+    };
+    /*to here*/
+
+    // Use this for initialization
+    void Start ()
     {
       
 
@@ -23,7 +39,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
 	void Update ()
     {
         Movement();
-       
+
+        AnimationUpdate();
 
         // transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * rotateSpeed);
     }
@@ -34,24 +51,69 @@ public class PlayerManager : MonoBehaviour, StatsBase
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
+            playerState = PlayerState.WALK;
+
             transform.position += transform.forward * GetMoveSpeed() * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
+            playerState = PlayerState.WALK;
+
             transform.position -= transform.forward * GetMoveSpeed() * Time.deltaTime;
         }
 
         // Left / Right
-        if (Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A))
         {
+            playerState = PlayerState.WALK;
+
             transform.position -= transform.right * GetMoveSpeed() * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
+            playerState = PlayerState.WALK;
+
             transform.position += transform.right * GetMoveSpeed() * Time.deltaTime;
         }
+        else
+        playerState = PlayerState.IDLE;
     }
+    /*Jenny's changes from here*/
+    private void AnimationUpdate()
+    {
+        switch (playerState)
+        {
+            case PlayerState.IDLE:
+                anim.Play("Idle_1");
+                break;
 
+            case PlayerState.WALK:
+                anim.Play("RunCycle");
+                break;
+
+            case PlayerState.SWISH:
+                anim.Play("Attack_1");
+                break;
+
+            case PlayerState.DOUBLE:
+                anim.Play("Attack_2");
+                break;
+
+            case PlayerState.HACK:
+                anim.Play("Attack_3");
+                break;
+
+            case PlayerState.HIT:
+                anim.Play("GetHit");
+                break;
+
+            case PlayerState.DIE:
+                anim.Play("Die");
+                break;
+
+        }
+    }
+    /* to here */
     public string GetName()
     {
         return "player";
