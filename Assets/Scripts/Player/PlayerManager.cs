@@ -6,12 +6,8 @@ using UnityEngine;
 // Handles Behaviour of Player ( Movement, Attack, etc )
 public class PlayerManager : MonoBehaviour, StatsBase
 {
-    //private float rotateAngle;
-    /*Jenny's changes from here */
+    /* Animation */
     public Animation anim;
-    PlayerState playerState;
-    public bool canMove;
-
     enum PlayerState
     {
         IDLE,
@@ -22,9 +18,9 @@ public class PlayerManager : MonoBehaviour, StatsBase
         HIT,
         DIE,
     };
-    /*to here*/
+    PlayerState playerState;
 
-    //Stats
+    /* Stats */
     [SerializeField]
     int playerLevel = 1;
     [SerializeField]
@@ -36,8 +32,12 @@ public class PlayerManager : MonoBehaviour, StatsBase
     [SerializeField]
     float movespeed = 10;
 
+    public bool canMove;
+
+    /* List storing Player weapons */
     List<ItemWeapons> Equipment = new List<ItemWeapons>();
 
+    /* Setters and Getters */
     public int Level
     {
         get
@@ -111,11 +111,11 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
 
-
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         //DebugPlayerStats();
+        Cursor.lockState = CursorLockMode.Locked;
 
         //Test
         Equipment.Add(new Sword());
@@ -124,9 +124,9 @@ public class PlayerManager : MonoBehaviour, StatsBase
             weapon.isEquipped = true;
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         if (playerState == PlayerState.IDLE)
         {
@@ -137,26 +137,28 @@ public class PlayerManager : MonoBehaviour, StatsBase
             return;
 
         Movement();
+        UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
-
-        // transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * rotateSpeed);
         EquipmentUpdate();
     }
 
-    /* Movement of Player - temporary */
+    /* Movement of Player */
     private void Movement()
     {
-
-        // Up / Down
+        //Up / Down
         if (Input.GetKey(KeyCode.W))
         {
             playerState = PlayerState.WALK;
+            //Vector3 movement = new Vector3(0.0f, 0.0f, transform.position.z);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), /*0.15F*/ 1);
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.S))
         {
             playerState = PlayerState.WALK;
+            //Vector3 movement = new Vector3(0.0f, 0.0f, -transform.position.z);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement),/* 0.15F*/ 1);
             transform.position -= transform.forward * MoveSpeed * Time.deltaTime;
         }
 
@@ -164,43 +166,67 @@ public class PlayerManager : MonoBehaviour, StatsBase
         else if (Input.GetKey(KeyCode.A))
         {
             playerState = PlayerState.WALK;
-            transform.position -= transform.right * MoveSpeed * Time.deltaTime;
+
+            /* 1) Camera Fixed, Player Rotates */
+            //Vector3 movement = new Vector3(-transform.position.x, 0.0f, 0.0f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), /*0.15F*/ 1);
+            //transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+
+            /* 2) Normal Rotation with Camera */
+            transform.Rotate(new Vector3(0, -90 * Time.deltaTime, 0));
         }
-       else  if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             playerState = PlayerState.WALK;
-            transform.position += transform.right * MoveSpeed * Time.deltaTime;
+
+            /* 1) Camera Fixed, Player Rotates */
+            //Vector3 movement = new Vector3(transform.position.x, 0.0f, 0.0f);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), /*0.15F*/ 1);
+            //transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+
+            /* 2) Normal Rotation with Camera */
+            transform.Rotate(new Vector3(0, 90 * Time.deltaTime, 0));
         }
+
         else
         {
             playerState = PlayerState.IDLE;
         }
-        
-    }
-    /*Jenny's changes from here*/
 
+        /* 3) Rotate Camera By Mouse */
+        transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 120.0F);
+    }
+
+    /* Attack of Player */
     private void PlayerAttacks()
     {
         if (Input.GetMouseButton(0))
         {
             playerState = PlayerState.SWISH;
         }
-        else if(playerState != PlayerState.WALK)
+        else if (playerState != PlayerState.WALK)
             playerState = PlayerState.IDLE;
     }
 
-    private void ChangeWeapon()
+    /* Unlocking Mouse from Screen */
+    static bool isPressed = false;
+    private void UnlockCursor()
     {
-        if(Input.GetKey(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.R) && !isPressed)
         {
-<<<<<<< HEAD
-        
-=======
-            
->>>>>>> a99bfbba7ab7cb5e0c1600226e44874fab479fbb
+            isPressed = true;
+            if (Cursor.lockState.Equals(CursorLockMode.Locked))
+                Cursor.lockState = CursorLockMode.None;
+        }
+        else if (Input.GetKeyDown(KeyCode.R) && isPressed)
+        {
+            isPressed = false;
+            if (Cursor.lockState.Equals(CursorLockMode.None))
+                Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
+    /* Updates in Animation HERE */
     private void AnimationUpdate()
     {
         switch (playerState)
@@ -232,14 +258,13 @@ public class PlayerManager : MonoBehaviour, StatsBase
             case PlayerState.DIE:
                 anim.Play("Die");
                 break;
-
         }
     }
-    /* to here */
 
+    /* Updates in Equipments HERE */
     void EquipmentUpdate()
     {
-        foreach(ItemWeapons weapon in Equipment)
+        foreach (ItemWeapons weapon in Equipment)
         {
             if (weapon.isEquipped)
             {
@@ -248,6 +273,15 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
 
+    /* Change Weapons */
+    private void ChangeWeapon()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+        }
+    }
+
+    /* Print Debug Information */
     void DebugPlayerStats()
     {
         Debug.Log("Name : " + Name);
