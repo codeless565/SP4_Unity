@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MPpotion : MonoBehaviour, ItemUses
 {
-    Image ItemImage;
+    Sprite ItemImage;
     bool used;
 
     public bool isUsed
@@ -27,7 +27,7 @@ public class MPpotion : MonoBehaviour, ItemUses
         return 500;
     }
 
-    public Image getItemImage()
+    public Sprite getItemImage()
     {
         return ItemImage;
     }

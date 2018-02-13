@@ -4,7 +4,22 @@ using UnityEngine;
 
 public class ItemManager
 {
-    public List<ItemBase> items = new List<ItemBase>();
+    // Singleton
+    private static ItemManager instance;
+    private ItemManager() { Awake(); }
+    public static ItemManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new ItemManager();
+            }
+            return instance;
+        }
+    }
+
+
     public List<ItemWeapons> WeaponList = new List<ItemWeapons>();
     public List<ItemUses> UsesList = new List<ItemUses>();
 
@@ -15,18 +30,22 @@ public class ItemManager
     // Use this for initialization
     void Awake()
     {
-        WeaponList.Add(Sword);
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
+        WeaponList.Add(new Sword());
 
 
         UsesList.Add(HPpotion);
         UsesList.Add(MPpotion);
-    }
-
-    public ItemWeapons AddingWeapon(ItemWeapons weapon)
-    {
-        if (WeaponList.Contains(weapon))
-            return weapon;
-
-        return null;
     }
 }

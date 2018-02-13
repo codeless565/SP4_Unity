@@ -17,11 +17,19 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
 
     AsyncOperation async;
 
+    // Timer Delay to finish playing sound effect
+    private float m_delayTime;
+
     // Use this for initialization
-    void Start () { }
+    void Start ()
+    {
+        m_delayTime = 0.25f;
+    }
 	
 	// Update is called once per frame
-	void Update () { }
+	void Update ()
+    {
+    }
 
     // When Play Button is Pressed.
     public void PlayButtonPressed()
@@ -49,9 +57,13 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
     // Loading to SceneGame.
     IEnumerator LoadingScreenToSceneGame()
     {
+        // Wait for sound effects to play finish first.
+        yield return new WaitForSecondsRealtime(m_delayTime);
+
         LoadingScreen.SetActive(true);
         async = SceneManager.LoadSceneAsync("SceneGame");
         async.allowSceneActivation = false;
+
 
         // If SceneGame is not loaded fully.
         while (async.isDone == false)
@@ -74,11 +86,11 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
         async = SceneManager.LoadSceneAsync("SceneTutorial");
         async.allowSceneActivation = false;
 
-        // If SceneGame is not loaded fully.
+        // If SceneTutorial is not loaded fully.
         while (async.isDone == false)
         {
             m_progressBar.value = async.progress;
-            // When GameScene is loaded.
+            // When SceneTutorial is loaded.
             if (async.progress == 0.9f)
             {
                 m_progressBar.value = 1f;
