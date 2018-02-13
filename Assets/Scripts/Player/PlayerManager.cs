@@ -6,11 +6,11 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     /* Stats */
-   static private string playerName;
-   static private int playerHealth;
-   static private float playerAtt;
-   static private float playerDef;
-   static private float moveSpeed;
+   private string playerName;
+   private int playerHealth;
+   private float playerAtt;
+   private float playerDef;
+   private float moveSpeed;
 
     //private float rotateAngle;
 
@@ -64,37 +64,37 @@ public class PlayerManager : MonoBehaviour
     }
 
     /* Setters */
-    static public void SetPlayerName(string _name)
+    public void SetPlayerName(string _name)
     {
         playerName = _name;
     }
-    static public void SetPlayerHealth(int _health)
+    public void SetPlayerHealth(int _health)
     {
         playerHealth = _health;
     }
-    static public void SetPlayerAttack(float _att)
+    public void SetPlayerAttack(float _att)
     {
         playerAtt = _att;
     }
-    static public void SetPlayerDefense(float _def)
+    public void SetPlayerDefense(float _def)
     {
         playerDef = _def;
     }
 
     /* Getters */
-    static public string GetPlayerName()
+    public string GetPlayerName()
     {
         return playerName;
     }
-    static public int GetPlayerHealth()
+    public int GetPlayerHealth()
     {
         return playerHealth;
     }
-    static public float GetPlayerAttack()
+    public float GetPlayerAttack()
     {
         return playerAtt;
     }
-    static public float GetPlayerDefense()
+    public float GetPlayerDefense()
     {
         return playerDef;
     }

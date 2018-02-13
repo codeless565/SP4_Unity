@@ -14,10 +14,13 @@ public class PlayerStatsMenu : MonoBehaviour
 
     void SetPlayerStats()
     {
-        sampleText.text = "Name : " + PlayerManager.GetPlayerName() + "\n" + 
-                            "Health : " + PlayerManager.GetPlayerHealth() + "\n" + 
-                             "Att : " + PlayerManager.GetPlayerAttack() + "\n" + 
-                             "Def : " + PlayerManager.GetPlayerDefense() + "\n";
+        //sampleText.text = "Name : " + PlayerManager.GetPlayerName() + "\n" + 
+        //                    "Health : " + PlayerManager.GetPlayerHealth() + "\n" + 
+        //                     "Att : " + PlayerManager.GetPlayerAttack() + "\n" + 
+        //                     "Def : " + PlayerManager.GetPlayerDefense() + "\n";
+
+        sampleText.text = "Name : " + GetComponent<PlayerManager>().GetPlayerName() + "\n" +
+                           "Health : " + GetComponent<PlayerManager>().GetPlayerHealth() + "\n";
     }
 
 
