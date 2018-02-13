@@ -166,8 +166,28 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
             transform.position += transform.right * MoveSpeed * Time.deltaTime;
         }
+        
     }
     /*Jenny's changes from here*/
+
+    private void PlayerAttacks()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            playerState = PlayerState.HIT;
+        }
+        else
+            playerState = PlayerState.IDLE;
+    }
+
+    private void ChangeWeapon()
+    {
+        if(Input.GetKey(KeyCode.C))
+        {
+            Equipment =
+        }
+    }
+
     private void AnimationUpdate()
     {
         switch (playerState)
