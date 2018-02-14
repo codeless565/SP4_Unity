@@ -9,6 +9,13 @@ public class HPpotion : MonoBehaviour, ItemUses
     Sprite ItemImage;
     bool used;
 
+    public HPpotion()
+    {
+        ItemImage = GameObject.FindGameObjectWithTag("UsesObjectHolder").GetComponent<UsesObjectHolder>().HPpotion;
+    }
+
+
+
     public bool isUsed
     {
         get

@@ -1,7 +1,11 @@
 fileFormatVersion: 2
 guid: 6081b22ea26e90f42a086f5d0f012568
 folderAsset: yes
+<<<<<<< HEAD:Assets/Prefabs/Enemies/Skeleton/Ani.meta
 timeCreated: 1518574866
+=======
+timeCreated: 1518578364
+>>>>>>> 59e83f787718bddfc1bfe7cbba62ab784efe6c8b:Assets/Interface.meta
 licenseType: Pro
 DefaultImporter:
   userData: 

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class TextBoxManager : MonoBehaviour{
+public class TextBoxManager : MonoBehaviour
+{
 
     public GameObject textBox;
     public Text theText;
@@ -22,26 +23,13 @@ public class TextBoxManager : MonoBehaviour{
     public bool stopPlayerMovement;
 
     //Typewriter
-    private bool isTyping = false;
-    private bool cancelTyping;
+    public bool isTyping = false;
+    public bool cancelTyping;
     public float typeSpeed;
-
-    //For tutorial
-    bool tut;
-    private bool movedW, movedA, movedS, movedD;
 
     // Use this for initialization
     void Start()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name == "SceneTutorial")
-        {
-            tut = true;
-            movedW = false;
-            movedA = false;
-            movedS = false;
-            movedD = false;
-        }
 
         player = FindObjectOfType<PlayerManager>();
         isActive = true;
@@ -53,13 +41,13 @@ public class TextBoxManager : MonoBehaviour{
             textLines = (textfile.text.Split('\n'));
         }
 
-        if(endAtLine == 0)
+        if (endAtLine == 0)
         {
             endAtLine = textLines.Length - 1;
 
         }
 
-        if(isActive)
+        if (isActive)
         {
             EnableTextBox();
         }
@@ -68,10 +56,10 @@ public class TextBoxManager : MonoBehaviour{
             DisableTextBox();
         }
     }
-    
+
     void Update()
     {
-        if(!isActive)
+        if (!isActive)
         {
             return;
         }
@@ -79,9 +67,9 @@ public class TextBoxManager : MonoBehaviour{
         //show text
         //theText.text = textLines[currentLine];
 
-        if(Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            if(!isTyping)
+            if (!isTyping)
             {
                 currentLine += 1;
 
@@ -91,29 +79,25 @@ public class TextBoxManager : MonoBehaviour{
                 }
                 else
                 {
-                    if(tut)
-                    {
-                        TutorialUpdate();
-                    }
-                    else
                     //show text letter by letter
                     StartCoroutine(TypeText(textLines[currentLine]));
                 }
             }
-            else if(isTyping && !cancelTyping) //interrupts typing
+            else if (isTyping && !cancelTyping) //interrupts typing
             {
                 cancelTyping = true;
             }
         }
+
     }
 
-    private IEnumerator TypeText(string lineOfText)
+    public IEnumerator TypeText(string lineOfText)
     {
         int letter = 0;
         theText.text = "";
         isTyping = true;
         cancelTyping = false;
-        while(isTyping && !cancelTyping && letter < lineOfText.Length - 1)
+        while (isTyping && !cancelTyping && letter < lineOfText.Length - 1)
         {
             theText.text += lineOfText[letter];
             letter += 1;
@@ -129,9 +113,8 @@ public class TextBoxManager : MonoBehaviour{
     public void EnableTextBox()
     {
         textBox.SetActive(true);
-
         //Player can't move when Textbox is active
-        if(stopPlayerMovement)
+        if (stopPlayerMovement)
         {
             player.canMove = false;
         }
@@ -153,64 +136,5 @@ public class TextBoxManager : MonoBehaviour{
             textLines = new string[1];
             textLines = (theText.text.Split('\n'));
         }
-    }
-
-    void TutorialUpdate()
-    {
-        switch(currentLine)
-        {
-            case 2: //after movement message
-                DisableTextBox();
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    movedW = true;
-                }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    movedA = true;
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    movedS = true;
-                }
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    movedD = true;
-                }
-
-                if (movedW && movedS && movedD && movedA) //tried movement
-                {
-                    currentLine = 2; //give instructions about attack
-                    EnableTextBox();
-                }
-                break;
-
-            case 3: //attack enemy
-                DisableTextBox();
-                if(Input.GetMouseButton(0)) //tried weapon //will change trigger to when enemy killed when enemy spawning is available
-                {
-                    currentLine = 3; //give instructions about changing weapon
-                    EnableTextBox();
-                }
-                break;
-
-            case 4: //change weapon
-                if(Input.GetKeyDown(KeyCode.C))
-                {
-                    currentLine = 4; //give instructions about interactions
-                    EnableTextBox();
-                }
-                break;
-
-            case 5: //interact
-                if(Input.GetKeyDown(KeyCode.I)) //will change to when item has been succesfully interacted
-                {
-                    currentLine = 5; //end message
-                    EnableTextBox();
-                }
-                break;
-        }
-        //show text letter by letter
-        StartCoroutine(TypeText(textLines[currentLine]));
     }
 }
