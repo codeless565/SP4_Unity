@@ -20,11 +20,17 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Vector 3 to store the velocity of the enemy.
     private Vector3 smoothVelocity = Vector3.zero;
+    private float minDistanceApart = 1.5f;
+    private float chaseDistanceRange = 15f;
+    private float distanceApart;
+    public float chasingTimer = 4f;
 
     // Player //
     public PlayerManager player;
     public Transform playerTransform;
     private Vector3 playerPos;
+    private Vector3 distanceOffset;
+    private Vector3 PlayerDestination;
 
     // Stats //
     [SerializeField]
@@ -111,6 +117,10 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
+        anim = GetComponent<Animation>();
+
+        // Setting an Offset.
+        distanceOffset.Set(1f, 0f, 1f);
 	}
 	
 	// Update is called once per frame
@@ -119,6 +129,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         transform.LookAt(playerTransform);
         // Getting Player Position.
         playerPos = player.GetComponent<PlayerManager>().transform.position;
+        PlayerDestination = playerPos - distanceOffset;
 
         if (skeletonState == EnemySkeletonState.IDLE)
         {
@@ -153,16 +164,102 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
         // END //
 
-        // If Enemy State is CHASE
-        if(skeletonState == EnemySkeletonState.CHASE)
+        // Enemy States
+        switch (skeletonState)
         {
-            // Enemy will walk to Player Position smoothly.
-            transform.position = Vector3.SmoothDamp(transform.position, playerPos, ref smoothVelocity, 10f);
+            case EnemySkeletonState.IDLE:
+                SkeletonIdle(PlayerDestination);
+                break;
+
+            case EnemySkeletonState.WALK:
+                break;
+
+            case EnemySkeletonState.ATTACK:
+                SkeletonAttack(PlayerDestination);
+                break;
+
+            case EnemySkeletonState.CHASE:
+                SkeletonChase(PlayerDestination, playerPos, distanceOffset);
+                break;
+
+            case EnemySkeletonState.DIE:
+                StartCoroutine(SkeletonStateToDie());
+                break;
         }
 
         AnimationUpdate();
 	}
 
+    // Enemy Idle
+    private void SkeletonIdle(Vector3 _playerDesti)
+    {
+        // Distance between Player and Enemy.
+        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+
+        // If Player is within Enemy Chase Range, then change State to CHASE.
+        if(distanceApart < chaseDistanceRange)
+        {
+            skeletonState = EnemySkeletonState.CHASE;
+        }
+    }
+
+    // Enemy Chase
+    private void SkeletonChase(Vector3 _playerDesti, Vector3 _playerPos, Vector3 _distOffset)
+    {
+        // Enemy will walk to Player Position smoothly.
+        transform.position = Vector3.SmoothDamp(transform.position, _playerPos - _distOffset, ref smoothVelocity, chasingTimer);
+
+        // Distance between Player and Enemy.
+        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+
+        // If Enemy has reached the destination, change State to Attack.
+        if (distanceApart < minDistanceApart)
+        {
+            skeletonState = EnemySkeletonState.ATTACK;
+        }
+
+        // If Player is outside of Enemy Chase Range, then change State to IDLE.
+        if(distanceApart > chaseDistanceRange)
+        {
+            skeletonState = EnemySkeletonState.IDLE;
+        }
+    }
+
+    // Enemy Attack
+    private void SkeletonAttack(Vector3 _playerDesti)
+    {
+        // Distance between Player and Enemy.
+        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+
+        // Minus Player Health (?)
+
+        // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
+        if (distanceApart > minDistanceApart)
+        {
+            // Start Parallel action.
+            float _delayTime = anim.GetClip("Attack").length;
+            StartCoroutine(SkeletonStateToChase(_delayTime));
+        }
+    }
+
+    // When Skeleton Die, wait for animation to be done playing before destroying it.
+    IEnumerator SkeletonStateToDie()
+    {
+        float _delayTime = anim.GetClip("Death").length;
+        yield return new WaitForSeconds(_delayTime);
+
+        Destroy(gameObject);
+    }
+    // When Player moved out of Enemy attack range, play finish animation before chasing.
+    IEnumerator SkeletonStateToChase(float _delay)
+    {
+        yield return new WaitForSeconds(_delay);
+
+        // Change State to Chase.
+        skeletonState = EnemySkeletonState.CHASE;
+    }
+
+    // Animation Changes based on States.
     private void AnimationUpdate()
     {
         switch(skeletonState)
