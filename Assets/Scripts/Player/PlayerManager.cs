@@ -32,7 +32,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
     [SerializeField]
     float movespeed = 10;
 
-    public bool canMove;
+    public bool canMove = true;
 
     /* List storing Player weapons */
     List<ItemWeapons> Equipment = new List<ItemWeapons>();
