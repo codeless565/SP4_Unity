@@ -86,9 +86,9 @@ public class TutorialTextBox : MonoBehaviour
                 }
                 else
                 {
+                    textboxManager.currentLine = 3;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    textboxManager.currentLine = 3;
                 }
                 break;
 
@@ -102,9 +102,10 @@ public class TutorialTextBox : MonoBehaviour
                 }
                 else
                 {
+                    textboxManager.currentLine = 5;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    textboxManager.currentLine = 5;
+                    //textboxManager.currentLine = 6;
                 }
                 break;
 
@@ -118,9 +119,10 @@ public class TutorialTextBox : MonoBehaviour
                 }
                 else
                 {
+                    textboxManager.currentLine = 7;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    textboxManager.currentLine = 7;
+                    //textboxManager.currentLine = 8;
                 }
                 break;
 
@@ -134,9 +136,10 @@ public class TutorialTextBox : MonoBehaviour
                 }
                 else
                 {
+                    textboxManager.currentLine = 9;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    textboxManager.currentLine = 9;
+                    //textboxManager.currentLine = 9;
                 }
                 break;
         }
@@ -146,8 +149,12 @@ public class TutorialTextBox : MonoBehaviour
     {
         if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
         {
+            if(!MovedA || !MovedD || !MovedS || !MovedW && !triedAttack || !triedChangeW || !triedInteract)
+            {
                 pauseBox = true;
                 textboxManager.DisableTextBox();
+                //textboxManager.currentLine = textboxManager.currentLine + 1;
+            }
         }  
         //show text letter by letter
         StartCoroutine(textboxManager.TypeText(textboxManager.textLines[textboxManager.currentLine]));
