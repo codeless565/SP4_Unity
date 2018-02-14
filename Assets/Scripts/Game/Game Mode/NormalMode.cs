@@ -18,7 +18,7 @@ public class NormalMode : MonoBehaviour, GameMode
 
     public void GameClear()
     {
-        throw new NotImplementedException();
+        SceneManager.LoadScene("SceneMainMenu");
     }
 
     public void GameOver()
