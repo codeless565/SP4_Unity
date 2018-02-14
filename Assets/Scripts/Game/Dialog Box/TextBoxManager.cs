@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class TextBoxManager : MonoBehaviour{
+public class TextBoxManager : MonoBehaviour
+{
 
     public GameObject textBox;
     public Text theText;
@@ -53,13 +54,13 @@ public class TextBoxManager : MonoBehaviour{
             textLines = (textfile.text.Split('\n'));
         }
 
-        if(endAtLine == 0)
+        if (endAtLine == 0)
         {
             endAtLine = textLines.Length - 1;
 
         }
 
-        if(isActive)
+        if (isActive)
         {
             EnableTextBox();
         }
@@ -68,20 +69,19 @@ public class TextBoxManager : MonoBehaviour{
             DisableTextBox();
         }
     }
-    
+
     void Update()
     {
-        if(!isActive)
+        if (!isActive)
         {
             return;
         }
 
         //show text
         //theText.text = textLines[currentLine];
-
-        if(Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            if(!isTyping)
+            if (!isTyping)
             {
                 currentLine += 1;
 
@@ -91,16 +91,16 @@ public class TextBoxManager : MonoBehaviour{
                 }
                 else
                 {
-                    if(tut)
+                    if (tut)
                     {
                         TutorialUpdate();
                     }
                     else
-                    //show text letter by letter
-                    StartCoroutine(TypeText(textLines[currentLine]));
+                        //show text letter by letter
+                        StartCoroutine(TypeText(textLines[currentLine]));
                 }
             }
-            else if(isTyping && !cancelTyping) //interrupts typing
+            else if (isTyping && !cancelTyping) //interrupts typing
             {
                 cancelTyping = true;
             }
@@ -113,7 +113,7 @@ public class TextBoxManager : MonoBehaviour{
         theText.text = "";
         isTyping = true;
         cancelTyping = false;
-        while(isTyping && !cancelTyping && letter < lineOfText.Length - 1)
+        while (isTyping && !cancelTyping && letter < lineOfText.Length - 1)
         {
             theText.text += lineOfText[letter];
             letter += 1;
@@ -131,7 +131,7 @@ public class TextBoxManager : MonoBehaviour{
         textBox.SetActive(true);
 
         //Player can't move when Textbox is active
-        if(stopPlayerMovement)
+        if (stopPlayerMovement)
         {
             player.canMove = false;
         }
@@ -157,37 +157,39 @@ public class TextBoxManager : MonoBehaviour{
 
     void TutorialUpdate()
     {
-        switch(currentLine)
+        switch (currentLine)
         {
             case 2: //after movement message
-                DisableTextBox();
-                if (Input.GetKeyDown(KeyCode.W))
+                if (!movedA && !movedD && !movedS && !movedW)
                 {
-                    movedW = true;
+                    DisableTextBox();
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        movedW = true;
+                    }
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        movedA = true;
+                    }
+                    if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        movedS = true;
+                    }
+                    if (Input.GetKeyDown(KeyCode.D))
+                    {
+                        movedD = true;
+                    }
                 }
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    movedA = true;
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    movedS = true;
-                }
-                if (Input.GetKeyDown(KeyCode.D))
-                {
-                    movedD = true;
-                }
-
-                if (movedW && movedS && movedD && movedA) //tried movement
+                else
                 {
                     currentLine = 2; //give instructions about attack
-                    EnableTextBox();
                 }
+                EnableTextBox();
                 break;
 
             case 3: //attack enemy
                 DisableTextBox();
-                if(Input.GetMouseButton(0)) //tried weapon //will change trigger to when enemy killed when enemy spawning is available
+                if (Input.GetMouseButton(0)) //tried weapon //will change trigger to when enemy killed when enemy spawning is available
                 {
                     currentLine = 3; //give instructions about changing weapon
                     EnableTextBox();
@@ -195,7 +197,7 @@ public class TextBoxManager : MonoBehaviour{
                 break;
 
             case 4: //change weapon
-                if(Input.GetKeyDown(KeyCode.C))
+                if (Input.GetKeyDown(KeyCode.C))
                 {
                     currentLine = 4; //give instructions about interactions
                     EnableTextBox();
@@ -203,7 +205,7 @@ public class TextBoxManager : MonoBehaviour{
                 break;
 
             case 5: //interact
-                if(Input.GetKeyDown(KeyCode.I)) //will change to when item has been succesfully interacted
+                if (Input.GetKeyDown(KeyCode.I)) //will change to when item has been succesfully interacted
                 {
                     currentLine = 5; //end message
                     EnableTextBox();
