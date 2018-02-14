@@ -14,6 +14,7 @@ public class LevelGenerator : MonoBehaviour
     public int MaxNoOfVerticalWalls   = 10;
     public int MinNoOfChest = 5;
     public int MaxNoOfChest = 5;
+    public float MinDistanceFromExit = 500;
 
     private GameObject m_GameLevel;
     private GameObject m_Floor;
@@ -164,6 +165,9 @@ public class LevelGenerator : MonoBehaviour
 
     private void GeneratePlayerSpawn()
     {
+        if (MinDistanceFromExit >= 5000)
+            MinDistanceFromExit = 5000;
+
         Debug.Log("GeneratePlayerSpawn");
         //Exit
         GameObject PlayerSpawn = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().PlayerSpawnLocation;
@@ -180,7 +184,7 @@ public class LevelGenerator : MonoBehaviour
             posX = Random.Range(0, m_gridX_occupied.Length - 1);
             posY = Random.Range(0, m_gridY_occupied.Length - 1);
             pos = new Vector3(posX * m_m_FloorGridSize + m_m_FloorGridOffSet, 0, posY * m_m_FloorGridSize + m_m_FloorGridOffSet);
-        } while ((m_gridX_occupied[posX] && m_gridY_occupied[posY]) && safetyCount < 50 && (pos - m_Exit.transform.position).sqrMagnitude <= 500);
+        } while ((m_gridX_occupied[posX] && m_gridY_occupied[posY]) || (pos - m_Exit.transform.position).sqrMagnitude <= MinDistanceFromExit);
 
         Debug.Log("SqrdMagnitude: " + (pos - m_Exit.transform.position).sqrMagnitude);
         Debug.Log("Spawn Position: " + pos);
