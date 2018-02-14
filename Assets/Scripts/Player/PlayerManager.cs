@@ -115,7 +115,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
     void Start()
     {
         //DebugPlayerStats();
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         //Test
         Equipment.Add(new Sword());
@@ -137,7 +137,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             return;
 
         Movement();
-        UnlockCursor();
+        //UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
         EquipmentUpdate();
@@ -194,7 +194,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
 
         /* 3) Rotate Camera By Mouse */
-        transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 120.0F);
+        //transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 120.0F);
     }
 
     /* Attack of Player */
