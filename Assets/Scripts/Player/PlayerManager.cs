@@ -42,13 +42,13 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     /* List storing Player equipment */
     public List<ItemBase> Inventory = new List<ItemBase>();
-    //enum EQTYPE
-    //{
-    //    HELMET,
-    //    WEAPON,
-    //    TOTAL
-    //}
-    //bool[] EquipmentList = new bool[(int)EQTYPE.WEAPON];
+    enum EQTYPE
+    {
+        HELMET,
+        WEAPON,
+        TOTAL
+    }
+    ItemBase[] EquipmentList = new ItemBase[(int)EQTYPE.TOTAL];
 
     /* Setters and Getters */
     public int Level
@@ -135,8 +135,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
         anim = GetComponent<Animation>();
 
-        //for (int i = 0; i < EquipmentList.Length; ++i)
-        //    EquipmentList[i] = false;
+        for (int i = 0; i < EquipmentList.Length; ++i)
+            EquipmentList[i] = null;
     }
 
     // Update is called once per frame
@@ -156,7 +156,14 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
         if (Input.GetKey(KeyCode.O))
         {
+            Debug.Log("MOVE THESE TO ON CLICK WITH INVENTORY/UI");
             EquipWeapon(Inventory[0]);
+            DebugPlayerStats();
+        }
+
+        if (Input.GetKey(KeyCode.P))
+        {
+            EquipWeapon(Inventory[1]);
             DebugPlayerStats();
         }
     }
@@ -318,33 +325,22 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     public void EquipWeapon(ItemBase _weapon)
     {
-        Debug.Log("TO BE IMPLEMENTED");
-        //Equipment'List' to check  stuff
-
-        ItemWeapons newWeapon;
-        if (Inventory.Contains(_weapon))
-            newWeapon = (ItemWeapons)_weapon;
-        else
+        if (!Inventory.Contains(_weapon))
             return;
 
-        attack += newWeapon.Attack;
-        //if (!EquipmentList[(int)EQTYPE.WEAPON]) // nothing equipped
-        //{
-        //    EquipmentList[(int)EQTYPE.WEAPON] = true;
-        //}
-        //foreach (ItemBase item in Inventory)
-        //{
-        //    if (item.getType() != "Weapons")
-        //        continue;
-
-        //    ItemWeapons thisWeapon = (ItemWeapons)item;
-        //    if(thisWeapon.isEquipped)
-        //    {
-        //        thisWeapon.isEquipped = false;
-        //        newWeapon.isEquipped = true;
-        //        Attack -= thisWeapon.Attack;
-        //        Attack += newWeapon.Attack;
-        //    }
-        //}
+        if (_weapon.getType() == "Weapons")
+        {
+            if (EquipmentList[(int)EQTYPE.WEAPON] == null)
+            {
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                attack += _weapon.Attack;
+            }
+            else
+            {
+                attack -= EquipmentList[(int)EQTYPE.WEAPON].Attack;
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                attack += _weapon.Attack;
+            }
+        }
     }
 }

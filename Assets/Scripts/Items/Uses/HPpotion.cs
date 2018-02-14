@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HPpotion : MonoBehaviour, ItemUses
+public class HPpotion : MonoBehaviour, ItemBase
 {
     Sprite ItemImage;
     bool used;
@@ -14,20 +14,6 @@ public class HPpotion : MonoBehaviour, ItemUses
         ItemImage = GameObject.FindGameObjectWithTag("UsesObjectHolder").GetComponent<UsesObjectHolder>().HPpotion;
     }
 
-
-
-    public bool isUsed
-    {
-        get
-        {
-            return used;
-        }
-
-        set
-        {
-            used = value;
-        }
-    }
 
     public int Level
     {

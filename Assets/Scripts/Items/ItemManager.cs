@@ -23,6 +23,7 @@ public class ItemManager : MonoBehaviour
     void Awake()
     {
         ItemList.Add(new Sword());
+        ItemList.Add(new Axe());
 
         ItemList.Add(new HPpotion());
         ItemList.Add(new MPpotion());
