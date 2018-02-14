@@ -146,6 +146,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /* Movement of Player */
     private void Movement()
     {
+        playerState = PlayerState.IDLE;
+
         //Up / Down
         if (Input.GetKey(KeyCode.W))
         {
@@ -154,7 +156,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), /*0.15F*/ 1);
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             playerState = PlayerState.WALK;
             //Vector3 movement = new Vector3(0.0f, 0.0f, -transform.position.z);
@@ -163,7 +165,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
 
         // Left / Right
-        else if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             playerState = PlayerState.WALK;
 
@@ -175,7 +177,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             /* 2) Normal Rotation with Camera */
             transform.Rotate(new Vector3(0, -90 * Time.deltaTime, 0));
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             playerState = PlayerState.WALK;
 
@@ -188,10 +190,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
             transform.Rotate(new Vector3(0, 90 * Time.deltaTime, 0));
         }
 
-        else
-        {
-            playerState = PlayerState.IDLE;
-        }
 
         /* 3) Rotate Camera By Mouse */
         //transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * 120.0F);
