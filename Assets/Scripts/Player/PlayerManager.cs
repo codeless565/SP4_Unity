@@ -33,11 +33,20 @@ public class PlayerManager : MonoBehaviour, StatsBase
     float defense = 10;
     [SerializeField]
     float movespeed = 10;
+    [SerializeField]
+    public int gold = 9999999;
 
     public bool canMove = true;
 
     /* List storing Player equipment */
-    public List<ItemWeapons> Equipment = new List<ItemWeapons>();
+    public List<ItemBase> Inventory = new List<ItemBase>();
+    //enum EQTYPE
+    //{
+    //    HELMET,
+    //    WEAPON,
+    //    TOTAL
+    //}
+    //bool[] EquipmentList = new bool[(int)EQTYPE.WEAPON];
 
     /* Setters and Getters */
     public int Level
@@ -85,7 +94,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         {
             attack = value;
         }
-    }
+     }
 
     public float Defense
     {
@@ -121,20 +130,10 @@ public class PlayerManager : MonoBehaviour, StatsBase
         animTimer = 2.0f;
         attackClicked = false;
 
-        //Test
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-
-        foreach (ItemWeapons weapon in Equipment)
-        {
-            weapon.isEquipped = true;
-        }
         anim = GetComponent<Animation>();
-        gameObject.GetComponent<InventoryBar>().DisplayPlayerEQ();
+
+        //for (int i = 0; i < EquipmentList.Length; ++i)
+        //    EquipmentList[i] = false;
     }
 
     // Update is called once per frame
@@ -152,7 +151,12 @@ public class PlayerManager : MonoBehaviour, StatsBase
         //UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
-        EquipmentUpdate();
+
+        if (Input.GetKey(KeyCode.O))
+        {
+            EquipWeapon(Inventory[0]);
+            DebugPlayerStats();
+        }
     }
 
     /* Movement of Player */
@@ -283,18 +287,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
 
-    /* Updates in Equipments HERE */
-    void EquipmentUpdate()
-    {
-        foreach (ItemWeapons weapon in Equipment)
-        {
-            if (weapon.isEquipped)
-            {
-                Attack += weapon.Attack;
-            }
-        }
-    }
-
     /* Change Weapons */
     private void ChangeWeapon()
     {
@@ -310,5 +302,46 @@ public class PlayerManager : MonoBehaviour, StatsBase
         Debug.Log("playerHealth : " + Health);
         Debug.Log("Att : " + Attack);
         Debug.Log("MoveSpeed : " + MoveSpeed);
+    }
+
+    public void AddItem(ItemBase newitem)
+    {
+        Inventory.Add(newitem);
+        
+        gameObject.GetComponent<InventoryBar>().AddPlayerHotBar(newitem);
+        Debug.Log("TO BE IMPLEMENTED");
+        // to move to when player put into hotbar
+    }
+
+    public void EquipWeapon(ItemBase _weapon)
+    {
+        Debug.Log("TO BE IMPLEMENTED");
+        //Equipment'List' to check  stuff
+
+        ItemWeapons newWeapon;
+        if (Inventory.Contains(_weapon))
+            newWeapon = (ItemWeapons)_weapon;
+        else
+            return;
+
+        attack += newWeapon.Attack;
+        //if (!EquipmentList[(int)EQTYPE.WEAPON]) // nothing equipped
+        //{
+        //    EquipmentList[(int)EQTYPE.WEAPON] = true;
+        //}
+        //foreach (ItemBase item in Inventory)
+        //{
+        //    if (item.getType() != "Weapons")
+        //        continue;
+
+        //    ItemWeapons thisWeapon = (ItemWeapons)item;
+        //    if(thisWeapon.isEquipped)
+        //    {
+        //        thisWeapon.isEquipped = false;
+        //        newWeapon.isEquipped = true;
+        //        Attack -= thisWeapon.Attack;
+        //        Attack += newWeapon.Attack;
+        //    }
+        //}
     }
 }

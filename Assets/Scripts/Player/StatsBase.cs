@@ -29,5 +29,4 @@ public interface StatsBase
     {
         get;set;
     }
-
 }
