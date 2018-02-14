@@ -70,7 +70,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour {
         {
             m_progressBar.value = async.progress;
             // When GameScene is loaded.
-            if (async.progress == 0.9f)
+            if (async.progress >= 0.9f)
             {
                 m_progressBar.value = 1f;
                 async.allowSceneActivation = true;
