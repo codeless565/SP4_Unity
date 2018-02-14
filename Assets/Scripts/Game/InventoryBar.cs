@@ -39,8 +39,8 @@ public class InventoryBar : MonoBehaviour {
             newIcon.GetComponentInChildren<Text>().alignment=TextAnchor.UpperLeft;
             newIcon.GetComponent<Image>().sprite = weapon.getItemImage();
 
-            newIcon.transform.position = new Vector3(275.0f + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
-                                                    50.0f + currentY * (newIcon.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY));
+            newIcon.transform.position = new Vector3((Panel.transform.position.x - Panel.GetComponent<RectTransform>().rect.width * 0.25f) + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
+                                                    Panel.transform.position.y + currentY * (newIcon.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY));
 
             currentX++;
             

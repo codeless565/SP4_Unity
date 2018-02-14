@@ -11,7 +11,7 @@ public class Sword : ItemWeapons
 
     public Sword()
     {
-        ItemImage = GameObject.Find("WeaponObjectHolder").GetComponent<WeaponObjectHolder>().Sword;
+        ItemImage = GameObject.FindGameObjectWithTag("WeaponsObjectHolder").GetComponent<WeaponObjectHolder>().Sword;
     }
 
     public bool isEquipped
