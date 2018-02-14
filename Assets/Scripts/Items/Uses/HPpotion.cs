@@ -54,7 +54,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Health;
+            return 0;
         }
 
         set
@@ -67,7 +67,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Attack;
+            return 0;
         }
 
         set
@@ -80,7 +80,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Defense;
+            return 0;
         }
 
         set
@@ -93,7 +93,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return MoveSpeed;
+            return 0.0f;
         }
 
         set
