@@ -9,6 +9,11 @@ public class MPpotion : MonoBehaviour, ItemUses
     Sprite ItemImage;
     bool used;
 
+    public MPpotion()
+    {
+        ItemImage = GameObject.FindGameObjectWithTag("UsesObjectHolder").GetComponent<UsesObjectHolder>().MPpotion;
+    }
+
     public bool isUsed
     {
         get

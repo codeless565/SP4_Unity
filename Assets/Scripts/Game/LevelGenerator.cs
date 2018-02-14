@@ -20,8 +20,8 @@ public class LevelGenerator : MonoBehaviour
     private GameObject m_Floor;
     private GameObject m_Exit;
 
-    float m_m_FloorGridSize;
-    float m_m_FloorGridOffSet;
+    float m_FloorGridSize;
+    float m_FloorGridOffSet;
 
     //Item Occupancies
     bool[] m_gridX_occupied;
@@ -34,8 +34,8 @@ public class LevelGenerator : MonoBehaviour
         m_Floor = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().Floor;
 
         //Size of grid 10x10
-        m_m_FloorGridSize = m_Floor.transform.localScale.x * 0.1f;
-        m_m_FloorGridOffSet = m_Floor.transform.localScale.x * 0.05f;
+        m_FloorGridSize = m_Floor.transform.localScale.x * 0.1f;
+        m_FloorGridOffSet = m_Floor.transform.localScale.x * 0.05f;
 
         //Init Item Occupancies Array
         m_gridX_occupied = new bool[(int)(m_Floor.transform.localScale.x * 0.1)];
@@ -55,14 +55,18 @@ public class LevelGenerator : MonoBehaviour
 
     private void GenerateWalls()
     {
+        //Outer Wall
+        GameObject BoarderWall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().BoarderWall;
+        Instantiate(BoarderWall, m_GameLevel.transform.position, m_GameLevel.transform.rotation, m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
+
+
         GameObject Wall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().StoneWall;
-
-        int safetyCount;
-
+        
         //Horizontal Walls
         bool[] H_gridX = new bool[(int)(m_Floor.transform.localScale.x * 0.1)];
         bool[] H_gridY = new bool[(int)(m_Floor.transform.localScale.x * 0.1)];
 
+        int safetyCount;
         int posX;
         int posY;
 
@@ -80,7 +84,7 @@ public class LevelGenerator : MonoBehaviour
             H_gridX[posX] = true;
             H_gridY[posY] = true;
 
-            Vector3 pos = new Vector3(posX * m_m_FloorGridSize + m_m_FloorGridOffSet, 0, posY * m_m_FloorGridSize);
+            Vector3 pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize);
             Instantiate(Wall, pos, transform.rotation, m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
         }
 
@@ -102,7 +106,7 @@ public class LevelGenerator : MonoBehaviour
             V_gridX[posX] = true;
             V_gridY[posY] = true;
 
-            Vector3 pos = new Vector3(posX * m_m_FloorGridSize, 0, posY * m_m_FloorGridSize + m_m_FloorGridOffSet);
+            Vector3 pos = new Vector3(posX * m_FloorGridSize, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
             Instantiate(Wall, pos, Quaternion.Euler(new Vector3(0, 90, 0)), m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
         }
     }
@@ -132,7 +136,7 @@ public class LevelGenerator : MonoBehaviour
             m_gridX_occupied[posX] = true;
             m_gridY_occupied[posY] = true;
 
-            Vector3 temppos = new Vector3(posX * m_m_FloorGridSize + m_m_FloorGridOffSet, 0, posY * m_m_FloorGridSize + m_m_FloorGridOffSet);
+            Vector3 temppos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
             Instantiate(Chest, temppos, Quaternion.Euler(new Vector3(0, 180, 0)), m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
         }
     }
@@ -157,33 +161,33 @@ public class LevelGenerator : MonoBehaviour
         m_gridX_occupied[posX] = true;
         m_gridY_occupied[posY] = true;
 
-        float m_ExitOffset = m_m_FloorGridOffSet * 0.5f;
+        float m_ExitOffset = m_FloorGridOffSet * 0.5f;
 
-        Vector3 pos = new Vector3(posX * m_m_FloorGridSize + m_m_FloorGridOffSet + m_ExitOffset, 0, posY * m_m_FloorGridSize + m_m_FloorGridOffSet + m_ExitOffset);
+        Vector3 pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet + m_ExitOffset, 0, posY * m_FloorGridSize + m_FloorGridOffSet + m_ExitOffset);
         m_Exit = Instantiate(Exit, pos, transform.rotation, m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
     }
 
     private void GeneratePlayerSpawn()
     {
+        // Safety check
         if (MinDistanceFromExit >= 5000)
             MinDistanceFromExit = 5000;
 
-        Debug.Log("GeneratePlayerSpawn");
         //Exit
         GameObject PlayerSpawn = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().PlayerSpawnLocation;
         
-        //Randomise and create an spawn location
+        // Randomise and create an spawn location
+        int safetyCount = 0; //to avoid Infinite loop
         int posX;
         int posY;
         Vector3 pos;
-        int safetyCount = 0; //to avoid Infinite loop
 
         do
         {
             ++safetyCount;
             posX = Random.Range(0, m_gridX_occupied.Length - 1);
             posY = Random.Range(0, m_gridY_occupied.Length - 1);
-            pos = new Vector3(posX * m_m_FloorGridSize + m_m_FloorGridOffSet, 0, posY * m_m_FloorGridSize + m_m_FloorGridOffSet);
+            pos = new Vector3(posX * m_FloorGridSize + m_FloorGridOffSet, 0, posY * m_FloorGridSize + m_FloorGridOffSet);
         } while ((m_gridX_occupied[posX] && m_gridY_occupied[posY]) || (pos - m_Exit.transform.position).sqrMagnitude <= MinDistanceFromExit);
 
         Debug.Log("SqrdMagnitude: " + (pos - m_Exit.transform.position).sqrMagnitude);
