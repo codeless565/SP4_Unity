@@ -1,0 +1,46 @@
+PlayerManager.cs
+
+// Variables
+public float animTimer; // countdown timer
+private float m_fAniTime; // value to countdown from
+
+// Start
+animTimer = 0.0f;
+m_fAniTime = 1.0f;
+
+// Update
+if (playerState == PlayerState.IDLE)
+{
+    anim.Play("Idle_1");
+} //Player's default animation
+
+if (canMove)
+	Movement();
+	
+/* Attack of Player */
+  bool attackClicked = false;
+  private void PlayerAttacks()
+  {
+      /* When Clicked down */
+      if (Input.GetMouseButtonDown(0) && !attackClicked)
+          attackClicked = true;
+
+      // Change Animation
+      if (attackClicked)
+      {
+          canMove = false;
+          animTimer += Time.deltaTime;
+          playerState = PlayerState.SWISH;
+          if (animTimer >= m_fAniTime)
+          {
+              attackClicked = false;
+              canMove = true;
+              animTimer -= m_fAniTime;
+          }
+      }
+  }
+  
+   case PlayerState.SWISH:
+                if(animTimer < m_fAniTime)
+                    anim.Play("Attack_1");
+                break;
