@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HPpotion : MonoBehaviour, ItemUses
 {
-    Sprite ItemImage;
+    Sprite ItemImage = GameObject.Find("UsesObjectHolder").GetComponent<UsesObjectHolder>().HPpotion;
     bool used;
 
     public bool isUsed
