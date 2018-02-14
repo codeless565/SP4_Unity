@@ -59,8 +59,8 @@ public class LevelGenerator : MonoBehaviour
     private void GenerateWalls()
     {
         // Outer Walls
-      //  GameObject BoarderWall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().BoarderWall;
-       // Instantiate(BoarderWall, m_GameLevel.transform.position, m_GameLevel.transform.rotation, m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
+        GameObject BoarderWall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().BoarderWall;
+        Instantiate(BoarderWall, m_GameLevel.transform.position, m_GameLevel.transform.rotation, m_GameLevel.transform); //Instantiate(GameObject, Position, quaternion, Parent)
 
         // Inner Walls
         GameObject Wall = GameObject.FindGameObjectWithTag("StructureHolder").GetComponent<StructureObjectHolder>().StoneWall;
