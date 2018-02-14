@@ -19,7 +19,9 @@ public class PlayerManager : MonoBehaviour, StatsBase
         DIE,
     };
     PlayerState playerState;
-    public float animTimer;
+    public float animTimer; // countdown timer
+    private float m_fAniTime; // value to countdown from
+
     public bool attackClicked;
 
     /* Stats */
@@ -33,11 +35,20 @@ public class PlayerManager : MonoBehaviour, StatsBase
     float defense = 10;
     [SerializeField]
     float movespeed = 10;
+    [SerializeField]
+    public int gold = 9999999;
 
     public bool canMove = true;
 
     /* List storing Player equipment */
-    public List<ItemWeapons> Equipment = new List<ItemWeapons>();
+    public List<ItemBase> Inventory = new List<ItemBase>();
+    enum EQTYPE
+    {
+        HELMET,
+        WEAPON,
+        TOTAL
+    }
+    ItemBase[] EquipmentList = new ItemBase[(int)EQTYPE.TOTAL];
 
     /* Setters and Getters */
     public int Level
@@ -85,7 +96,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         {
             attack = value;
         }
-    }
+     }
 
     public float Defense
     {
@@ -118,41 +129,43 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         //DebugPlayerStats();
         //Cursor.lockState = CursorLockMode.Locked;
-        animTimer = 2.0f;
+        animTimer = 0.0f;
+        m_fAniTime = 1.0f;
         attackClicked = false;
 
-        //Test
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-        Equipment.Add(new Sword());
-
-        foreach (ItemWeapons weapon in Equipment)
-        {
-            weapon.isEquipped = true;
-        }
         anim = GetComponent<Animation>();
-        gameObject.GetComponent<InventoryBar>().DisplayPlayerEQ();
+
+        for (int i = 0; i < EquipmentList.Length; ++i)
+            EquipmentList[i] = null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerState == PlayerState.IDLE && animTimer > 0.0f)
+        if (playerState == PlayerState.IDLE)
         {
             anim.Play("Idle_1");
         } //Player's default animation
 
-        if (!canMove)
-            return;
+        if (canMove)
+            Movement();
 
-        Movement();
         //UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
-        EquipmentUpdate();
+
+        if (Input.GetKey(KeyCode.O))
+        {
+            Debug.Log("MOVE THESE TO ON CLICK WITH INVENTORY/UI");
+            EquipWeapon(Inventory[0]);
+            DebugPlayerStats();
+        }
+
+        if (Input.GetKey(KeyCode.P))
+        {
+            EquipWeapon(Inventory[1]);
+            DebugPlayerStats();
+        }
     }
 
     /* Movement of Player */
@@ -210,18 +223,23 @@ public class PlayerManager : MonoBehaviour, StatsBase
     /* Attack of Player */
     private void PlayerAttacks()
     {
-        if (Input.GetMouseButton(0))
-        {
-            attackClicked = true;
-            animTimer--;
-            //playerState = PlayerState.SWISH;
-        }
-        else if (playerState != PlayerState.WALK && animTimer > 0)
-            playerState = PlayerState.IDLE;
 
-        if(attackClicked)
+        /* When Clicked down */
+        if (Input.GetMouseButtonDown(0) && !attackClicked)
+            attackClicked = true;
+
+        // Change Animation
+        if (attackClicked)
         {
+            canMove = false;
+            animTimer += Time.deltaTime;
             playerState = PlayerState.SWISH;
+            if (animTimer >= m_fAniTime)
+            {
+                attackClicked = false;
+                canMove = true;
+                animTimer -= m_fAniTime;
+            }
         }
     }
 
@@ -257,12 +275,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 break;
 
             case PlayerState.SWISH:
-                if(animTimer <= 0.0f)
-                {
+                if (animTimer < m_fAniTime)
                     anim.Play("Attack_1");
-                    animTimer = 2.0f;
-                    attackClicked = false;
-                }
                 break;
 
             case PlayerState.DOUBLE:
@@ -283,18 +297,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         }
     }
 
-    /* Updates in Equipments HERE */
-    void EquipmentUpdate()
-    {
-        foreach (ItemWeapons weapon in Equipment)
-        {
-            if (weapon.isEquipped)
-            {
-                Attack += weapon.Attack;
-            }
-        }
-    }
-
     /* Change Weapons */
     private void ChangeWeapon()
     {
@@ -310,5 +312,35 @@ public class PlayerManager : MonoBehaviour, StatsBase
         Debug.Log("playerHealth : " + Health);
         Debug.Log("Att : " + Attack);
         Debug.Log("MoveSpeed : " + MoveSpeed);
+    }
+
+    public void AddItem(ItemBase newitem)
+    {
+        Inventory.Add(newitem);
+        
+        gameObject.GetComponent<InventoryBar>().AddPlayerHotBar(newitem);
+        Debug.Log("TO BE IMPLEMENTED");
+        // to move to when player put into hotbar
+    }
+
+    public void EquipWeapon(ItemBase _weapon)
+    {
+        if (!Inventory.Contains(_weapon))
+            return;
+
+        if (_weapon.getType() == "Weapons")
+        {
+            if (EquipmentList[(int)EQTYPE.WEAPON] == null)
+            {
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                attack += _weapon.Attack;
+            }
+            else
+            {
+                attack -= EquipmentList[(int)EQTYPE.WEAPON].Attack;
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                attack += _weapon.Attack;
+            }
+        }
     }
 }

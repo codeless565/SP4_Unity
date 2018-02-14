@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sword : ItemWeapons
+public class Sword : ItemBase
 {
     Sprite ItemImage;
     bool equipped;
@@ -12,19 +12,6 @@ public class Sword : ItemWeapons
     public Sword()
     {
         ItemImage = GameObject.FindGameObjectWithTag("WeaponsObjectHolder").GetComponent<WeaponObjectHolder>().Sword;
-    }
-
-    public bool isEquipped
-    {
-        get
-        {
-            return equipped;
-        }
-
-        set
-        {
-            equipped = value;
-        }
     }
 
     public int getCost()

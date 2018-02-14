@@ -23,7 +23,7 @@ public class Shop : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //DisplayEquipment();
+        DisplayEquipment();
     }
 
     // Update is called once per frame
@@ -35,10 +35,24 @@ public class Shop : MonoBehaviour {
 
     void ButtonOnClick(GameObject btn)
     {
-        foreach(GameObject buttons in btnList)
+        foreach (GameObject buttons in btnList)
         {
-            if (btn.GetComponent<Image>().sprite.name == buttons.GetComponent<Image>().sprite.name)
-                Debug.Log(btn.GetComponent<Image>().sprite.name + " is Pressed");
+            if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
+                continue;
+
+            //Debug.Log(btn.GetComponent<Image>().sprite.name + " is pressed");
+            // Check player gold
+            
+            ItemBase newitem = ItemManager.Instance.CheckGO(btn);
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold - newitem.getCost() >= 0)
+                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddItem(newitem);
+            else
+            {
+                Debug.Log("Not enough gold");
+                Debug.Log("TO BE IMPLEMENTED");
+                // Dialog/Alert box
+            }
+                
         }
     }
 

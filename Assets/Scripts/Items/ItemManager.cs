@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
@@ -16,45 +17,26 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-   
-
     public List<ItemBase> ItemList = new List<ItemBase>();
 
     // Use this for initialization
     void Awake()
     {
         ItemList.Add(new Sword());
+        ItemList.Add(new Axe());
 
         ItemList.Add(new HPpotion());
         ItemList.Add(new MPpotion());
-
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-        //ItemList.Add(new Sword());
-
-
     }
 
-    public bool CheckItem(GameObject go)
+    public ItemBase CheckGO(GameObject go)
     {
-        foreach (ItemBase item in ItemList)
+        foreach(ItemBase item in ItemList)
         {
-            if (go.name == item.Name)
-            {
-                Debug.Log("Item Exist");
-                return true;
-            }
+            if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                return item;
         }
 
-        return false;
+        return null;
     }
 }
