@@ -19,6 +19,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
         DIE,
     };
     PlayerState playerState;
+    public float animTimer;
+    public bool attackClicked;
 
     /* Stats */
     [SerializeField]
@@ -116,6 +118,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         //DebugPlayerStats();
         //Cursor.lockState = CursorLockMode.Locked;
+        animTimer = 2.0f;
+        attackClicked = false;
 
         //Test
         Equipment.Add(new Sword());
@@ -129,14 +133,14 @@ public class PlayerManager : MonoBehaviour, StatsBase
         {
             weapon.isEquipped = true;
         }
-
+        anim = GetComponent<Animation>();
         gameObject.GetComponent<InventoryBar>().DisplayPlayerEQ();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerState == PlayerState.IDLE)
+        if (playerState == PlayerState.IDLE && animTimer > 0.0f)
         {
             anim.Play("Idle_1");
         } //Player's default animation
@@ -208,10 +212,17 @@ public class PlayerManager : MonoBehaviour, StatsBase
     {
         if (Input.GetMouseButton(0))
         {
+            attackClicked = true;
+            animTimer--;
+            //playerState = PlayerState.SWISH;
+        }
+        else if (playerState != PlayerState.WALK && animTimer > 0)
+            playerState = PlayerState.IDLE;
+
+        if(attackClicked)
+        {
             playerState = PlayerState.SWISH;
         }
-        else if (playerState != PlayerState.WALK)
-            playerState = PlayerState.IDLE;
     }
 
     /* Unlocking Mouse from Screen */
@@ -246,7 +257,12 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 break;
 
             case PlayerState.SWISH:
-                anim.Play("Attack_1");
+                if(animTimer <= 0.0f)
+                {
+                    anim.Play("Attack_1");
+                    animTimer = 2.0f;
+                    attackClicked = false;
+                }
                 break;
 
             case PlayerState.DOUBLE:
