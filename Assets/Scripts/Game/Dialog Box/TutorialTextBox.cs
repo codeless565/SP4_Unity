@@ -145,6 +145,7 @@ public class TutorialTextBox : MonoBehaviour
         }
 
     }
+
     void TutorialUpdate()
     {
         if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
