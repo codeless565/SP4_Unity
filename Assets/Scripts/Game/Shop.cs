@@ -13,39 +13,64 @@ public class Shop : MonoBehaviour {
     [SerializeField]
     int NumberOfItemsPerRow=3;
 
-	// Use this for initialization
-	void Start () {
-		Display();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+    [SerializeField]
+    int MaxNumberOfColumn = 10;
+
+    float ButtonMarginX = 30.0f;
+    float ButtonMarginY = 30.0f;
+
+    List<GameObject> btnList = new List<GameObject>();
+
+    // Use this for initialization
+    void Start () {
+        //DisplayEquipment();
+    }
+
+    // Update is called once per frame
+    void Update () {
+        
+        //if (btnList.Count == 0)
+        //    Debug.Log("There are no buttons");
 	}
 
-    void Display()
+    void ButtonOnClick(GameObject btn)
     {
-        //int count = 0;
-        int currentX = 0;
-        int currentY = 0;
-        foreach (ItemWeapons weapon in ItemManager.Instance.WeaponList)
+        foreach(GameObject buttons in btnList)
         {
-            //count++;
+            if (btn.GetComponent<Image>().sprite.name == buttons.GetComponent<Image>().sprite.name)
+                Debug.Log(btn.GetComponent<Image>().sprite.name + " is Pressed");
+        }
+    }
+
+    void DisplayEquipment()
+    {
+        int count = 0;
+        float currentX = 0.0f; // Margin off left
+        float  currentY = 0.0f; // Margin off bottom
+
+        foreach (ItemBase item in ItemManager.Instance.ItemList)
+        {
+            if (count >= MaxNumberOfColumn)
+                break;
+
             if (currentX >= NumberOfItemsPerRow)
             {
-                currentX = 0;
+                currentX = 0.0f;
                 currentY++;
             }
             GameObject newBtn = Instantiate(ButtonPrefab) as GameObject;
             newBtn.transform.SetParent(ShopCanvas.transform);
-            newBtn.GetComponentInChildren<Text>().text = weapon.Name;
-            newBtn.GetComponentInChildren<Image>().sprite = weapon.getItemImage();
-            // transform button to canvas and equal spacing       
-            newBtn.transform.position = new Vector3(currentX * 150, currentY * 150);
-            //newBtn.transform.position = new Vector3(currentX * newBtn.GetComponentInChildren<RectTransform>().localScale.x, currentY * newBtn.GetComponentInChildren<RectTransform>().localScale.y);
+            newBtn.GetComponentInChildren<Text>().text = item.Name;
+            newBtn.GetComponent<Image>().sprite = item.getItemImage();
+            
+            newBtn.transform.position = new Vector3(100.0f + currentX * (newBtn.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
+                                                    50.0f + currentY * (newBtn.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY));
+            
             currentX++;
+            count++;
+            newBtn.GetComponent<Button>().onClick.AddListener(delegate { ButtonOnClick(newBtn); });
+            
+            btnList.Add(newBtn);
         }
-
-        //Debug.Log(count);
     }
 }

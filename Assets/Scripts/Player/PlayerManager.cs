@@ -34,8 +34,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     public bool canMove = true;
 
-    /* List storing Player weapons */
-    List<ItemWeapons> Equipment = new List<ItemWeapons>();
+    /* List storing Player equipment */
+    public List<ItemWeapons> Equipment = new List<ItemWeapons>();
 
     /* Setters and Getters */
     public int Level
@@ -119,10 +119,18 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
         //Test
         Equipment.Add(new Sword());
+        Equipment.Add(new Sword());
+        Equipment.Add(new Sword());
+        Equipment.Add(new Sword());
+        Equipment.Add(new Sword());
+        Equipment.Add(new Sword());
+
         foreach (ItemWeapons weapon in Equipment)
         {
             weapon.isEquipped = true;
         }
+
+        gameObject.GetComponent<InventoryBar>().DisplayPlayerEQ();
     }
 
     // Update is called once per frame

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MPpotion : MonoBehaviour, ItemUses
 {
-    Sprite ItemImage;
+    Sprite ItemImage = GameObject.Find("UsesObjectHolder").GetComponent<UsesObjectHolder>().MPpotion;
     bool used;
 
     public bool isUsed
