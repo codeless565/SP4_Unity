@@ -10,6 +10,11 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject PlayerSpawnLocation;
     public GameObject BoarderWall;
     public GameObject StoneWall;
-    public GameObject StonePillar;
+
     public GameObject WoodenChest;
+
+    //Mainly 2D
+    public GameObject CloseDoor;
+    public GameObject OpenDoor;
+
 }
