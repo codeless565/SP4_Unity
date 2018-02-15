@@ -38,7 +38,7 @@ public class ActivateTextAtLine : MonoBehaviour {
 	}
 
     //triggered collison with item/NPC
-    void onTriggerEnter(Collider other)
+    void onTriggerEnter(Collider2D other)
     {
         if(other.name == "player")
         {
@@ -61,7 +61,7 @@ public class ActivateTextAtLine : MonoBehaviour {
     }
    
     //player walks away from item/NPC
-    void onTriggerExit(Collider other)
+    void onTriggerExit(Collider2D other)
     {
         if(other.name == "player")
         {
