@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class Pause_PopOutScreenControls : MonoBehaviour
 {
     [SerializeField]
-    Button m_backButton;
+    Button m_resumeButton;
 
     [SerializeField]
-    GameObject Pause_PopOutScreen;
+    GameObject Pause_PopOutScreen, Options_PopOutScreen;
 
 	// Use this for initialization
 	void Start () { }
@@ -23,8 +23,17 @@ public class Pause_PopOutScreenControls : MonoBehaviour
         Pause_PopOutScreen.SetActive(true);
     }
 
+    // When Options Button is Pressed.
+    public void OptionButtonPressed()
+    {
+        // Set PausePopOutScreen active to False.
+        Pause_PopOutScreen.SetActive(false);
+        // Set OptionsPopOutScreen active to true.
+        Options_PopOutScreen.SetActive(true);
+    }
+
     // When Back Button is Pressed.
-    public void BackButtonPressed()
+    public void ResumeButtonPressed()
     {
         Pause_PopOutScreen.SetActive(false);
     }
