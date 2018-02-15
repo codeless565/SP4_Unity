@@ -10,7 +10,7 @@ public class TutorialTextBox : MonoBehaviour
     public int startLine;
     public int endLine;
 
-    bool MovedW, MovedA, MovedS, MovedD;
+    public bool MovedW, MovedA, MovedS, MovedD;
     bool triedAttack, triedInteract, triedChangeW;
     public bool pauseBox;
     // Use this for initialization
@@ -65,40 +65,35 @@ public class TutorialTextBox : MonoBehaviour
         switch (textboxManager.currentLine)
         {
             case 2:
-                if(MovedA && MovedD && MovedS && MovedW)
+                if(!MovedA || !MovedD || !MovedS || !MovedW)
+                {
+                        if (Input.GetKey(KeyCode.A))
+                        {
+                            MovedA = true;
+                        }
+                    
+                        if (Input.GetKey(KeyCode.D))
+                        {
+                            MovedD = true;
+                        }
+                  
+                        if (Input.GetKey(KeyCode.S))
+                        {
+                            MovedS = true;
+                        }
+                  
+                        if (Input.GetKey(KeyCode.W))
+                        {
+                            MovedW = true;
+                        }
+                        
+                   
+                }
+                else
                 {
                     textboxManager.currentLine = 3;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                }
-                else if(!MovedA)
-                {
-                    if (Input.GetKey(KeyCode.A))
-                    {
-                        MovedA = true;
-                    }
-                }
-                else if(!MovedD)
-                {
-                    if (Input.GetKey(KeyCode.D))
-                    {
-                        MovedD = true;
-                    }
-                }
-                else if(!MovedS)
-                {
-                    if (Input.GetKey(KeyCode.S))
-                    {
-                        MovedS = true;
-                    }
-                }
-                else if (!MovedW)
-                {
-                    if (Input.GetKey(KeyCode.W))
-                    {
-                        MovedW = true;
-                    }
-                    
                 }
                 break;
 
