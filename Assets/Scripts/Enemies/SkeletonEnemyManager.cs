@@ -18,19 +18,19 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     EnemySkeletonState skeletonState;
     public Animation anim;
 
-    // Vector 3 to store the velocity of the enemy.
-    private Vector3 smoothVelocity = Vector3.zero;
+    private Vector2 currentVelocity = Vector2.zero;
     private float minDistanceApart = 1.5f;
     private float chaseDistanceRange = 15f;
     private float distanceApart;
     public float chasingTimer = 4f;
+    public float maxSpeed = 5f;
 
     // Player //
     public PlayerManager player;
     public Transform playerTransform;
-    private Vector3 playerPos;
-    private Vector3 distanceOffset;
-    private Vector3 PlayerDestination;
+    private Vector2 playerPos;
+    private Vector2 distanceOffset;
+    private Vector2 PlayerDestination;
 
     // Stats //
     [SerializeField]
@@ -120,7 +120,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         anim = GetComponent<Animation>();
 
         // Setting an Offset.
-        distanceOffset.Set(1f, 0f, 1f);
+        distanceOffset.Set(1f, 1f);
 	}
 	
 	// Update is called once per frame
@@ -191,10 +191,10 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 	}
 
     // Enemy Idle
-    private void SkeletonIdle(Vector3 _playerDesti)
+    private void SkeletonIdle(Vector2 _playerDesti)
     {
         // Distance between Player and Enemy.
-        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+        distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
         // If Player is within Enemy Chase Range, then change State to CHASE.
         if(distanceApart < chaseDistanceRange)
@@ -204,13 +204,13 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Enemy Chase
-    private void SkeletonChase(Vector3 _playerDesti, Vector3 _playerPos, Vector3 _distOffset)
+    private void SkeletonChase(Vector2 _playerDesti, Vector2 _playerPos, Vector2 _distOffset)
     {
         // Enemy will walk to Player Position smoothly.
-        transform.position = Vector3.SmoothDamp(transform.position, _playerPos - _distOffset, ref smoothVelocity, chasingTimer);
+        transform.position = Vector2.SmoothDamp(transform.position, _playerPos - _distOffset, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
         // Distance between Player and Enemy.
-        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+        distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
         // If Enemy has reached the destination, change State to Attack.
         if (distanceApart < minDistanceApart)
@@ -226,10 +226,10 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Enemy Attack
-    private void SkeletonAttack(Vector3 _playerDesti)
+    private void SkeletonAttack(Vector2 _playerDesti)
     {
         // Distance between Player and Enemy.
-        distanceApart = Vector3.Distance(transform.position, _playerDesti);
+        distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
         // Minus Player Health (?)
 

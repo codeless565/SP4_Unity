@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Levels_PopOutScreenControls : MonoBehaviour {
+public class Levels_PopOutScreenControls : MonoBehaviour
+{
 
     [SerializeField]
     Button m_backButton, m_playButton, m_tutorialButton;
