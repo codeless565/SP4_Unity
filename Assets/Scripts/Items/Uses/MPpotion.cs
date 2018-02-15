@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MPpotion : MonoBehaviour, ItemBase
+public class MPpotion : ItemBase
 {
     Sprite ItemImage;
     bool used;

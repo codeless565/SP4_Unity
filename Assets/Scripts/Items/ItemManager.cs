@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemManager : MonoBehaviour
+public class ItemManager
 {
     private static ItemManager instance;
-    private ItemManager() { Awake(); }
+    private ItemManager()
+    {
+        ItemList.Add(new Sword());
+        ItemList.Add(new Axe());
+
+        ItemList.Add(new HPpotion());
+        ItemList.Add(new MPpotion());
+    }
     public static ItemManager Instance
     {
         get
@@ -18,16 +25,6 @@ public class ItemManager : MonoBehaviour
     }
 
     public List<ItemBase> ItemList = new List<ItemBase>();
-
-    // Use this for initialization
-    void Awake()
-    {
-        ItemList.Add(new Sword());
-        ItemList.Add(new Axe());
-
-        ItemList.Add(new HPpotion());
-        ItemList.Add(new MPpotion());
-    }
 
     public ItemBase CheckGO(GameObject go)
     {

@@ -343,4 +343,9 @@ public class PlayerManager : MonoBehaviour, StatsBase
             }
         }
     }
+
+    public void AddGold(int Amount)
+    {
+        gold += Amount;
+    }
 }
