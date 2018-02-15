@@ -10,7 +10,7 @@ public class TutorialTextBox : MonoBehaviour
     public int startLine;
     public int endLine;
 
-    bool MovedW, MovedA, MovedS, MovedD;
+    public bool MovedW, MovedA, MovedS, MovedD;
     bool triedAttack, triedInteract, triedChangeW;
     public bool pauseBox;
     // Use this for initialization
@@ -65,24 +65,29 @@ public class TutorialTextBox : MonoBehaviour
         switch (textboxManager.currentLine)
         {
             case 2:
-                if (!MovedA || !MovedD || !MovedS || !MovedW)
+                if(!MovedA || !MovedD || !MovedS || !MovedW)
                 {
-                    if (Input.GetKey(KeyCode.W))
-                    {
-                        MovedW = true;
-                    }
-                    if (Input.GetKey(KeyCode.A))
-                    {
-                        MovedA = true;
-                    }
-                    if (Input.GetKey(KeyCode.S))
-                    {
-                        MovedS = true;
-                    }
-                    if (Input.GetKey(KeyCode.D))
-                    {
-                        MovedD = true;
-                    }
+                        if (Input.GetKey(KeyCode.A))
+                        {
+                            MovedA = true;
+                        }
+                    
+                        if (Input.GetKey(KeyCode.D))
+                        {
+                            MovedD = true;
+                        }
+                  
+                        if (Input.GetKey(KeyCode.S))
+                        {
+                            MovedS = true;
+                        }
+                  
+                        if (Input.GetKey(KeyCode.W))
+                        {
+                            MovedW = true;
+                        }
+                        
+                   
                 }
                 else
                 {
@@ -105,7 +110,6 @@ public class TutorialTextBox : MonoBehaviour
                     textboxManager.currentLine = 5;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    //textboxManager.currentLine = 6;
                 }
                 break;
 
@@ -122,7 +126,6 @@ public class TutorialTextBox : MonoBehaviour
                     textboxManager.currentLine = 7;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    //textboxManager.currentLine = 8;
                 }
                 break;
 
@@ -139,7 +142,6 @@ public class TutorialTextBox : MonoBehaviour
                     textboxManager.currentLine = 9;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                    //textboxManager.currentLine = 9;
                 }
                 break;
         }
@@ -150,11 +152,25 @@ public class TutorialTextBox : MonoBehaviour
     {
         if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
         {
-            if(!MovedA || !MovedD || !MovedS || !MovedW && !triedAttack || !triedChangeW || !triedInteract)
+            if(!MovedA || !MovedD || !MovedS || !MovedW)
             {
                 pauseBox = true;
                 textboxManager.DisableTextBox();
-                //textboxManager.currentLine = textboxManager.currentLine + 1;
+            }
+            else if(!triedAttack)
+            {
+                pauseBox = true;
+                textboxManager.DisableTextBox();
+            }
+            else if(!triedChangeW)
+            {
+                pauseBox = true;
+                textboxManager.DisableTextBox();
+            }
+            else if(!triedInteract)
+            {
+                pauseBox = true;
+                textboxManager.DisableTextBox();
             }
         }  
         //show text letter by letter
