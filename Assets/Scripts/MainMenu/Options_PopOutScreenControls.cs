@@ -29,7 +29,7 @@ public class Options_PopOutScreenControls : MonoBehaviour
         // Background Music
         musicSource = backgroundMusic.GetComponent<AudioSource>();
         // Setting the musicVolumeSlider value.
-        musicVolumeSlider.value = PlayerPrefs.GetFloat("MainMenu_BGM_Volume", 1);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("BGM_Volume", 1);
 
         // Button Pressed Sound Effects
         buttonPressedSFX_Source = buttonPressedSFX.GetComponent<AudioSource>();
@@ -50,7 +50,7 @@ public class Options_PopOutScreenControls : MonoBehaviour
     public void ApplyButtonPressed()
     {
         // Save the Changes made to the MusicVolume Slider.
-        PlayerPrefs.SetFloat("MainMenu_BGM_Volume", musicVolumeSlider.value);
+        PlayerPrefs.SetFloat("BGM_Volume", musicVolumeSlider.value);
         // Save the Changes made to the SoundEFfects Slider.
         PlayerPrefs.SetFloat("ButtonPressedSFX_Volume", soundEffectSlider.value);
     }
@@ -60,7 +60,7 @@ public class Options_PopOutScreenControls : MonoBehaviour
     {
         // If Back is Pressed w/o saving...
         // The music volume will stay the same.
-        musicVolumeSlider.value = PlayerPrefs.GetFloat("MainMenu_BGM_Volume", 1);
+        musicVolumeSlider.value = PlayerPrefs.GetFloat("BGM_Volume", 1);
         // The sound effects volume will stay the same.
         soundEffectSlider.value = PlayerPrefs.GetFloat("ButtonPressedSFX_Volume", 1);
 
