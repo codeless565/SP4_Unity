@@ -14,36 +14,52 @@ public class InventoryBar : MonoBehaviour {
     float ButtonMarginY = 30.0f;
 
     int maxNumOfX = 6;
+
+    GameObject[] HotBar;
     // Use this for initialization
     void Start () {
-        
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        
-    }
-
-    public void DisplayPlayerEQ()
-    {
+        HotBar = new GameObject[6];
         int currentX = 0;
         int currentY = 0;
-        foreach (ItemWeapons weapon in gameObject.GetComponent<PlayerManager>().Equipment)
+
+
+        for (int i =0;i<HotBar.Length;++i)
         {
             if (currentX >= maxNumOfX)
                 break;
 
             GameObject newIcon = Instantiate(ItemLogoPrefab) as GameObject;
             newIcon.transform.SetParent(Panel.transform);
-            newIcon.GetComponentInChildren<Text>().text = (currentX+1).ToString();
-            newIcon.GetComponentInChildren<Text>().alignment=TextAnchor.UpperLeft;
-            newIcon.GetComponent<Image>().sprite = weapon.getItemImage();
+            newIcon.GetComponentInChildren<Text>().text = (currentX + 1).ToString();
+            newIcon.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
+
 
             newIcon.transform.position = new Vector3((Panel.transform.position.x - Panel.GetComponent<RectTransform>().rect.width * 0.25f) + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
                                                     Panel.transform.position.y + currentY * (newIcon.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY));
 
             currentX++;
-            
+
+            HotBar[i] = newIcon;
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update () {
+    }
+
+    public void AddPlayerHotBar(ItemBase item)
+    {
+        for (int i = 0; i < HotBar.Length; ++i)
+        {
+            if (HotBar[i].GetComponent<Image>().sprite.name == item.getItemImage().name)
+                break;
+
+            if (HotBar[i].GetComponent<Image>().sprite.name == "UISprite")
+            {
+                HotBar[i].GetComponent<Image>().sprite = item.getItemImage();
+                break;
+            }
         }
     }
 }

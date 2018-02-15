@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MPpotion : MonoBehaviour, ItemUses
+public class MPpotion : MonoBehaviour, ItemBase
 {
     Sprite ItemImage;
     bool used;
@@ -12,19 +12,6 @@ public class MPpotion : MonoBehaviour, ItemUses
     public MPpotion()
     {
         ItemImage = GameObject.FindGameObjectWithTag("UsesObjectHolder").GetComponent<UsesObjectHolder>().MPpotion;
-    }
-
-    public bool isUsed
-    {
-        get
-        {
-            return used;
-        }
-
-        set
-        {
-            used = value;
-        }
     }
 
     public int getCost()
@@ -69,7 +56,7 @@ public class MPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Health;
+            return 0;
         }
 
         set
@@ -82,7 +69,7 @@ public class MPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Attack;
+            return 0.0f;
         }
 
         set
@@ -95,7 +82,7 @@ public class MPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Defense;
+            return 0.0f;
         }
 
         set
@@ -108,7 +95,7 @@ public class MPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return MoveSpeed;
+            return 0.0f;
         }
 
         set

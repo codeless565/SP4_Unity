@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuControls : MonoBehaviour {
+public class MainMenuControls : MonoBehaviour
+{
 
     [SerializeField]
     Button m_startButton, m_optionButton;

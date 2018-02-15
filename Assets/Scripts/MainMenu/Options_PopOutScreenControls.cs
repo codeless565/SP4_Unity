@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Options_PopOutScreenControls : MonoBehaviour {
+public class Options_PopOutScreenControls : MonoBehaviour
+{
 
     [SerializeField]
     Button m_backButton, m_applyButton;

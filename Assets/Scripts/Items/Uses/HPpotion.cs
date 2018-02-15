@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HPpotion : MonoBehaviour, ItemUses
+public class HPpotion : MonoBehaviour, ItemBase
 {
     Sprite ItemImage;
     bool used;
@@ -14,20 +14,6 @@ public class HPpotion : MonoBehaviour, ItemUses
         ItemImage = GameObject.FindGameObjectWithTag("UsesObjectHolder").GetComponent<UsesObjectHolder>().HPpotion;
     }
 
-
-
-    public bool isUsed
-    {
-        get
-        {
-            return used;
-        }
-
-        set
-        {
-            used = value;
-        }
-    }
 
     public int Level
     {
@@ -54,7 +40,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Health;
+            return 0;
         }
 
         set
@@ -67,7 +53,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Attack;
+            return 0;
         }
 
         set
@@ -80,7 +66,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return Defense;
+            return 0;
         }
 
         set
@@ -93,7 +79,7 @@ public class HPpotion : MonoBehaviour, ItemUses
     {
         get
         {
-            return MoveSpeed;
+            return 0.0f;
         }
 
         set
