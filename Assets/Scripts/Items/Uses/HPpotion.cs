@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HPpotion : MonoBehaviour, ItemBase
+public class HPpotion :  ItemBase
 {
     Sprite ItemImage;
     bool used;
