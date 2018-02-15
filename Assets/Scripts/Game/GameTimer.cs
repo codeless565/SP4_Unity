@@ -11,13 +11,11 @@ public class GameTimer : MonoBehaviour {
     public Text TimeDisplay;
     public float m_Gametime = 500; //In Seconds
 
-	// Use this for initialization
 	void Start () {
         if (m_Gametime <= 10)
             m_Gametime = 10;
 	}
 	
-	// Update is called once per frame
 	void Update () {
         m_Gametime -= Time.deltaTime;
         TimeDisplay.text = "Time: " + m_Gametime.ToString("0") + " seconds";
@@ -26,6 +24,19 @@ public class GameTimer : MonoBehaviour {
         {
             gameObject.GetComponent<GameMode>().GameOver();
         }
+    }
 
+    // Modifiers //
+    void AddTime(float _time)
+    {
+        m_Gametime += _time;
+    }
+
+    void DeductTime(float _time)
+    {
+        m_Gametime -= _time;
+
+        if (m_Gametime < 0)
+            m_Gametime = 0;
     }
 }
