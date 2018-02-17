@@ -14,7 +14,7 @@ public class CollisionCheck : MonoBehaviour {
 		
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<CollisionBase>() == null) //Check if the script with "CollisionBase" as interface exists
             return;
