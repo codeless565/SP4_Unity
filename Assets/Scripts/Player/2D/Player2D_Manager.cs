@@ -5,7 +5,6 @@ using UnityEngine;
 /* For Player in 2D */
 public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 {
-
     /* Player Stats */
     [SerializeField]
     int playerLevel = 1;
@@ -19,6 +18,16 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     float movespeed = 10;
     [SerializeField]
     public int gold = 9999999;
+
+    /* Direction Player will face */
+    enum Direction
+    {
+        Up = 0,
+        Down,
+        Left,
+        Right,
+    };
+    Direction toMove = 0;
 
     /* Setters and Getters */
     public string Name
@@ -114,55 +123,101 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
-            /* In which direction and axis will player be moving in */
-            //movement = new Vector3(0, transform.position.y, 0);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerForward), 0.55F);
+            // Sprite not facing up 
+            if (toMove != Direction.Up)
+            {
+                switch (toMove)
+                {
+                    case Direction.Down:
+                        transform.Rotate(0, 0, 180);
+                        break;
 
+                    case Direction.Right:
+                        transform.Rotate(0, 0, 90);
+                        break;
+
+                    case Direction.Left:
+                        transform.Rotate(0, 0, -90);
+                        break;
+                }
+                toMove = Direction.Up;
+            }
+
+            // Movement
             transform.position += transform.up * MoveSpeed * Time.deltaTime;
-
-            //Debug.Log("Position : " + transform.position);
-            //Debug.Log("Rotation : " + transform.rotation);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            /* In which direction and axis will player be moving in */
-            //movement = new Vector3(0, transform.position.y, 0);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerForward, -movement), 0.55F);
+            if (toMove != Direction.Down)
+            {
+                switch (toMove)
+                {
+                    case Direction.Up:
+                        transform.Rotate(0, 0, 180);
+                        break;
 
-            transform.position -= transform.up * MoveSpeed * Time.deltaTime;
+                    case Direction.Right:
+                        transform.Rotate(0, 0, -90);
+                        break;
 
-            //Debug.Log("Position : " + transform.position);
-            //Debug.Log("Rotation : " + transform.rotation);
+                    case Direction.Left:
+                        transform.Rotate(0, 0, 90);
+                        break;
+                }
+                toMove = Direction.Down;
+            }
+
+            transform.position += transform.up * MoveSpeed * Time.deltaTime;
         }
 
         // Left / Right
         if (Input.GetKey(KeyCode.A))
         {
-            /* In which direction and axis will player be moving in */
-            //movement = new Vector3(transform.position.x + 1, 0.0F, 0.0F);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerForward, movement), /*0.15F*/ 1);
+            if (toMove != Direction.Left)
+            {
+                switch (toMove)
+                {
+                    case Direction.Down:
+                        transform.Rotate(0, 0, -90);
+                        break;
 
-            //transform.Rotate(0, 0, 90);
-            //transform.Rotate(Vector3.back);
-            //transform.LookAt(transform.position - Vector3.right);
+                    case Direction.Right:
+                        transform.Rotate(0, 0, 180);
+                        break;
 
-            transform.position -= transform.right * MoveSpeed * Time.deltaTime;
+                    case Direction.Up:
+                        transform.Rotate(0, 0, 90);
+                        break;
+                }
+                toMove = Direction.Left;
+            }
+
+            transform.position += transform.up * MoveSpeed * Time.deltaTime;
 
         }
         if (Input.GetKey(KeyCode.D))
         {
-            /* In which direction and axis will player be moving in */
-            //movement = new Vector3(transform.position.x, 0.0F, 0.0F);
-            //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(playerForward, movement), /*0.15F*/ 1);
+            if (toMove != Direction.Right)
+            {
+                switch (toMove)
+                {
+                    case Direction.Down:
+                        transform.Rotate(0, 0, 90);
+                        break;
 
-            //transform.Rotate(0, 0, -90 * Time.deltaTime);
-            transform.position += transform.right * MoveSpeed * Time.deltaTime;
+                    case Direction.Left:
+                        transform.Rotate(0, 0, 180);
+                        break;
 
+                    case Direction.Up:
+                        transform.Rotate(0, 0, -90);
+                        break;
+                }
+                toMove = Direction.Right;
+            }
 
-
+            transform.position += transform.up * MoveSpeed * Time.deltaTime;
         }
-
-
     }
 
     /* Interaction with Objects */
@@ -195,6 +250,4 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         Debug.Log("MoveSpeed : " + MoveSpeed);
         Debug.Log("Gold : " + gold.ToString());
     }
-
-   
 }
