@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CollisionExit : MonoBehaviour, CollisionBase
 {
-    public void CollisionResponse()
+    public void CollisionResponse(string tag)
     {
         GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameClear();
     }

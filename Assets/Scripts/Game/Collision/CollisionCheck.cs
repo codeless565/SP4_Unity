@@ -18,7 +18,7 @@ public class CollisionCheck : MonoBehaviour {
     {
         if (other.GetComponent<CollisionBase>() == null) //Check if the script with "CollisionBase" as interface exists
             return;
-
-        other.GetComponent<CollisionBase>().CollisionResponse();
+        
+        other.GetComponent<CollisionBase>().CollisionResponse(tag);
     }
 }

@@ -221,7 +221,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     }
 
     /* Interaction with Objects */
-    public void CollisionResponse()
+    public void CollisionResponse(string _tag)
     {
         // Player - Traps 
         // When hit by traps, change state to be "playerInjuried"

@@ -16,7 +16,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Enemy //
     EnemySkeletonState skeletonState;
-    public Animation anim;
+    //public Animation anim;
 
     private Vector2 currentVelocity = Vector2.zero;
     private float minDistanceApart = 1.5f;
@@ -26,7 +26,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     public float maxSpeed = 5f;
 
     // Player //
-    public PlayerManager player;
+    public Player2D_Manager player;
     public Transform playerTransform;
     private Vector2 playerPos;
     private Vector2 distanceOffset;
@@ -35,6 +35,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Stats //
     [SerializeField]
     int enemyLevel = 0, health = 10;
+    [SerializeField]
     float attack = 10, defense = 10, movespeed = 10;
 
     // Stats Setter and Getter //
@@ -117,7 +118,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
-        anim = GetComponent<Animation>();
+        //anim = GetComponent<Animation>();
 
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);
@@ -126,43 +127,43 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 	// Update is called once per frame
 	void Update ()
     {
-        transform.LookAt(playerTransform);
+        //transform.LookAt(playerTransform);
         // Getting Player Position.
-        playerPos = player.GetComponent<PlayerManager>().transform.position;
+        playerPos = player.transform.position;
         PlayerDestination = playerPos - distanceOffset;
 
-        if (skeletonState == EnemySkeletonState.IDLE)
-        {
-            anim.Play("Idle");
-        }
+        //if (skeletonState == EnemySkeletonState.IDLE)
+        //{
+        //    anim.Play("Idle");
+        //}
 
-        // Changing Enemy States Manually //
-        if(Input.GetKey(KeyCode.Alpha1))
-        {
-            // Change State to Idle
-            skeletonState = EnemySkeletonState.IDLE;
-        }
-        if(Input.GetKey(KeyCode.Alpha2))
-        {
-            // Change State to Walk
-            skeletonState = EnemySkeletonState.WALK;
-        }
-        if(Input.GetKey(KeyCode.Alpha3))
-        {
-            // Change State to Chase
-            skeletonState = EnemySkeletonState.CHASE;
-        }
-        if (Input.GetKey(KeyCode.Alpha4))
-        {
-            // Change State to Attack
-            skeletonState = EnemySkeletonState.ATTACK;
-        }
-        if (Input.GetKey(KeyCode.Alpha5))
-        {
-            // Change State to Death
-            skeletonState = EnemySkeletonState.DIE;
-        }
-        // END //
+        //// Changing Enemy States Manually //
+        //if(Input.GetKey(KeyCode.Alpha1))
+        //{
+        //    // Change State to Idle
+        //    skeletonState = EnemySkeletonState.IDLE;
+        //}
+        //if(Input.GetKey(KeyCode.Alpha2))
+        //{
+        //    // Change State to Walk
+        //    skeletonState = EnemySkeletonState.WALK;
+        //}
+        //if(Input.GetKey(KeyCode.Alpha3))
+        //{
+        //    // Change State to Chase
+        //    skeletonState = EnemySkeletonState.CHASE;
+        //}
+        //if (Input.GetKey(KeyCode.Alpha4))
+        //{
+        //    // Change State to Attack
+        //    skeletonState = EnemySkeletonState.ATTACK;
+        //}
+        //if (Input.GetKey(KeyCode.Alpha5))
+        //{
+        //    // Change State to Death
+        //    skeletonState = EnemySkeletonState.DIE;
+        //}
+        //// END //
 
         // Enemy States
         switch (skeletonState)
@@ -187,8 +188,10 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
                 break;
         }
 
-        AnimationUpdate();
-	}
+        //AnimationUpdate();
+
+        PlayerHitEnemy();
+    }
 
     // Enemy Idle
     private void SkeletonIdle(Vector2 _playerDesti)
@@ -237,7 +240,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         if (distanceApart > minDistanceApart)
         {
             // Start Parallel action.
-            float _delayTime = anim.GetClip("Attack").length;
+            float _delayTime = /*anim.GetClip("Attack").length*/ 0.5F;
             StartCoroutine(SkeletonStateToChase(_delayTime));
         }
     }
@@ -245,11 +248,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // When Skeleton Die, wait for animation to be done playing before destroying it.
     IEnumerator SkeletonStateToDie()
     {
-        float _delayTime = anim.GetClip("Death").length;
+        float _delayTime = /*anim.GetClip("Death").length*/ 0.5F;
         yield return new WaitForSeconds(_delayTime);
 
         Destroy(gameObject);
     }
+
     // When Player moved out of Enemy attack range, play finish animation before chasing.
     IEnumerator SkeletonStateToChase(float _delay)
     {
@@ -265,24 +269,38 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         switch(skeletonState)
         {
             case EnemySkeletonState.IDLE:
-                anim.Play("Idle");
+                //anim.Play("Idle");
                 break;
 
             case EnemySkeletonState.WALK:
-                anim.Play("Walk");
+               // anim.Play("Walk");
                 break;
 
             case EnemySkeletonState.ATTACK:
-                anim.Play("Attack");
+                //anim.Play("Attack");
                 break;
 
             case EnemySkeletonState.CHASE:
-                anim.Play("Run");
+               // anim.Play("Run");
                 break;
 
             case EnemySkeletonState.DIE:
-                anim.Play("Death");
+               // anim.Play("Death");
                 break;
         }
     }
+
+    // Handles Player Attack Enemy 
+    private void PlayerHitEnemy()
+    {
+        if (GetComponent<CollisionPlayerMelee>().Attacked)
+        {
+            health -= (int)player.Attack;
+            GetComponent<CollisionPlayerMelee>().Attacked = false;
+        }
+
+        if (health <= 0)
+            skeletonState = EnemySkeletonState.DIE;
+    }
+    
 }
