@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Pause_PopOutScreenControls : MonoBehaviour
 {
     [SerializeField]
-    Button m_resumeButton;
-
-    [SerializeField]
-    GameObject Pause_PopOutScreen, Options_PopOutScreen;
+    GameObject Pause_PopOutScreen, Options_PopOutScreen, Exit_PopOutScreen;
 
 	// Use this for initialization
 	void Start () { }
@@ -36,5 +32,12 @@ public class Pause_PopOutScreenControls : MonoBehaviour
     public void ResumeButtonPressed()
     {
         Pause_PopOutScreen.SetActive(false);
+    }
+
+    // When Exit Button is Pressed.
+    public void ExitButtonPressed()
+    {
+        Pause_PopOutScreen.SetActive(false);
+        Exit_PopOutScreen.SetActive(true);
     }
 }
