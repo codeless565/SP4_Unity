@@ -14,6 +14,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         DIE,
     }
 
+    // Stats //
+    [SerializeField]
+    int enemyLevel = 0, health = 10;
+    [SerializeField]
+    float attack = 10, defense = 10, movespeed = 10;
+
     // Enemy //
     EnemySkeletonState skeletonState;
     //public Animation anim;
@@ -22,21 +28,17 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private float minDistanceApart = 1.5f;
     private float chaseDistanceRange = 15f;
     private float distanceApart;
+    private float EnemyAttackTimer;
+    private bool canCountAttackTimer = false;
     public float chasingTimer = 4f;
     public float maxSpeed = 5f;
 
     // Player //
-    public Player2D_Manager player;
-    public Transform playerTransform;
     private Vector2 playerPos;
     private Vector2 distanceOffset;
     private Vector2 PlayerDestination;
-
-    // Stats //
-    [SerializeField]
-    int enemyLevel = 0, health = 10;
-    [SerializeField]
-    float attack = 10, defense = 10, movespeed = 10;
+    public Player2D_Manager player;
+    public Transform playerTransform;
 
     // Stats Setter and Getter //
     public int Level
@@ -122,12 +124,13 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);
+        // Setting Enemy Attack Timer to 0.8f
+        EnemyAttackTimer = 0.8f;
 	}
 	
 	// Update is called once per frame
 	void Update ()
-    {
-        //transform.LookAt(playerTransform);
+    {        
         // Getting Player Position.
         playerPos = player.transform.position;
         PlayerDestination = playerPos - distanceOffset;
@@ -189,6 +192,14 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
 
         //AnimationUpdate();
+        
+        // If AttackTimer can be counted down.
+        if(canCountAttackTimer)
+        {
+            EnemyAttackTimer -= Time.deltaTime;
+        }
+
+        Debug.Log(player.Health);
 
         PlayerHitEnemy();
     }
@@ -234,11 +245,21 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Distance between Player and Enemy.
         distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
-        // Minus Player Health (?)
+        // Set CountAttackTimer to true.
+        canCountAttackTimer = true;
+
+        if(EnemyAttackTimer <= 0f)
+        {
+            EnemyAttackTimer = 0.8f;
+            player.Health -= (int)Attack;
+        }
 
         // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
         if (distanceApart > minDistanceApart)
         {
+            // Set CountAttackTimer to false
+            canCountAttackTimer = false;
+
             // Start Parallel action.
             float _delayTime = /*anim.GetClip("Attack").length*/ 0.5F;
             StartCoroutine(SkeletonStateToChase(_delayTime));
