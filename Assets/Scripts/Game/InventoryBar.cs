@@ -10,10 +10,6 @@ public class InventoryBar : MonoBehaviour {
     [SerializeField]
     GameObject ItemLogoPrefab;
 
-    float PanelMargin = 35.0f;
-    float ButtonMarginX = 30.0f;
-    float ButtonMarginY = 30.0f;
-
     int maxNumOfX = 6;
 
     GameObject[] HotBar;
@@ -28,11 +24,6 @@ public class InventoryBar : MonoBehaviour {
             GameObject newIcon = Instantiate(ItemLogoPrefab, Bar.transform) as GameObject;
             newIcon.GetComponentInChildren<Text>().text = (currentX + 1).ToString();
             newIcon.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
-
-
-            newIcon.transform.position = new Vector3(PanelMargin + Bar.GetComponent<RectTransform>().rect.xMin + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
-                                                   0) + Bar.transform.position;
-
             currentX++;
 
             HotBar[i] = newIcon;
