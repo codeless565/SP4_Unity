@@ -130,6 +130,7 @@ public class ShopDisplay : MonoBehaviour
     public void DisplayShopMenu(string itemtype)
     {
         ResetDisplay();
+
         foreach (ItemBase item in ItemManager.Instance.ItemList)
         {
             if (item.getType() != itemtype)
@@ -149,6 +150,31 @@ public class ShopDisplay : MonoBehaviour
 
             }
         }
+    }
+
+    public void DisplayAllEquipment()
+    {
+        ResetDisplay();
+        foreach (ItemBase item in ItemManager.Instance.ItemList)
+        {
+            if (item.getType() == "Uses")
+                continue;
+
+            foreach (GameObject go in ShopLayout)
+            {
+                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                    break;
+                else if (go.GetComponent<Image>().sprite.name != "UISprite")
+                    continue;
+                else
+                {
+                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    break;
+                }
+
+            }
+        }
+
     }
 
     void DisplayConfirmedItem()

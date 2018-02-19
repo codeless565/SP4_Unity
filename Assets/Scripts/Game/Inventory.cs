@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public GameObject WeaponsButton;
+    public GameObject EquipmentDropdown;
     public GameObject UsesButton;
     public GameObject InventoryUICanvas;
 
@@ -23,7 +23,7 @@ public class Inventory : MonoBehaviour
         UsesDisplay = false;
         InventoryUI = false;
 
-        WeaponsButton.GetComponent<Image>().color = ButtonActiveColour;
+        EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
     }
 
@@ -31,9 +31,9 @@ public class Inventory : MonoBehaviour
     void Update()
     {
         if (WeaponsDisplay)
-            WeaponsButton.GetComponent<Image>().color = ButtonActiveColour;
+            EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         else
-            WeaponsButton.GetComponent<Image>().color = ButtonInactiveColour;
+            EquipmentDropdown.GetComponent<Image>().color = ButtonInactiveColour;
 
         if (UsesDisplay)
             UsesButton.GetComponent<Image>().color = ButtonActiveColour;
@@ -43,12 +43,33 @@ public class Inventory : MonoBehaviour
         InventoryUICanvas.SetActive(InventoryUI);
     }
 
-    public void OpenWeapons()
+    public void OpenEquipment()
     {
-        gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Weapons");
+        switch (EquipmentDropdown.GetComponent<Dropdown>().value)
+        {
+            case 1:
+                gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Weapons");
+                break;
+            case 2:
+                gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Helmets");
+                break;
+            case 3:
+                gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Chestpieces");
+                break;
+            case 4:
+                gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Leggings");
+                break;
+            case 5:
+                gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Shoes");
+                break;
+            default:
+                gameObject.GetComponent<InventoryDisplay>().DisplayAllEquipments();
+                break;
+        }
         WeaponsDisplay = true;
         UsesDisplay = false;
     }
+
     public void OpenUses()
     {
         gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Uses");
@@ -65,7 +86,7 @@ public class Inventory : MonoBehaviour
     public void OpenInventoryUI()
     {
         gameObject.GetComponent<InventoryDisplay>().getItemDisplayCanvas().SetActive(true);
-        OpenWeapons();
+        OpenEquipment();
         InventoryUI = true;
     }
 

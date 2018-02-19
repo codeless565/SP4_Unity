@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponObjectHolder : MonoBehaviour
 {
+    public Sprite Helmet;
+
     public Sprite Sword;
     public Sprite Axe;
 }

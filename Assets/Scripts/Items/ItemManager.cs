@@ -8,6 +8,8 @@ public class ItemManager
     private static ItemManager instance;
     private ItemManager()
     {
+        ItemList.Add(new Helmet());
+
         ItemList.Add(new Sword());
         ItemList.Add(new Axe());
 
@@ -37,3 +39,12 @@ public class ItemManager
         return null;
     }
 }
+
+// Adding Items?
+// Get the image
+// Change Sprite Texture Type to Sprite (2D and UI)
+//Go to holder and declare sprite/item name
+// Throw sprite into holder in editor 
+// Create new Item Class 
+// Make sure type is correct (Check on ItemBase)
+// Throw into ItemManager in Constructor

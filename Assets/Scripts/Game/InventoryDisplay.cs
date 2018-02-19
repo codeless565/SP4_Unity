@@ -41,14 +41,14 @@ public class InventoryDisplay : MonoBehaviour {
         ConfirmationCanvas = false;
         ConfirmButton = Instantiate(ItemButton, EquipConfirmationCanvas.transform) as GameObject;
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
-        ConfirmButton.transform.position = new Vector3(- 50.0f,  - 100.0f) + InventoryDisplayCanvas.transform.position;
+        ConfirmButton.transform.position = new Vector3(-50.0f,  - 100.0f) + EquipConfirmationCanvas.transform.position;
         ConfirmButton.GetComponent<Button>().onClick.RemoveAllListeners();
         ConfirmButton.GetComponent<Button>().onClick.AddListener(ConfirmEquip);
 
         CancelButton = Instantiate(ItemButton, EquipConfirmationCanvas.transform) as GameObject;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelEquip);
-        CancelButton.transform.position = new Vector3(50.0f,- 100.0f) + InventoryDisplayCanvas.transform.position;
+        CancelButton.transform.position = new Vector3(50.0f,- 100.0f) + EquipConfirmationCanvas.transform.position;
 
     }
 
@@ -86,6 +86,30 @@ public class InventoryDisplay : MonoBehaviour {
 
             }
         }
+    }
+    public void DisplayAllEquipments()
+    {
+        ResetDisplay();
+        foreach (ItemBase item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        {
+            if (item.getType() == "Uses")
+                continue;
+
+            foreach (GameObject go in InventoryLayout)
+            {
+                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                    break;
+                else if (go.GetComponent<Image>().sprite.name != "UISprite")
+                    continue;
+                else
+                {
+                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    break;
+                }
+
+            }
+        }
+
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }

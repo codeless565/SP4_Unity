@@ -13,5 +13,9 @@ public interface ItemBase : StatsBase
 }
 
 //  Item Types
-//  Uses
-//  Weapons
+// Weapons
+// Helmets
+// Chestpieces
+// Leggings
+// Shoes
+// Uses
