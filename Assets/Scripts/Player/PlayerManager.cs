@@ -319,7 +319,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         Inventory.Add(newitem);
         
         gameObject.GetComponent<InventoryBar>().AddPlayerHotBar(newitem);
-        Debug.Log("TO BE IMPLEMENTED");
+        Debug.Log("PlayerManager->AddItem TO BE IMPLEMENTED");
         // to move to when player put into hotbar
     }
 

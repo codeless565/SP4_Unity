@@ -6,10 +6,11 @@ using UnityEngine.UI;
 public class InventoryBar : MonoBehaviour {
 
     [SerializeField]
-    GameObject Panel;
+    GameObject Bar;
     [SerializeField]
     GameObject ItemLogoPrefab;
 
+    float PanelMargin = 35.0f;
     float ButtonMarginX = 30.0f;
     float ButtonMarginY = 30.0f;
 
@@ -18,23 +19,19 @@ public class InventoryBar : MonoBehaviour {
     GameObject[] HotBar;
     // Use this for initialization
     void Start () {
-        HotBar = new GameObject[6];
+        HotBar = new GameObject[maxNumOfX];
         int currentX = 0;
-        int currentY = 0;
 
 
         for (int i =0;i<HotBar.Length;++i)
         {
-            if (currentX >= maxNumOfX)
-                break;
-
-            GameObject newIcon = Instantiate(ItemLogoPrefab, Panel.transform) as GameObject;
+            GameObject newIcon = Instantiate(ItemLogoPrefab, Bar.transform) as GameObject;
             newIcon.GetComponentInChildren<Text>().text = (currentX + 1).ToString();
             newIcon.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
 
 
-            newIcon.transform.position = new Vector3((Panel.transform.position.x - Panel.GetComponent<RectTransform>().rect.width * 0.25f) + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
-                                                    Panel.transform.position.y + currentY * (newIcon.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY));
+            newIcon.transform.position = new Vector3(PanelMargin + Bar.GetComponent<RectTransform>().rect.xMin + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
+                                                   0) + Bar.transform.position;
 
             currentX++;
 
