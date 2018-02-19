@@ -142,9 +142,9 @@ public class InventoryDisplay : MonoBehaviour {
             return;
 
         if (SelectedItem.getType() == "Uses")
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem); ;
-        if (SelectedItem.getType() == "Weapons")
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().EquipWeapon(SelectedItem);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
+        else
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().EquipEQ(SelectedItem);
         ConfirmationCanvas = false;
     }
 

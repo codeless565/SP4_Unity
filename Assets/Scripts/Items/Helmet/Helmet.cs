@@ -54,7 +54,7 @@ public class Helmet : ItemBase
     {
         get
         {
-            return Health;
+            return 30;
         }
 
         set
@@ -93,7 +93,7 @@ public class Helmet : ItemBase
     {
         get
         {
-            return MoveSpeed;
+            return 0.0f;
         }
 
         set

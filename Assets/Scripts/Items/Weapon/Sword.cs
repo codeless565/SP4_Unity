@@ -54,7 +54,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return Health;
+            return 0;
         }
 
         set
@@ -93,7 +93,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return MoveSpeed;
+            return 0;
         }
 
         set
