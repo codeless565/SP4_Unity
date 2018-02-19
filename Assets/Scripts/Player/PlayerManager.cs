@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     /* List storing Player equipment */
     public List<ItemBase> Inventory = new List<ItemBase>();
+    public List<ItemBase> getPlayerInventory() { return Inventory; }
     enum EQTYPE
     {
         HELMET,
@@ -153,19 +154,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         //UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
-
-        if (Input.GetKey(KeyCode.O))
-        {
-            Debug.Log("MOVE THESE TO ON CLICK WITH INVENTORY/UI");
-            EquipWeapon(Inventory[0]);
-            DebugPlayerStats();
-        }
-
-        if (Input.GetKey(KeyCode.P))
-        {
-            EquipWeapon(Inventory[1]);
-            DebugPlayerStats();
-        }
     }
 
     /* Movement of Player */
@@ -317,10 +305,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
     public void AddItem(ItemBase newitem)
     {
         Inventory.Add(newitem);
-        
-        gameObject.GetComponent<InventoryBar>().AddPlayerHotBar(newitem);
-        Debug.Log("PlayerManager->AddItem TO BE IMPLEMENTED");
-        // to move to when player put into hotbar
     }
 
     public void EquipWeapon(ItemBase _weapon)

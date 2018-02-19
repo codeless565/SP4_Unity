@@ -18,15 +18,12 @@ public class ShopDisplay : MonoBehaviour
     GameObject ConfirmationText;
 
     [SerializeField]
-    int NumberOfItemsPerRow = 3;
+    int NumberOfItemsPerRow = 5;
 
     [SerializeField]
-    int MaxNumberOfColumn = 10;
+    int MaxNumberOfColumn = 3;
 
     GameObject[] ShopLayout;
-
-    float ButtonMarginX = 30.0f;
-    float ButtonMarginY = 30.0f;
 
     GameObject ItemNameText;
     GameObject CostText;
@@ -49,20 +46,10 @@ public class ShopDisplay : MonoBehaviour
         ShopDisplayCanvas.SetActive(false);
 
         // Shop Menu UI
-        float currentX = 0.0f;
-        float currentY = 0.0f;
         for (int i = 0; i < ShopLayout.Length; ++i)
         {
-            if (currentX >= NumberOfItemsPerRow)
-            {
-                currentX = 0.0f;
-                currentY++;
-            }
             GameObject newIcon = Instantiate(ButtonPrefab, ShopDisplayCanvas.transform) as GameObject;
 
-            newIcon.transform.position = new Vector3(ShopDisplayCanvas.GetComponent<RectTransform>().rect.xMin + currentX * (newIcon.GetComponent<Image>().rectTransform.rect.width + ButtonMarginX),
-                                                    ShopDisplayCanvas.GetComponent<RectTransform>().rect.yMin + currentY * (newIcon.GetComponent<Image>().rectTransform.rect.height + ButtonMarginY)) + ShopDisplayCanvas.transform.position;
-            currentX++;
             ShopLayout[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
             newIcon.GetComponent<Button>().onClick.AddListener(delegate { ButtonOnClick(newIcon); });
@@ -115,7 +102,6 @@ public class ShopDisplay : MonoBehaviour
             CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.getCost() * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
-
     }
 
     void ButtonOnClick(GameObject btn)
