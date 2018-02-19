@@ -5,6 +5,20 @@ using UnityEngine;
 /* For Player in 2D */
 public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 {
+    /* Animation */
+    private Animator anim;
+    enum PlayerState
+    {
+        IDLE,
+        WALK,
+        SWISH, //attack1
+        DOUBLE, //attack2
+        HACK, //attack3
+        HIT,
+        DIE,
+    };
+    PlayerState playerState;
+
     /* Player Stats */
     [SerializeField]
     int playerLevel = 1;
@@ -108,116 +122,207 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     void Start ()
     {
         //DebugPlayerStats();
-        
+        anim = GetComponent<Animator>();
+        anim.SetBool("MoveDown", true);
+        toMove = Direction.Down;
+
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        switch(toMove)
+        {
+            case Direction.Up:
+                anim.SetBool("MoveUp", true);
+                anim.SetBool("MoveDown", false);
+                anim.SetBool("MoveLeft", false);
+                anim.SetBool("MoveRight", false);
+                break;
+            case Direction.Down:
+                anim.SetBool("MoveUp", false);
+                anim.SetBool("MoveDown", true);
+                anim.SetBool("MoveLeft", false);
+                anim.SetBool("MoveRight", false);
+                break;
+            case Direction.Left:
+                anim.SetBool("MoveUp", false);
+                anim.SetBool("MoveDown", false);
+                anim.SetBool("MoveLeft", true);
+                anim.SetBool("MoveRight", false);
+                break;
+            case Direction.Right:
+                anim.SetBool("MoveUp", false);
+                anim.SetBool("MoveDown", false);
+                anim.SetBool("MoveLeft", false);
+                anim.SetBool("MoveRight", true);
+                break;
+        }
+
         Movement2D();
 	}
 
-    /* Movement of Player - Camera is Fixed, Player will move according to its direction */
-    void Movement2D()
+    void moveLeft()
+    {
+        //if (toMove != Direction.Left)
+        //{
+        //    switch (toMove)
+        //    {
+        //        case Direction.Down:
+        //            //transform.Rotate(0, 0, -90);
+        //            anim.SetBool("MoveDown", true);
+        //            break;
+
+        //        case Direction.Right:
+        //            transform.Rotate(0, 0, 180);
+        //            break;
+
+        //        case Direction.Up:
+        //            //transform.Rotate(0, 0, 90);
+        //            anim.SetBool("MoveUp", true);
+        //            break;
+        //    }
+        //    toMove = Direction.Left;
+        //}
+        toMove = Direction.Left;
+        transform.position -= transform.right * MoveSpeed * Time.deltaTime;
+    }
+
+    void moveRight()
+    {
+        //if (toMove != Direction.Right)
+        //{
+        //    switch (toMove)
+        //    {
+        //        case Direction.Down:
+        //            //transform.Rotate(0, 0, -90);
+        //            anim.SetBool("MoveDown", true);
+        //            break;
+
+        //        case Direction.Left:
+        //            transform.Rotate(0, 0, 180);
+        //            break;
+
+        //        case Direction.Up:
+        //           // transform.Rotate(0, 0, -90);
+        //            anim.SetBool("MoveUp", true);
+        //            break;
+        //    }
+        //    toMove = Direction.Right;
+        //}
+        toMove = Direction.Right;
+        transform.position += transform.right * MoveSpeed * Time.deltaTime;
+    }
+
+    void moveUp()
+    {
+        // Sprite not facing up 
+        //if (toMove != Direction.Up)
+        //{
+        //    switch (toMove)
+        //    {
+        //        case Direction.Down:
+        //            //transform.Rotate(0, 0, -90);
+        //            anim.SetBool("MoveUp", true);
+        //            anim.SetBool("MoveDown", false);
+        //            break;
+
+        //        case Direction.Right:
+        //            transform.Rotate(0, 0, 90);
+        //            break;
+
+        //        case Direction.Left:
+        //            transform.Rotate(0, 0, -90);
+        //            break;
+        //    }
+        //    toMove = Direction.Up;
+        //}
+
+        toMove = Direction.Up;
+
+        // Movement
+        transform.position += transform.up * MoveSpeed * Time.deltaTime;
+    }
+
+    void moveDown()
+    {
+        //if (toMove != Direction.Down)
+        //{
+        //    switch (toMove)
+        //    {
+        //        case Direction.Up:
+        //            //transform.Rotate(0, 0, 180);
+        //            anim.SetBool("MoveDown", true);
+        //            anim.SetBool("MoveUp", false);
+        //            break;
+
+        //        case Direction.Right:
+        //            transform.Rotate(0, 0, -90);
+        //            break;
+
+        //        case Direction.Left:
+        //            transform.Rotate(0, 0, 90);
+        //            break;
+        //    }
+        //    toMove = Direction.Down;
+        //}
+        toMove = Direction.Down;
+        transform.position -= transform.up * MoveSpeed * Time.deltaTime;
+    }
+
+    void KeyMove()
     {
         // Up / Down
         if (Input.GetKey(KeyCode.W))
         {
-            // Sprite not facing up 
-            if (toMove != Direction.Up)
-            {
-                switch (toMove)
-                {
-                    case Direction.Down:
-                        transform.Rotate(0, 0, 180);
-                        break;
-
-                    case Direction.Right:
-                        transform.Rotate(0, 0, 90);
-                        break;
-
-                    case Direction.Left:
-                        transform.Rotate(0, 0, -90);
-                        break;
-                }
-                toMove = Direction.Up;
-            }
-
-            // Movement
-            transform.position += transform.up * MoveSpeed * Time.deltaTime;
+            moveUp();
         }
         if (Input.GetKey(KeyCode.S))
         {
-            if (toMove != Direction.Down)
-            {
-                switch (toMove)
-                {
-                    case Direction.Up:
-                        transform.Rotate(0, 0, 180);
-                        break;
-
-                    case Direction.Right:
-                        transform.Rotate(0, 0, -90);
-                        break;
-
-                    case Direction.Left:
-                        transform.Rotate(0, 0, 90);
-                        break;
-                }
-                toMove = Direction.Down;
-            }
-
-            transform.position += transform.up * MoveSpeed * Time.deltaTime;
+            moveDown();
         }
 
         // Left / Right
         if (Input.GetKey(KeyCode.A))
         {
-            if (toMove != Direction.Left)
-            {
-                switch (toMove)
-                {
-                    case Direction.Down:
-                        transform.Rotate(0, 0, -90);
-                        break;
-
-                    case Direction.Right:
-                        transform.Rotate(0, 0, 180);
-                        break;
-
-                    case Direction.Up:
-                        transform.Rotate(0, 0, 90);
-                        break;
-                }
-                toMove = Direction.Left;
-            }
-
-            transform.position += transform.up * MoveSpeed * Time.deltaTime;
-
+            moveLeft();
         }
         if (Input.GetKey(KeyCode.D))
         {
-            if (toMove != Direction.Right)
-            {
-                switch (toMove)
-                {
-                    case Direction.Down:
-                        transform.Rotate(0, 0, 90);
-                        break;
-
-                    case Direction.Left:
-                        transform.Rotate(0, 0, 180);
-                        break;
-
-                    case Direction.Up:
-                        transform.Rotate(0, 0, -90);
-                        break;
-                }
-                toMove = Direction.Right;
-            }
-
-            transform.position += transform.up * MoveSpeed * Time.deltaTime;
+            moveRight();
         }
+    }
+
+    void AccMove()
+    {
+        //values from accelerometer;
+        float x = Input.acceleration.x;
+        float y = Input.acceleration.y;
+
+        if(x < 0) //move left
+        {
+            moveLeft();
+        }
+        else //move right
+        {
+            moveRight();
+        }
+
+        if(y < 0)
+        {
+            moveUp();
+        }
+        else
+        {
+            moveDown();
+        }
+    }
+
+    /* Movement of Player - Camera is Fixed, Player will move according to its direction */
+    void Movement2D()
+    {
+        KeyMove();
+        //AccMove();
     }
 
     /* Interaction with Objects */

@@ -42,10 +42,14 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     /* List storing Player equipment */
     public List<ItemBase> Inventory = new List<ItemBase>();
+    public List<ItemBase> getPlayerInventory() { return Inventory; }
     enum EQTYPE
     {
         HELMET,
         WEAPON,
+        CHESTPIECE,
+        LEGGING,
+        SHOE,
         TOTAL
     }
     ItemBase[] EquipmentList = new ItemBase[(int)EQTYPE.TOTAL];
@@ -153,19 +157,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         //UnlockCursor();
         PlayerAttacks();
         AnimationUpdate();
-
-        if (Input.GetKey(KeyCode.O))
-        {
-            Debug.Log("MOVE THESE TO ON CLICK WITH INVENTORY/UI");
-            EquipWeapon(Inventory[0]);
-            DebugPlayerStats();
-        }
-
-        if (Input.GetKey(KeyCode.P))
-        {
-            EquipWeapon(Inventory[1]);
-            DebugPlayerStats();
-        }
     }
 
     /* Movement of Player */
@@ -317,33 +308,116 @@ public class PlayerManager : MonoBehaviour, StatsBase
     public void AddItem(ItemBase newitem)
     {
         Inventory.Add(newitem);
-        
-        gameObject.GetComponent<InventoryBar>().AddPlayerHotBar(newitem);
-        Debug.Log("PlayerManager->AddItem TO BE IMPLEMENTED");
-        // to move to when player put into hotbar
     }
 
-    public void EquipWeapon(ItemBase _weapon)
+    public void EquipEQ(ItemBase _weapon)
     {
         if (!Inventory.Contains(_weapon))
             return;
-
+        
         if (_weapon.getType() == "Weapons")
         {
             if (EquipmentList[(int)EQTYPE.WEAPON] == null)
             {
                 EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
-                attack += _weapon.Attack;
+                AddStats(_weapon);
             }
             else
             {
-                attack -= EquipmentList[(int)EQTYPE.WEAPON].Attack;
+                AddStats(-EquipmentList[(int)EQTYPE.WEAPON].Health,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Attack,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Defense,
+                    -EquipmentList[(int)EQTYPE.WEAPON].MoveSpeed);
                 EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
-                attack += _weapon.Attack;
+                AddStats(_weapon);
             }
         }
+        if (_weapon.getType() == "Helmets")
+        {
+            if (EquipmentList[(int)EQTYPE.HELMET] == null)
+            {
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.HELMET].Health,
+                    -EquipmentList[(int)EQTYPE.HELMET].Attack,
+                    -EquipmentList[(int)EQTYPE.HELMET].Defense,
+                    -EquipmentList[(int)EQTYPE.HELMET].MoveSpeed);
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.getType() == "Chestpieces")
+        {
+            if (EquipmentList[(int)EQTYPE.CHESTPIECE] == null)
+            {
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.CHESTPIECE].Health,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Attack,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Defense,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.getType() == "Leggings")
+        {
+            if (EquipmentList[(int)EQTYPE.LEGGING] == null)
+            {
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.LEGGING].Health,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Attack,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Defense,
+                    -EquipmentList[(int)EQTYPE.LEGGING].MoveSpeed);
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.getType() == "Shoes")
+        {
+            if (EquipmentList[(int)EQTYPE.SHOE] == null)
+            {
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.SHOE].Health,
+                    -EquipmentList[(int)EQTYPE.SHOE].Attack,
+                    -EquipmentList[(int)EQTYPE.SHOE].Defense,
+                    -EquipmentList[(int)EQTYPE.SHOE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+
+        DebugPlayerStats();
     }
 
+    public void AddStats(ItemBase item)
+    {
+        health += item.Health;
+        attack += item.Attack;
+        defense += item.Defense;
+        movespeed += item.MoveSpeed;
+    }
+    public void AddStats(int _health,float _attack, float _defence, float _movespeed)
+    {
+        health += _health;
+        attack += _attack;
+        defense += _defence;
+        movespeed += _movespeed;
+    }
     public void AddGold(int Amount)
     {
         gold += Amount;
