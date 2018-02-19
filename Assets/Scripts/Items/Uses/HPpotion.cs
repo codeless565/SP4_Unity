@@ -40,7 +40,7 @@ public class HPpotion :  ItemBase
     {
         get
         {
-            return 0;
+            return 100;
         }
 
         set

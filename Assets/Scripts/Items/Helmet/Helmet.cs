@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Sword : ItemBase
+public class Helmet : ItemBase
 {
     Sprite ItemImage;
     bool equipped;
 
-    public Sword()
+    public Helmet()
     {
-        ItemImage = GameObject.FindGameObjectWithTag("WeaponsObjectHolder").GetComponent<WeaponObjectHolder>().Sword;
+        ItemImage = GameObject.FindGameObjectWithTag("WeaponsObjectHolder").GetComponent<WeaponObjectHolder>().Helmet;
     }
 
     public int getCost()
@@ -26,7 +26,7 @@ public class Sword : ItemBase
 
     public string getType()
     {
-        return "Weapons";
+        return "Helmets";
     }
 
     public int Level
@@ -46,7 +46,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return "Sword";
+            return "Helmet";
         }
     }
 
@@ -54,7 +54,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return 0;
+            return 30;
         }
 
         set
@@ -67,7 +67,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return 100;
+            return 300;
         }
 
         set
@@ -93,7 +93,7 @@ public class Sword : ItemBase
     {
         get
         {
-            return 0;
+            return 0.0f;
         }
 
         set

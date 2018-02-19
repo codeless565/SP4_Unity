@@ -30,7 +30,9 @@ public class InGameOptions_PopOutScreenControls : MonoBehaviour
         musicVolumeSlider.value = PlayerPrefs.GetFloat("BGM_Volume", 1);
 
         // Button Pressed Sound Effects
-
+        buttonPressedSFX_Source = buttonPressedSFX.GetComponent<AudioSource>();
+        // Setting the soundEffectsSlider value.
+        soundEffectsSlider.value = PlayerPrefs.GetFloat("ButtonPressedSFX_Volume", 1);
     }
 	
 	// Update is called once per frame
@@ -38,6 +40,8 @@ public class InGameOptions_PopOutScreenControls : MonoBehaviour
     {
         // Changing the BGM volume based on the Slider value.
         musicSource.volume = musicVolumeSlider.value;
+        // Changing the SFX volume based on the Slider value.
+        buttonPressedSFX_Source.volume = soundEffectsSlider.value;
     }
 
     // When Apply Button is Pressed.
@@ -45,13 +49,18 @@ public class InGameOptions_PopOutScreenControls : MonoBehaviour
     {
         // Save the Changes made to the MusicVolume Slider.
         PlayerPrefs.SetFloat("BGM_Volume", musicVolumeSlider.value);
+        // Save the Changes made to the SoundEffects Slider.
+        PlayerPrefs.SetFloat("ButtonPressedSFX_Volume", soundEffectsSlider.value);
     }
 
     // When Back Button is Pressed.
     public void BackButtonPressed()
     {
         // If Back is Prssed w/o saving...
+        // The music volume will stay the same.
         musicVolumeSlider.value = PlayerPrefs.GetFloat("BGM_Volume", 1);
+        // The sound effects volume will stay the same.
+        soundEffectsSlider.value = PlayerPrefs.GetFloat("ButtonPressedSFX_Volume", 1);
 
         // Set OptionsPopOutScreen active to False.
         Options_PopOutScreen.SetActive(false);
