@@ -1,0 +1,7 @@
+Name,Type,Level,Cost,Health,Mana,Attack,Defence,Movespeed,Sprite name,,,Weapons
+Sword,Weapons,0,1000,0,0,100,0,0,sword,,,Helmets
+Axe,Weapons,0,0,0,0,300,0,0,axe,,,Chestpieces
+HP Potion,Uses,0,0,0,0,0,0,0,hp,,,Leggings
+MP Potion,Uses,0,1000,0,0,0,0,0,mp,,,Shoes
+Helmet,Helmets,0,1000,100,0,0,0,0,helmet,,,Uses
+,Weapons,,,,,,,,,,, 

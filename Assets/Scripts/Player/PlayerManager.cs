@@ -30,6 +30,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     [SerializeField]
     int health = 100;
     [SerializeField]
+    int mana = 100;
+    [SerializeField]
     float attack = 10;
     [SerializeField]
     float defense = 10;
@@ -65,14 +67,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         set
         {
             playerLevel = value;
-        }
-    }
-
-    public string Name
-    {
-        get
-        {
-            return "Player";
         }
     }
 
@@ -125,6 +119,31 @@ public class PlayerManager : MonoBehaviour, StatsBase
         set
         {
             movespeed = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "Player";
+        }
+        set
+        {
+            return;
+        }
+    }
+
+    public int Mana
+    {
+        get
+        {
+            return mana;
+        }
+
+        set
+        {
+            mana = value;
         }
     }
 
@@ -315,7 +334,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         if (!Inventory.Contains(_weapon))
             return;
         
-        if (_weapon.getType() == "Weapons")
+        if (_weapon.ItemType == "Weapons")
         {
             if (EquipmentList[(int)EQTYPE.WEAPON] == null)
             {
@@ -332,7 +351,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Helmets")
+        if (_weapon.ItemType == "Helmets")
         {
             if (EquipmentList[(int)EQTYPE.HELMET] == null)
             {
@@ -349,7 +368,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Chestpieces")
+        if (_weapon.ItemType == "Chestpieces")
         {
             if (EquipmentList[(int)EQTYPE.CHESTPIECE] == null)
             {
@@ -366,7 +385,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Leggings")
+        if (_weapon.ItemType == "Leggings")
         {
             if (EquipmentList[(int)EQTYPE.LEGGING] == null)
             {
@@ -383,7 +402,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Shoes")
+        if (_weapon.ItemType == "Shoes")
         {
             if (EquipmentList[(int)EQTYPE.SHOE] == null)
             {

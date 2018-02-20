@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     [SerializeField]
     int health = 100;
     [SerializeField]
+    int mana = 100;
+    [SerializeField]
     float attack = 10;
     [SerializeField]
     float defense = 10;
@@ -44,14 +47,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     Direction toMove = 0;
 
     /* Setters and Getters */
-    public string Name
-    {
-        get
-        {
-            return "player2D";
-        }
-    }
-
     public int Level
     {
         get
@@ -114,6 +109,32 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         set
         {
             movespeed = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "player2D";
+        }
+
+        set
+        {
+            return;
+        }
+    }
+
+    public int Mana
+    {
+        get
+        {
+            return mana;
+        }
+
+        set
+        {
+            mana = value;
         }
     }
 

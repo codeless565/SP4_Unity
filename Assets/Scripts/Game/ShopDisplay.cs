@@ -90,7 +90,7 @@ public class ShopDisplay : MonoBehaviour
         ShopConfirmationCanvas.SetActive(ConfirmationDisplay);
         if (ConfirmationDisplay)
         {
-            CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.getCost() * Quantity).ToString();
+            CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
     }
@@ -103,7 +103,7 @@ public class ShopDisplay : MonoBehaviour
             if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemManager.Instance.CheckGO(btn);
+            SelectedItem = ItemLoader.Instance.CheckGO(btn);
             if (SelectedItem != null)
             {
                 ConfirmationDisplay = true;
@@ -123,20 +123,20 @@ public class ShopDisplay : MonoBehaviour
     {
         ResetDisplay();
 
-        foreach (ItemBase item in ItemManager.Instance.ItemList)
+        foreach (ItemBase item in ItemLoader.Instance.ItemList)
         {
-            if (item.getType() != itemtype)
+            if (item.ItemType != itemtype)
                 continue;
 
             foreach (GameObject go in ShopLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
                     break;
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
                     continue;
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -146,20 +146,33 @@ public class ShopDisplay : MonoBehaviour
     public void DisplayAllEquipment()
     {
         ResetDisplay();
-        foreach (ItemBase item in ItemManager.Instance.ItemList)
-        {
-            if (item.getType() == "Uses")
-                continue;
+        
 
+        foreach (ItemBase item in ItemLoader.Instance.ItemList)
+        {
+            if (item.ItemType == "Uses")
+                continue;
+            if (item.ItemImage == null)
+                Debug.Log("null");
+
+            //Debug.Log(item.ItemImage.name);
             foreach (GameObject go in ShopLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
+                {
+                    
                     break;
+                }
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
+                {
+                    
                     continue;
+                }
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -180,7 +193,7 @@ public class ShopDisplay : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddItem(SelectedItem);
         }
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddGold(-SelectedItem.getCost() * Quantity);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddGold(-SelectedItem.ItemCost * Quantity);
 
         ConfirmationDisplay = false;
         Quantity = 1;
@@ -193,7 +206,7 @@ public class ShopDisplay : MonoBehaviour
 
     void AddQuantity()
     {
-        if ((SelectedItem.getCost() * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
+        if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
             Quantity++;
     }
     void SubtractQuantity()
