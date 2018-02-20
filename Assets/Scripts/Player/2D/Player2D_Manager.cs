@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     [SerializeField]
     int health = 100;
     [SerializeField]
+    int mana = 100;
+    [SerializeField]
     float attack = 10;
     [SerializeField]
     float defense = 10;
@@ -44,14 +47,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     Direction toMove = 0;
 
     /* Setters and Getters */
-    public string Name
-    {
-        get
-        {
-            return "player2D";
-        }
-    }
-
     public int Level
     {
         get
@@ -117,6 +112,32 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         }
     }
 
+    public string Name
+    {
+        get
+        {
+            return "player2D";
+        }
+
+        set
+        {
+            return;
+        }
+    }
+
+    public int Mana
+    {
+        get
+        {
+            return mana;
+        }
+
+        set
+        {
+            mana = value;
+        }
+    }
+
 
     // Use this for initialization
     void Start ()
@@ -159,8 +180,22 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
                 break;
         }
 
+        /* Checking of Player Health */
+        if(Health <= 0)
+        {
+            playerState = PlayerState.DIE;
+        }
+
+        /* Player States */
+        switch(playerState)
+        {
+            case PlayerState.DIE:
+                PlayerDeath();
+                break;
+        }
+
         Movement2D();
-	}
+    }
 
     void moveLeft()
     {
@@ -316,6 +351,14 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         {
             moveDown();
         }
+    }
+
+    /* Death of Player */
+    void PlayerDeath()
+    {
+        Destroy(gameObject);
+
+        // Generate a LoseScreen .etc.
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */

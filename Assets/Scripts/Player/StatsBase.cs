@@ -7,7 +7,7 @@ public interface StatsBase
 {
     string Name
     {
-        get;
+        get;set;
     }
     int Level
     {
@@ -16,6 +16,10 @@ public interface StatsBase
     int Health
     {
         get;set;
+    }
+    int Mana
+    {
+        get; set;
     }
     float Attack
     {
