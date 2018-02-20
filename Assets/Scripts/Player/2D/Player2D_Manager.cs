@@ -151,7 +151,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     {
         //DebugPlayerStats();
         anim = GetComponent<Animator>();
-        HairAnim = Hair.GetComponent<Animator>();
+      //  HairAnim = Hair.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -193,8 +193,8 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
         anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-        HairAnim.SetFloat("MoveX", lastMove.x);
-        HairAnim.SetFloat("MoveY", lastMove.y);
+       // HairAnim.SetFloat("MoveX", lastMove.x);
+        //HairAnim.SetFloat("MoveY", lastMove.y);
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);

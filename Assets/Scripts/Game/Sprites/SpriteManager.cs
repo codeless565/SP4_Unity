@@ -33,7 +33,7 @@ public class SpriteManager : MonoBehaviour {
     public GameObject Head/*, Top, Bottom, Gloves, Shoes, Weapon*/;
     public Animator HairAnim;
     S_Wardrobe topSprite, bottomSprite, headSprite, glovesSprite, shoesSprite, weaponSprite;
-    public S_Dir direction;
+    public S_Dir direction = 0;
     public float hori, verti;
     
 
@@ -58,7 +58,7 @@ public class SpriteManager : MonoBehaviour {
         //if(direction == S_Dir.LEFT || direction == S_Dir.RIGHT)
         {
             Debug.Log(hori);
-
+            Debug.Log(direction);
             HairAnim.SetFloat("MoveX", hori);
         }
     }
