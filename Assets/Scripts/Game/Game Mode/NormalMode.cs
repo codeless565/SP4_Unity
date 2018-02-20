@@ -9,7 +9,7 @@ public class NormalMode : MonoBehaviour, GameMode
     void Start ()
     {
         gameObject.GetComponent<BoardGenerator>().Init();
-        gameObject.GetComponent<PlayerSpawn>().Init();
+        gameObject.GetComponent<ObjectSpawn>().Init();
     }
 
     void Update()
