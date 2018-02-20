@@ -123,7 +123,7 @@ public class InventoryDisplay : MonoBehaviour {
             if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemLoader.Instance.CheckGO(btn);
+            SelectedItem = ItemDatabase.Instance.CheckGO(btn);
             if (SelectedItem != null)
             {
                 ConfirmationCanvas = true;

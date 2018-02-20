@@ -8,25 +8,32 @@ public class Room
     public int yPos;                      // The y coordinate of the lower left tile of the room.
     public int roomWidth;                     // How many tiles wide the room is.
     public int roomHeight;                    // How many tiles high the room is.
-    public Direction[] Corridors = new Direction[4];    // The direction of the corridor that is entering this room.
+    public Direction Corridors;    // The direction of the corridor that is entering this room.
+    public bool generated;
 
     // This is used for the first room.  It does not have a Corridor parameter since there are no corridors yet.
     public void SetupRoom(IntRange widthRange, IntRange heightRange, int columns, int rows)
     {
+        generated = true;
         // Set a random width and height.
         roomWidth = widthRange.Random;
         roomHeight = heightRange.Random;
 
         // Set the x and y coordinates so the room is roughly in the middle of the board.
-        xPos = Mathf.RoundToInt(columns / 2f - roomWidth / 2f);
-        yPos = Mathf.RoundToInt(rows / 2f - roomHeight / 2f);
+        float xStart = Random.Range(0.2f, 0.8f);
+        float yStart = Random.Range(0.2f, 0.8f);
+
+        xPos = Mathf.RoundToInt(columns * xStart - roomWidth * 0.5f);
+        yPos = Mathf.RoundToInt(rows * yStart - roomHeight * 0.5f);
     }
     
     // This is an overload of the SetupRoom function and has a corridor parameter that represents the corridor entering the room.
     public void SetupRoom(IntRange widthRange, IntRange heightRange, int columns, int rows, Corridor corridor)
     {
         // Set the entering corridor direction.
-        Corridors[0] = corridor.direction;
+        Corridors = corridor.direction;
+        corridor.connectedTo = true;
+        generated = true;
 
         // Set random values for width and height.
         roomWidth = widthRange.Random;
@@ -59,7 +66,7 @@ public class Room
                 break;
             case Direction.South:
                 roomHeight = Mathf.Clamp(roomHeight, 1, corridor.EndPositionY);
-                yPos = corridor.EndPositionY - roomHeight + 1;
+                yPos = corridor.EndPositionY - roomHeight + 2;
 
                 xPos = Random.Range(corridor.EndPositionX - roomWidth + 1, corridor.EndPositionX);
                 xPos = Mathf.Clamp(xPos, 0, columns - roomWidth);

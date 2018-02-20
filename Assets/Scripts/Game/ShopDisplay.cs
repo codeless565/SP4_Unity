@@ -19,6 +19,7 @@ public class ShopDisplay : MonoBehaviour
 
     bool ConfirmationDisplay;
     GameObject ItemNameText;
+    GameObject ItemNameStats;
     GameObject CostText;
     GameObject GoldText;
     GameObject BuyButton;
@@ -31,7 +32,7 @@ public class ShopDisplay : MonoBehaviour
 
     // Use this for initialization
     void Start()
-    { 
+    {
         ConfirmationDisplay = false;
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopDisplayCanvas.SetActive(false);
@@ -49,6 +50,12 @@ public class ShopDisplay : MonoBehaviour
 
         // Confirmation Menu UI
         ItemNameText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
+
+        ItemNameStats = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
+        ItemNameStats.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 50.0f));
+        
         CostText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
         CostText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
         GoldText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
@@ -103,7 +110,7 @@ public class ShopDisplay : MonoBehaviour
             if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemLoader.Instance.CheckGO(btn);
+            SelectedItem = ItemDatabase.Instance.CheckGO(btn);
             if (SelectedItem != null)
             {
                 ConfirmationDisplay = true;
@@ -123,7 +130,7 @@ public class ShopDisplay : MonoBehaviour
     {
         ResetDisplay();
 
-        foreach (ItemBase item in ItemLoader.Instance.ItemList)
+        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
         {
             if (item.ItemType != itemtype)
                 continue;
@@ -148,7 +155,7 @@ public class ShopDisplay : MonoBehaviour
         ResetDisplay();
         
 
-        foreach (ItemBase item in ItemLoader.Instance.ItemList)
+        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
         {
             if (item.ItemType == "Uses")
                 continue;
@@ -184,6 +191,12 @@ public class ShopDisplay : MonoBehaviour
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
+        
+        ItemNameStats.GetComponent<Text>().text =   "Health: " + SelectedItem.Health + "   " +
+                                                    "Mana: " + SelectedItem.Mana + "   " +
+                                                    "Attack: " + SelectedItem.Attack + "   " +
+                                                    "Defense: " + SelectedItem.Defense + "   " +
+                                                    "Move Speed: " + SelectedItem.MoveSpeed;
         GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold.ToString();
     }
 

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class NormalMode : MonoBehaviour, GameMode
 {
+    private float elapseTime;
+
     void Start ()
     {
         gameObject.GetComponent<BoardGenerator>().Init();
@@ -14,10 +16,24 @@ public class NormalMode : MonoBehaviour, GameMode
 
     void Update()
     {
+        elapseTime += Time.deltaTime;
+
+        if (elapseTime >= 5)
+        {
+            elapseTime = 0;
+            //ReGenerateLevel();
+        }
+
+    }
+
+    private void ReGenerateLevel()
+    {
+        gameObject.GetComponent<BoardGenerator>().DestroyLevel();
+        gameObject.GetComponent<BoardGenerator>().Init();
+        gameObject.GetComponent<ObjectSpawn>().Init();
     }
 
     // Interface Functions // 
-
     public void GameClear()
     {
         SceneManager.LoadScene("SceneMainMenu");
