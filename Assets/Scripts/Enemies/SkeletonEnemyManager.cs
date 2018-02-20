@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +17,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
+<<<<<<< HEAD
     int enemyLevel = 0, health = 50;
+=======
+    int enemyLevel = 0, health = 10,mana = 10;
+>>>>>>> 09368b8af84248a7afaa63ffebd32051eadd05e3
     [SerializeField]
     float attack = 10, defense = 10, movespeed = 10;
 
@@ -51,14 +56,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         set
         {
             enemyLevel = value;
-        }
-    }
-
-    public string Name
-    {
-        get
-        {
-            return "EnemySkeleton";
         }
     }
 
@@ -111,6 +108,32 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         set
         {
             movespeed = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "EnemySkeleton";
+        }
+
+        set
+        {
+            return;
+        }
+    }
+
+    public int Mana
+    {
+        get
+        {
+            return mana;
+        }
+
+        set
+        {
+            mana = value;
         }
     }
 

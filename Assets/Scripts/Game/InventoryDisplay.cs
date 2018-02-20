@@ -67,18 +67,18 @@ public class InventoryDisplay : MonoBehaviour {
         ResetDisplay();
         foreach (ItemBase item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
         {
-            if (item.getType() != itemtype)
+            if (item.ItemType != itemtype)
                 continue;
 
             foreach (GameObject go in InventoryLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
                     break;
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
                     continue;
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -90,18 +90,18 @@ public class InventoryDisplay : MonoBehaviour {
         ResetDisplay();
         foreach (ItemBase item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
         {
-            if (item.getType() == "Uses")
+            if (item.ItemType == "Uses")
                 continue;
 
             foreach (GameObject go in InventoryLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
                     break;
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
                     continue;
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -123,7 +123,7 @@ public class InventoryDisplay : MonoBehaviour {
             if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemManager.Instance.CheckGO(btn);
+            SelectedItem = ItemLoader.Instance.CheckGO(btn);
             if (SelectedItem != null)
             {
                 ConfirmationCanvas = true;
@@ -137,7 +137,7 @@ public class InventoryDisplay : MonoBehaviour {
         if (SelectedItem == null)
             return;
 
-        if (SelectedItem.getType() == "Uses")
+        if (SelectedItem.ItemType == "Uses")
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
         else
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().EquipEQ(SelectedItem);
