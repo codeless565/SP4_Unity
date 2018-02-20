@@ -30,6 +30,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     [SerializeField]
     int health = 100;
     [SerializeField]
+    int mana = 100;
+    [SerializeField]
     float attack = 10;
     [SerializeField]
     float defense = 10;
@@ -65,14 +67,6 @@ public class PlayerManager : MonoBehaviour, StatsBase
         set
         {
             playerLevel = value;
-        }
-    }
-
-    public string Name
-    {
-        get
-        {
-            return "Player";
         }
     }
 
@@ -125,6 +119,31 @@ public class PlayerManager : MonoBehaviour, StatsBase
         set
         {
             movespeed = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return "Player";
+        }
+        set
+        {
+            return;
+        }
+    }
+
+    public int Mana
+    {
+        get
+        {
+            return mana;
+        }
+
+        set
+        {
+            mana = value;
         }
     }
 
@@ -312,10 +331,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
 
     public void EquipEQ(ItemBase _weapon)
     {
-        if (!Inventory.Contains(_weapon))
-            return;
-        
-        if (_weapon.getType() == "Weapons")
+        if (_weapon.ItemType == "Weapons")
         {
             if (EquipmentList[(int)EQTYPE.WEAPON] == null)
             {
@@ -325,6 +341,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.WEAPON].Health,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Mana,
                     -EquipmentList[(int)EQTYPE.WEAPON].Attack,
                     -EquipmentList[(int)EQTYPE.WEAPON].Defense,
                     -EquipmentList[(int)EQTYPE.WEAPON].MoveSpeed);
@@ -332,7 +349,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Helmets")
+        if (_weapon.ItemType == "Helmets")
         {
             if (EquipmentList[(int)EQTYPE.HELMET] == null)
             {
@@ -342,6 +359,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.HELMET].Health,
+                    -EquipmentList[(int)EQTYPE.HELMET].Mana,
                     -EquipmentList[(int)EQTYPE.HELMET].Attack,
                     -EquipmentList[(int)EQTYPE.HELMET].Defense,
                     -EquipmentList[(int)EQTYPE.HELMET].MoveSpeed);
@@ -349,7 +367,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Chestpieces")
+        if (_weapon.ItemType == "Chestpieces")
         {
             if (EquipmentList[(int)EQTYPE.CHESTPIECE] == null)
             {
@@ -359,6 +377,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.CHESTPIECE].Health,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Mana,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].Attack,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].Defense,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].MoveSpeed);
@@ -366,7 +385,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Leggings")
+        if (_weapon.ItemType == "Leggings")
         {
             if (EquipmentList[(int)EQTYPE.LEGGING] == null)
             {
@@ -376,6 +395,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.LEGGING].Health,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Mana,
                     -EquipmentList[(int)EQTYPE.LEGGING].Attack,
                     -EquipmentList[(int)EQTYPE.LEGGING].Defense,
                     -EquipmentList[(int)EQTYPE.LEGGING].MoveSpeed);
@@ -383,7 +403,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
                 AddStats(_weapon);
             }
         }
-        if (_weapon.getType() == "Shoes")
+        if (_weapon.ItemType == "Shoes")
         {
             if (EquipmentList[(int)EQTYPE.SHOE] == null)
             {
@@ -393,6 +413,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.SHOE].Health,
+                    -EquipmentList[(int)EQTYPE.SHOE].Mana,
                     -EquipmentList[(int)EQTYPE.SHOE].Attack,
                     -EquipmentList[(int)EQTYPE.SHOE].Defense,
                     -EquipmentList[(int)EQTYPE.SHOE].MoveSpeed);
@@ -407,13 +428,15 @@ public class PlayerManager : MonoBehaviour, StatsBase
     public void AddStats(ItemBase item)
     {
         health += item.Health;
+        mana += item.Mana;
         attack += item.Attack;
         defense += item.Defense;
         movespeed += item.MoveSpeed;
     }
-    public void AddStats(int _health,float _attack, float _defence, float _movespeed)
+    public void AddStats(int _health,int _mana, float _attack, float _defence, float _movespeed)
     {
         health += _health;
+        mana += _mana;
         attack += _attack;
         defense += _defence;
         movespeed += _movespeed;

@@ -5,42 +5,34 @@ using UnityEngine.UI;
 
 public class ShopDisplay : MonoBehaviour
 {
-    [SerializeField]
-    GameObject ShopDisplayCanvas;
+    public GameObject ShopDisplayCanvas;
+    public GameObject ShopConfirmationCanvas;
 
-    [SerializeField]
-    GameObject ShopConfirmationCanvas;
+    public GameObject ButtonPrefab;
+    public GameObject ConfirmationText;
 
-    [SerializeField]
-    GameObject ButtonPrefab;
-
-    [SerializeField]
-    GameObject ConfirmationText;
-
-    [SerializeField]
-    int NumberOfItemsPerRow = 5;
-
-    [SerializeField]
-    int MaxNumberOfColumn = 3;
+    public int NumberOfItemsPerRow = 5;
+    public int MaxNumberOfColumn = 3;
 
     GameObject[] ShopLayout;
+    ItemBase SelectedItem;
 
+    bool ConfirmationDisplay;
     GameObject ItemNameText;
+    GameObject ItemNameStats;
     GameObject CostText;
     GameObject GoldText;
     GameObject BuyButton;
     GameObject CancelButton;
-    bool ConfirmationDisplay;
-
+    
     GameObject QuantityText;
     int Quantity;
     GameObject QuantityAdd;
     GameObject QuantitySubtract;
 
-    ItemBase SelectedItem;
     // Use this for initialization
     void Start()
-    { 
+    {
         ConfirmationDisplay = false;
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopDisplayCanvas.SetActive(false);
@@ -52,12 +44,18 @@ public class ShopDisplay : MonoBehaviour
 
             ShopLayout[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
-            newIcon.GetComponent<Button>().onClick.AddListener(delegate { ButtonOnClick(newIcon); });
+            newIcon.GetComponent<Button>().onClick.AddListener(delegate { ShopButtonOnClick(newIcon); });
         }
 
 
         // Confirmation Menu UI
         ItemNameText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
+
+        ItemNameStats = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
+        ItemNameStats.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 50.0f));
+        
         CostText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
         CostText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
         GoldText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
@@ -99,12 +97,12 @@ public class ShopDisplay : MonoBehaviour
         ShopConfirmationCanvas.SetActive(ConfirmationDisplay);
         if (ConfirmationDisplay)
         {
-            CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.getCost() * Quantity).ToString();
+            CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
     }
 
-    void ButtonOnClick(GameObject btn)
+    void ShopButtonOnClick(GameObject btn)
     {
         SelectedItem = null;
         foreach (GameObject buttons in ShopLayout)
@@ -112,7 +110,7 @@ public class ShopDisplay : MonoBehaviour
             if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemManager.Instance.CheckGO(btn);
+            SelectedItem = ItemDatabase.Instance.CheckGO(btn);
             if (SelectedItem != null)
             {
                 ConfirmationDisplay = true;
@@ -120,6 +118,7 @@ public class ShopDisplay : MonoBehaviour
             }
         }
     }
+
     void ResetDisplay()
     {
         foreach (GameObject go in ShopLayout)
@@ -131,44 +130,56 @@ public class ShopDisplay : MonoBehaviour
     {
         ResetDisplay();
 
-        foreach (ItemBase item in ItemManager.Instance.ItemList)
+        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
         {
-            if (item.getType() != itemtype)
+            if (item.ItemType != itemtype)
                 continue;
 
             foreach (GameObject go in ShopLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
                     break;
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
                     continue;
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
             }
         }
     }
-
     public void DisplayAllEquipment()
     {
         ResetDisplay();
-        foreach (ItemBase item in ItemManager.Instance.ItemList)
-        {
-            if (item.getType() == "Uses")
-                continue;
+        
 
+        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
+        {
+            if (item.ItemType == "Uses")
+                continue;
+            if (item.ItemImage == null)
+                Debug.Log("null");
+
+            //Debug.Log(item.ItemImage.name);
             foreach (GameObject go in ShopLayout)
             {
-                if (go.GetComponent<Image>().sprite.name == item.getItemImage().name)
+                
+                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
+                {
+                    
                     break;
+                }
                 else if (go.GetComponent<Image>().sprite.name != "UISprite")
+                {
+                    
                     continue;
+                }
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.getItemImage();
+
+                    go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -180,6 +191,12 @@ public class ShopDisplay : MonoBehaviour
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
+        
+        ItemNameStats.GetComponent<Text>().text =   "Health: " + SelectedItem.Health + "   " +
+                                                    "Mana: " + SelectedItem.Mana + "   " +
+                                                    "Attack: " + SelectedItem.Attack + "   " +
+                                                    "Defense: " + SelectedItem.Defense + "   " +
+                                                    "Move Speed: " + SelectedItem.MoveSpeed;
         GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold.ToString();
     }
 
@@ -189,12 +206,11 @@ public class ShopDisplay : MonoBehaviour
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddItem(SelectedItem);
         }
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddGold(-SelectedItem.getCost() * Quantity);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddGold(-SelectedItem.ItemCost * Quantity);
 
         ConfirmationDisplay = false;
         Quantity = 1;
     }
-
     void CancelBuy()
     {
         ConfirmationDisplay = false;
@@ -203,10 +219,9 @@ public class ShopDisplay : MonoBehaviour
 
     void AddQuantity()
     {
-        if ((SelectedItem.getCost() * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
+        if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
             Quantity++;
     }
-
     void SubtractQuantity()
     {
         if (Quantity - 1 <= 1)

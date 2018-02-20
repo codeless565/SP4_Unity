@@ -7,6 +7,9 @@ public class Pause_PopOutScreenControls : MonoBehaviour
     [SerializeField]
     GameObject Pause_PopOutScreen, Options_PopOutScreen, Exit_PopOutScreen;
 
+    [SerializeField]
+    GameObject PauseButton;
+
 	// Use this for initialization
 	void Start () { }
 	
@@ -16,7 +19,11 @@ public class Pause_PopOutScreenControls : MonoBehaviour
     // When Pause Button is Pressed.
     public void PauseButtonPressed()
     {
+        // Stop Time
+        Time.timeScale = 0;
+
         Pause_PopOutScreen.SetActive(true);
+        PauseButton.SetActive(false);
     }
 
     // When Options Button is Pressed.
@@ -31,6 +38,10 @@ public class Pause_PopOutScreenControls : MonoBehaviour
     // When Back Button is Pressed.
     public void ResumeButtonPressed()
     {
+        // Resume Time to normal.
+        Time.timeScale = 1;
+
+        PauseButton.SetActive(true);
         Pause_PopOutScreen.SetActive(false);
     }
 

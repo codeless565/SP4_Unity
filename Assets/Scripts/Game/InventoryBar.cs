@@ -43,12 +43,12 @@ public class InventoryBar : MonoBehaviour {
 
         for (int i = 0; i < HotBar.Length; ++i)
         {
-            if (HotBar[i].GetComponent<Image>().sprite.name == item.getItemImage().name)
+            if (HotBar[i].GetComponent<Image>().sprite.name == item.ItemImage.name)
                 break; // TODO add quantity at btm right, not just not render more
 
             if (HotBar[i].GetComponent<Image>().sprite.name == "UISprite")
             {
-                HotBar[i].GetComponent<Image>().sprite = item.getItemImage();
+                HotBar[i].GetComponent<Image>().sprite = item.ItemImage;
                 break;
             }
         }

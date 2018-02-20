@@ -28,6 +28,18 @@ public class BoardGenerator : MonoBehaviour
     
     public void Init()
     {
+        if (boardHolder == null)
+        {
+            boardHolder = new GameObject("Level");
+        }
+
+        // Safety Check for numCorridor
+        if (numCorridors.m_Min < numRooms.m_Max)
+        {
+            numCorridors.m_Min = numRooms.m_Max + 5;
+            numCorridors.m_Max = numCorridors.m_Min + 5;
+        }
+
         // Create the board holder.
         SetupTilesArray();
 
@@ -61,42 +73,59 @@ public class BoardGenerator : MonoBehaviour
         // There should be one less corridor than there is rooms.
         int rand = numCorridors.Random;
         corridors = new List<Corridor>(rand);
-        Debug.Log(rand +  "   " + corridors.Count);
+        //Debug.Log(rand +  "   " + corridors.Count);
 
         // Create the first room and corridor.
         rooms[0] = new Room();
-        // ... create a corridor.
-        Corridor firstCorridor = new Corridor();
-
         // Setup the first room, there is no previous corridor so we do not use one.
         rooms[0].SetupRoom(roomWidth, roomHeight, columns, rows);
 
-        // Setup the first corridor using the first room.
-        firstCorridor.SetupCorridor(rooms[0], corridorLength, roomWidth, roomHeight, columns, rows, false);
+        for (int startingCorr = 0; startingCorr < 4; ++startingCorr)
+        {         // ... create a corridor.
+            Corridor firstCorridor = new Corridor();
+            // Setup the first corridor using the first room.
+            firstCorridor.SetupCorridor(rooms[0], corridorLength, roomWidth, roomHeight, columns, rows, startingCorr);
 
-        corridors.Add(firstCorridor);
+            corridors.Add(firstCorridor);
+        }
 
         for (int i = 1; i < rooms.Length; i++)
         {
-            Debug.Log(corridors.Count + "     " + corridors.Capacity);
             // Create a room.
             rooms[i] = new Room();
 
-            // Setup the room based on the previous corridor.
-            rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[i - 1]);
+            List<int> notConnectedCorrsIndex = new List<int>();
+
+            // Setup the room base on a unConnectedTo corridor
+            for (int corIndex = 0; corIndex < corridors.Count; ++corIndex)
+            {
+                if (corridors[corIndex].connectedTo == false)
+                {
+                    notConnectedCorrsIndex.Add(corIndex);
+                }
+            }
+
+            //choose randomly from the list of unconnected corridors
+            if (notConnectedCorrsIndex.Count > 0)
+            {
+                int randomChoice = Random.Range(0, notConnectedCorrsIndex.Count);
+                rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[notConnectedCorrsIndex[randomChoice]]);
+            }
+            else
+            {
+                rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[i - 1]);
+            }
+
+            notConnectedCorrsIndex.Clear();
 
             // If we haven't reached the end of the corridors array...
-            if (i < corridors.Capacity)
+            if (corridors.Count < corridors.Capacity)
             {
-                // ... create a corridor.
                 Corridor tempCorridor = new Corridor();
-                // Setup the corridor based on the room that was just created.
-                tempCorridor.SetupCorridor(rooms[i], corridorLength, roomWidth, roomHeight, columns, rows, false);
-
+                int firstDir = tempCorridor.SetupCorridor(rooms[i], corridorLength, roomWidth, roomHeight, columns, rows, false);
                 corridors.Add(tempCorridor);
             }
         }
-
     }
 
     void SetTilesValuesForRooms()
@@ -116,7 +145,11 @@ public class BoardGenerator : MonoBehaviour
                 {
                     int yCoord = currentRoom.yPos + k;
 
+                    if (yCoord < 0)
+                        yCoord = 0;
+
                     // The coordinates in the jagged array are based on the room's position and it's width and height.
+//                    Debug.Log("x " + xCoord + " : " + "  ||  " + " y " + yCoord + " : ");
                     tiles[xCoord][yCoord] = TileType.Floor;
                 }
             }
@@ -131,7 +164,7 @@ public class BoardGenerator : MonoBehaviour
             Corridor currentCorridor = corridors[i];
 
             // and go through it's length.
-            for (int j = 0; j < currentCorridor.corridorLength; j++)
+            for (int j = 0; j < currentCorridor.corridorLength; ++j)
             {
                 // Start the coordinates at the start of the corridor.
                 int xCoord = currentCorridor.startXPos;
@@ -245,6 +278,11 @@ public class BoardGenerator : MonoBehaviour
 
     public Room[] GetRooms()
     { return rooms; }
+
+    public void DestroyLevel()
+    {
+        Destroy(boardHolder);
+    }
 }
 
 [System.Serializable]
