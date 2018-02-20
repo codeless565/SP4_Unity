@@ -5,39 +5,30 @@ using UnityEngine.UI;
 
 public class ShopDisplay : MonoBehaviour
 {
-    [SerializeField]
-    GameObject ShopDisplayCanvas;
+    public GameObject ShopDisplayCanvas;
+    public GameObject ShopConfirmationCanvas;
 
-    [SerializeField]
-    GameObject ShopConfirmationCanvas;
+    public GameObject ButtonPrefab;
+    public GameObject ConfirmationText;
 
-    [SerializeField]
-    GameObject ButtonPrefab;
-
-    [SerializeField]
-    GameObject ConfirmationText;
-
-    [SerializeField]
-    int NumberOfItemsPerRow = 5;
-
-    [SerializeField]
-    int MaxNumberOfColumn = 3;
+    public int NumberOfItemsPerRow = 5;
+    public int MaxNumberOfColumn = 3;
 
     GameObject[] ShopLayout;
+    ItemBase SelectedItem;
 
+    bool ConfirmationDisplay;
     GameObject ItemNameText;
     GameObject CostText;
     GameObject GoldText;
     GameObject BuyButton;
     GameObject CancelButton;
-    bool ConfirmationDisplay;
-
+    
     GameObject QuantityText;
     int Quantity;
     GameObject QuantityAdd;
     GameObject QuantitySubtract;
 
-    ItemBase SelectedItem;
     // Use this for initialization
     void Start()
     { 
@@ -52,7 +43,7 @@ public class ShopDisplay : MonoBehaviour
 
             ShopLayout[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
-            newIcon.GetComponent<Button>().onClick.AddListener(delegate { ButtonOnClick(newIcon); });
+            newIcon.GetComponent<Button>().onClick.AddListener(delegate { ShopButtonOnClick(newIcon); });
         }
 
 
@@ -104,7 +95,7 @@ public class ShopDisplay : MonoBehaviour
         }
     }
 
-    void ButtonOnClick(GameObject btn)
+    void ShopButtonOnClick(GameObject btn)
     {
         SelectedItem = null;
         foreach (GameObject buttons in ShopLayout)
@@ -120,6 +111,7 @@ public class ShopDisplay : MonoBehaviour
             }
         }
     }
+
     void ResetDisplay()
     {
         foreach (GameObject go in ShopLayout)
@@ -151,7 +143,6 @@ public class ShopDisplay : MonoBehaviour
             }
         }
     }
-
     public void DisplayAllEquipment()
     {
         ResetDisplay();
@@ -194,7 +185,6 @@ public class ShopDisplay : MonoBehaviour
         ConfirmationDisplay = false;
         Quantity = 1;
     }
-
     void CancelBuy()
     {
         ConfirmationDisplay = false;
@@ -206,7 +196,6 @@ public class ShopDisplay : MonoBehaviour
         if ((SelectedItem.getCost() * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
             Quantity++;
     }
-
     void SubtractQuantity()
     {
         if (Quantity - 1 <= 1)

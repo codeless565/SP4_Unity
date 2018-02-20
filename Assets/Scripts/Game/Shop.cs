@@ -13,8 +13,8 @@ public class Shop : MonoBehaviour
     bool WeaponsDisplay;
     bool UsesDisplay;
 
-    public Color ButtonActiveColour = Color.red;
-    public Color ButtonInactiveColour = Color.cyan;
+    Color ButtonActiveColour = Color.red;
+    Color ButtonInactiveColour = Color.cyan;
 
     // Use this for initialization
     void Start()
