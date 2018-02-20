@@ -17,11 +17,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-<<<<<<< HEAD
-    int enemyLevel = 0, health = 50;
-=======
-    int enemyLevel = 0, health = 10,mana = 10;
->>>>>>> 09368b8af84248a7afaa63ffebd32051eadd05e3
+    int enemyLevel = 0, health = 50, mana = 10;
     [SerializeField]
     float attack = 10, defense = 10, movespeed = 10;
 
