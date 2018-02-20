@@ -38,7 +38,7 @@ public class TutorialTextBox : MonoBehaviour
     {
         KeyPressedUpdate();
 
-        if (Input.GetKeyDown(KeyCode.Return) && !pauseBox)
+        if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
         {
             if (!textboxManager.isTyping)
             {
