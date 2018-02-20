@@ -1,25 +1,65 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpriteManager : MonoBehaviour {
+    enum S_Weapon
+    {
+        DAGGER,
+        SWORD,
+        ARROW,
+        BOW,
+    };
 
-    public Animator anim;
-    public float speed;
-    public Rigidbody2D rigid;
-	// Use this for initialization
-	void Start () {
-        anim = GetComponent<Animator>();
+    enum S_Wardrobe
+    {
+        DEFAULT_TOP,
+        DEFAULT_BOTTOM,
+        DEFAULT_SHOES,
+        DEFAULT_HEADP,
+        METAL_TOP,
+        METAL_BOTTOM,
+        METAL_GLOVES,
+        METAL_SHOES,
+        METAL_HEADP,
+    };
+
+    public enum S_Dir
+    {
+        FRONT,
+        BACK,
+        LEFT,
+        RIGHT
+    };
+
+    public GameObject Head/*, Top, Bottom, Gloves, Shoes, Weapon*/;
+    public Animator HairAnim;
+    S_Wardrobe topSprite, bottomSprite, headSprite, glovesSprite, shoesSprite, weaponSprite;
+    public S_Dir direction;
+    public float hori, verti;
+    
+
+    // Use this for initialization
+    void Start ()
+    {
+        HairAnim = Head.GetComponent<Animator>();
 	}
+
+    void ChangeHead()
+    {
+        switch(headSprite)
+        {
+            case S_Wardrobe.DEFAULT_HEADP:
+                
+                break;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        float moveHori = Input.GetAxis("Horizontal");
-        float moveVerti = Input.GetAxis("Vertical");
+        //if(direction == S_Dir.LEFT || direction == S_Dir.RIGHT)
+        {
+            Debug.Log(hori);
 
-        Vector3 movement = new Vector3(moveHori, moveVerti, 0.0f);
-        rigid.velocity = movement * speed;
-        anim.SetFloat("MovementX", moveHori);
-        anim.SetFloat("MovementY", moveVerti);
+            HairAnim.SetFloat("MoveX", hori);
+        }
     }
 }

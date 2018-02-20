@@ -6,14 +6,22 @@ using UnityEngine;
 public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 {
     /* Animation */
-    private Animator anim;
+   public GameObject Hair;
+    private Animator anim, HairAnim;
+
+    private bool PlayerMoving;
+    private Vector2 lastMove;
+
+    SpriteManager p_spriteManager = new SpriteManager();
+
     enum PlayerState
     {
         IDLE,
         WALK,
-        SWISH, //attack1
-        DOUBLE, //attack2
-        HACK, //attack3
+        SLASH, //attack1
+        SPELL, //attack2
+        THRUST, //attack3
+        BOW, //attack4
         HIT,
         DIE,
     };
@@ -36,8 +44,8 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     /* Direction Player will face */
     enum Direction
     {
-        Up = 0,
-        Down,
+        Down = 0,
+        Up,
         Left,
         Right,
     };
@@ -123,174 +131,54 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     {
         //DebugPlayerStats();
         anim = GetComponent<Animator>();
-        anim.SetBool("MoveDown", true);
-        toMove = Direction.Down;
-
+        HairAnim = Hair.GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        switch(toMove)
-        {
-            case Direction.Up:
-                anim.SetBool("MoveUp", true);
-                anim.SetBool("MoveDown", false);
-                anim.SetBool("MoveLeft", false);
-                anim.SetBool("MoveRight", false);
-                break;
-            case Direction.Down:
-                anim.SetBool("MoveUp", false);
-                anim.SetBool("MoveDown", true);
-                anim.SetBool("MoveLeft", false);
-                anim.SetBool("MoveRight", false);
-                break;
-            case Direction.Left:
-                anim.SetBool("MoveUp", false);
-                anim.SetBool("MoveDown", false);
-                anim.SetBool("MoveLeft", true);
-                anim.SetBool("MoveRight", false);
-                break;
-            case Direction.Right:
-                anim.SetBool("MoveUp", false);
-                anim.SetBool("MoveDown", false);
-                anim.SetBool("MoveLeft", false);
-                anim.SetBool("MoveRight", true);
-                break;
-        }
-
         Movement2D();
-	}
-
-    void moveLeft()
-    {
-        //if (toMove != Direction.Left)
-        //{
-        //    switch (toMove)
-        //    {
-        //        case Direction.Down:
-        //            //transform.Rotate(0, 0, -90);
-        //            anim.SetBool("MoveDown", true);
-        //            break;
-
-        //        case Direction.Right:
-        //            transform.Rotate(0, 0, 180);
-        //            break;
-
-        //        case Direction.Up:
-        //            //transform.Rotate(0, 0, 90);
-        //            anim.SetBool("MoveUp", true);
-        //            break;
-        //    }
-        //    toMove = Direction.Left;
-        //}
-        toMove = Direction.Left;
-        transform.position -= transform.right * MoveSpeed * Time.deltaTime;
-    }
-
-    void moveRight()
-    {
-        //if (toMove != Direction.Right)
-        //{
-        //    switch (toMove)
-        //    {
-        //        case Direction.Down:
-        //            //transform.Rotate(0, 0, -90);
-        //            anim.SetBool("MoveDown", true);
-        //            break;
-
-        //        case Direction.Left:
-        //            transform.Rotate(0, 0, 180);
-        //            break;
-
-        //        case Direction.Up:
-        //           // transform.Rotate(0, 0, -90);
-        //            anim.SetBool("MoveUp", true);
-        //            break;
-        //    }
-        //    toMove = Direction.Right;
-        //}
-        toMove = Direction.Right;
-        transform.position += transform.right * MoveSpeed * Time.deltaTime;
-    }
-
-    void moveUp()
-    {
-        // Sprite not facing up 
-        //if (toMove != Direction.Up)
-        //{
-        //    switch (toMove)
-        //    {
-        //        case Direction.Down:
-        //            //transform.Rotate(0, 0, -90);
-        //            anim.SetBool("MoveUp", true);
-        //            anim.SetBool("MoveDown", false);
-        //            break;
-
-        //        case Direction.Right:
-        //            transform.Rotate(0, 0, 90);
-        //            break;
-
-        //        case Direction.Left:
-        //            transform.Rotate(0, 0, -90);
-        //            break;
-        //    }
-        //    toMove = Direction.Up;
-        //}
-
-        toMove = Direction.Up;
-
-        // Movement
-        transform.position += transform.up * MoveSpeed * Time.deltaTime;
-    }
-
-    void moveDown()
-    {
-        //if (toMove != Direction.Down)
-        //{
-        //    switch (toMove)
-        //    {
-        //        case Direction.Up:
-        //            //transform.Rotate(0, 0, 180);
-        //            anim.SetBool("MoveDown", true);
-        //            anim.SetBool("MoveUp", false);
-        //            break;
-
-        //        case Direction.Right:
-        //            transform.Rotate(0, 0, -90);
-        //            break;
-
-        //        case Direction.Left:
-        //            transform.Rotate(0, 0, 90);
-        //            break;
-        //    }
-        //    toMove = Direction.Down;
-        //}
-        toMove = Direction.Down;
-        transform.position -= transform.up * MoveSpeed * Time.deltaTime;
     }
 
     void KeyMove()
     {
-        // Up / Down
-        if (Input.GetKey(KeyCode.W))
+        PlayerMoving = false;
+
+        //move left/right
+        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
-            moveUp();
+            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * MoveSpeed * Time.deltaTime, 0f, 0f));
+            PlayerMoving = true;
+            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+
+            if (Input.GetAxisRaw("Horizontal") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+            }
+            else
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+            }
+
+            p_spriteManager.hori = lastMove.x;
+            
         }
-        if (Input.GetKey(KeyCode.S))
+        //move up/down
+        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
         {
-            moveDown();
+            transform.Translate(new Vector3(0f,Input.GetAxisRaw("Vertical") * MoveSpeed * Time.deltaTime, 0f));
+            PlayerMoving = true;
+            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
         }
 
-        // Left / Right
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveLeft();
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveRight();
-        }
+        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
+        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
+        HairAnim.SetFloat("MoveX", lastMove.x);
+        HairAnim.SetFloat("MoveY", lastMove.y);
+        anim.SetBool("PlayerMoving", PlayerMoving);
+        anim.SetFloat("LastMoveX", lastMove.x);
+        anim.SetFloat("LastMoveY", lastMove.y);
+        
     }
 
     void AccMove()
@@ -298,24 +186,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         //values from accelerometer;
         float x = Input.acceleration.x;
         float y = Input.acceleration.y;
-
-        if(x < 0) //move left
-        {
-            moveLeft();
-        }
-        else //move right
-        {
-            moveRight();
-        }
-
-        if(y < 0)
-        {
-            moveUp();
-        }
-        else
-        {
-            moveDown();
-        }
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
