@@ -13,8 +13,8 @@ public class Inventory : MonoBehaviour
     bool WeaponsDisplay;
     bool UsesDisplay;
 
-    public Color ButtonActiveColour = Color.red;
-    public Color ButtonInactiveColour = Color.cyan;
+    Color ButtonActiveColour = Color.red;
+    Color ButtonInactiveColour = Color.cyan;
 
     // Use this for initialization
     void Start()
@@ -73,14 +73,13 @@ public class Inventory : MonoBehaviour
     public void OpenUses()
     {
         gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Uses");
-        UsesDisplay = true;
         WeaponsDisplay = false;
+        UsesDisplay = true;
     }
     public void CloseInventoryUI()
     {
         gameObject.GetComponent<InventoryDisplay>().getItemDisplayCanvas().SetActive(false);
         gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
-
         InventoryUI = false;
     }
     public void OpenInventoryUI()
@@ -89,5 +88,4 @@ public class Inventory : MonoBehaviour
         OpenEquipment();
         InventoryUI = true;
     }
-
 }

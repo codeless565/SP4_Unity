@@ -11,18 +11,15 @@ public class InventoryDisplay : MonoBehaviour {
     public int NumberOfItemsPerRow = 5;
     public int MaxNumberOfColumn = 3;
 
+    GameObject[] InventoryLayout;
+    ItemBase SelectedItem;
+
     // Confirmation Canvas
     public GameObject EquipConfirmationCanvas;
     bool ConfirmationCanvas;
     GameObject ItemNameText;
     GameObject ConfirmButton;
     GameObject CancelButton;
-
-    
-
-    GameObject[] InventoryLayout;
-    ItemBase SelectedItem;
-
     // Use this for initialization
     void Start () {
         InventoryLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
@@ -35,7 +32,7 @@ public class InventoryDisplay : MonoBehaviour {
 
             InventoryLayout[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
-            newIcon.GetComponent<Button>().onClick.AddListener(delegate { Clicking(newIcon); });
+            newIcon.GetComponent<Button>().onClick.AddListener(delegate { InventoryButtonOnClick(newIcon); });
         }
         ItemNameText = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
         ConfirmationCanvas = false;
@@ -64,6 +61,7 @@ public class InventoryDisplay : MonoBehaviour {
             go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().Empty;
         }
     }
+
     public void DisplayInventoryMenu(string itemtype)
     {
         ResetDisplay();
@@ -112,10 +110,12 @@ public class InventoryDisplay : MonoBehaviour {
 
     }
 
-    public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }
-    public GameObject getItemDisplayCanvas() { return InventoryDisplayCanvas; }
+    void DisplayConfirmedItem()
+    {
+        ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
+    }
 
-    void Clicking(GameObject btn)
+    void InventoryButtonOnClick(GameObject btn)
     {
         SelectedItem = null;
         foreach (GameObject buttons in InventoryLayout)
@@ -132,10 +132,6 @@ public class InventoryDisplay : MonoBehaviour {
         }
     }
 
-    void CancelEquip()
-    {
-        ConfirmationCanvas = false;
-    }
     void ConfirmEquip()
     {
         if (SelectedItem == null)
@@ -147,10 +143,11 @@ public class InventoryDisplay : MonoBehaviour {
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().EquipEQ(SelectedItem);
         ConfirmationCanvas = false;
     }
-
-    void DisplayConfirmedItem()
+    void CancelEquip()
     {
-        ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
+        ConfirmationCanvas = false;
     }
-
+    
+    public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }
+    public GameObject getItemDisplayCanvas() { return InventoryDisplayCanvas; }
 }
