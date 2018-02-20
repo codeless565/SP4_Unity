@@ -180,8 +180,22 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
                 break;
         }
 
+        /* Checking of Player Health */
+        if(Health <= 0)
+        {
+            playerState = PlayerState.DIE;
+        }
+
+        /* Player States */
+        switch(playerState)
+        {
+            case PlayerState.DIE:
+                PlayerDeath();
+                break;
+        }
+
         Movement2D();
-	}
+    }
 
     void moveLeft()
     {
@@ -337,6 +351,14 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         {
             moveDown();
         }
+    }
+
+    /* Death of Player */
+    void PlayerDeath()
+    {
+        Destroy(gameObject);
+
+        // Generate a LoseScreen .etc.
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */

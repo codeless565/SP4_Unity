@@ -218,8 +218,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             EnemyAttackTimer -= Time.deltaTime;
         }
 
-        Debug.Log(player.Health);
-
         PlayerHitEnemy();
     }
 
