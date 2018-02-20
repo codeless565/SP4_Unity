@@ -10,7 +10,10 @@ public interface ItemBase : StatsBase
     {
         get;set;
     }
-
+    //string ItemRarity
+    //{
+    //    get;set;
+    //}
     string ItemType
     {
         get;set;
@@ -27,6 +30,7 @@ public class Item : ItemBase
     string _itemname;
     string _itemtype;
     int _itemlevel;
+    //string _itemrarity;
     int _itemcost;
     int _health;
     int _mana;
@@ -61,7 +65,7 @@ public class Item : ItemBase
         {
             _itemtype = value;
         }
-    }
+    }  
 
     public int Level
     {
@@ -75,6 +79,19 @@ public class Item : ItemBase
             _itemlevel = value;
         }
     }
+
+    //public string ItemRarity
+    //{
+    //    get
+    //    {
+    //        return _itemrarity;
+    //    }
+
+    //    set
+    //    {
+    //        _itemrarity = value;
+    //    }
+    //}
 
     public int ItemCost
     {
@@ -172,10 +189,3 @@ public class Item : ItemBase
         ItemImage = GameObject.FindGameObjectWithTag("ItemObjectHolder").GetComponent<ItemObjectHolder>().getSprite(_spritename);
     }
 }
-//  Item Types
-// Weapons
-// Helmets
-// Chestpieces
-// Leggings
-// Shoes
-// Uses
