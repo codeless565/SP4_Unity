@@ -17,7 +17,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-    int enemyLevel = 0, health = 10,mana = 10;
+    int enemyLevel = 0, health = 50, mana = 10;
     [SerializeField]
     float attack = 10, defense = 10, movespeed = 10;
 
@@ -38,8 +38,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private Vector2 playerPos;
     private Vector2 distanceOffset;
     private Vector2 PlayerDestination;
-    public Player2D_Manager player;
-    public Transform playerTransform;
+    private GameObject player;
+    private Transform playerTransform;
 
     // Stats Setter and Getter //
     public int Level
@@ -137,6 +137,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Use this for initialization
     void Start ()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
+
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
         //anim = GetComponent<Animation>();
@@ -144,12 +146,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);
         // Setting Enemy Attack Timer to 0.8f
-        EnemyAttackTimer = 0.8f;
+        EnemyAttackTimer = 0.5f;
 	}
 	
 	// Update is called once per frame
 	void Update ()
-    {        
+    {   
         // Getting Player Position.
         playerPos = player.transform.position;
         PlayerDestination = playerPos - distanceOffset;
@@ -267,8 +269,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         if(EnemyAttackTimer <= 0f)
         {
-            EnemyAttackTimer = 0.8f;
-            player.Health -= (int)Attack;
+            EnemyAttackTimer = 0.5f;
+            player.GetComponent<Player2D_Manager>().Health -= (int)Attack;
         }
 
         // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
@@ -333,7 +335,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         if (GetComponent<CollisionPlayerMelee>().Attacked)
         {
-            health -= (int)player.Attack;
+            health -= (int)player.GetComponent<Player2D_Manager>().Attack;
             GetComponent<CollisionPlayerMelee>().Attacked = false;
         }
 
