@@ -104,19 +104,16 @@ public class BoardGenerator : MonoBehaviour
                     notConnectedCorrsIndex.Add(corIndex);
                 }
             }
-            Debug.Log("Size of Unconnected " + notConnectedCorrsIndex.Count);
 
             //choose randomly from the list of unconnected corridors
             if (notConnectedCorrsIndex.Count > 0)
             {
                 int randomChoice = Random.Range(0, notConnectedCorrsIndex.Count);
                 rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[notConnectedCorrsIndex[randomChoice]]);
-                Debug.Log("Chosen " + notConnectedCorrsIndex[randomChoice]);
             }
             else
             {
                 rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[i - 1]);
-                Debug.Log("no free corridors");
             }
 
             notConnectedCorrsIndex.Clear();
@@ -127,17 +124,6 @@ public class BoardGenerator : MonoBehaviour
                 Corridor tempCorridor = new Corridor();
                 int firstDir = tempCorridor.SetupCorridor(rooms[i], corridorLength, roomWidth, roomHeight, columns, rows, false);
                 corridors.Add(tempCorridor);
-                //Debug.Log(corridors.Count + "   " + corridors.Capacity);
-
-                //if (corridors.Count < corridors.Capacity)
-                //{
-                //    Corridor tempCorridor2 = new Corridor();
-
-                //    tempCorridor.SetupCorridor(rooms[i], corridorLength, roomWidth, roomHeight, columns, rows, firstDir + 2);
-
-                //    corridors.Add(tempCorridor2);
-                //    Debug.Log("Double Add " + corridors.Count + "   " + corridors.Capacity);
-                //}
             }
         }
     }

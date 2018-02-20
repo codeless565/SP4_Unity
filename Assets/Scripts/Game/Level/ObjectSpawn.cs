@@ -40,7 +40,10 @@ public class ObjectSpawn : MonoBehaviour {
             m_playerRoom = Random.Range(0, m_rooms.Length - 1);
 
         m_playerPos = new Vector2(m_rooms[m_playerRoom].xPos + m_rooms[m_playerRoom].roomWidth * 0.5f, m_rooms[m_playerRoom].yPos + m_rooms[m_playerRoom].roomHeight * 0.5f);
-        Camera.GetComponent<CameraController>().SetPlayer(Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform)); //Spawn Player and Set the Instantiated player into Camera
+        Player = Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
+        Player.GetComponent<ObjectInfo>().Init(m_playerRoom, m_rooms[m_playerRoom], m_playerPos); //Set Starting Spawn location and detail to object
+
+        Camera.GetComponent<CameraController>().SetPlayer(Player); //Spawn Player and Set the Instantiated player into Camera
     }
 
     private void ExitSpawn()
@@ -59,6 +62,9 @@ public class ObjectSpawn : MonoBehaviour {
         m_exitPos = new Vector2(ranXpos, ranYpos);
 
         go_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
+        go_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
+
+        //Debug.Log("Exit Info: " + go_exit.GetComponent<ObjectInfo>().RoomIndex + "  " + go_exit.GetComponent<ObjectInfo>().MapPostion);
     }
 
     private void ItemSpawn()
@@ -66,13 +72,15 @@ public class ObjectSpawn : MonoBehaviour {
         go_chest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
 
         int AmtOfChest = NumChest.Random;
+        int tempRoom;
         Vector2 tempPos = new Vector2(0, 0);
 
         for (int i = 0; i < AmtOfChest; ++i)
-        {
+        { 
+
             do
             {
-                int tempRoom = Random.Range(0, m_rooms.Length - 1);
+                tempRoom = Random.Range(0, m_rooms.Length - 1);
 
                 int ranXpos = Random.Range(m_rooms[tempRoom].xPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
                                            m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
@@ -80,11 +88,14 @@ public class ObjectSpawn : MonoBehaviour {
                 int ranYpos = Random.Range(m_rooms[tempRoom].yPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
                                            m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
 
-                tempPos = new Vector2(ranXpos, ranYpos);
+                tempPos.Set(ranXpos, ranYpos);
 
             } while (tempPos == m_playerPos || tempPos == m_exitPos);
 
-            Instantiate(go_chest, tempPos, Quaternion.identity, go_floorholder.transform);
+            GameObject tempChest = Instantiate(go_chest, tempPos, Quaternion.identity, go_floorholder.transform);
+            tempChest.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
+
+            //Debug.Log("Chest Info: " + tempChest.GetComponent<ObjectInfo>().RoomIndex + "  " + tempChest.GetComponent<ObjectInfo>().MapPostion);
         }
     }
 
