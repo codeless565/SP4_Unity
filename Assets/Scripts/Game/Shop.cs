@@ -8,6 +8,7 @@ public class Shop : MonoBehaviour
     public GameObject EquipmentDropdown;
     public GameObject UsesButton;
     public GameObject ShopUICanvas;
+    public GameObject GoldText;
 
     bool ShopUI;
     bool WeaponsDisplay;
@@ -41,6 +42,7 @@ public class Shop : MonoBehaviour
             UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
 
         ShopUICanvas.SetActive(ShopUI);
+        GoldText.GetComponent<Text>().text = "Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold.ToString();
     }
 
     public void OpenEquipment()
