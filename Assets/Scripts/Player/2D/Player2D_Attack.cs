@@ -35,7 +35,7 @@ public class Player2D_Attack : MonoBehaviour
             temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform;
 
             /* Translate the hitbox so that it can rotate according to player direction */
-            //temp.transform.Translate(0, 1.25F,0);
+            temp.transform.Translate(0, 1.25F,0);
             //transform.Rotate(0, 0, 180 * Time.deltaTime);
 
             //Debug.Log(transform.rotation.ToString());
