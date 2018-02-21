@@ -3,148 +3,84 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* For Player in 2D */
-public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
+public class Player2D_Manager : MonoBehaviour, CollisionBase
 {
+<<<<<<< HEAD
     /*Base Animation(body)*/
+=======
+    /* Animation */
+    public GameObject Hair;
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
     private Animator anim;
     private bool PlayerMoving;
     private Vector2 lastMove;
 
+<<<<<<< HEAD
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
+=======
+    //SpriteManager p_spriteManager;
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
 
-    enum PlayerState
+    /* Getting Player Stats */
+    private Player2D_StatsHolder statsHolder;
+
+    /* Show Level Up */
+    [SerializeField]
+    private TextMesh m_levelup_mesh, cloneMesh;
+    private float m_fLevelUpTimer = 0.0F;
+    private float m_fLevelUpMaxTimer = 2.0F;
+    private bool m_bCheckLevelUp; 
+
+    /* Direction Player Melee Box will face */
+    //enum Direction
+    //{
+    //    Down = 0,
+    //    Up,
+    //    Left,
+    //    Right,
+    //};
+    //Direction toMove = 0;
+
+    // Use this for initialization
+
+    void Start()
     {
-        IDLE,
-        WALK,
-        SLASH, //attack1
-        SPELL, //attack2
-        THRUST, //attack3
-        BOW, //attack4
-        HIT,
-        DIE,
-    };
-    PlayerState playerState;
+        anim = GetComponent<Animator>();
 
-    /* Player Stats */
-    [SerializeField]
-    int playerLevel = 1;
-    [SerializeField]
-    int health = 100;
-    [SerializeField]
-    float attack = 10;
-    [SerializeField]
-    int mana = 10;
-    [SerializeField]
-    float defense = 10;
-    [SerializeField]
-    float movespeed = 10;
-    [SerializeField]
-    public int gold = 9999999;
+        //p_spriteManager = GetComponent<SpriteManager>();
 
-    string name;
-
-    /* Direction Player will face */
-    enum Direction
-    {
-        Down = 0,
-        Up,
-        Left,
-        Right,
-    };
-    Direction toMove = 0;
-
-    /* Setters and Getters */
-    public string Name
-    {
-        get
-        {
-            return "player2D";
-        }
-        set
-        {
-            name = value;
-        }
+        /* Stats Things */
+        statsHolder = GetComponent<Player2D_StatsHolder>();
+        m_bCheckLevelUp = false;
+        // statsHolder.DebugPlayerStats();
     }
 
-    public int Level
+    // Update is called once per frame
+    void Update()
     {
-        get
+        /* When EXP is maxed */
+        if (statsHolder.EXP >= statsHolder.MaxEXP)
         {
-            return playerLevel;
+            m_bCheckLevelUp = true;
+            LevelUp();
         }
-
-        set
+        
+        // Check Timer to despawn level up
+        if (m_bCheckLevelUp)
         {
-            playerLevel = value;
+            m_fLevelUpTimer += Time.deltaTime;
+            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
+            {
+                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
+                Destroy(cloneMesh);
+                m_bCheckLevelUp = false;
+            }
+            
         }
-    }
+        Debug.Log(m_bCheckLevelUp);
 
-    public int Health
-    {
-        get
-        {
-            return health;
-        }
-
-        set
-        {
-            health = value;
-        }
-    }
-
-    public float Attack
-    {
-        get
-        {
-            return attack;
-        }
-
-        set
-        {
-            attack = value;
-        }
-    }
-
-    public float Defense
-    {
-        get
-        {
-            return defense;
-        }
-
-        set
-        {
-            defense = value;
-        }
-    }
-
-    public float MoveSpeed
-    {
-        get
-        {
-            return movespeed;
-        }
-
-        set
-        {
-            movespeed = value;
-        }
-    }
-
-    public int Mana
-    {
-        get
-        {
-            return mana;
-        }
-
-        set
-        {
-            mana = value;
-        }
-    }
-
+<<<<<<< HEAD
     // Use this for initialization
     void Start()
     {
@@ -158,55 +94,86 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     // Update is called once per frame
     void Update()
     {
+=======
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
         Movement2D();
+
+        
     }
 
     void KeyMove()
     {
         PlayerMoving = false;
-        //move left/right
+
+        // Move Left / Right
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * MoveSpeed * Time.deltaTime, 0f, 0f));
+            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
             PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
 
             if (Input.GetAxisRaw("Horizontal") > 0f)
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                /* Sprite play Right animation*/
+                //p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                /* Melee Hitbox faces Right*/
+                //GetComponentInChildren<Player2D_Attack>().transform.Rotate(0, 0, 90);
             }
             else
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+                //p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
             }
+<<<<<<< HEAD
             p_spriteManager.SetLastMove(lastMove.x, 0);
+=======
+
+            //p_spriteManager.hori = lastMove.x;
+
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
         }
-        //move up/down
+
+        //Debug.Log("Degrees of Melee Box: " + GetComponentInChildren<Player2D_Attack>().transform.rotation.ToString());
+        //GetComponent<Player2D_StatsHolder>().DebugPlayerStats();
+
+
+        // Move Up / Down
         if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
         {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * MoveSpeed * Time.deltaTime, 0f));
+            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
             PlayerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
-
+            
             if (Input.GetAxisRaw("Vertical") > 0f)
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+                //p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
             }
             else
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+                //p_spriteManager.direction = SpriteManager.S_Dir.BACK;
             }
+<<<<<<< HEAD
             p_spriteManager.SetLastMove(0, lastMove.y); 
+=======
+            //p_spriteManager.verti = lastMove.y;
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
         }
 
+        /* Set Player Movement to Animation */
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
         anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
+<<<<<<< HEAD
+=======
+        //p_spriteManager.hori = lastMove.x;
+        //p_spriteManager.verti = lastMove.y;
+
+
+>>>>>>> 2606ae42fa9450ce75825a6233f61c0c99b07482
     }
 
-    void AccMove()
+    private void AccMove()
     {
         //values from accelerometer;
         float x = Input.acceleration.x;
@@ -239,15 +206,14 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 
     }
 
-    /* Print Debug Information */
-    void DebugPlayerStats()
+    /* Level Up Character */
+    private void LevelUp()
     {
-        Debug.Log("Name : " + Name);
-        Debug.Log("Level : " + Level);
-        Debug.Log("playerHealth : " + Health);
-        Debug.Log("Att : " + Attack);
-        Debug.Log("Def : " + Defense);
-        Debug.Log("MoveSpeed : " + MoveSpeed);
-        Debug.Log("Gold : " + gold.ToString());
+        /* Reset all Exp */
+        statsHolder.EXP = 0.0F;
+        statsHolder.MaxEXP += 1;
+        statsHolder.Level += 1;
+        /* Create Text to show u level up */
+        cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
     }
 }
