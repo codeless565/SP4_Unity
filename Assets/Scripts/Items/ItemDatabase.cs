@@ -45,11 +45,50 @@ public class ItemDatabase {
             newItem.Defense = temp2;
             float.TryParse(linedata[8], out temp2);
             newItem.MoveSpeed = temp2;
-
+            newItem.ItemRarity = "Common";
             newItem._spritename = linedata[9];
             newItem.getImage();
 
             ItemList.Add(newItem);
+
+            if (newItem.ItemType != "Uses")
+            {
+                for (int j = 1; j <= 4; ++j)
+                {
+                    float multipler = 0.0f;
+                    Item OtherRarityItem = new Item(newItem);
+                    switch (j)
+                    {
+                        case 1:
+                            OtherRarityItem.ItemRarity = "Uncommon";
+                            OtherRarityItem.Level = 10;
+                            multipler = OtherRarityItem.Level / 10 * 1.5f;
+                            break;
+                        case 2:
+                            OtherRarityItem.ItemRarity = "Magic";
+                            OtherRarityItem.Level = 20;
+                            multipler = OtherRarityItem.Level / 10 * 2.0f;
+                            break;
+                        case 3:
+                            OtherRarityItem.ItemRarity = "Ancient";
+                            OtherRarityItem.Level = 30;
+                            multipler = OtherRarityItem.Level / 10 * 2.5f;
+                            break;
+                        case 4:
+                            OtherRarityItem.ItemRarity = "Relic";
+                            OtherRarityItem.Level = 40;
+                            multipler = OtherRarityItem.Level / 10 * 3.0f;
+                            break;
+                    }
+                    OtherRarityItem.Health *= (int)multipler;
+                    OtherRarityItem.Mana *= (int)multipler;
+                    OtherRarityItem.Attack *= multipler;
+                    OtherRarityItem.Defense *= multipler;
+                    OtherRarityItem.MoveSpeed *= multipler;
+
+                    ItemList.Add(OtherRarityItem);
+                }
+            }
         }
     }
     public static ItemDatabase Instance
@@ -85,7 +124,16 @@ public class ItemDatabase {
     {
         foreach (Item item in ItemList)
         {
-            string data = item.Name + " " + item.ItemType + " " + item.ItemCost;
+            string data = item.Name + " " +
+                          item.ItemType + " " +
+                          item.Level + " " +
+                          item.ItemRarity + " " +
+                          item.ItemCost + " " +
+                          item.Health + " " +
+                          item.Mana + " " +
+                          item.Attack + " " +
+                          item.Defense + " " +
+                          item.MoveSpeed;
             Debug.Log(data);
         }
     }
