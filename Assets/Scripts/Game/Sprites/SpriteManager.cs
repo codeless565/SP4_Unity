@@ -9,7 +9,7 @@ public class SpriteManager : MonoBehaviour {
         BOW,
     };
 
-    enum S_Wardrobe
+    public enum S_Wardrobe
     {
         DEFAULT_TOP,
         DEFAULT_BOTTOM,
@@ -20,6 +20,7 @@ public class SpriteManager : MonoBehaviour {
         METAL_GLOVES,
         METAL_SHOES,
         METAL_HEADP,
+        TOTAL
     };
 
     public enum S_Dir
@@ -30,36 +31,43 @@ public class SpriteManager : MonoBehaviour {
         RIGHT
     };
 
-    public GameObject Head/*, Top, Bottom, Gloves, Shoes, Weapon*/;
-    public Animator HairAnim;
-    S_Wardrobe topSprite, bottomSprite, headSprite, glovesSprite, shoesSprite, weaponSprite;
+    public GameObject Head, Top, Bottom, Gloves, Shoes, Weapon;
+    public Animator HeadAnim;
+    S_Wardrobe headEquipped,  topEquipped, bottomEquipped,glovesEquipped, shoesEquipped, weaponEquipped;
     public S_Dir direction = 0;
-    public float hori, verti;
-    
+    Vector2 lastMove;
 
     // Use this for initialization
     void Start ()
     {
-        HairAnim = Head.GetComponent<Animator>();
+        HeadAnim = Head.GetComponent<Animator>();
 	}
+
+    public void SetLastMove(float x, float y)
+    {
+        lastMove.x = x;
+        lastMove.y = y;
+    }
+
+    public void SetEquipments(S_Wardrobe headp)
+    {
+        headEquipped = headp;
+
+    }
 
     void ChangeHead()
     {
-        switch(headSprite)
+        switch(headEquipped)
         {
             case S_Wardrobe.DEFAULT_HEADP:
-                
+                //Head.GetComponentInChildren
                 break;
         }
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //if(direction == S_Dir.LEFT || direction == S_Dir.RIGHT)
-        {
-            Debug.Log(hori);
-            Debug.Log(direction);
-            HairAnim.SetFloat("MoveX", hori);
-        }
+        HeadAnim.SetFloat("MoveX", lastMove.x);
+        HeadAnim.SetFloat("MoveY", lastMove.y);
     }
 }

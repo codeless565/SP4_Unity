@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryBar : MonoBehaviour {
+public class InventoryBar : MonoBehaviour
+{
+    public GameObject Bar;  
+    public GameObject ItemLogoPrefab;
+    public GameObject ItemHotkey;
 
-    [SerializeField]
-    GameObject Bar;
-    [SerializeField]
-    GameObject ItemLogoPrefab;
 
     int maxNumOfX = 6;
 
@@ -22,10 +22,14 @@ public class InventoryBar : MonoBehaviour {
         for (int i =0;i<HotBar.Length;++i)
         {
             GameObject newIcon = Instantiate(ItemLogoPrefab, Bar.transform) as GameObject;
-            newIcon.GetComponentInChildren<Text>().text = (currentX + 1).ToString();
-            newIcon.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
             currentX++;
 
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+            GameObject HotKeyText = Instantiate(ItemHotkey, newIcon.transform);
+            HotKeyText.transform.position = new Vector3(75.0f, 25.0f) + newIcon.transform.position;
+            HotKeyText.GetComponentInChildren<Text>().text = currentX.ToString();
+            HotKeyText.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
+#endif
             HotBar[i] = newIcon;
         }
 
@@ -35,19 +39,17 @@ public class InventoryBar : MonoBehaviour {
     void Update () {
     }
 
-    public void AddPlayerHotBar(ItemBase item)
+    public void AddPlayerHotBar(Item item)
     {
-        // TODO Make sure that hotbar item is 'uses'
-        //if (item.getType() != "Uses") 
-        //    return;
-
         for (int i = 0; i < HotBar.Length; ++i)
         {
             if (HotBar[i].GetComponent<Image>().sprite.name == item.ItemImage.name)
-                break; // TODO add quantity at btm right, not just not render more
+                break;
 
             if (HotBar[i].GetComponent<Image>().sprite.name == "UISprite")
             {
+                HotBar[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                HotBar[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
                 HotBar[i].GetComponent<Image>().sprite = item.ItemImage;
                 break;
             }
