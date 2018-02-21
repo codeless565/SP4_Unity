@@ -5,12 +5,12 @@ using UnityEngine;
 /* For Player in 2D */
 public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 {
-    /* Animation */
+    /*Base Animation(body)*/
     private Animator anim;
-
     private bool PlayerMoving;
     private Vector2 lastMove;
 
+    /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
 
     enum PlayerState
@@ -151,6 +151,8 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         //DebugPlayerStats();
         anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
+        
+        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
     }
 
     // Update is called once per frame
@@ -177,7 +179,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
             {
                 p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
             }
-        p_spriteManager.hori = lastMove.x;
+            p_spriteManager.SetLastMove(lastMove.x, 0);
         }
         //move up/down
         if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
@@ -194,7 +196,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
             {
                 p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
             }
-        p_spriteManager.verti = lastMove.y;
+            p_spriteManager.SetLastMove(0, lastMove.y); 
         }
 
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
@@ -202,7 +204,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
-        Debug.Log(p_spriteManager.hori + ", " + p_spriteManager.verti);
     }
 
     void AccMove()
