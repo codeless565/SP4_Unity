@@ -89,8 +89,8 @@ public class Player2D_StatsMenu : MonoBehaviour
     private void PrintData()
     {
         tempText.text = "\n\n\nLevel : " + player.Level.ToString() + " \n"
-                       + "Health : " + player.Health.ToString() + " \n"
-                       + "Mana : " + player.Mana.ToString() + " \n"
+                       + "Health : " + player.MaxHealth.ToString() + " \n"
+                       + "Mana : " + player.MaxMana.ToString() + " \n"
                        + "Attack : " + player.Attack.ToString() + " \n"
                        + "Defense : " + player.Defense.ToString() + " \n"
                        + "MoveSpeed : " + player.MoveSpeed.ToString() + " \n";
