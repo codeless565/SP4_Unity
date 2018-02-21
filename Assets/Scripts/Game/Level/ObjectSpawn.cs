@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectSpawn : MonoBehaviour {
+public class ObjectSpawn : MonoBehaviour
+{
 
     public GameObject Player;
     public bool RandomPlayerSpawn = false;
@@ -11,9 +12,9 @@ public class ObjectSpawn : MonoBehaviour {
 
     public IntRange NumChest = new IntRange(5, 10);
     public IntRange NumEnemy = new IntRange(5, 10);
-    
+
     private Room[] m_rooms;
-    private GameObject go_floorholder; 
+    private GameObject go_floorholder;
     private GameObject go_exit;
     private GameObject go_chest;
     private GameObject go_chestMimic;
@@ -23,27 +24,36 @@ public class ObjectSpawn : MonoBehaviour {
     private Vector2 m_exitPos;
 
 
-    public void Init () {
+    public void Init(int _floor)
+    {
         go_floorholder = gameObject.GetComponent<BoardGenerator>().boardHolder;
         m_rooms = gameObject.GetComponent<BoardGenerator>().GetRooms();
 
-        PlayerSpawn();
-        ExitSpawn();
-        ItemSpawn();
+        if (_floor == 10)
+        {
+            //spawn Boss / bonus floor
+        }
+        else
+        {
+            PlayerSpawn();
+            ExitSpawn();
+            ItemSpawn(_floor);
+            EnemySpawn(_floor);
+        }
     }
 
     private void PlayerSpawn()
     {
         m_playerRoom = 0;
-        
+
         if (RandomPlayerSpawn)
             m_playerRoom = Random.Range(0, m_rooms.Length - 1);
 
         m_playerPos = new Vector2(m_rooms[m_playerRoom].xPos + m_rooms[m_playerRoom].roomWidth * 0.5f, m_rooms[m_playerRoom].yPos + m_rooms[m_playerRoom].roomHeight * 0.5f);
-        Player = Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
-        Player.GetComponent<ObjectInfo>().Init(m_playerRoom, m_rooms[m_playerRoom], m_playerPos); //Set Starting Spawn location and detail to object
+        GameObject t_player = Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
+        t_player.GetComponent<ObjectInfo>().Init(m_playerRoom, m_rooms[m_playerRoom], m_playerPos); //Set Starting Spawn location and detail to object
 
-        Camera.GetComponent<CameraController>().SetPlayer(Player); //Spawn Player and Set the Instantiated player into Camera
+        Camera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
     }
 
     private void ExitSpawn()
@@ -61,13 +71,13 @@ public class ObjectSpawn : MonoBehaviour {
 
         m_exitPos = new Vector2(ranXpos, ranYpos);
 
-        go_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
-        go_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
+        GameObject t_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
+        t_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
 
         //Debug.Log("Exit Info: " + go_exit.GetComponent<ObjectInfo>().RoomIndex + "  " + go_exit.GetComponent<ObjectInfo>().MapPostion);
     }
 
-    private void ItemSpawn()
+    private void ItemSpawn(int _floor)
     {
         go_chest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
 
@@ -76,7 +86,7 @@ public class ObjectSpawn : MonoBehaviour {
         Vector2 tempPos = new Vector2(0, 0);
 
         for (int i = 0; i < AmtOfChest; ++i)
-        { 
+        {
 
             do
             {
@@ -99,4 +109,8 @@ public class ObjectSpawn : MonoBehaviour {
         }
     }
 
+    private void EnemySpawn(int _floor)
+    {
+        //spawn enemy and init their level based on the curr floor's level
+    }
 }

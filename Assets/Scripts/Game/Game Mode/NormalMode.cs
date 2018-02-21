@@ -7,45 +7,35 @@ using UnityEngine.SceneManagement;
 public class NormalMode : MonoBehaviour, GameMode
 {
     private float elapseTime;
+    int t_CurrFloor;
 
     void Start ()
     {
+        t_CurrFloor = PlayerPrefs.GetInt("CurrentLevel");// set from player's curr floor
+        //check player's curr florr and init accordingly
+
+        Debug.Log("Current Floor: " + t_CurrFloor);
+
         gameObject.GetComponent<BoardGenerator>().Init();
-        gameObject.GetComponent<ObjectSpawn>().Init();
-    }
-
-    void Update()
-    {
-        elapseTime += Time.deltaTime;
-
-        if (elapseTime >= 5)
-        {
-            elapseTime = 0;
-            //ReGenerateLevel();
-        }
-
-    }
-
-    private void ReGenerateLevel()
-    {
-        gameObject.GetComponent<BoardGenerator>().DestroyLevel();
-        gameObject.GetComponent<BoardGenerator>().Init();
-        gameObject.GetComponent<ObjectSpawn>().Init();
+        gameObject.GetComponent<ObjectSpawn>().Init(t_CurrFloor);
     }
 
     // Interface Functions // 
     public void GameClear()
     {
-        SceneManager.LoadScene("SceneMainMenu");
+        //player curr floor + 1
+        PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
+        SceneManager.LoadScene("SceneGame_2D");
     }
 
     public void GameOver()
     {
-        SceneManager.LoadScene("SceneMainMenu");
+        PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");
+        SceneManager.LoadScene("SceneGameOver");
     }
 
     public void RestartGame()
     {
-        throw new NotImplementedException();
+        SceneManager.LoadScene("SceneGame_2D");
     }
 }

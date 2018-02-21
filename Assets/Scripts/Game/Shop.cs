@@ -81,13 +81,13 @@ public class Shop : MonoBehaviour
     }
     public void CloseShopUI()
     {
-        gameObject.GetComponent<ShopDisplay>().getItemDisplayCanvas().SetActive(false);
+        gameObject.GetComponent<ShopDisplay>().ShopDisplayCanvas.SetActive(false);
         gameObject.GetComponent<ShopDisplay>().setConfirmationDisplay(false);
         ShopUI = false;
     }
     public void OpenShopUI()
     {
-        gameObject.GetComponent<ShopDisplay>().getItemDisplayCanvas().SetActive(true);
+        gameObject.GetComponent<ShopDisplay>().ShopDisplayCanvas.SetActive(true);
         OpenEquipment();
         ShopUI = true;
     }
