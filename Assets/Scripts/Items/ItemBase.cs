@@ -23,6 +23,7 @@ public interface ItemBase : StatsBase
     {
         get;set;
     }
+    int Quantity { get; set; }
 }
 
 public class Item : ItemBase
@@ -38,6 +39,7 @@ public class Item : ItemBase
     float _defense;
     float _movespeed;
     Sprite _sprite;
+    int _quantity;
 
     public string _spritename;
 
@@ -181,6 +183,19 @@ public class Item : ItemBase
         set
         {
             _sprite = value;
+        }
+    }
+
+    public int Quantity
+    {
+        get
+        {
+            return _quantity;
+        }
+
+        set
+        {
+            _quantity = value;
         }
     }
 

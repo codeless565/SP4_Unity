@@ -15,7 +15,7 @@ public class ShopDisplay : MonoBehaviour
     public int MaxNumberOfColumn = 3;
 
     GameObject[] ShopLayout;
-    ItemBase SelectedItem;
+    Item SelectedItem;
 
     bool ConfirmationDisplay;
     GameObject ItemNameText;
@@ -130,7 +130,7 @@ public class ShopDisplay : MonoBehaviour
     {
         ResetDisplay();
 
-        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
+        foreach (Item item in ItemDatabase.Instance.ItemList)
         {
             if (item.ItemType != itemtype)
                 continue;
@@ -155,7 +155,7 @@ public class ShopDisplay : MonoBehaviour
         ResetDisplay();
         
 
-        foreach (ItemBase item in ItemDatabase.Instance.ItemList)
+        foreach (Item item in ItemDatabase.Instance.ItemList)
         {
             if (item.ItemType == "Uses")
                 continue;
@@ -192,7 +192,8 @@ public class ShopDisplay : MonoBehaviour
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
         
-        ItemNameStats.GetComponent<Text>().text =   "Health: " + SelectedItem.Health + "   " +
+        ItemNameStats.GetComponent<Text>().text =   "Level: " + SelectedItem.Level + "   " +
+                                                    "Health: " + SelectedItem.Health + "   " +
                                                     "Mana: " + SelectedItem.Mana + "   " +
                                                     "Attack: " + SelectedItem.Attack + "   " +
                                                     "Defense: " + SelectedItem.Defense + "   " +

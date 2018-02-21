@@ -12,12 +12,13 @@ public class InventoryDisplay : MonoBehaviour {
     public int MaxNumberOfColumn = 3;
 
     GameObject[] InventoryLayout;
-    ItemBase SelectedItem;
+    Item SelectedItem;
 
     // Confirmation Canvas
     public GameObject EquipConfirmationCanvas;
     bool ConfirmationCanvas;
     GameObject ItemNameText;
+    GameObject ItemNameStats;
     GameObject ConfirmButton;
     GameObject CancelButton;
     // Use this for initialization
@@ -35,6 +36,13 @@ public class InventoryDisplay : MonoBehaviour {
             newIcon.GetComponent<Button>().onClick.AddListener(delegate { InventoryButtonOnClick(newIcon); });
         }
         ItemNameText = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
+        ItemNameText.transform.position = new Vector3(EquipConfirmationCanvas.transform.position.x, (EquipConfirmationCanvas.transform.position.y + 100.0f));
+
+        ItemNameStats = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
+        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
+        ItemNameStats.transform.position = new Vector3(EquipConfirmationCanvas.transform.position.x, (EquipConfirmationCanvas.transform.position.y + 50.0f));
+
+
         ConfirmationCanvas = false;
         ConfirmButton = Instantiate(ItemButton, EquipConfirmationCanvas.transform) as GameObject;
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
@@ -65,7 +73,7 @@ public class InventoryDisplay : MonoBehaviour {
     public void DisplayInventoryMenu(string itemtype)
     {
         ResetDisplay();
-        foreach (ItemBase item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
         {
             if (item.ItemType != itemtype)
                 continue;
@@ -78,6 +86,8 @@ public class InventoryDisplay : MonoBehaviour {
                     continue;
                 else
                 {
+                    go.GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                    go.GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
                     go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
@@ -88,11 +98,11 @@ public class InventoryDisplay : MonoBehaviour {
     public void DisplayAllEquipments()
     {
         ResetDisplay();
-        foreach (ItemBase item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
         {
             if (item.ItemType == "Uses")
                 continue;
-
+            
             foreach (GameObject go in InventoryLayout)
             {
                 if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
@@ -101,6 +111,8 @@ public class InventoryDisplay : MonoBehaviour {
                     continue;
                 else
                 {
+                    go.GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                    go.GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
                     go.GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
@@ -113,6 +125,13 @@ public class InventoryDisplay : MonoBehaviour {
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
+        ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
+                                            "Health: " + SelectedItem.Health + "   " +
+                                            "Mana: " + SelectedItem.Mana + "   " +
+                                            "Attack: " + SelectedItem.Attack + "   " +
+                                            "Defense: " + SelectedItem.Defense + "   " +
+                                            "Move Speed: " + SelectedItem.MoveSpeed;
+
     }
 
     void InventoryButtonOnClick(GameObject btn)
