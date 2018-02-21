@@ -45,6 +45,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
         anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
+        //set default equipments
         p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
     }
 
@@ -71,7 +72,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
         }
 
-
         Movement2D();
     }
 
@@ -86,14 +86,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
 
-            if (Input.GetAxisRaw("Horizontal") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
-            }
-            else
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
-            }
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
 
@@ -104,14 +96,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             PlayerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
 
-            if (Input.GetAxisRaw("Vertical") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
-            }
-            else
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
-            }
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 

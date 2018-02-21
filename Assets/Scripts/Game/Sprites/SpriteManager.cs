@@ -20,6 +20,7 @@ public class SpriteManager : MonoBehaviour {
         METAL_GLOVES,
         METAL_SHOES,
         METAL_HEADP,
+        HAT_HEADP,
         TOTAL
     };
 
@@ -37,10 +38,14 @@ public class SpriteManager : MonoBehaviour {
     public S_Dir direction = 0;
     Vector2 lastMove;
 
+    public void SetEquipments(S_Wardrobe headp)
+    {
+        headEquipped = headp;
+    }
+
     // Use this for initialization
     void Start ()
     {
-        HeadAnim = Head.GetComponent<Animator>();
 	}
 
     public void SetLastMove(float x, float y)
@@ -49,27 +54,27 @@ public class SpriteManager : MonoBehaviour {
         lastMove.y = y;
     }
 
-    public void SetEquipments(S_Wardrobe headp)
-    {
-        headEquipped = headp;
-
-    }
-
     void ChangeHead()
     {
-        switch(headEquipped)
+        switch (headEquipped)
         {
             case S_Wardrobe.DEFAULT_HEADP:
-                //Head.GetComponentInChildren
+                Head = transform.Find("Head/Hood").gameObject;
+                break;
+
+            case S_Wardrobe.METAL_HEADP:
+                Head = transform.Find("Head/Hood").gameObject;
                 break;
         }
+        HeadAnim = Head.GetComponent<Animator>();
+        Head.SetActive(true);
+        HeadAnim.SetFloat("MoveX", lastMove.x);
+        HeadAnim.SetFloat("MoveY", lastMove.y);
     }
 	
 	// Update is called once per frame
 	void Update () {
-        HeadAnim.SetFloat("MoveX", lastMove.x);
-        HeadAnim.SetFloat("MoveY", lastMove.y);
-        Debug.Log("dir" + direction.ToString());
-        Debug.Log("lastmove" + lastMove.x+ ", " + lastMove.y);
+        Debug.Log("In Update");
+        ChangeHead();
     }
 }
