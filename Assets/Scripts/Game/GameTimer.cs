@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour {
 
-    [SerializeField]
-    GameObject Level;   //Floor of the game<parent of every other object>
-
     public Text TimeDisplay;
     public float m_Gametime = 500; //In Seconds
 
@@ -22,7 +19,7 @@ public class GameTimer : MonoBehaviour {
 
         if (m_Gametime <= 0)
         {
-            gameObject.GetComponent<GameMode>().GameOver();
+            GetComponent<GameMode>().GameOver();
         }
     }
 

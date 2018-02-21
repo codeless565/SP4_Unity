@@ -283,6 +283,14 @@ public class BoardGenerator : MonoBehaviour
     {
         Destroy(boardHolder);
     }
+
+    public bool CheckLevel()
+    {
+        if (boardHolder == null)
+            return false;
+
+        return true;
+    }
 }
 
 [System.Serializable]
