@@ -6,13 +6,12 @@ using UnityEngine;
 public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
 {
     /* Animation */
-    public GameObject Hair;
-    private Animator anim, HairAnim;
+    private Animator anim;
 
     private bool PlayerMoving;
     private Vector2 lastMove;
 
-    SpriteManager p_spriteManager = new SpriteManager();
+    SpriteManager p_spriteManager;
 
     enum PlayerState
     {
@@ -151,7 +150,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     {
         //DebugPlayerStats();
         anim = GetComponent<Animator>();
-      //  HairAnim = Hair.GetComponent<Animator>();
+        p_spriteManager = GetComponent<SpriteManager>();
     }
 
     // Update is called once per frame
@@ -163,7 +162,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     void KeyMove()
     {
         PlayerMoving = false;
-
         //move left/right
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
@@ -179,9 +177,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
             {
                 p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
             }
-
-            p_spriteManager.hori = lastMove.x;
-
+        p_spriteManager.hori = lastMove.x;
         }
         //move up/down
         if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
@@ -189,16 +185,24 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * MoveSpeed * Time.deltaTime, 0f));
             PlayerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+            if (Input.GetAxisRaw("Vertical") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+            }
+            else
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+            }
+        p_spriteManager.verti = lastMove.y;
         }
 
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
         anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-       // HairAnim.SetFloat("MoveX", lastMove.x);
-        //HairAnim.SetFloat("MoveY", lastMove.y);
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
-
+        Debug.Log(p_spriteManager.hori + ", " + p_spriteManager.verti);
     }
 
     void AccMove()

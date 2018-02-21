@@ -30,7 +30,7 @@ public class SpriteManager : MonoBehaviour {
         RIGHT
     };
 
-    public GameObject Head/*, Top, Bottom, Gloves, Shoes, Weapon*/;
+    public GameObject Head, Top, Bottom, Gloves, Shoes, Weapon;
     public Animator HairAnim;
     S_Wardrobe topSprite, bottomSprite, headSprite, glovesSprite, shoesSprite, weaponSprite;
     public S_Dir direction = 0;
@@ -55,11 +55,14 @@ public class SpriteManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //if(direction == S_Dir.LEFT || direction == S_Dir.RIGHT)
+        if(direction == S_Dir.LEFT || direction == S_Dir.RIGHT)
         {
-            Debug.Log(hori);
-            Debug.Log(direction);
             HairAnim.SetFloat("MoveX", hori);
         }
+        if(direction == S_Dir.FRONT || direction == S_Dir.BACK)
+        {
+            HairAnim.SetFloat("MoveY", verti);
+        }
+        Debug.Log("dir" + direction.ToString());
     }
 }

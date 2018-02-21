@@ -43,8 +43,8 @@ public class PlayerManager : MonoBehaviour, StatsBase
     public bool canMove = true;
 
     /* List storing Player equipment */
-    public List<ItemBase> Inventory = new List<ItemBase>();
-    public List<ItemBase> getPlayerInventory() { return Inventory; }
+    public List<Item> Inventory = new List<Item>();
+    public List<Item> getPlayerInventory() { return Inventory; }
     enum EQTYPE
     {
         HELMET,
@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         SHOE,
         TOTAL
     }
-    ItemBase[] EquipmentList = new ItemBase[(int)EQTYPE.TOTAL];
+    Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
 
     /* Setters and Getters */
     public int Level
@@ -324,13 +324,30 @@ public class PlayerManager : MonoBehaviour, StatsBase
         Debug.Log("MoveSpeed : " + MoveSpeed);
     }
 
-    public void AddItem(ItemBase newitem)
+    public void AddItem(Item newitem)
     {
-        Inventory.Add(newitem);
+        if (Inventory.Contains(newitem))
+        {
+            foreach (Item item in Inventory)
+            {
+                if (item == newitem)
+                {
+                    item.Quantity++;
+                    break;
+                }
+            }
+            Inventory.Add(newitem);
+        }
+        else
+            Inventory.Add(newitem);
     }
 
-    public void EquipEQ(ItemBase _weapon)
+    public void EquipEQ(Item _weapon)
     {
+        // TODO display message
+        if (playerLevel < _weapon.Level)
+            return;
+
         if (_weapon.ItemType == "Weapons")
         {
             if (EquipmentList[(int)EQTYPE.WEAPON] == null)
@@ -425,7 +442,7 @@ public class PlayerManager : MonoBehaviour, StatsBase
         DebugPlayerStats();
     }
 
-    public void AddStats(ItemBase item)
+    public void AddStats(Item item)
     {
         health += item.Health;
         mana += item.Mana;
