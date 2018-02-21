@@ -10,15 +10,19 @@ public class PetManager : MonoBehaviour, StatsBase
         FOLLOW,
         PROTECT,
         ATTACK,
-        RECOVERY
+        RECOVERY,
+        TELEPORT
     }
 
     // Pet //
     PetState petState;
     private Vector2 currentVelocity = Vector2.zero;
-    private float followTimer = 5f;
-    private float maxSpeed = 5f;
+    private Vector2 petDestination;
+    private Vector2 destinationOffset;
+    private float followTimer = 2f;
+    private float maxSpeed = 20f;
     private float distanceApart;
+    private float changeToGuardDistance;
 
     // Stats //
     [SerializeField]
@@ -27,6 +31,7 @@ public class PetManager : MonoBehaviour, StatsBase
     float attack = 10, defense = 0, movespeed = 10;
 
     // Player //
+    private Player2D_StatsHolder playerStats;
     private GameObject player;
     private Vector2 playerPos;
 
@@ -126,46 +131,91 @@ public class PetManager : MonoBehaviour, StatsBase
     void Start ()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
+        playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
 
         // Pet current state to be FOLLOW.
         petState = PetState.FOLLOW;
+        // Setting an Offset.
+        destinationOffset.Set(1f, 1f);
+        // Setting the range for Pet State to be GUARD.
+        changeToGuardDistance = 2f;
     }
 	
 	void Update ()
     {
         // Getting Player Position for Pet.
         playerPos = player.transform.position;
+        petDestination = playerPos - destinationOffset;
 
         // Pet States
         switch (petState)
         {
             case PetState.GUARD:
-                // Idle, being still when near Player.
+                PetGuard();
                 break;
             case PetState.FOLLOW:
-                // Follow Player, if its out of the Guard Range.
-                PetFollow(playerPos);
+                PetFollow(petDestination, destinationOffset);
                 break;
             case PetState.PROTECT:
-                // Will cast a shield around Player if Player's Health is 30/100 - ish.
+                PetProtect();
                 break;
             case PetState.ATTACK:
-                // Will attack the closest enemy when enemy is near player.
+                PetAttack();
                 break;
             case PetState.RECOVERY:
-                // If Pet health reaches 0, it wil switch to this state where they will follow Player but will not do anything.
+                PetRecovery();
+                break;
+            case PetState.TELEPORT:
+                PetTeleport();
                 break;
         }
     }
 
-    private void PetFollow(Vector2 _playerPos)
+    // Similar to IDLE state of Enemy, Pet will stay still when it's near the Player and "Guard" it.
+    private void PetGuard()
+    {
+
+    }
+
+    // If Player moves beyond Pet Guard Range, Pet State will change to Follow, and follow the Player.
+    private void PetFollow(Vector2 _petDesti, Vector2 _distOffset)
     {
         // Pet will walk to Player smoothly.
-        transform.position = Vector2.SmoothDamp(transform.position, _playerPos, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
+        transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
 
         // Distance between Player and Pet.
-        distanceApart = Vector2.Distance(transform.position, _playerPos);
-        
+        distanceApart = Vector2.Distance(transform.position, _petDesti);
+
+        // If there is any enemy within its range, change to ATTACK.
+
+        // If there is no enemy within its range, change to GUARD.
+        //if(distanceApart <= changeToGuardDistance)
+        //{
+        //    petState = PetState.GUARD;
+        //}
+    }
+    
+    // If Player Health is below x, the Pet will casts a shield around Player to protect Player for x seconds.
+    private void PetProtect()
+    {
+
+    }
+
+    // If there are Enemies near the Player, Pet State will change to Attack and deal damage to the nearest Enemy.
+    private void PetAttack()
+    {
+
+    }
+
+    // If Pet HP is 0, the Pet will still follow Player but it will not help unless its HP is maximum again.
+    private void PetRecovery()
+    {
+
+    }
+
+    // If Pet is beyond x Range, Pet will be teleported to the Player Pos.
+    private void PetTeleport()
+    {
 
     }
 }
