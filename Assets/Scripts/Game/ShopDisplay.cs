@@ -15,9 +15,11 @@ public class ShopDisplay : MonoBehaviour
     public int MaxNumberOfColumn = 3;
 
     GameObject[] ShopLayout;
+    Item[] ShopItems;
     Item SelectedItem;
 
     bool ConfirmationDisplay;
+    GameObject ItemNameRarity;
     GameObject ItemNameText;
     GameObject ItemNameStats;
     GameObject CostText;
@@ -35,6 +37,7 @@ public class ShopDisplay : MonoBehaviour
     {
         ConfirmationDisplay = false;
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
+        ShopItems = new Item[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopDisplayCanvas.SetActive(false);
 
         // Shop Menu UI
@@ -49,6 +52,9 @@ public class ShopDisplay : MonoBehaviour
 
 
         // Confirmation Menu UI
+        ItemNameRarity = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameRarity.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 125.0f));
+
         ItemNameText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
         ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
 
@@ -105,12 +111,15 @@ public class ShopDisplay : MonoBehaviour
     void ShopButtonOnClick(GameObject btn)
     {
         SelectedItem = null;
-        foreach (GameObject buttons in ShopLayout)
+        
+        for (int i = 0; i < ShopLayout.Length; ++i)
         {
-            if (btn.GetComponent<Image>().sprite.name != buttons.GetComponent<Image>().sprite.name)
+            if (btn.GetComponent<Image>().sprite.name != ShopLayout[i].GetComponent<Image>().sprite.name)
                 continue;
 
-            SelectedItem = ItemDatabase.Instance.CheckGO(btn);
+            if (btn.name == ShopLayout[i].name)
+                SelectedItem = ShopItems[i];
+
             if (SelectedItem != null)
             {
                 ConfirmationDisplay = true;
@@ -135,15 +144,16 @@ public class ShopDisplay : MonoBehaviour
             if (item.ItemType != itemtype)
                 continue;
 
-            foreach (GameObject go in ShopLayout)
+            for (int i = 0; i < ShopLayout.Length; ++i)
             {
-                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
+                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity)
                     break;
-                else if (go.GetComponent<Image>().sprite.name != "UISprite")
+                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
                     continue;
                 else
                 {
-                    go.GetComponent<Image>().sprite = item.ItemImage;
+                    ShopItems[i] = item;
+                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
@@ -159,39 +169,49 @@ public class ShopDisplay : MonoBehaviour
         {
             if (item.ItemType == "Uses")
                 continue;
-            if (item.ItemImage == null)
-                Debug.Log("null");
 
-            //Debug.Log(item.ItemImage.name);
-            foreach (GameObject go in ShopLayout)
+            for (int i = 0; i < ShopLayout.Length; ++i)
             {
                 
-                if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
+                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity)
                 {
                     
                     break;
                 }
-                else if (go.GetComponent<Image>().sprite.name != "UISprite")
-                {
-                    
+                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                {   
                     continue;
                 }
                 else
                 {
-
-                    go.GetComponent<Image>().sprite = item.ItemImage;
+                    ShopItems[i] = item;
+                    ShopLayout[i].name = item.Name + " " + item.ItemRarity;
+                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
                     break;
                 }
 
             }
+            
         }
-
     }
 
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
-        
+        ItemNameRarity.GetComponent<Text>().text = SelectedItem.ItemRarity;
+
+        if (SelectedItem.ItemRarity == "Common")
+            ItemNameRarity.GetComponent<Text>().color = Color.white;
+        else if (SelectedItem.ItemRarity == "Uncommon")
+            ItemNameRarity.GetComponent<Text>().color = Color.grey;
+        else if (SelectedItem.ItemRarity == "Magic")
+            ItemNameRarity.GetComponent<Text>().color = Color.green;
+        else if (SelectedItem.ItemRarity == "Ancient")
+            ItemNameRarity.GetComponent<Text>().color = Color.yellow;
+        else if (SelectedItem.ItemRarity == "Relic")
+            ItemNameRarity.GetComponent<Text>().color = Color.red;
+
+
         ItemNameStats.GetComponent<Text>().text =   "Level: " + SelectedItem.Level + "   " +
                                                     "Health: " + SelectedItem.Health + "   " +
                                                     "Mana: " + SelectedItem.Mana + "   " +

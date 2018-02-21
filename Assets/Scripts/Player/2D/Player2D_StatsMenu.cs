@@ -8,17 +8,21 @@ public class Player2D_StatsMenu : MonoBehaviour
 {
     /* Menu for Player Stats */
     [SerializeField]
-    private GameObject player_StatsMenu; // for open/close panel
-    [SerializeField]
-    private Text player_Stats; // text in menu
-    [SerializeField]
-    private Player2D_Manager player; // will try to do the other way
+    private GameObject player_StatsMenu; // main prefab
+    private GameObject Menu;
 
-    private GameObject Menu; // temp menu
-    private Text tempText; // temp text
+    /* Text containing the Stats */
+    [SerializeField]
+    private Text player_Stats; // main prefab
 
-    private Vector3 player_MenuScale; // effects when opening/ closing
-    private bool isOpen; // check to open / to close
+    /* Player */
+    [SerializeField]
+    private Player2D_StatsHolder player;
+    private Text tempText;
+
+    /* Variables */
+    private Vector3 player_MenuScale;
+    private bool isOpen;
 
     // Use this for initialization
     void Start ()
@@ -29,8 +33,7 @@ public class Player2D_StatsMenu : MonoBehaviour
         //    gameObject.GetComponent<Button>().onClick.AddListener(delegate { RenderStatsMenu(); });
         //}
 
-        //m_Level = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().Level;
-        
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
         isOpen = false;
         player_MenuScale = new Vector3(1.0F, 1.0F, 0.0F);
     }
@@ -86,10 +89,10 @@ public class Player2D_StatsMenu : MonoBehaviour
     private void PrintData()
     {
         tempText.text = "\n\n\nLevel : " + player.Level.ToString() + " \n"
-                       + "Health : " + player.Health.ToString() + " \n"
+                       + "Health : " + player.MaxHealth.ToString() + " \n"
+                       + "Mana : " + player.MaxMana.ToString() + " \n"
                        + "Attack : " + player.Attack.ToString() + " \n"
                        + "Defense : " + player.Defense.ToString() + " \n"
-                       + "MoveSpeed : " + player.MoveSpeed.ToString() + " \n"
-                       + "Gold : " + player.gold.ToString() ;
+                       + "MoveSpeed : " + player.MoveSpeed.ToString() + " \n";
     }
 }

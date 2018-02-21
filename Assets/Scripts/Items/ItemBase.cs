@@ -10,10 +10,10 @@ public interface ItemBase : StatsBase
     {
         get;set;
     }
-    //string ItemRarity
-    //{
-    //    get;set;
-    //}
+    string ItemRarity
+    {
+        get; set;
+    }
     string ItemType
     {
         get;set;
@@ -31,7 +31,7 @@ public class Item : ItemBase
     string _itemname;
     string _itemtype;
     int _itemlevel;
-    //string _itemrarity;
+    string _itemrarity;
     int _itemcost;
     int _health;
     int _mana;
@@ -40,6 +40,38 @@ public class Item : ItemBase
     float _movespeed;
     Sprite _sprite;
     int _quantity;
+
+    public Item()
+    {
+        _itemname = "";
+        _itemtype = "";
+        _itemlevel = 0;
+        _itemrarity = "";
+        _itemcost = 0;
+        _health = 0;
+        _mana = 0;
+        _attack = 0.0f;
+        _defense = 0.0f;
+        _movespeed = 0.0f;
+        _sprite = null;
+        _quantity = 0;
+    }
+
+    public Item(Item copy)
+    {
+        _itemname = copy.Name;
+        _itemtype = copy.ItemType;
+        _itemlevel = copy.Level;
+        _itemrarity = copy.ItemRarity;
+        _itemcost = copy.ItemCost;
+        _health = copy.Health;
+        _mana = copy.Mana;
+        _attack = copy.Attack;
+        _defense = copy.Defense;
+        _movespeed = copy.MoveSpeed;
+        _sprite = copy._sprite;
+        _quantity = 0;
+    }
 
     public string _spritename;
 
@@ -82,18 +114,18 @@ public class Item : ItemBase
         }
     }
 
-    //public string ItemRarity
-    //{
-    //    get
-    //    {
-    //        return _itemrarity;
-    //    }
+    public string ItemRarity
+    {
+        get
+        {
+            return _itemrarity;
+        }
 
-    //    set
-    //    {
-    //        _itemrarity = value;
-    //    }
-    //}
+        set
+        {
+            _itemrarity = value;
+        }
+    }
 
     public int ItemCost
     {
