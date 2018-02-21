@@ -39,7 +39,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private Vector2 distanceOffset;
     private Vector2 PlayerDestination;
     private GameObject player;
-    private Transform playerTransform;
+    private Player2D_StatsHolder playerStats;
 
     // Stats Setter and Getter //
     public int Level
@@ -138,6 +138,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     void Start ()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
+        playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
 
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
@@ -270,7 +271,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         if(EnemyAttackTimer <= 0f)
         {
             EnemyAttackTimer = 0.5f;
-            player.GetComponent<Player2D_Manager>().Health -= (int)Attack;
+            player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
         }
 
         // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
@@ -291,8 +292,15 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         float _delayTime = /*anim.GetClip("Death").length*/ 0.5F;
         yield return new WaitForSeconds(_delayTime);
 
+        /* Add EXP to Player when Die */
+        playerStats.EXP += 1;
+        Debug.Log(playerStats.EXP);
+
         Destroy(gameObject);
+
+        
     }
+    
 
     // When Player moved out of Enemy attack range, play finish animation before chasing.
     IEnumerator SkeletonStateToChase(float _delay)
@@ -335,7 +343,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         if (GetComponent<CollisionPlayerMelee>().Attacked)
         {
-            health -= (int)player.GetComponent<Player2D_Manager>().Attack;
+            health -= (int)playerStats.Attack;
             GetComponent<CollisionPlayerMelee>().Attacked = false;
         }
 
