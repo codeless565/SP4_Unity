@@ -78,13 +78,13 @@ public class Inventory : MonoBehaviour
     }
     public void CloseInventoryUI()
     {
-        gameObject.GetComponent<InventoryDisplay>().getItemDisplayCanvas().SetActive(false);
+        gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(false);
         gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
         InventoryUI = false;
     }
     public void OpenInventoryUI()
     {
-        gameObject.GetComponent<InventoryDisplay>().getItemDisplayCanvas().SetActive(true);
+        gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
         OpenEquipment();
         InventoryUI = true;
     }

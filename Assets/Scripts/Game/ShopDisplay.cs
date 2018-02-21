@@ -12,11 +12,16 @@ public class ShopDisplay : MonoBehaviour
     public GameObject ConfirmationText;
     public GameObject BorderPrefab;
 
+    public GameObject Page1Button;
+    public GameObject Page2Button;
+
     public int NumberOfItemsPerRow = 5;
     public int MaxNumberOfColumn = 3;
 
     public InputField SearchBar;
 
+    int StartCount;
+    string currenttag;
     GameObject[] ShopLayout;
     GameObject[] ShopBorders;
     Item[] ShopItems;
@@ -39,6 +44,10 @@ public class ShopDisplay : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Page1Button.GetComponent<Image>().color = Color.red;
+        Page2Button.GetComponent<Image>().color = Color.cyan;
+        StartCount = 0;
+        currenttag = "";
         ConfirmationDisplay = false;
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopBorders = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
@@ -158,45 +167,48 @@ public class ShopDisplay : MonoBehaviour
     public void DisplayShopMenu(string itemtype)
     {
         ResetDisplay();
-
+        currenttag = itemtype;
+        int itemcount = 0;
         foreach (Item item in ItemDatabase.Instance.ItemList)
         {
             if (item.ItemType != itemtype)
                 continue;
+            itemcount++;
 
-            
-            for (int i = 0; i < ShopLayout.Length; ++i)
+            if (itemcount >= StartCount)
             {
-                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
-                    break;
-                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
-                    continue;
-                else
+                for (int i = 0; i < ShopLayout.Length; ++i)
                 {
-                    if (item.ItemRarity == "Common")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
-                    else if (item.ItemRarity == "Uncommon")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
-                    else if (item.ItemRarity == "Magic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
-                    else if (item.ItemRarity == "Ancient")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
-                    else if (item.ItemRarity == "Relic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
-                    
+                    if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
+                        break;
+                    else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                        continue;
+                    else
+                    {
+                        if (item.ItemRarity == "Common")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                        else if (item.ItemRarity == "Uncommon")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                        else if (item.ItemRarity == "Magic")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                        else if (item.ItemRarity == "Ancient")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                        else if (item.ItemRarity == "Relic")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
-                    ShopItems[i] = item;
-                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
-                    break;
+
+                        ShopItems[i] = item;
+                        ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
+                        break;
+                    }
                 }
-
             }
         }
     }
     public void DisplaySearchMenu(InputField itemname)
     {
         ResetDisplay();
-
+        
         foreach (Item item in ItemDatabase.Instance.ItemList)
         {
             if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
@@ -233,49 +245,52 @@ public class ShopDisplay : MonoBehaviour
     public void DisplayAllEquipment()
     {
         ResetDisplay();
-        
-
+        int itemcount = 0;
         foreach (Item item in ItemDatabase.Instance.ItemList)
         {
+            currenttag = "all";
             if (item.ItemType == "Uses")
                 continue;
 
-            for (int i = 0; i < ShopLayout.Length; ++i)
+            itemcount++;
+
+            if (itemcount >= StartCount)
             {
-                
-                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
+                for (int i = 0; i < ShopLayout.Length; ++i)
                 {
-                    
-                    break;
-                }
-                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
-                {   
-                    continue;
-                }
-                else
-                {
-                    if (item.ItemRarity == "Common")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
-                    else if (item.ItemRarity == "Uncommon")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
-                    else if (item.ItemRarity == "Magic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
-                    else if (item.ItemRarity == "Ancient")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
-                    else if (item.ItemRarity == "Relic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
-                    ShopItems[i] = item;
-                    ShopLayout[i].name = item.Name + " " + item.ItemRarity;
-                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
-                    break;
-                }
+                    if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
+                    {
 
+                        break;
+                    }
+                    else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (item.ItemRarity == "Common")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                        else if (item.ItemRarity == "Uncommon")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                        else if (item.ItemRarity == "Magic")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                        else if (item.ItemRarity == "Ancient")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                        else if (item.ItemRarity == "Relic")
+                            ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
+
+                        ShopItems[i] = item;
+                        ShopLayout[i].name = item.Name + " " + item.ItemRarity;
+                        ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
+                        break;
+                    }
+                }
             }
             
         }
     }
-
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
@@ -330,6 +345,27 @@ public class ShopDisplay : MonoBehaviour
             Quantity = 1;
         else
             Quantity--;
+    }
+
+    public void ViewPage1()
+    {
+        StartCount = 0;
+        if (currenttag == "all")
+            DisplayAllEquipment();
+        else
+            DisplayShopMenu(currenttag);
+        Page1Button.GetComponent<Image>().color = Color.red;
+        Page2Button.GetComponent<Image>().color = Color.cyan;
+    }
+    public void ViewPage2()
+    {
+        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn;
+        if (currenttag == "all")
+            DisplayAllEquipment();
+        else
+            DisplayShopMenu(currenttag);
+        Page1Button.GetComponent<Image>().color = Color.cyan;
+        Page2Button.GetComponent<Image>().color = Color.red;
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationDisplay = _display; }
