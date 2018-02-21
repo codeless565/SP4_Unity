@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemDatabase {
-    public List<ItemBase> ItemList = new List<ItemBase>();
+    public List<Item> ItemList = new List<Item>();
 
 
     private static ItemDatabase instance;
@@ -70,9 +70,9 @@ public class ItemDatabase {
         }
     }
 
-    public ItemBase CheckGO(GameObject go)
+    public Item CheckGO(GameObject go)
     {
-        foreach (ItemBase item in ItemList)
+        foreach (Item item in ItemList)
         {
             if (go.GetComponent<Image>().sprite.name == item.ItemImage.name)
                 return item;
@@ -83,18 +83,18 @@ public class ItemDatabase {
 
     public void ShowItems()
     {
-        foreach (ItemBase item in ItemList)
+        foreach (Item item in ItemList)
         {
             string data = item.Name + " " + item.ItemType + " " + item.ItemCost;
             Debug.Log(data);
         }
     }
 
-    public ItemBase GenerateItem(string type)
+    public Item GenerateItem(string type)
     {
-        List<ItemBase> ItemOptions = new List<ItemBase>();
+        List<Item> ItemOptions = new List<Item>();
 
-        foreach (ItemBase item in ItemList)
+        foreach (Item item in ItemList)
         {
             if (item.ItemType != type)
                 continue;
@@ -114,4 +114,5 @@ public class ItemDatabase {
 
 // Adding Items?
 // Add Item image into UI folder
+// Add Item to ItemObjectHolder
 // Go to Resource->ItemDB.csv and add in item stats
