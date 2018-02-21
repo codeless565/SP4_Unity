@@ -24,16 +24,15 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
 
-
     /* Direction Player will face */
-    enum Direction
-    {
-        Down = 0,
-        Up,
-        Left,
-        Right,
-    };
-    Direction toMove = 0;
+    //enum Direction
+    //{
+    //    Down = 0,
+    //    Up,
+    //    Left,
+    //    Right,
+    //};
+    //Direction toMove = 0;
 
     // Use this for initialization
     void Start()
@@ -41,35 +40,27 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         /* Stats Things */
         statsHolder = GetComponent<Player2D_StatsHolder>();
         m_bCheckLevelUp = false;
-        statsHolder.DebugPlayerStats();
+        //statsHolder.DebugPlayerStats();
 
         anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
-        //set default equipments
+
+        // set default equipments
         p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
     }
 
     // Update is called once per frame
     void Update()
     {
+        /* When Player Dies, Stop Updating */
+        if (statsHolder.Health <= 0)
+            return;
+
         /* When EXP is maxed */
         if (statsHolder.EXP >= statsHolder.MaxEXP)
         {
             m_bCheckLevelUp = true;
             LevelUp();
-        }
-
-        // Check Timer to despawn level up
-        if (m_bCheckLevelUp)
-        {
-            m_fLevelUpTimer += Time.deltaTime;
-            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
-            {
-                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                Destroy(cloneMesh);
-                m_bCheckLevelUp = false;
-            }
-
         }
 
         Movement2D();
@@ -83,9 +74,18 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+            //transform.Rotate
             PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
 
+            if (Input.GetAxisRaw("Horizontal") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+            }
+            if (Input.GetAxisRaw("Horizontal") < 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+            }
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
 
@@ -96,6 +96,14 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             PlayerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
 
+            if (Input.GetAxisRaw("Vertical") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+            }
+            if (Input.GetAxisRaw("Vertical") < 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+            }
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 
@@ -106,6 +114,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         anim.SetFloat("LastMoveY", lastMove.y);
     }
 
+    /* For Mobile */
     void AccMove()
     {
         //values from accelerometer;
@@ -141,12 +150,26 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
     /* Level Up Character */
     private void LevelUp()
-    { 
+    {
         /* Reset all Exp */
         statsHolder.EXP = 0.0F;
         statsHolder.MaxEXP += 1;
         statsHolder.Level += 1;
-        /* Create Text to show u level up */
+
+        /* Create Text to show level up */
         cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
+
+        // Check Timer to despawn level up
+        if (m_bCheckLevelUp)
+        {
+            m_fLevelUpTimer += Time.deltaTime;
+            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
+            {
+                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
+                Destroy(cloneMesh);
+                Destroy(m_levelup_mesh);
+                m_bCheckLevelUp = false;
+            }
+        }
     }
 }
