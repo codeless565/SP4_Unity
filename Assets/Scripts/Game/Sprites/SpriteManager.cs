@@ -60,6 +60,7 @@ public class SpriteManager : MonoBehaviour {
             Debug.Log(hori);
             Debug.Log(direction);
             HairAnim.SetFloat("MoveX", hori);
+            HairAnim.SetFloat("MoveY", verti);
         }
     }
 }

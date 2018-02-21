@@ -12,7 +12,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     private bool PlayerMoving;
     private Vector2 lastMove;
 
-    SpriteManager p_spriteManager = new SpriteManager();
+    SpriteManager p_spriteManager;
 
     enum PlayerState
     {
@@ -151,6 +151,7 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
     {
         //DebugPlayerStats();
         anim = GetComponent<Animator>();
+        p_spriteManager = GetComponent<SpriteManager>();
       //  HairAnim = Hair.GetComponent<Animator>();
     }
 
@@ -180,7 +181,6 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
                 p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
             }
 
-            p_spriteManager.hori = lastMove.x;
 
         }
         //move up/down
@@ -189,15 +189,24 @@ public class Player2D_Manager : MonoBehaviour, StatsBase, CollisionBase
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * MoveSpeed * Time.deltaTime, 0f));
             PlayerMoving = true;
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+            if (Input.GetAxisRaw("Vertical") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+            }
+            else
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+            }
         }
 
         anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
         anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-       // HairAnim.SetFloat("MoveX", lastMove.x);
-        //HairAnim.SetFloat("MoveY", lastMove.y);
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
+        p_spriteManager.hori = lastMove.x;
+        p_spriteManager.verti = lastMove.y;
 
     }
 
