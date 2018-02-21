@@ -69,5 +69,7 @@ public class SpriteManager : MonoBehaviour {
 	void Update () {
         HeadAnim.SetFloat("MoveX", lastMove.x);
         HeadAnim.SetFloat("MoveY", lastMove.y);
+        Debug.Log("dir" + direction.ToString());
+        Debug.Log("lastmove" + lastMove.x+ ", " + lastMove.y);
     }
 }
