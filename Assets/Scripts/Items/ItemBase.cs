@@ -54,7 +54,7 @@ public class Item : ItemBase
         _defense = 0.0f;
         _movespeed = 0.0f;
         _sprite = null;
-        _quantity = 0;
+        _quantity = 1;
     }
 
     public Item(Item copy)
@@ -70,7 +70,7 @@ public class Item : ItemBase
         _defense = copy.Defense;
         _movespeed = copy.MoveSpeed;
         _sprite = copy._sprite;
-        _quantity = 0;
+        _quantity = 1;
     }
 
     public string _spritename;

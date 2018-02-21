@@ -6,13 +6,14 @@ using UnityEngine.UI;
 public class ItemDatabase {
     public List<Item> ItemList = new List<Item>();
 
-
     private static ItemDatabase instance;
     
     private ItemDatabase()
     {
-        TextAsset ItemDatabase = Resources.Load<TextAsset>("ItemDB");
+        TextAsset ItemSpecialName = Resources.Load<TextAsset>("ItemNames");
+        string[] listofspecialname = ItemSpecialName.text.Split(new char[] { '\n' });
 
+        TextAsset ItemDatabase = Resources.Load<TextAsset>("ItemDB");
         string[] rowdata = ItemDatabase.text.Split(new char[] { '\n' });
 
         for (int i = 0; i < rowdata.Length - 1; ++i)
@@ -88,7 +89,67 @@ public class ItemDatabase {
 
                     ItemList.Add(OtherRarityItem);
                 }
-            }
+
+                // Special Items?!?!?!
+                float createspecial = Random.Range(0.0f,1.0f);
+                if (createspecial >= 0.0f && createspecial <= 1.0f) // add special items
+                {
+                    int randomSpecial = Random.Range(1, listofspecialname.Length-1);
+                    float multipler = 0.0f;
+                    float specialmultipler = 1.0f;
+                    string[] itemdetails = listofspecialname[randomSpecial].Split(new char[] { ',' });
+
+                    Item OtherRarityItem = new Item(newItem);
+                    
+                    if (itemdetails[1] == "0") // suffix
+                    {
+                        OtherRarityItem.Name = itemdetails[0] + " " + OtherRarityItem.Name;
+                    }
+                    else if (itemdetails[1] == "1") // prefix
+                    {
+                        OtherRarityItem.Name = OtherRarityItem.Name + " " + itemdetails[0];
+                    }
+
+                    float.TryParse(itemdetails[2], out specialmultipler);
+                    if (specialmultipler >= 10.0f)
+                        specialmultipler = 10.0f;
+
+                    
+                    int RandomQuality = Random.Range(1, 5);
+                    switch (RandomQuality)
+                    {
+                        case 1:
+                            OtherRarityItem.ItemRarity = "Uncommon";
+                            OtherRarityItem.Level = 10;
+                            multipler = OtherRarityItem.Level / 10 * 1.5f * specialmultipler;
+                            break;
+                        case 2:
+                            OtherRarityItem.ItemRarity = "Magic";
+                            OtherRarityItem.Level = 20;
+                            multipler = OtherRarityItem.Level / 10 * 2.0f * specialmultipler;
+                            break;
+                        case 3:
+                            OtherRarityItem.ItemRarity = "Ancient";
+                            OtherRarityItem.Level = 30;
+                            multipler = OtherRarityItem.Level / 10 * 2.5f * specialmultipler;
+                            break;
+                        case 4:
+                            OtherRarityItem.ItemRarity = "Relic";
+                            OtherRarityItem.Level = 40;
+                            multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
+                            break;
+                    }
+                    
+
+                    OtherRarityItem.Health *= (int)multipler;
+                    OtherRarityItem.Mana *= (int)multipler;
+                    OtherRarityItem.Attack *= multipler;
+                    OtherRarityItem.Defense *= multipler;
+                    OtherRarityItem.MoveSpeed *= multipler;
+
+                    ItemList.Add(OtherRarityItem);
+                }
+            }           
         }
     }
     public static ItemDatabase Instance

@@ -62,7 +62,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour
         yield return new WaitForSecondsRealtime(m_delayTime);
 
         LoadingScreen.SetActive(true);
-        async = SceneManager.LoadSceneAsync("SceneGame");
+        async = SceneManager.LoadSceneAsync("SceneGame_2D");
         async.allowSceneActivation = false;
 
 
