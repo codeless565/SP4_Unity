@@ -24,15 +24,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
 
-    /* Direction Player will face */
-    //enum Direction
-    //{
-    //    Down = 0,
-    //    Up,
-    //    Left,
-    //    Right,
-    //};
-    //Direction toMove = 0;
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -61,6 +52,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         // set default equipments
         p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
 
+        // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
 
@@ -80,6 +72,17 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             LevelUp();
         }
 
+        // Check Timer to despawn level up
+        if (m_bCheckLevelUp)
+        {
+            m_fLevelUpTimer += Time.deltaTime;
+            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
+            {
+                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
+                DestroyImmediate(cloneMesh);
+                m_bCheckLevelUp = false;
+            }
+        }
         Movement2D();
     }
 
@@ -175,21 +178,9 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
         /* Create Text to show level up */
         cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
-
-        // Check Timer to despawn level up
-        if (m_bCheckLevelUp)
-        {
-            m_fLevelUpTimer += Time.deltaTime;
-            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
-            {
-                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                Destroy(cloneMesh);
-                Destroy(m_levelup_mesh);
-                m_bCheckLevelUp = false;
-            }
-        }
     }
 
+    /* Adding Items to Inventory */
     public void AddItem(Item newitem)
     {
         if (Inventory.Contains(newitem))
@@ -208,6 +199,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             Inventory.Add(newitem);
     }
 
+    /* Equipping EQ to the Player */
     public void EquipEQ(Item _weapon)
     {
         // TODO display message
@@ -306,6 +298,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         }
     }
 
+    /* Stats will be added when Equipped */
     public void AddStats(Item item)
     {
         statsHolder.Health += item.Health;
