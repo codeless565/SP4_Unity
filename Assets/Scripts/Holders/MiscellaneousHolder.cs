@@ -15,4 +15,8 @@ public class MiscellaneousHolder : MonoBehaviour
 
     public GameObject InventoryBar;
     public GameObject HUD;
+
+    public GameObject ButtonPrefab;
+    public GameObject TextPrefab;
+    public GameObject BorderPrefab;
 }

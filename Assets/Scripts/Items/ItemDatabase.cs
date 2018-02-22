@@ -7,7 +7,15 @@ public class ItemDatabase {
     public List<Item> ItemList = new List<Item>();
 
     private static ItemDatabase instance;
-    
+    public static ItemDatabase Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new ItemDatabase();
+            return instance;
+        }
+    }
     private ItemDatabase()
     {
         TextAsset ItemSpecialName = Resources.Load<TextAsset>("ItemNames");
@@ -162,15 +170,6 @@ public class ItemDatabase {
             }
         }
     }
-    public static ItemDatabase Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new ItemDatabase();
-            return instance;
-        }
-    }
 
     void ShowData(string[] data)
     {
@@ -209,16 +208,16 @@ public class ItemDatabase {
         }
     }
 
-    public List<Item> GenerateItem(string _rarity)
+    public List<Item> GenerateItem(string _rarity) // Generating Items
     {
-        List<Item> ItemOptions = new List<Item>();
+        List<Item> ItemOptions = new List<Item>(); // List of Possible Items
 
-        foreach (Item item in ItemList)
+        foreach (Item item in ItemList)         
         {
             if (item.ItemRarity != _rarity)
                 continue;
 
-            ItemOptions.Add(item);
+            ItemOptions.Add(item);                  // If item rarity is as requested add into List of Possible Items
         }
 
         return ItemOptions;

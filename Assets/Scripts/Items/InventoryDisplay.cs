@@ -6,25 +6,27 @@ using UnityEngine.UI;
 
 public class InventoryDisplay : MonoBehaviour {
     public GameObject InventoryDisplayCanvas;
-    public GameObject ItemButton;
-    public GameObject ItemText;
-    public GameObject BorderPrefab;
+    public GameObject EquipConfirmationCanvas;
 
+    private GameObject ButtonPrefab;
+    private GameObject TextPrefab;
+    private GameObject BorderPrefab;
 
     public int NumberOfItemsPerRow = 5;
     public int MaxNumberOfColumn = 4;
 
-    int StartCount;
-    int MaxCount;
-    int PageCount;
-    string currenttag;
+    // Pages Preview
+    int StartCount; // Counter for ItemDatabase
+    int MaxCount;   // Maximum number of pages
+    int PageCount;  // Current page number
+
+    string currenttag; // Tag to store currently viewed display
     GameObject[] InventoryLayout;
     GameObject[] InventoryBorders;
     Item[] InventoryItems;
     Item SelectedItem;
 
-    // Confirmation Canvas
-    public GameObject EquipConfirmationCanvas;
+    // Confirmation
     bool ConfirmationCanvas;
     GameObject ItemNameRarity;
     GameObject ItemNameText;
@@ -40,16 +42,20 @@ public class InventoryDisplay : MonoBehaviour {
         MaxCount = 5;
         StartCount = 0;
         currenttag = "";
+        ConfirmationCanvas = false;
 
         InventoryLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         InventoryBorders = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         InventoryItems = new Item[NumberOfItemsPerRow * MaxNumberOfColumn];
 
+        ButtonPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().ButtonPrefab;
+        TextPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().TextPrefab;
+        BorderPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderPrefab;
 
-        // Shop Menu UI
+        // Inventory Display UI
         for (int i = 0; i < InventoryLayout.Length; ++i)
         {
-            GameObject newIcon = Instantiate(ItemButton, InventoryDisplayCanvas.transform) as GameObject;
+            GameObject newIcon = Instantiate(ButtonPrefab, InventoryDisplayCanvas.transform) as GameObject;
 
             InventoryLayout[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -58,32 +64,31 @@ public class InventoryDisplay : MonoBehaviour {
             GameObject newBorder = Instantiate(BorderPrefab, InventoryLayout[i].transform);
             newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(55.0f, 55.0f);
             InventoryBorders[i] = newBorder;
-
         }
-        ItemNameRarity = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameRarity.transform.position = new Vector3(EquipConfirmationCanvas.transform.position.x, (EquipConfirmationCanvas.transform.position.y + 125.0f));
 
+        ItemNameRarity = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
+        ItemNameRarity.transform.position = new Vector3(0.0f, 125.0f) + EquipConfirmationCanvas.transform.position;
 
-        ItemNameText = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameText.transform.position = new Vector3(EquipConfirmationCanvas.transform.position.x, (EquipConfirmationCanvas.transform.position.y + 100.0f));
+        ItemNameText = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
+        ItemNameText.transform.position = new Vector3(0.0f,100.0f) + EquipConfirmationCanvas.transform.position;
 
-        ItemNameStats = Instantiate(ItemText, EquipConfirmationCanvas.transform) as GameObject;
+        ItemNameStats = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
         ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
-        ItemNameStats.transform.position = new Vector3(EquipConfirmationCanvas.transform.position.x, (EquipConfirmationCanvas.transform.position.y + 50.0f));
+        ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + EquipConfirmationCanvas.transform.position;
 
-
-        ConfirmationCanvas = false;
-        ConfirmButton = Instantiate(ItemButton, EquipConfirmationCanvas.transform) as GameObject;
+        // Confirmation
+        ConfirmButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
+        ConfirmButton.transform.position = new Vector3(-50.0f, -100.0f) + EquipConfirmationCanvas.transform.position;
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
-        ConfirmButton.transform.position = new Vector3(-50.0f,  - 100.0f) + EquipConfirmationCanvas.transform.position;
         ConfirmButton.GetComponent<Button>().onClick.RemoveAllListeners();
         ConfirmButton.GetComponent<Button>().onClick.AddListener(ConfirmEquip);
+        
 
-        CancelButton = Instantiate(ItemButton, EquipConfirmationCanvas.transform) as GameObject;
+        CancelButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
+        CancelButton.transform.position = new Vector3(50.0f, -100.0f) + EquipConfirmationCanvas.transform.position;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelEquip);
-        CancelButton.transform.position = new Vector3(50.0f,- 100.0f) + EquipConfirmationCanvas.transform.position;
-
+        
         Player = GameObject.FindGameObjectWithTag("Player");
     }
 
@@ -91,7 +96,31 @@ public class InventoryDisplay : MonoBehaviour {
     void Update () {
         EquipConfirmationCanvas.SetActive(ConfirmationCanvas);
     }
+    
+    // On Click listener for inventory buttons
+    void InventoryButtonOnClick(GameObject btn)
+    {
+        SelectedItem = null;
+        for (int i = 0; i < InventoryLayout.Length; ++i)
+        {
+            // If btn clicked is not the same as current InventoryLayout[Button] 
+            if (btn.name != InventoryLayout[i].name)
+                continue;
 
+            SelectedItem = InventoryItems[i];
+
+            // If there is an Item, Display SelectedItem
+            if (SelectedItem != null)
+            {
+                ConfirmationCanvas = true;
+                DisplayConfirmedItem();
+            }
+        }
+    }
+
+    // Display Functions
+    ////////////////////////////////////////
+    // Display Reset
     void ResetDisplay()
     {
         foreach (GameObject go in InventoryLayout)
@@ -100,14 +129,15 @@ public class InventoryDisplay : MonoBehaviour {
         }
         for (int i = 0; i < InventoryItems.Length; ++i)
         {
-            InventoryItems[i] = null;
+            if (InventoryItems[i] != null)
+                InventoryItems[i] = null;
         }
         foreach (GameObject go in InventoryBorders)
         {
             go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
         }
     }
-
+    // Display Specific type 
     public void DisplayInventoryMenu(string itemtype)
     {
         ResetDisplay();
@@ -125,10 +155,13 @@ public class InventoryDisplay : MonoBehaviour {
             {
                 for (int i = 0; i < InventoryLayout.Length; ++i)
                 {
+                    // If item name and rarity already exist in Inventory layout
                     if (InventoryLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && InventoryItems[i].ItemRarity == item.ItemRarity && InventoryItems[i].Name == item.Name)
                         break;
+                    // If current layout is not empty
                     else if (InventoryLayout[i].GetComponent<Image>().sprite.name != "UISprite")
                         continue;
+                    // Provide Border and add to InventoryLayout/InventoryItems/InventoryBorder
                     else
                     {
                         if (item.ItemRarity == "Common")
@@ -158,51 +191,7 @@ public class InventoryDisplay : MonoBehaviour {
             }
         }
     }
-    public void DisplaySearchMenu(InputField itemname)
-    {
-        ResetDisplay();
-
-        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory())
-        {
-            if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
-                continue;
-
-            for (int i = 0; i < InventoryLayout.Length; ++i)
-            {
-                if (InventoryLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && InventoryItems[i].ItemRarity == item.ItemRarity && InventoryItems[i].Name == item.Name)
-                    break;
-                else if (InventoryLayout[i].GetComponent<Image>().sprite.name != "UISprite")
-                    continue;
-                else
-                {
-                    if (item.ItemRarity == "Common")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
-                    else if (item.ItemRarity == "Uncommon")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
-                    else if (item.ItemRarity == "Magic")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
-                    else if (item.ItemRarity == "Ancient")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
-                    else if (item.ItemRarity == "Relic")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
-
-
-                    InventoryItems[i] = item;
-                    InventoryLayout[i].name = item.Name + " " + item.ItemRarity;
-
-                    if (item.Quantity > 1)
-                    {
-                        InventoryLayout[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
-                        InventoryLayout[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
-                    }
-                    InventoryLayout[i].GetComponent<Image>().sprite = item.ItemImage;
-                    break;
-                }
-
-            }
-        }
-    }
-
+    // Display All Equipments
     public void DisplayAllEquipments()
     {
         ResetDisplay();
@@ -252,7 +241,55 @@ public class InventoryDisplay : MonoBehaviour {
         }
 
     }
+    // Display Search Result
+    public void DisplaySearchMenu(InputField itemname)
+    {
+        ResetDisplay();
 
+        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory())
+        {
+            if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
+                continue;
+
+            currenttag = item.ItemType;
+
+            for (int i = 0; i < InventoryLayout.Length; ++i)
+            {
+                if (InventoryLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && InventoryItems[i].ItemRarity == item.ItemRarity && InventoryItems[i].Name == item.Name)
+                    break;
+                else if (InventoryLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                    continue;
+                else
+                {
+                    if (item.ItemRarity == "Common")
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                    else if (item.ItemRarity == "Uncommon")
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                    else if (item.ItemRarity == "Magic")
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                    else if (item.ItemRarity == "Ancient")
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                    else if (item.ItemRarity == "Relic")
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
+
+
+                    InventoryItems[i] = item;
+                    InventoryLayout[i].name = item.Name + " " + item.ItemRarity;
+
+                    if (item.Quantity > 1)
+                    {
+                        InventoryLayout[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                        InventoryLayout[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
+                    }
+                    InventoryLayout[i].GetComponent<Image>().sprite = item.ItemImage;
+                    break;
+                }
+
+            }
+        }
+    }
+
+    // Display Selected Item
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
@@ -287,26 +324,7 @@ public class InventoryDisplay : MonoBehaviour {
                                                     "Move Speed: " + SelectedItem.MoveSpeed;
     }
 
-    void InventoryButtonOnClick(GameObject btn)
-    {
-        SelectedItem = null;
-        for (int i = 0; i < InventoryLayout.Length; ++i)
-        {
-            if (btn.GetComponent<Image>().sprite.name != InventoryLayout[i].GetComponent<Image>().sprite.name)
-                continue;
-
-            if (btn.name == InventoryLayout[i].name)
-                SelectedItem = InventoryItems[i];
-
-            //SelectedItem = ItemDatabase.Instance.CheckGO(btn);
-            if (SelectedItem != null)
-            {
-                ConfirmationCanvas = true;
-                DisplayConfirmedItem();
-            }
-        }
-    }
-
+    // On Click Listener for Confirm/Cancel Buttons
     void ConfirmEquip()
     {
         if (SelectedItem == null)
@@ -323,7 +341,8 @@ public class InventoryDisplay : MonoBehaviour {
         ConfirmationCanvas = false;
     }
 
-    public void ViewPage1()
+    // Function for Previous and Next Button
+    public void ViewPrevious()
     {
         if (PageCount - 1 >= 0)
             PageCount--;
@@ -333,10 +352,10 @@ public class InventoryDisplay : MonoBehaviour {
             DisplayAllEquipments();
         else
             DisplayInventoryMenu(currenttag);
-        gameObject.GetComponent<Inventory>().Page1Button.GetComponent<Image>().color = Color.red;
-        gameObject.GetComponent<Inventory>().Page2Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Inventory>().PreviousPageButton.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Inventory>().NextPageButton.GetComponent<Image>().color = Color.cyan;
     }
-    public void ViewPage2()
+    public void ViewNext()
     {
         if (PageCount + 1 < MaxCount)
             PageCount++;
@@ -346,8 +365,8 @@ public class InventoryDisplay : MonoBehaviour {
             DisplayAllEquipments();
         else
             DisplayInventoryMenu(currenttag);
-        gameObject.GetComponent<Inventory>().Page1Button.GetComponent<Image>().color = Color.cyan;
-        gameObject.GetComponent<Inventory>().Page2Button.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Inventory>().PreviousPageButton.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Inventory>().NextPageButton.GetComponent<Image>().color = Color.red;
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }

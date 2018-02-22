@@ -5,18 +5,17 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
+    public GameObject InventoryUICanvas;
+
     public GameObject EquipmentDropdown;
     public GameObject UsesButton;
-    public GameObject InventoryUICanvas;
+    public GameObject NextPageButton;
+    public GameObject PreviousPageButton;
     public InputField SearchBar;
     public GameObject InventoryPage;
 
-
-    public GameObject Page1Button;
-    public GameObject Page2Button;
-
     bool InventoryUI;
-    bool WeaponsDisplay;
+    bool EquipmentDisplay;
     bool UsesDisplay;
 
     Color ButtonActiveColour = Color.red;
@@ -25,22 +24,21 @@ public class Inventory : MonoBehaviour
     // Use this for initialization
     void Init()
     {
-        WeaponsDisplay = true;
+        EquipmentDisplay = true;
         UsesDisplay = false;
         InventoryUI = false;
 
         EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
-
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<InventoryDisplay>().DisplaySearchMenu(SearchBar); });
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
+        PreviousPageButton.GetComponent<Image>().color = Color.red;
+        NextPageButton.GetComponent<Image>().color = Color.cyan;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (WeaponsDisplay)
+        if (EquipmentDisplay)
             EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         else
             EquipmentDropdown.GetComponent<Image>().color = ButtonInactiveColour;
@@ -78,14 +76,14 @@ public class Inventory : MonoBehaviour
                 gameObject.GetComponent<InventoryDisplay>().DisplayAllEquipments();
                 break;
         }
-        WeaponsDisplay = true;
+        EquipmentDisplay = true;
         UsesDisplay = false;
     }
 
     public void OpenUses()
     {
         gameObject.GetComponent<InventoryDisplay>().DisplayInventoryMenu("Uses");
-        WeaponsDisplay = false;
+        EquipmentDisplay = false;
         UsesDisplay = true;
     }
     public void CloseInventoryUI()

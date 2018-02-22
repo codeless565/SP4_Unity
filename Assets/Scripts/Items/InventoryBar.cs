@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryBar : MonoBehaviour
 {
-    private GameObject Bar;  
+    private GameObject Bar;
     public GameObject ItemLogoPrefab;
     public GameObject ItemHotkey;
 
@@ -13,14 +13,17 @@ public class InventoryBar : MonoBehaviour
     int maxNumOfX = 6;
 
     GameObject[] HotBar;
+    Item[] HotBarItem;
     // Use this for initialization
-    void Start () {
+    void Start() {
         HotBar = new GameObject[maxNumOfX];
+        HotBarItem = new Item[maxNumOfX];
+
         int currentX = 0;
         Bar = Instantiate(GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().InventoryBar,
             GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().HUD.transform);
 
-        for (int i =0;i<HotBar.Length;++i)
+        for (int i = 0; i < HotBar.Length; ++i)
         {
             GameObject newIcon = Instantiate(ItemLogoPrefab, Bar.transform) as GameObject;
             currentX++;
@@ -37,7 +40,7 @@ public class InventoryBar : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
     }
 
     public void AddPlayerHotBar(Item item)
@@ -49,10 +52,47 @@ public class InventoryBar : MonoBehaviour
 
             if (HotBar[i].GetComponent<Image>().sprite.name == "UISprite")
             {
-                HotBar[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
-                HotBar[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
+                if (item.Quantity > 1)
+                {
+                    HotBar[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                    HotBar[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
+                }
+
                 HotBar[i].GetComponent<Image>().sprite = item.ItemImage;
+
+
+                HotBarItem[i] = item;
                 break;
+            }
+        }
+    }
+
+    public Item[] getPlayerHotBar() { return HotBarItem; }
+
+    public void RemovePlayerHotBar(Item item, bool quantityremove) // if false remove completely, if true remove quantity on hotbar
+    {
+        for (int i = 0; i < HotBar.Length; ++i)
+        {
+            if (HotBar[i].GetComponent<Image>().sprite.name == item.ItemImage.name)
+            {
+                if (!quantityremove)
+                {
+                    HotBar[i].GetComponentInChildren<Text>().text = "";
+                    HotBar[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
+                }
+                else
+                {
+                    if (item.Quantity > 1)
+                    {
+                        HotBar[i].GetComponentInChildren<Text>().text = item.Quantity.ToString();
+                        HotBar[i].GetComponentInChildren<Text>().alignment = TextAnchor.LowerRight;
+                        HotBar[i].GetComponent<Image>().sprite = item.ItemImage;
+                    }
+                    else
+                        HotBar[i].GetComponentInChildren<Text>().text = "";
+
+
+                }
             }
         }
     }
