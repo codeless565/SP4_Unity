@@ -21,7 +21,7 @@ public class Inventory : MonoBehaviour
     Color ButtonInactiveColour = Color.cyan;
 
     // Use this for initialization
-    void Start()
+    void Init()
     {
         WeaponsDisplay = true;
         UsesDisplay = false;

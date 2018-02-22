@@ -33,6 +33,19 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     //    Right,
     //};
     //Direction toMove = 0;
+    /* List storing Player equipment */
+    public List<Item> Inventory = new List<Item>();
+    public List<Item> getPlayerInventory() { return Inventory; }
+    enum EQTYPE
+    {
+        HELMET,
+        WEAPON,
+        CHESTPIECE,
+        LEGGING,
+        SHOE,
+        TOTAL
+    }
+    Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
 
     // Use this for initialization
     void Start()
@@ -47,6 +60,10 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
         // set default equipments
         p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
+
+        for (int i = 0; i < EquipmentList.Length; ++i)
+            EquipmentList[i] = null;
+
     }
 
     // Update is called once per frame
@@ -172,4 +189,138 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             }
         }
     }
+
+    public void AddItem(Item newitem)
+    {
+        if (Inventory.Contains(newitem))
+        {
+            foreach (Item item in Inventory)
+            {
+                if (item == newitem)
+                {
+                    item.Quantity++;
+                    break;
+                }
+            }
+            Inventory.Add(newitem);
+        }
+        else
+            Inventory.Add(newitem);
+    }
+
+    public void EquipEQ(Item _weapon)
+    {
+        // TODO display message
+        if (statsHolder.Level < _weapon.Level)
+            return;
+
+        if (_weapon.ItemType == "Weapons")
+        {
+            if (EquipmentList[(int)EQTYPE.WEAPON] == null)
+            {
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.WEAPON].Health,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Mana,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Attack,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Defense,
+                    -EquipmentList[(int)EQTYPE.WEAPON].MoveSpeed);
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Helmets")
+        {
+            if (EquipmentList[(int)EQTYPE.HELMET] == null)
+            {
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.HELMET].Health,
+                    -EquipmentList[(int)EQTYPE.HELMET].Mana,
+                    -EquipmentList[(int)EQTYPE.HELMET].Attack,
+                    -EquipmentList[(int)EQTYPE.HELMET].Defense,
+                    -EquipmentList[(int)EQTYPE.HELMET].MoveSpeed);
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Chestpieces")
+        {
+            if (EquipmentList[(int)EQTYPE.CHESTPIECE] == null)
+            {
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.CHESTPIECE].Health,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Mana,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Attack,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Defense,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Leggings")
+        {
+            if (EquipmentList[(int)EQTYPE.LEGGING] == null)
+            {
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.LEGGING].Health,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Mana,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Attack,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Defense,
+                    -EquipmentList[(int)EQTYPE.LEGGING].MoveSpeed);
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Shoes")
+        {
+            if (EquipmentList[(int)EQTYPE.SHOE] == null)
+            {
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.SHOE].Health,
+                    -EquipmentList[(int)EQTYPE.SHOE].Mana,
+                    -EquipmentList[(int)EQTYPE.SHOE].Attack,
+                    -EquipmentList[(int)EQTYPE.SHOE].Defense,
+                    -EquipmentList[(int)EQTYPE.SHOE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+    }
+
+    public void AddStats(Item item)
+    {
+        statsHolder.Health += item.Health;
+        statsHolder.Mana += item.Mana;
+        statsHolder.Attack += item.Attack;
+        statsHolder.Defense += item.Defense;
+        statsHolder.MoveSpeed += item.MoveSpeed;
+    }
+    public void AddStats(int _health, int _mana, float _attack, float _defence, float _movespeed)
+    {
+        statsHolder.Health += _health;
+        statsHolder.Mana += _mana;
+        statsHolder.Attack += _attack;
+        statsHolder.Defense+= _defence;
+        statsHolder.MoveSpeed += _movespeed;
+    }
+
 }

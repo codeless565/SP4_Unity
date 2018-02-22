@@ -29,6 +29,8 @@ public class InventoryDisplay : MonoBehaviour {
     GameObject ItemNameStats;
     GameObject ConfirmButton;
     GameObject CancelButton;
+
+    private GameObject Player;
     // Use this for initialization
     void Start ()
     { 
@@ -78,6 +80,7 @@ public class InventoryDisplay : MonoBehaviour {
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelEquip);
         CancelButton.transform.position = new Vector3(50.0f,- 100.0f) + EquipConfirmationCanvas.transform.position;
 
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -89,7 +92,7 @@ public class InventoryDisplay : MonoBehaviour {
     {
         foreach (GameObject go in InventoryLayout)
         {
-            go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().Empty;
+            go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
         }
         for (int i = 0; i < InventoryItems.Length; ++i)
         {
@@ -97,7 +100,7 @@ public class InventoryDisplay : MonoBehaviour {
         }
         foreach (GameObject go in InventoryBorders)
         {
-            go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().Empty;
+            go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
         }
     }
 
@@ -125,15 +128,15 @@ public class InventoryDisplay : MonoBehaviour {
                     else
                     {
                         if (item.ItemRarity == "Common")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
                         else if (item.ItemRarity == "Uncommon")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
                         else if (item.ItemRarity == "Magic")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
                         else if (item.ItemRarity == "Ancient")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
                         else if (item.ItemRarity == "Relic")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
 
                         InventoryItems[i] = item;
@@ -169,15 +172,15 @@ public class InventoryDisplay : MonoBehaviour {
                 else
                 {
                     if (item.ItemRarity == "Common")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
                     else if (item.ItemRarity == "Uncommon")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
                     else if (item.ItemRarity == "Magic")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
                     else if (item.ItemRarity == "Ancient")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
                     else if (item.ItemRarity == "Relic")
-                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
+                        InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
 
                     InventoryItems[i] = item;
@@ -202,7 +205,7 @@ public class InventoryDisplay : MonoBehaviour {
         currenttag = "all";
         int itemcount = 0;
 
-        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        foreach (Item item in Player.GetComponent<Player2D_Manager>().getPlayerInventory())
         {
             if (item.ItemType == "Uses")
                 continue;
@@ -219,15 +222,15 @@ public class InventoryDisplay : MonoBehaviour {
                     else
                     {
                         if (item.ItemRarity == "Common")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
                         else if (item.ItemRarity == "Uncommon")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
                         else if (item.ItemRarity == "Magic")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
                         else if (item.ItemRarity == "Ancient")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
                         else if (item.ItemRarity == "Relic")
-                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("MiscellaneousHolder").GetComponent<MiscellaneousHolder>().BorderRelic;
+                            InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
 
                         InventoryItems[i] = item;

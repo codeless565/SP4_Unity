@@ -21,8 +21,9 @@ public class Shop : MonoBehaviour
     Color ButtonActiveColour = Color.red;
     Color ButtonInactiveColour = Color.cyan;
 
+    private GameObject Player;
     // Use this for initialization
-    void Start()
+    public void Init()
     {
         WeaponsDisplay = true;
         UsesDisplay = false;
@@ -34,6 +35,7 @@ public class Shop : MonoBehaviour
         Page2Button.GetComponent<Image>().color = Color.cyan;
 
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<ShopDisplay>().DisplaySearchMenu(SearchBar); });
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -50,7 +52,7 @@ public class Shop : MonoBehaviour
             UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
 
         ShopUICanvas.SetActive(ShopUI);
-        GoldText.GetComponent<Text>().text = "Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold.ToString();
+        GoldText.GetComponent<Text>().text = "Gold: " + Player.GetComponent<Player2D_StatsHolder>().gold.ToString();
     }
 
     public void OpenEquipment()

@@ -233,6 +233,6 @@ public class Item : ItemBase
 
     public void getImage()
     {
-        ItemImage = GameObject.FindGameObjectWithTag("ItemObjectHolder").GetComponent<ItemObjectHolder>().getSprite(_spritename);
+        ItemImage = GameObject.FindGameObjectWithTag("Holder").GetComponent<ItemObjectHolder>().getSprite(_spritename);
     }
 }
