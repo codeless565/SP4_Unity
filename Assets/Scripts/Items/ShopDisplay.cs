@@ -16,6 +16,9 @@ public class ShopDisplay : MonoBehaviour
     public int MaxNumberOfColumn = 4;
 
     int StartCount;
+    int MaxCount;
+    int PageCount;
+
     string currenttag;
     GameObject[] ShopLayout;
     GameObject[] ShopBorders;
@@ -39,6 +42,8 @@ public class ShopDisplay : MonoBehaviour
     // Use this for initialization
     public void Init()
     {
+        PageCount = 0;
+        MaxCount = 5;
         StartCount = 0;
         currenttag = "";
         ConfirmationDisplay = false;
@@ -72,7 +77,7 @@ public class ShopDisplay : MonoBehaviour
         ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
 
         ItemNameStats = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
+        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(650.0f, 30.0f);
         ItemNameStats.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 50.0f));
         
         CostText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
@@ -299,16 +304,21 @@ public class ShopDisplay : MonoBehaviour
         else if (SelectedItem.ItemRarity == "Relic")
             ItemNameRarity.GetComponent<Text>().color = Color.red;
 
-
-        ItemNameStats.GetComponent<Text>().text =   "Level: " + SelectedItem.Level + "   " +
+        if (SelectedItem.ItemType == "Uses")
+            ItemNameStats.GetComponent<Text>().text =   "Level: " + SelectedItem.Level + "   " +
                                                     "Health: " + SelectedItem.Health + "   " +
                                                     "Stamina: " + SelectedItem.Stamina + "   " +
                                                     "Attack: " + SelectedItem.Attack + "   " +
                                                     "Defense: " + SelectedItem.Defense + "   " +
                                                     "Move Speed: " + SelectedItem.MoveSpeed;
-        //GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gold.ToString();
-        //TODO
-
+        else
+            ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
+                                                    "Health: " + SelectedItem.MaxHealth + "   " +
+                                                    "Stamina: " + SelectedItem.MaxStamina + "   " +
+                                                    "Attack: " + SelectedItem.Attack + "   " +
+                                                    "Defense: " + SelectedItem.Defense + "   " +
+                                                    "Move Speed: " + SelectedItem.MoveSpeed;
+        GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats().gold.ToString();
     }
 
     void BuyItem()
@@ -331,9 +341,8 @@ public class ShopDisplay : MonoBehaviour
 
     void AddQuantity()
     {
-        //if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gold)
-        //    Quantity++;
-        //TODO
+        if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats().gold)
+            Quantity++;
     }
     void SubtractQuantity()
     {
@@ -345,7 +354,10 @@ public class ShopDisplay : MonoBehaviour
 
     public void ViewPage1()
     {
-        StartCount = 0;
+        if (PageCount - 1 >= 0)
+            PageCount--;
+
+            StartCount = PageCount * NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipment();
         else
@@ -355,7 +367,10 @@ public class ShopDisplay : MonoBehaviour
     }
     public void ViewPage2()
     {
-        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn + 1;
+        if (PageCount + 1 < MaxCount)
+            PageCount++;
+
+        StartCount = PageCount * NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipment();
         else
@@ -366,4 +381,6 @@ public class ShopDisplay : MonoBehaviour
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationDisplay = _display; }
+    public int getPageCount() { return PageCount; }
+    public int getMaxCount() { return MaxCount; }
 }

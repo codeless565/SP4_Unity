@@ -13,6 +13,7 @@ public class Shop : MonoBehaviour
     public GameObject Page2Button;
     public InputField SearchBar;
     public GameObject GoldText;
+    public GameObject ShopPage;
     
     bool ShopUI;
     bool WeaponsDisplay;
@@ -53,6 +54,8 @@ public class Shop : MonoBehaviour
 
         ShopUICanvas.SetActive(ShopUI);
         GoldText.GetComponent<Text>().text = "Gold: " + Player.GetComponent<Player2D_StatsHolder>().gold.ToString();
+
+        ShopPage.GetComponent<Text>().text = "Page: " + (GetComponent<ShopDisplay>().getPageCount()+1) + "/" + GetComponent<ShopDisplay>().getMaxCount();
     }
 
     public void OpenEquipment()
