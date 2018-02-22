@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* For Player in 2D */
-public class Player2D_Manager : MonoBehaviour, CollisionBase
+public class Player2D_Manager : MonoBehaviour
 {
     /*Base Animation(body)*/
     private bool PlayerMoving;
@@ -18,8 +18,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     //attack animation
     public float animTimer; // countdown timer
     private float m_fAniTime; // value to countdown from
-
-    public bool attackClicked;
+    static public bool attackClicked;
 
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
@@ -27,7 +26,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     /* Show Level Up */
     [SerializeField]
     private TextMesh m_levelup_mesh;
-    private TextMesh cloneMesh;
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
@@ -57,6 +55,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
 
+        /* Animation */
         animTimer = 0.0f;
         m_fAniTime = 1.0f;
         attackClicked = false;
@@ -88,7 +87,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
             {
                 m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                DestroyImmediate(cloneMesh);
+               
                 m_bCheckLevelUp = false;
             }
         }
@@ -148,26 +147,42 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
 
-        //Player can move
+        /* When canMove, move */
         if (canMove)
-        {
             Movement2D();
-        }
+
+        /* Attack Animation */
         PlayerAttack2D();
     }
 
+    /* Key Board Movement of the Player */
     void KeyMove()
     {
         PlayerMoving = false;
         p_spriteManager.SetPlayerMoving(false);
 
+        /* Getting the Direction of the Player */
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
+        if (inputX != 0f && inputY != 0f)
+        {
+            Player2D_Attack.Direction.Set(inputX, inputY);
+        }
+        else if (inputX != 0f)
+        {
+            Player2D_Attack.Direction.Set(inputX, 0);
+        }
+        else if (inputY != 0f)
+        {
+            Player2D_Attack.Direction.Set(0, inputY);
+        }
+
         // Move Left / Right
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
-            //transform.Rotate
             p_spriteManager.SetPlayerMoving(true);
-           PlayerMoving = true;
+            PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
@@ -185,20 +200,16 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         p_spriteManager.SetPlayerMoving(PlayerMoving);
     }
 
+    /* Attack Animation of Player */
     public void PlayerAttack2D()
     {
-        /* When Clicked down */
-        if (Input.GetMouseButtonDown(0) && !attackClicked)
-        {
-            attackClicked = true;
-            p_spriteManager.SetSlash(true);
-        }
-
         // Change Animation
         if (attackClicked)
         {
             canMove = false;
             animTimer += Time.deltaTime;
+            p_spriteManager.SetSlash(true);
+
             if (animTimer >= m_fAniTime)
             {
                 attackClicked = false;
@@ -224,6 +235,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         //AccMove();
     }
 
+    /* HotKeys */
     public void HotKeyResponse(int keynum)
     {
         
@@ -253,35 +265,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             }
 
         }
-    }
-
-
-    /* Interaction with Objects */
-    public void CollisionResponse(string _tag)
-    {
-        // Player - Traps 
-        // When hit by traps, change state to be "playerInjuried"
-        // in state do everything when injuried before coming back to this state
-
-
-        // Player - Merchant
-        // When near merchant, press e to go into buying state
-        // in state , dont update anything until when the player press back button , then change script back to this
-
-
-        // Player- Wooden box
-
-
-
-    }
-
-    /* Level Up Character */
-    private void LevelUp()
-    {
-        /* Reset all Exp */
-
-        /* Create Text to show level up */
-        cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
     }
 
     /* Adding Items to Inventory */
