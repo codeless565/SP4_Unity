@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryBar : MonoBehaviour
 {
-    public GameObject Bar;  
+    private GameObject Bar;  
     public GameObject ItemLogoPrefab;
     public GameObject ItemHotkey;
 
@@ -17,7 +17,8 @@ public class InventoryBar : MonoBehaviour
     void Start () {
         HotBar = new GameObject[maxNumOfX];
         int currentX = 0;
-
+        Bar = Instantiate(GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().InventoryBar,
+            GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().HUD.transform);
 
         for (int i =0;i<HotBar.Length;++i)
         {
