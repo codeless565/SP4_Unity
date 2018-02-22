@@ -199,25 +199,19 @@ public class ItemDatabase {
         }
     }
 
-    public Item GenerateItem(string type)
+    public List<Item> GenerateItem(string _rarity)
     {
         List<Item> ItemOptions = new List<Item>();
 
         foreach (Item item in ItemList)
         {
-            if (item.ItemType != type)
+            if (item.ItemRarity != _rarity)
                 continue;
 
             ItemOptions.Add(item);
         }
 
-        if (ItemOptions.Count > 0)
-        {
-            int selected = Random.Range(0, ItemOptions.Count);
-            return ItemOptions[selected];
-        }
-
-        return null;
+        return ItemOptions;
     }
 }
 
