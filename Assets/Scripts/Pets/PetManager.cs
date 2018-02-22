@@ -18,15 +18,17 @@ public class PetManager : MonoBehaviour, StatsBase
     [SerializeField]
     int petLevel = 0;
 
-    float health = 50;
-    float maxhealth = 50;
-    float stamina = 0;
-    float maxStamina = 0;
-    float attack = 10;
-    float defense = 0;
+    float health;
+    float maxhealth;
+    float stamina;
+    float maxStamina;
+    float attack;
+    float defense;
 
     [SerializeField]
     float movespeed = 10;
+
+    LevelingSystem levelingSystem;
 
     // Pet //
     PetState petState;
@@ -39,12 +41,12 @@ public class PetManager : MonoBehaviour, StatsBase
     private float PetGuardRange;
     private float PetFollowRange;
     private float PetHealRange;
-    private int PetHealPlayerCounter;
+    private bool HasPetHeal;
 
     // Player //
     private Player2D_StatsHolder playerStats;
     private GameObject player;
-    private float playerHP;
+    private float addPlayerHP;
     public GameObject playerHealingSprite;
 
     // Stats Setter and Getter //
@@ -196,8 +198,8 @@ public class PetManager : MonoBehaviour, StatsBase
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
 
         // The amount of HP that a Pet will use to heal Player.
-        playerHP = 10f;
-        PetHealPlayerCounter = 0;
+        addPlayerHP = 20f;
+        HasPetHeal = false;
 
         // Pet current state to be GUARD.
         petState = PetState.GUARD;
@@ -205,9 +207,11 @@ public class PetManager : MonoBehaviour, StatsBase
         destinationOffset.Set(1f, 1f);
         // Setting the range for Pet State to be GUARD.
         PetGuardRange = 2f;
-
+        // Setting the range for Pet to heal the Player.
+        PetHealRange = 2.5f;
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this, false);
+        levelingSystem = GetComponent<LevelingSystem>();
+        levelingSystem.Init(this, false);
     }
 
     void Update ()
@@ -218,7 +222,8 @@ public class PetManager : MonoBehaviour, StatsBase
         // Checks for Player's Health, if it's below 1/3. Pet will heal Player Health.
         if (playerStats.Health <= (playerStats.MaxHealth * 0.3f))
         {
-            petState = PetState.HEAL;
+            if (!HasPetHeal)
+                petState = PetState.HEAL;
         }
 
         // Pet States
@@ -231,7 +236,7 @@ public class PetManager : MonoBehaviour, StatsBase
                 PetFollow(petDestination, destinationOffset);
                 break;
             case PetState.HEAL:
-                PetProtect(petDestination);
+                PetHeal(petDestination);
                 break;
             case PetState.ATTACK:
                 PetAttack();
@@ -243,6 +248,8 @@ public class PetManager : MonoBehaviour, StatsBase
                 PetTeleport();
                 break;
         }
+
+       // Debug.Log("player HP: " + playerStats.Health);
     }
 
     // Similar to IDLE state of Enemy, Pet will stay still when it's near the Player and "Guard" it.
@@ -275,16 +282,31 @@ public class PetManager : MonoBehaviour, StatsBase
     }
 
     // If Player Health is below x, the Pet will heal the Player to for x seconds.
-    private void PetProtect(Vector2 _petDesti)
+    private void PetHeal(Vector2 _petDesti)
     {
-        // Pet will walk to Player smoothly.
-        transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
+        if(!HasPetHeal)
+        {
+            // Pet will walk to Player smoothly.
+            transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
 
-        // Distance between Player and Pet.
-        distanceApart = Vector2.Distance(transform.position, _petDesti);
+            // Distance between Player and Pet.
+            distanceApart = Vector2.Distance(transform.position, _petDesti);
 
-        // Increase Player Health.
+            if (distanceApart < PetHealRange)
+            {
+                // Increase Player Health.
+                playerStats.Health += addPlayerHP;
+                HasPetHeal = true;
+            }
+        }
 
+        if (HasPetHeal)
+        {
+            //Debug.Log("Not Healing Anymore.... Changing to Guard.");
+            // Start the cool down timer.
+            // Changing to Guard State.
+            petState = PetState.GUARD;
+        }
     }
 
     // If there are Enemies near the Player, Pet State will change to Attack and deal damage to the nearest Enemy.

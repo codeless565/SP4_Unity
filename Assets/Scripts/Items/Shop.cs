@@ -5,35 +5,37 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    // Canvas
     public GameObject ShopUICanvas;
 
+    // UI 
     public GameObject EquipmentDropdown;
     public GameObject UsesButton;
-    public GameObject Page1Button;
-    public GameObject Page2Button;
+    public GameObject NextPageButton;
+    public GameObject PreviousPageButton;
     public InputField SearchBar;
     public GameObject GoldText;
-    public GameObject ShopPage;
+    public GameObject ShopPageText;
     
     bool ShopUI;
-    bool WeaponsDisplay;
+    bool EquipmentDisplay;
     bool UsesDisplay;
 
     Color ButtonActiveColour = Color.red;
     Color ButtonInactiveColour = Color.cyan;
-
     private GameObject Player;
+
     // Use this for initialization
     public void Init()
     {
-        WeaponsDisplay = true;
+        EquipmentDisplay = true;
         UsesDisplay = false;
         ShopUI = false;
 
         EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
+        NextPageButton.GetComponent<Image>().color = Color.red;
+        PreviousPageButton.GetComponent<Image>().color = Color.cyan;
 
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<ShopDisplay>().DisplaySearchMenu(SearchBar); });
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -42,7 +44,7 @@ public class Shop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (WeaponsDisplay)
+        if (EquipmentDisplay)
             EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         else
             EquipmentDropdown.GetComponent<Image>().color = ButtonInactiveColour;
@@ -53,9 +55,9 @@ public class Shop : MonoBehaviour
             UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
 
         ShopUICanvas.SetActive(ShopUI);
-        GoldText.GetComponent<Text>().text = "Gold: " + Player.GetComponent<Player2D_StatsHolder>().gold.ToString();
 
-        ShopPage.GetComponent<Text>().text = "Page: " + (GetComponent<ShopDisplay>().getPageCount()+1) + "/" + GetComponent<ShopDisplay>().getMaxCount();
+        GoldText.GetComponent<Text>().text = "Gold: " + Player.GetComponent<Player2D_Manager>().getPlayerStats().gold.ToString();
+        ShopPageText.GetComponent<Text>().text = "Page: " + (GetComponent<ShopDisplay>().getPageCount()+1) + "/" + GetComponent<ShopDisplay>().getMaxCount();
     }
 
     public void OpenEquipment()
@@ -82,15 +84,15 @@ public class Shop : MonoBehaviour
                 gameObject.GetComponent<ShopDisplay>().DisplayAllEquipment();
                 break;
         }
-        WeaponsDisplay = true;
+        EquipmentDisplay = true;
         UsesDisplay = false;
     }
 
     public void OpenUses()
     {
         gameObject.GetComponent<ShopDisplay>().DisplayShopMenu("Uses");
+        EquipmentDisplay = false;
         UsesDisplay = true;
-        WeaponsDisplay = false;
     }
     public void CloseShopUI()
     {

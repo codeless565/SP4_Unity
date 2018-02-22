@@ -8,23 +8,25 @@ public class ShopDisplay : MonoBehaviour
     public GameObject ShopDisplayCanvas;
     public GameObject ShopConfirmationCanvas;
 
-    public GameObject ButtonPrefab;
-    public GameObject TextPrefab;
-    public GameObject BorderPrefab;
+    private GameObject ButtonPrefab;
+    private GameObject TextPrefab;
+    private GameObject BorderPrefab;
 
     public int NumberOfItemsPerRow = 5;
     public int MaxNumberOfColumn = 4;
 
-    int StartCount;
-    int MaxCount;
-    int PageCount;
+    // Pages Preview
+    int StartCount; // Counter for ItemDatabase
+    int MaxCount;   // Maximum number of pages
+    int PageCount;  // Current page number
 
-    string currenttag;
+    string currenttag; // Tag to store currently viewed display
     GameObject[] ShopLayout;
     GameObject[] ShopBorders;
     Item[] ShopItems;
     Item SelectedItem;
 
+    // Confirmation
     bool ConfirmationDisplay;
     GameObject ItemNameRarity;
     GameObject ItemNameText;
@@ -39,6 +41,7 @@ public class ShopDisplay : MonoBehaviour
     GameObject QuantityAdd;
     GameObject QuantitySubtract;
 
+    private GameObject Player;
     // Use this for initialization
     public void Init()
     {
@@ -47,14 +50,16 @@ public class ShopDisplay : MonoBehaviour
         StartCount = 0;
         currenttag = "";
         ConfirmationDisplay = false;
+
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopBorders = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopItems = new Item[NumberOfItemsPerRow * MaxNumberOfColumn];
-        
-        
-        ShopDisplayCanvas.SetActive(false);
 
-        // Shop Menu UI
+        ButtonPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().ButtonPrefab;
+        TextPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().TextPrefab;
+        BorderPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderPrefab;
+
+        // Shop Display UI
         for (int i = 0; i < ShopLayout.Length; ++i)
         {
             GameObject newIcon = Instantiate(ButtonPrefab, ShopDisplayCanvas.transform) as GameObject;
@@ -69,75 +74,80 @@ public class ShopDisplay : MonoBehaviour
         }
 
 
-        // Confirmation Menu UI
+        // Confirmation UI
         ItemNameRarity = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameRarity.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 125.0f));
+        ItemNameRarity.transform.position = new Vector3(0.0f, 125.0f) + ShopConfirmationCanvas.transform.position;
 
         ItemNameText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
+        ItemNameText.transform.position = new Vector3(0.0f, 100.0f) + ShopConfirmationCanvas.transform.position;
 
         ItemNameStats = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(650.0f, 30.0f);
-        ItemNameStats.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 50.0f));
-        
+        ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + ShopConfirmationCanvas.transform.position;
+
         CostText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        CostText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
+        CostText.transform.position = new Vector3(- 100.0f, 25.0f) + ShopConfirmationCanvas.transform.position;
         GoldText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        GoldText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
+        GoldText.transform.position = new Vector3(100.0f, 25.0f) + ShopConfirmationCanvas.transform.position;
 
         BuyButton = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         BuyButton.GetComponentInChildren<Text>().text = "Buy";
-        BuyButton.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 50.0f, (ShopConfirmationCanvas.transform.position.y - 100.0f));
         BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
         BuyButton.GetComponent<Button>().onClick.AddListener(BuyItem);
+        BuyButton.transform.position = new Vector3(-50.0f, -100.0f) + ShopConfirmationCanvas.transform.position;
 
         CancelButton = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelBuy);
-        CancelButton.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 50.0f, (ShopConfirmationCanvas.transform.position.y - 100.0f));
+        CancelButton.transform.position = new Vector3(50.0f, -100.0f) + ShopConfirmationCanvas.transform.position;
 
-        QuantityText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        QuantityText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 50.0f, (ShopConfirmationCanvas.transform.position.y - 25.0f));
-        QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         Quantity = 1;
+        QuantityText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
+        QuantityText.transform.position = new Vector3(- 50.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
+        QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
 
         QuantityAdd = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         QuantityAdd.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Plus;
-        QuantityAdd.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 50.0f, (ShopConfirmationCanvas.transform.position.y - 25.0f));
+        QuantityAdd.transform.position = new Vector3(50.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
         QuantityAdd.GetComponent<Button>().onClick.RemoveAllListeners();
         QuantityAdd.GetComponent<Button>().onClick.AddListener(AddQuantity);
 
 
         QuantitySubtract = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         QuantitySubtract.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Minus;
-        QuantitySubtract.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 125.0f, (ShopConfirmationCanvas.transform.position.y - 25.0f));
+        QuantitySubtract.transform.position = new Vector3(125.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
         QuantitySubtract.GetComponent<Button>().onClick.RemoveAllListeners();
         QuantitySubtract.GetComponent<Button>().onClick.AddListener(SubtractQuantity);
+
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
         ShopConfirmationCanvas.SetActive(ConfirmationDisplay);
-        if (ConfirmationDisplay)
+        if (ConfirmationDisplay) // Update Text when Confirmation is active
         {
             CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
+        if (ShopDisplayCanvas.activeSelf)
+            Player.GetComponent<Player2D_Manager>().canMove = false;
     }
 
+    // On Click listener for shop buttons
     void ShopButtonOnClick(GameObject btn)
     {
         SelectedItem = null;
         
         for (int i = 0; i < ShopLayout.Length; ++i)
         {
-            if (btn.GetComponent<Image>().sprite.name != ShopLayout[i].GetComponent<Image>().sprite.name)
+            // If btn clicked is not the same as current ShopLayout[Button] 
+            if (btn.name != ShopLayout[i].name)
                 continue;
 
-            if (btn.name == ShopLayout[i].name)
-                SelectedItem = ShopItems[i];
-
+            SelectedItem = ShopItems[i];
+            // If there is an Item, Display SelectedItem
             if (SelectedItem != null)
             {
                 ConfirmationDisplay = true;
@@ -146,6 +156,9 @@ public class ShopDisplay : MonoBehaviour
         }
     }
 
+    // Display Functions
+    ////////////////////////////////////////
+    // Display Reset
     void ResetDisplay()
     {
         foreach (GameObject go in ShopLayout)
@@ -161,6 +174,7 @@ public class ShopDisplay : MonoBehaviour
             go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
         }
     }
+    // Display Specific type 
     public void DisplayShopMenu(string itemtype)
     {
         ResetDisplay();
@@ -176,10 +190,13 @@ public class ShopDisplay : MonoBehaviour
             {
                 for (int i = 0; i < ShopLayout.Length; ++i)
                 {
+                    // If item name and rarity already exist in shop layout
                     if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
                         break;
+                    // If current layout is not empty
                     else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
                         continue;
+                    // Provide Border and add to ShopLayout/ShopItems/ShopBorder
                     else
                     {
                         if (item.ItemRarity == "Common")
@@ -201,44 +218,8 @@ public class ShopDisplay : MonoBehaviour
                 }
             }
         }
-    }
-    public void DisplaySearchMenu(InputField itemname)
-    {
-        ResetDisplay();
-        
-        foreach (Item item in ItemDatabase.Instance.ItemList)
-        {
-            if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
-                continue;
-
-            for (int i = 0; i < ShopLayout.Length; ++i)
-            {
-                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
-                    break;
-                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
-                    continue;
-                else
-                {
-                    if (item.ItemRarity == "Common")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
-                    else if (item.ItemRarity == "Uncommon")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
-                    else if (item.ItemRarity == "Magic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
-                    else if (item.ItemRarity == "Ancient")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
-                    else if (item.ItemRarity == "Relic")
-                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
-
-
-                    ShopItems[i] = item;
-                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
-                    break;
-                }
-
-            }
-        }
-    }
+    } 
+    // Display All Equipments
     public void DisplayAllEquipment()
     {
         ResetDisplay();
@@ -288,6 +269,48 @@ public class ShopDisplay : MonoBehaviour
             
         }
     }
+    // Display Search Result
+    public void DisplaySearchMenu(InputField itemname)
+    {
+        ResetDisplay();
+
+        foreach (Item item in ItemDatabase.Instance.ItemList)
+        {
+            if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
+                continue;
+
+            currenttag = item.ItemType;
+
+            for (int i = 0; i < ShopLayout.Length; ++i)
+            {
+                if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
+                    break;
+                else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                    continue;
+                else
+                {
+                    if (item.ItemRarity == "Common")
+                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                    else if (item.ItemRarity == "Uncommon")
+                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                    else if (item.ItemRarity == "Magic")
+                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                    else if (item.ItemRarity == "Ancient")
+                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                    else if (item.ItemRarity == "Relic")
+                        ShopBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
+
+
+                    ShopItems[i] = item;
+                    ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
+                    break;
+                }
+
+            }
+        }
+    }
+    
+    // Display Selected Item
     void DisplayConfirmedItem()
     {
         ItemNameText.GetComponent<Text>().text = SelectedItem.Name;
@@ -321,14 +344,14 @@ public class ShopDisplay : MonoBehaviour
         GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats().gold.ToString();
     }
 
+    // On Click Listener for Buy/Cancel Buttons
     void BuyItem()
     {
         for (int i = 1; i <= Quantity; ++i)
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(SelectedItem);
         }
-        //GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddGold(-SelectedItem.ItemCost * Quantity);
-        //TODO
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddGold(-SelectedItem.ItemCost * Quantity);
 
         ConfirmationDisplay = false;
         Quantity = 1;
@@ -339,6 +362,7 @@ public class ShopDisplay : MonoBehaviour
         Quantity = 1;
     }
 
+    // On Click Listener for Add/Subtract Buttons
     void AddQuantity()
     {
         if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats().gold)
@@ -352,7 +376,8 @@ public class ShopDisplay : MonoBehaviour
             Quantity--;
     }
 
-    public void ViewPage1()
+    // Function for Previous and Next Button
+    public void ViewPrevious()
     {
         if (PageCount - 1 >= 0)
             PageCount--;
@@ -362,10 +387,10 @@ public class ShopDisplay : MonoBehaviour
             DisplayAllEquipment();
         else
             DisplayShopMenu(currenttag);
-        gameObject.GetComponent<Shop>().Page1Button.GetComponent<Image>().color = Color.red;
-        gameObject.GetComponent<Shop>().Page2Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Shop>().PreviousPageButton.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Shop>().NextPageButton.GetComponent<Image>().color = Color.cyan;
     }
-    public void ViewPage2()
+    public void ViewNext()
     {
         if (PageCount + 1 < MaxCount)
             PageCount++;
@@ -376,8 +401,8 @@ public class ShopDisplay : MonoBehaviour
         else
             DisplayShopMenu(currenttag);
 
-        gameObject.GetComponent<Shop>().Page1Button.GetComponent<Image>().color = Color.cyan;
-        gameObject.GetComponent<Shop>().Page2Button.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Shop>().PreviousPageButton.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Shop>().NextPageButton.GetComponent<Image>().color = Color.red;
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationDisplay = _display; }

@@ -6,23 +6,10 @@ using UnityEngine.UI;
 
 public interface ItemBase : StatsBase
 {
-    Sprite ItemImage
-    {
-        get;set;
-    }
-    string ItemRarity
-    {
-        get; set;
-    }
-    string ItemType
-    {
-        get;set;
-    }
-    
-    int ItemCost
-    {
-        get;set;
-    }
+    Sprite ItemImage { get; set; }
+    string ItemRarity { get; set; }
+    string ItemType { get; set; }
+    int ItemCost { get; set; }
     int Quantity { get; set; }
 }
 
