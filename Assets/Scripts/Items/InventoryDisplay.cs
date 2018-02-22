@@ -271,13 +271,20 @@ public class InventoryDisplay : MonoBehaviour {
             ItemNameRarity.GetComponent<Text>().color = Color.red;
 
 
-        ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
-                                            "Health: " + SelectedItem.Health + "   " +
-                                            "Stamina: " + SelectedItem.Stamina + "   " +
-                                            "Attack: " + SelectedItem.Attack + "   " +
-                                            "Defense: " + SelectedItem.Defense + "   " +
-                                            "Move Speed: " + SelectedItem.MoveSpeed;
-
+        if (SelectedItem.ItemType == "Uses")
+            ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
+                                                    "Health: " + SelectedItem.Health + "   " +
+                                                    "Stamina: " + SelectedItem.Stamina + "   " +
+                                                    "Attack: " + SelectedItem.Attack + "   " +
+                                                    "Defense: " + SelectedItem.Defense + "   " +
+                                                    "Move Speed: " + SelectedItem.MoveSpeed;
+        else
+            ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
+                                                    "Health: " + SelectedItem.MaxHealth + "   " +
+                                                    "Stamina: " + SelectedItem.MaxStamina + "   " +
+                                                    "Attack: " + SelectedItem.Attack + "   " +
+                                                    "Defense: " + SelectedItem.Defense + "   " +
+                                                    "Move Speed: " + SelectedItem.MoveSpeed;
     }
 
     void InventoryButtonOnClick(GameObject btn)
