@@ -8,6 +8,10 @@ public class Inventory : MonoBehaviour
     public GameObject EquipmentDropdown;
     public GameObject UsesButton;
     public GameObject InventoryUICanvas;
+    public InputField SearchBar;
+
+    public GameObject Page1Button;
+    public GameObject Page2Button;
 
     bool InventoryUI;
     bool WeaponsDisplay;
@@ -25,6 +29,11 @@ public class Inventory : MonoBehaviour
 
         EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
+
+        SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<InventoryDisplay>().DisplaySearchMenu(SearchBar); });
+        Page1Button.GetComponent<Image>().color = Color.red;
+        Page2Button.GetComponent<Image>().color = Color.cyan;
+
     }
 
     // Update is called once per frame

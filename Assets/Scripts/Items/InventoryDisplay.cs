@@ -9,13 +9,10 @@ public class InventoryDisplay : MonoBehaviour {
     public GameObject ItemButton;
     public GameObject ItemText;
     public GameObject BorderPrefab;
-    public InputField SearchBar;
 
-    public GameObject Page1Button;
-    public GameObject Page2Button;
 
     public int NumberOfItemsPerRow = 5;
-    public int MaxNumberOfColumn = 3;
+    public int MaxNumberOfColumn = 4;
 
     int StartCount;
     string currenttag;
@@ -35,15 +32,12 @@ public class InventoryDisplay : MonoBehaviour {
     // Use this for initialization
     void Start ()
     { 
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
         StartCount = 0;
         currenttag = "";
 
         InventoryLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         InventoryBorders = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         InventoryItems = new Item[NumberOfItemsPerRow * MaxNumberOfColumn];
-        SearchBar.onEndEdit.AddListener(delegate { DisplaySearchMenu(SearchBar); });
 
 
         // Shop Menu UI
@@ -322,18 +316,18 @@ public class InventoryDisplay : MonoBehaviour {
             DisplayAllEquipments();
         else
             DisplayInventoryMenu(currenttag);
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Inventory>().Page1Button.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Inventory>().Page2Button.GetComponent<Image>().color = Color.cyan;
     }
     public void ViewPage2()
     {
-        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn;
+        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipments();
         else
             DisplayInventoryMenu(currenttag);
-        Page1Button.GetComponent<Image>().color = Color.cyan;
-        Page2Button.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Inventory>().Page1Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Inventory>().Page2Button.GetComponent<Image>().color = Color.red;
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }

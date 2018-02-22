@@ -9,16 +9,11 @@ public class ShopDisplay : MonoBehaviour
     public GameObject ShopConfirmationCanvas;
 
     public GameObject ButtonPrefab;
-    public GameObject ConfirmationText;
+    public GameObject TextPrefab;
     public GameObject BorderPrefab;
 
-    public GameObject Page1Button;
-    public GameObject Page2Button;
-
     public int NumberOfItemsPerRow = 5;
-    public int MaxNumberOfColumn = 3;
-
-    public InputField SearchBar;
+    public int MaxNumberOfColumn = 4;
 
     int StartCount;
     string currenttag;
@@ -44,15 +39,12 @@ public class ShopDisplay : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
         StartCount = 0;
         currenttag = "";
         ConfirmationDisplay = false;
         ShopLayout = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopBorders = new GameObject[NumberOfItemsPerRow * MaxNumberOfColumn];
         ShopItems = new Item[NumberOfItemsPerRow * MaxNumberOfColumn];
-        SearchBar.onEndEdit.AddListener(delegate { DisplaySearchMenu(SearchBar); });
         
         
         ShopDisplayCanvas.SetActive(false);
@@ -73,19 +65,19 @@ public class ShopDisplay : MonoBehaviour
 
 
         // Confirmation Menu UI
-        ItemNameRarity = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameRarity = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         ItemNameRarity.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 125.0f));
 
-        ItemNameText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         ItemNameText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 100.0f));
 
-        ItemNameStats = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        ItemNameStats = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(700.0f, 30.0f);
         ItemNameStats.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x, (ShopConfirmationCanvas.transform.position.y + 50.0f));
         
-        CostText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        CostText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         CostText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
-        GoldText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        GoldText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         GoldText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 100.0f, (ShopConfirmationCanvas.transform.position.y + 25.0f));
 
         BuyButton = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
@@ -99,7 +91,7 @@ public class ShopDisplay : MonoBehaviour
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelBuy);
         CancelButton.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x + 50.0f, (ShopConfirmationCanvas.transform.position.y - 100.0f));
 
-        QuantityText = Instantiate(ConfirmationText, ShopConfirmationCanvas.transform) as GameObject;
+        QuantityText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
         QuantityText.transform.position = new Vector3(ShopConfirmationCanvas.transform.position.x - 50.0f, (ShopConfirmationCanvas.transform.position.y - 25.0f));
         QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         Quantity = 1;
@@ -354,18 +346,19 @@ public class ShopDisplay : MonoBehaviour
             DisplayAllEquipment();
         else
             DisplayShopMenu(currenttag);
-        Page1Button.GetComponent<Image>().color = Color.red;
-        Page2Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Shop>().Page1Button.GetComponent<Image>().color = Color.red;
+        gameObject.GetComponent<Shop>().Page2Button.GetComponent<Image>().color = Color.cyan;
     }
     public void ViewPage2()
     {
-        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn;
+        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipment();
         else
             DisplayShopMenu(currenttag);
-        Page1Button.GetComponent<Image>().color = Color.cyan;
-        Page2Button.GetComponent<Image>().color = Color.red;
+
+        gameObject.GetComponent<Shop>().Page1Button.GetComponent<Image>().color = Color.cyan;
+        gameObject.GetComponent<Shop>().Page2Button.GetComponent<Image>().color = Color.red;
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationDisplay = _display; }
