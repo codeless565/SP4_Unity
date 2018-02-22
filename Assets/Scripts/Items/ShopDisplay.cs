@@ -131,8 +131,6 @@ public class ShopDisplay : MonoBehaviour
             CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
-        if (ShopDisplayCanvas.activeSelf)
-            Player.GetComponent<Player2D_Manager>().canMove = false;
     }
 
     // On Click listener for shop buttons
