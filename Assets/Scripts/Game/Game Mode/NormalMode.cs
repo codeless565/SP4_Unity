@@ -18,6 +18,9 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<BoardGenerator>().Init();
         GetComponent<ObjectSpawn>().Init(t_CurrFloor);
+
+        GetComponent<Inventory>().Init();
+
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
     }

@@ -99,11 +99,13 @@ public class Shop : MonoBehaviour
         gameObject.GetComponent<ShopDisplay>().ShopDisplayCanvas.SetActive(false);
         gameObject.GetComponent<ShopDisplay>().setConfirmationDisplay(false);
         ShopUI = false;
+        Player.GetComponent<Player2D_Manager>().canMove = true;
     }
     public void OpenShopUI()
     {
         gameObject.GetComponent<ShopDisplay>().ShopDisplayCanvas.SetActive(true);
         OpenEquipment();
         ShopUI = true;
+        Player.GetComponent<Player2D_Manager>().canMove = false;
     }
 }

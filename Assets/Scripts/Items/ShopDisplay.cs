@@ -17,7 +17,7 @@ public class ShopDisplay : MonoBehaviour
 
     // Pages Preview
     int StartCount; // Counter for ItemDatabase
-    int MaxCount;   // Maximum number of pages
+    public int MaxCount = 5;   // Maximum number of pages
     int PageCount;  // Current page number
 
     string currenttag; // Tag to store currently viewed display
@@ -46,7 +46,6 @@ public class ShopDisplay : MonoBehaviour
     public void Init()
     {
         PageCount = 0;
-        MaxCount = 5;
         StartCount = 0;
         currenttag = "";
         ConfirmationDisplay = false;
@@ -131,8 +130,6 @@ public class ShopDisplay : MonoBehaviour
             CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
-        if (ShopDisplayCanvas.activeSelf)
-            Player.GetComponent<Player2D_Manager>().canMove = false;
     }
 
     // On Click listener for shop buttons

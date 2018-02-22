@@ -148,6 +148,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
 
+        //Player can move
         if (canMove)
         {
             Movement2D();

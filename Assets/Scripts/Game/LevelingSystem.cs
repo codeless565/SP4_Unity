@@ -58,11 +58,11 @@ public class LevelingSystem : MonoBehaviour
         _stats.Stamina = _stats.MaxStamina;
 
         //Debug.Log("Name : " + m_Stats.Name);
-        Debug.Log("Level : " + _stats.Level);
-        Debug.Log("EXP : " + _stats.EXP);
-        Debug.Log("Max EXP : " + _stats.MaxEXP);
+        //Debug.Log("Level : " + _stats.Level);
+        //Debug.Log("EXP : " + _stats.EXP);
+        //Debug.Log("Max EXP : " + _stats.MaxEXP);
         //Debug.Log("HP : " + m_Stats.Health);
-        Debug.Log("Max HP : " + _stats.MaxHealth);
+        //Debug.Log("Max HP : " + _stats.MaxHealth);
         //Debug.Log("Stamina : " + m_Stats.Stamina);
         //Debug.Log("Max Stamina : " + m_Stats.MaxStamina);
         //Debug.Log("Attack : " + m_Stats.Attack);
