@@ -16,7 +16,7 @@ public class LevelingSystem : MonoBehaviour
     public void Init (StatsBase _stats) {
         m_Stats = _stats;
 
-        CalculateStats(m_Stats.Level);
+        //CalculateStats(m_Stats.Level);
     }
 
     // Update is called once per frame
@@ -26,7 +26,7 @@ public class LevelingSystem : MonoBehaviour
         {
             m_Stats.EXP -= m_Stats.MaxEXP;
             ++m_Stats.Level;
-            CalculateStats(m_Stats.Level);
+            //CalculateStats(m_Stats.Level);
         }
 	}
 

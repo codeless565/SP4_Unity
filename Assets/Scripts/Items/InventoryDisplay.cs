@@ -15,6 +15,8 @@ public class InventoryDisplay : MonoBehaviour {
     public int MaxNumberOfColumn = 4;
 
     int StartCount;
+    int MaxCount;
+    int PageCount;
     string currenttag;
     GameObject[] InventoryLayout;
     GameObject[] InventoryBorders;
@@ -33,7 +35,9 @@ public class InventoryDisplay : MonoBehaviour {
     private GameObject Player;
     // Use this for initialization
     void Start ()
-    { 
+    {
+        PageCount = 0;
+        MaxCount = 5;
         StartCount = 0;
         currenttag = "";
 
@@ -86,7 +90,7 @@ public class InventoryDisplay : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         EquipConfirmationCanvas.SetActive(ConfirmationCanvas);
-	}
+    }
 
     void ResetDisplay()
     {
@@ -314,7 +318,10 @@ public class InventoryDisplay : MonoBehaviour {
 
     public void ViewPage1()
     {
-        StartCount = 0;
+        if (PageCount - 1 >= 0)
+            PageCount--;
+
+            StartCount = PageCount * NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipments();
         else
@@ -324,7 +331,10 @@ public class InventoryDisplay : MonoBehaviour {
     }
     public void ViewPage2()
     {
-        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn + 1;
+        if (PageCount + 1 < MaxCount)
+            PageCount++;
+
+        StartCount = PageCount*NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipments();
         else
@@ -334,4 +344,6 @@ public class InventoryDisplay : MonoBehaviour {
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationCanvas = _display; }
+    public int getPageCount() { return PageCount; }
+    public int getMaxCount() { return MaxCount; }
 }

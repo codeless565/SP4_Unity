@@ -9,6 +9,8 @@ public class Inventory : MonoBehaviour
     public GameObject UsesButton;
     public GameObject InventoryUICanvas;
     public InputField SearchBar;
+    public GameObject InventoryPage;
+
 
     public GameObject Page1Button;
     public GameObject Page2Button;
@@ -33,7 +35,6 @@ public class Inventory : MonoBehaviour
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<InventoryDisplay>().DisplaySearchMenu(SearchBar); });
         Page1Button.GetComponent<Image>().color = Color.red;
         Page2Button.GetComponent<Image>().color = Color.cyan;
-
     }
 
     // Update is called once per frame
@@ -50,6 +51,8 @@ public class Inventory : MonoBehaviour
             UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
 
         InventoryUICanvas.SetActive(InventoryUI);
+        
+        InventoryPage.GetComponent<Text>().text = "Page: " + (GetComponent<InventoryDisplay>().getPageCount() + 1) + "/" + GetComponent<InventoryDisplay>().getMaxCount();
     }
 
     public void OpenEquipment()

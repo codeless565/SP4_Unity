@@ -16,6 +16,9 @@ public class ShopDisplay : MonoBehaviour
     public int MaxNumberOfColumn = 4;
 
     int StartCount;
+    int MaxCount;
+    int PageCount;
+
     string currenttag;
     GameObject[] ShopLayout;
     GameObject[] ShopBorders;
@@ -39,6 +42,8 @@ public class ShopDisplay : MonoBehaviour
     // Use this for initialization
     public void Init()
     {
+        PageCount = 0;
+        MaxCount = 5;
         StartCount = 0;
         currenttag = "";
         ConfirmationDisplay = false;
@@ -345,7 +350,10 @@ public class ShopDisplay : MonoBehaviour
 
     public void ViewPage1()
     {
-        StartCount = 0;
+        if (PageCount - 1 >= 0)
+            PageCount--;
+
+            StartCount = PageCount * NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipment();
         else
@@ -355,7 +363,10 @@ public class ShopDisplay : MonoBehaviour
     }
     public void ViewPage2()
     {
-        StartCount = NumberOfItemsPerRow * MaxNumberOfColumn + 1;
+        if (PageCount + 1 < MaxCount)
+            PageCount++;
+
+        StartCount = PageCount * NumberOfItemsPerRow * MaxNumberOfColumn + 1;
         if (currenttag == "all")
             DisplayAllEquipment();
         else
@@ -366,4 +377,6 @@ public class ShopDisplay : MonoBehaviour
     }
 
     public void setConfirmationDisplay(bool _display) { ConfirmationDisplay = _display; }
+    public int getPageCount() { return PageCount; }
+    public int getMaxCount() { return MaxCount; }
 }
