@@ -17,7 +17,7 @@ public class InventoryDisplay : MonoBehaviour {
 
     // Pages Preview
     int StartCount; // Counter for ItemDatabase
-    int MaxCount;   // Maximum number of pages
+    public int MaxCount = 5;   // Maximum number of pages
     int PageCount;  // Current page number
 
     string currenttag; // Tag to store currently viewed display
@@ -39,7 +39,6 @@ public class InventoryDisplay : MonoBehaviour {
     void Start ()
     {
         PageCount = 0;
-        MaxCount = 5;
         StartCount = 0;
         currenttag = "";
         ConfirmationCanvas = false;

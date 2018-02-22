@@ -1,7 +1,24 @@
 Name,Type,Level,Cost,Experience,Health,MaxHealth,Stamina,MaxStamina,Attack,Defence,Movespeed,Sprite name,,,Weapons
-Sword,Weapons,0,1,0,0,0,0,0,100,0,0,sword,,,Helmets
-Axe,Weapons,0,0,0,0,0,0,0,300,0,0,axe,,,Chestpieces
-HP Potion,Uses,0,0,0,40,0,0,0,0,0,0,hp,,,Leggings
-MP Potion,Uses,0,1000,0,0,0,100,0,0,0,0,mp,,,Shoes
-Helmet,Helmets,0,1000,0,0,100,0,0,0,0,0,helmet,,,Uses
-,Weapons,,,,,,,,,,,,,, 
+Long Sword,Weapons,0,1,0,0,0,0,0,100,0,0,weaponlongsword,,,Helmets
+Rapier,Weapons,0,0,0,0,0,0,0,300,0,0,weaponrapier,,,Chestpieces
+Bow,Weapons,0,0,0,0,0,0,0,0,0,0,weaponbow,,,Leggings
+Dagger,Weapons,0,0,0,0,0,0,0,0,0,0,weapondagger,,,Shoes
+Long Spear,Weapons,0,0,0,0,0,0,0,0,0,0,weaponlongspear,,,Uses
+Spear,Weapons,0,0,0,0,0,0,0,0,0,0,weaponspear,,,
+Arrow,Uses,0,0,0,0,0,0,0,0,0,0,arrow,,,
+HP Potion,Uses,0,0,0,40,0,0,0,0,0,0,hp,,,
+MP Potion,Uses,0,1000,0,0,0,100,0,0,0,0,mp,,,
+Leather Helmet,Helmets,0,1000,0,0,100,0,0,0,0,0,helmetleather,,,
+Chain Helmet,Helmets,0,0,0,0,0,0,0,0,0,0,helmetchain,,,
+Plated Helmet,Helmets,0,0,0,0,0,0,0,0,0,0,helmetplate,,,
+Robe Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,0,chestpiecerobe,,, 
+Purple Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,0,chestpiecepurple,,,
+Plated Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,,chestpieceplate,,,
+Leather Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,,chestpieceleather2,,,
+White Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,,chestpieceleather2,,,
+Chain Chestpiece,Chestpieces,0,0,0,0,0,0,0,0,0,,chestpiecechain,,,
+Robe Leggings,Leggings,0,0,0,0,0,0,0,0,0,0,leggingsrobe,,,
+Green Leggings,Leggings,0,0,0,0,0,0,0,0,0,,leggingsgreen,,,
+Plated Leggings,Leggings,0,0,0,0,0,0,0,0,0,,leggingsplate,,,
+Leather Shoes,Shoes,0,0,0,0,0,0,0,0,0,0,shoesleather,,,
+Plated Shoes,Shoes,0,0,0,0,0,0,0,0,0,,shoesplate,,,
