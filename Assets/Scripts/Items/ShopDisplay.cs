@@ -302,20 +302,23 @@ public class ShopDisplay : MonoBehaviour
 
         ItemNameStats.GetComponent<Text>().text =   "Level: " + SelectedItem.Level + "   " +
                                                     "Health: " + SelectedItem.Health + "   " +
-                                                    "Mana: " + SelectedItem.Mana + "   " +
+                                                    "Stamina: " + SelectedItem.Stamina + "   " +
                                                     "Attack: " + SelectedItem.Attack + "   " +
                                                     "Defense: " + SelectedItem.Defense + "   " +
                                                     "Move Speed: " + SelectedItem.MoveSpeed;
-        GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold.ToString();
+        //GoldText.GetComponent<Text>().text = "Your Gold: " + GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gold.ToString();
+        //TODO
+
     }
 
     void BuyItem()
     {
         for (int i = 1; i <= Quantity; ++i)
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddItem(SelectedItem);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(SelectedItem);
         }
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().AddGold(-SelectedItem.ItemCost * Quantity);
+        //GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddGold(-SelectedItem.ItemCost * Quantity);
+        //TODO
 
         ConfirmationDisplay = false;
         Quantity = 1;
@@ -328,8 +331,9 @@ public class ShopDisplay : MonoBehaviour
 
     void AddQuantity()
     {
-        if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().gold)
-            Quantity++;
+        //if ((SelectedItem.ItemCost * (Quantity + 1)) <= GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gold)
+        //    Quantity++;
+        //TODO
     }
     void SubtractQuantity()
     {

@@ -20,8 +20,6 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     private float m_MaxHealth = 100;
     private float m_MaxStamina = 10;
 
-    private LevelingSystem LevelSystem;
-
     /* Setters and Getters */
     public string Name
     {
@@ -160,8 +158,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     /* Initializing of Stats */
     void Awake()
     {
-        LevelSystem = new LevelingSystem();
-        LevelSystem.Init(this);
+        GetComponent<LevelingSystem>().Init(this);
         /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
     }
 

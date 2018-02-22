@@ -39,7 +39,7 @@ public class ItemDatabase {
             int.TryParse(linedata[4], out temp);
             newItem.Health = temp;
             int.TryParse(linedata[5], out temp);
-            newItem.Mana = temp;
+            newItem.Stamina = temp;
             float.TryParse(linedata[6], out temp2);
             newItem.Attack = temp2;
             float.TryParse(linedata[7], out temp2);
@@ -82,7 +82,7 @@ public class ItemDatabase {
                             break;
                     }
                     OtherRarityItem.Health *= (int)multipler;
-                    OtherRarityItem.Mana *= (int)multipler;
+                    OtherRarityItem.Stamina *= (int)multipler;
                     OtherRarityItem.Attack *= multipler;
                     OtherRarityItem.Defense *= multipler;
                     OtherRarityItem.MoveSpeed *= multipler;
@@ -142,7 +142,7 @@ public class ItemDatabase {
                     
 
                     OtherRarityItem.Health *= (int)multipler;
-                    OtherRarityItem.Mana *= (int)multipler;
+                    OtherRarityItem.Stamina *= (int)multipler;
                     OtherRarityItem.Attack *= multipler;
                     OtherRarityItem.Defense *= multipler;
                     OtherRarityItem.MoveSpeed *= multipler;
@@ -191,7 +191,7 @@ public class ItemDatabase {
                           item.ItemRarity + " " +
                           item.ItemCost + " " +
                           item.Health + " " +
-                          item.Mana + " " +
+                          item.Stamina + " " +
                           item.Attack + " " +
                           item.Defense + " " +
                           item.MoveSpeed;

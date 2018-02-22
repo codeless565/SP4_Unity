@@ -26,9 +26,17 @@ public class PetManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-    int petLevel = 0, health = 50, mana = 0;
+    int petLevel = 0;
+
+    float health = 50;
+    float maxhealth = 0;
+    float stamina = 0;
+    float maxStamina = 0;
+    float attack = 10;
+    float defense = 0;
+
     [SerializeField]
-    float attack = 10, defense = 0, movespeed = 10;
+    float movespeed = 10;
 
     // Player //
     private Player2D_StatsHolder playerStats;
@@ -36,6 +44,19 @@ public class PetManager : MonoBehaviour, StatsBase
     private Vector2 playerPos;
 
     // Stats Setter and Getter //
+    public string Name
+    {
+        get
+        {
+            return "Pet";
+        }
+
+        set
+        {
+            return;
+        }
+    }
+
     public int Level
     {
         get
@@ -49,7 +70,31 @@ public class PetManager : MonoBehaviour, StatsBase
         }
     }
 
-    public int Health
+    public float EXP
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+        }
+    }
+
+    public float MaxEXP
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+        }
+    }
+
+    public float Health
     {
         get
         {
@@ -59,6 +104,45 @@ public class PetManager : MonoBehaviour, StatsBase
         set
         {
             health = value;
+        }
+    }
+
+    public float MaxHealth
+    {
+        get
+        {
+            return maxhealth;
+        }
+
+        set
+        {
+            maxhealth = value;
+        }
+    }
+
+    public float Stamina
+    {
+        get
+        {
+            return stamina;
+        }
+
+        set
+        {
+            stamina = value;
+        }
+    }
+
+    public float MaxStamina
+    {
+        get
+        {
+            return maxStamina;
+        }
+
+        set
+        {
+            maxStamina = value;
         }
     }
 
@@ -101,32 +185,6 @@ public class PetManager : MonoBehaviour, StatsBase
         }
     }
 
-    public string Name
-    {
-        get
-        {
-            return "Pet";
-        }
-
-        set
-        {
-            return;
-        }
-    }
-
-    public int Mana
-    {
-        get
-        {
-            return mana;
-        }
-
-        set
-        {
-            mana = value;
-        }
-    }
-
 
     void Start ()
     {
@@ -139,9 +197,11 @@ public class PetManager : MonoBehaviour, StatsBase
         destinationOffset.Set(1f, 1f);
         // Setting the range for Pet State to be GUARD.
         changeToGuardDistance = 2f;
+        //Initialize Stats from the leveling system
+        GetComponent<LevelingSystem>().Init(this);
     }
-	
-	void Update ()
+
+    void Update ()
     {
         // Getting Player Position for Pet.
         playerPos = player.transform.position;

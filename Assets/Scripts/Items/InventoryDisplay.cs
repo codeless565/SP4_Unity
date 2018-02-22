@@ -110,7 +110,7 @@ public class InventoryDisplay : MonoBehaviour {
         currenttag = itemtype;
         int itemcount = 0;
 
-        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory())
         {
             if (item.ItemType != itemtype)
                 continue;
@@ -158,7 +158,7 @@ public class InventoryDisplay : MonoBehaviour {
     {
         ResetDisplay();
 
-        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().getPlayerInventory())
+        foreach (Item item in GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory())
         {
             if (!item.Name.Contains(itemname.text) && !item.Name.ToLower().Contains(itemname.text) && !item.Name.ToUpper().Contains(itemname.text))
                 continue;
@@ -269,7 +269,7 @@ public class InventoryDisplay : MonoBehaviour {
 
         ItemNameStats.GetComponent<Text>().text = "Level: " + SelectedItem.Level + "   " +
                                             "Health: " + SelectedItem.Health + "   " +
-                                            "Mana: " + SelectedItem.Mana + "   " +
+                                            "Stamina: " + SelectedItem.Stamina + "   " +
                                             "Attack: " + SelectedItem.Attack + "   " +
                                             "Defense: " + SelectedItem.Defense + "   " +
                                             "Move Speed: " + SelectedItem.MoveSpeed;
@@ -302,9 +302,9 @@ public class InventoryDisplay : MonoBehaviour {
             return;
 
         if (SelectedItem.ItemType == "Uses")
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
         else
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>().EquipEQ(SelectedItem);
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().EquipEQ(SelectedItem);
         ConfirmationCanvas = false;
     }
     void CancelEquip()

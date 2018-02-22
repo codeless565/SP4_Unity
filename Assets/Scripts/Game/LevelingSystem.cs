@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelingSystem
+public class LevelingSystem : MonoBehaviour
 {
     private StatsBase m_Stats;
 
@@ -22,8 +22,6 @@ public class LevelingSystem
     // Update is called once per frame
     void Update ()
     {
-        m_Stats.EXP += Time.deltaTime;
-
         if (m_Stats.EXP >= m_Stats.MaxEXP)
         {
             m_Stats.EXP -= m_Stats.MaxEXP;
@@ -41,5 +39,16 @@ public class LevelingSystem
         m_Stats.Defense     = _Level * DefenseScaling;
         m_Stats.Health      = m_Stats.MaxHealth;
         m_Stats.Stamina     = m_Stats.MaxStamina;
+
+        Debug.Log("Name : " + m_Stats.Name);
+        Debug.Log("Level : " + m_Stats.Level);
+        Debug.Log("EXP : " + m_Stats.EXP);
+        Debug.Log("Max EXP : " + m_Stats.MaxEXP);
+        Debug.Log("HP : " + m_Stats.Health);
+        Debug.Log("Max HP : " + m_Stats.MaxHealth);
+        Debug.Log("Stamina : " + m_Stats.Stamina);
+        Debug.Log("Max Stamina : " + m_Stats.MaxStamina);
+        Debug.Log("Attack : " + m_Stats.Attack);
+        Debug.Log("Defense : " + m_Stats.Defense);
     }
 }

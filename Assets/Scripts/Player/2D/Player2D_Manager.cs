@@ -10,6 +10,8 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private bool PlayerMoving;
     private Vector2 lastMove;
 
+    //textbox
+    public bool canMove = true;
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
 
@@ -90,48 +92,52 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     {
         PlayerMoving = false;
 
-        // Move Left / Right
-        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+        if(canMove)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
-            //transform.Rotate
-            PlayerMoving = true;
-            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+            // Move Left / Right
+            if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+            {
+                transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+                //transform.Rotate
+                PlayerMoving = true;
+                lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
 
-            if (Input.GetAxisRaw("Horizontal") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                if (Input.GetAxisRaw("Horizontal") > 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                }
+                if (Input.GetAxisRaw("Horizontal") < 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+                }
+                p_spriteManager.SetLastMove(lastMove.x, 0);
             }
-            if (Input.GetAxisRaw("Horizontal") < 0f)
+
+            // Move Up / Down
+            if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+                transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
+                PlayerMoving = true;
+                lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+                if (Input.GetAxisRaw("Vertical") > 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+                }
+                if (Input.GetAxisRaw("Vertical") < 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+                }
+                p_spriteManager.SetLastMove(0, lastMove.y);
             }
-            p_spriteManager.SetLastMove(lastMove.x, 0);
+
+            anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
+            anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
+            anim.SetBool("PlayerMoving", PlayerMoving);
+            anim.SetFloat("LastMoveX", lastMove.x);
+            anim.SetFloat("LastMoveY", lastMove.y);
         }
-
-        // Move Up / Down
-        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
-        {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-            PlayerMoving = true;
-            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
-
-            if (Input.GetAxisRaw("Vertical") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
-            }
-            if (Input.GetAxisRaw("Vertical") < 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
-            }
-            p_spriteManager.SetLastMove(0, lastMove.y);
-        }
-
-        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
-        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-        anim.SetBool("PlayerMoving", PlayerMoving);
-        anim.SetFloat("LastMoveX", lastMove.x);
-        anim.SetFloat("LastMoveY", lastMove.y);
+       
     }
 
     /* For Mobile */
@@ -216,7 +222,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.WEAPON].Health,
-                    -EquipmentList[(int)EQTYPE.WEAPON].Mana,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Stamina,
                     -EquipmentList[(int)EQTYPE.WEAPON].Attack,
                     -EquipmentList[(int)EQTYPE.WEAPON].Defense,
                     -EquipmentList[(int)EQTYPE.WEAPON].MoveSpeed);
@@ -234,7 +240,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.HELMET].Health,
-                    -EquipmentList[(int)EQTYPE.HELMET].Mana,
+                    -EquipmentList[(int)EQTYPE.HELMET].Stamina,
                     -EquipmentList[(int)EQTYPE.HELMET].Attack,
                     -EquipmentList[(int)EQTYPE.HELMET].Defense,
                     -EquipmentList[(int)EQTYPE.HELMET].MoveSpeed);
@@ -252,7 +258,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.CHESTPIECE].Health,
-                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Mana,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Stamina,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].Attack,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].Defense,
                     -EquipmentList[(int)EQTYPE.CHESTPIECE].MoveSpeed);
@@ -270,7 +276,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.LEGGING].Health,
-                    -EquipmentList[(int)EQTYPE.LEGGING].Mana,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Stamina,
                     -EquipmentList[(int)EQTYPE.LEGGING].Attack,
                     -EquipmentList[(int)EQTYPE.LEGGING].Defense,
                     -EquipmentList[(int)EQTYPE.LEGGING].MoveSpeed);
@@ -288,7 +294,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             else
             {
                 AddStats(-EquipmentList[(int)EQTYPE.SHOE].Health,
-                    -EquipmentList[(int)EQTYPE.SHOE].Mana,
+                    -EquipmentList[(int)EQTYPE.SHOE].Stamina,
                     -EquipmentList[(int)EQTYPE.SHOE].Attack,
                     -EquipmentList[(int)EQTYPE.SHOE].Defense,
                     -EquipmentList[(int)EQTYPE.SHOE].MoveSpeed);
@@ -302,15 +308,15 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     public void AddStats(Item item)
     {
         statsHolder.Health += item.Health;
-        statsHolder.Mana += item.Mana;
+        statsHolder.Stamina += item.Stamina;
         statsHolder.Attack += item.Attack;
         statsHolder.Defense += item.Defense;
         statsHolder.MoveSpeed += item.MoveSpeed;
     }
-    public void AddStats(int _health, int _mana, float _attack, float _defence, float _movespeed)
+    public void AddStats(float _health, float _mana, float _attack, float _defence, float _movespeed)
     {
         statsHolder.Health += _health;
-        statsHolder.Mana += _mana;
+        statsHolder.Stamina += _mana;
         statsHolder.Attack += _attack;
         statsHolder.Defense+= _defence;
         statsHolder.MoveSpeed += _movespeed;
