@@ -17,13 +17,13 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-    int enemyLevel = 0;
+    int enemyLevel = 1;
 
-    float health;
-    float maxhealth;
+    float health = 50;
+    float maxhealth = 50;
     float stamina;
     float maxStamina;
-    float attack;
+    float attack = 10;
     float defense;
 
     [SerializeField]
@@ -48,6 +48,10 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private Vector2 PlayerDestination;
     private GameObject player;
     private Player2D_StatsHolder playerStats;
+
+    // Pet //
+    private GameObject pet;
+    private int PetDamagedCounter;
 
     // Stats Setter and Getter //
     public string Name
@@ -197,6 +201,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
+        pet = GameObject.FindGameObjectWithTag("Pet").GetComponent<PetManager>().gameObject;
+
+        PetDamagedCounter = 0;
 
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
@@ -406,6 +413,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             health -= (int)playerStats.Attack;
             GetComponent<CollisionPlayerMelee>().Attacked = false;
         }
+
+        //Debug.Log("Enemy HP" + health);
+        //Debug.Log("Enemy Lvl" + enemyLevel);
 
         if (health <= 0)
             skeletonState = EnemySkeletonState.DIE;
