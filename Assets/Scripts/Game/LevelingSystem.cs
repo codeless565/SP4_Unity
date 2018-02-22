@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LevelingSystem : MonoBehaviour
 {
-    private StatsBase m_Stats;
-
     public float MaxEXPScaling = 10;
     public float HealthScaling = 10;
     public float StaminaScaling = 10;
@@ -17,28 +15,28 @@ public class LevelingSystem : MonoBehaviour
     // Use this for initialization
     public void Init(StatsBase _stats, bool _isPlayer)
     {
-        m_Stats = _stats;
+        isPlayer = _isPlayer;
 
         if (_isPlayer)
         {
             if (!LoadStats()) // Check Loadable stats
-                CalculateStats(m_Stats.Level);
+                CalculateStats(_stats);
         }
         else
         {
-            CalculateStats(m_Stats.Level);
+            CalculateStats(_stats);
         }
     }
 
     // Update is called once per frame
-    void Update()
+    public void UpdateStats(StatsBase _stats)
     {
         if (isPlayer)
-            if (m_Stats.EXP >= m_Stats.MaxEXP)
+            if (_stats.EXP >= _stats.MaxEXP)
             {
-                m_Stats.EXP -= m_Stats.MaxEXP;
-                ++m_Stats.Level;
-                CalculateStats(m_Stats.Level);
+                _stats.EXP -= _stats.MaxEXP;
+                ++_stats.Level;
+                CalculateStats(_stats);
             }
     }
 
@@ -49,22 +47,22 @@ public class LevelingSystem : MonoBehaviour
         return false;
     }
 
-    private void CalculateStats(int _Level)
+    private void CalculateStats(StatsBase _stats)
     {
-        m_Stats.MaxEXP = _Level * MaxEXPScaling;
-        m_Stats.MaxHealth = _Level * HealthScaling;
-        m_Stats.MaxStamina = _Level * StaminaScaling;
-        m_Stats.Attack = _Level * AttackScaling;
-        m_Stats.Defense = _Level * DefenseScaling;
-        m_Stats.Health = m_Stats.MaxHealth;
-        m_Stats.Stamina = m_Stats.MaxStamina;
+        _stats.MaxEXP = _stats.Level * MaxEXPScaling;
+        _stats.MaxHealth = _stats.Level * HealthScaling;
+        _stats.MaxStamina = _stats.Level * StaminaScaling;
+        _stats.Attack = _stats.Level * AttackScaling;
+        _stats.Defense = _stats.Level * DefenseScaling;
+        _stats.Health = _stats.MaxHealth;
+        _stats.Stamina = _stats.MaxStamina;
 
         //Debug.Log("Name : " + m_Stats.Name);
-        //Debug.Log("Level : " + m_Stats.Level);
-        //Debug.Log("EXP : " + m_Stats.EXP);
-        //Debug.Log("Max EXP : " + m_Stats.MaxEXP);
+        Debug.Log("Level : " + _stats.Level);
+        Debug.Log("EXP : " + _stats.EXP);
+        Debug.Log("Max EXP : " + _stats.MaxEXP);
         //Debug.Log("HP : " + m_Stats.Health);
-        //Debug.Log("Max HP : " + m_Stats.MaxHealth);
+        Debug.Log("Max HP : " + _stats.MaxHealth);
         //Debug.Log("Stamina : " + m_Stats.Stamina);
         //Debug.Log("Max Stamina : " + m_Stats.MaxStamina);
         //Debug.Log("Attack : " + m_Stats.Attack);

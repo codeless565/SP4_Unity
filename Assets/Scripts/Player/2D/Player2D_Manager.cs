@@ -15,6 +15,12 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
 
+    //attack animation
+    public float animTimer; // countdown timer
+    private float m_fAniTime; // value to countdown from
+
+    public bool attackClicked;
+
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
 
@@ -25,6 +31,9 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
+
+    private GameObject temp; // store the created game object
+    private float m_timer, testTimer; // for duration of hitbox
 
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
@@ -48,16 +57,18 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
 
+        animTimer = 0.0f;
+        m_fAniTime = 1.0f;
+        attackClicked = false;
         anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
 
         // set default equipments
-        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
+        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.HEADP_DEFAULT, SpriteManager.S_Weapon.DAGGER);
 
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
-
     }
 
     // Update is called once per frame
@@ -67,13 +78,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (statsHolder.Health <= 0)
             return;
 
-        /* When EXP is maxed */
-        if (statsHolder.EXP >= statsHolder.MaxEXP)
-        {
-            m_bCheckLevelUp = true;
-            LevelUp();
-        }
-
+        Movement2D();
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -85,6 +90,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
                 m_bCheckLevelUp = false;
             }
         }
+<<<<<<< HEAD
         Movement2D();
 
         // Hot bar key press
@@ -141,58 +147,88 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         }
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
+=======
+
+        if (canMove)
+        {
+            Movement2D();
+        }
+        PlayerAttack2D();
+>>>>>>> 8922fe0bec0c2569483e20ad8a3d686b9677654a
     }
 
     void KeyMove()
     {
         PlayerMoving = false;
 
-        if(canMove)
+        // Move Left / Right
+        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
-            // Move Left / Right
-            if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+            //transform.Rotate
+            PlayerMoving = true;
+            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+
+            if (Input.GetAxisRaw("Horizontal") > 0f)
             {
-                transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
-                //transform.Rotate
-                PlayerMoving = true;
-                lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
-
-                if (Input.GetAxisRaw("Horizontal") > 0f)
-                {
-                    p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
-                }
-                if (Input.GetAxisRaw("Horizontal") < 0f)
-                {
-                    p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
-                }
-                p_spriteManager.SetLastMove(lastMove.x, 0);
+                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
             }
-
-            // Move Up / Down
-            if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
+            if (Input.GetAxisRaw("Horizontal") < 0f)
             {
-                transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-                PlayerMoving = true;
-                lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
-
-                if (Input.GetAxisRaw("Vertical") > 0f)
-                {
-                    p_spriteManager.direction = SpriteManager.S_Dir.BACK;
-                }
-                if (Input.GetAxisRaw("Vertical") < 0f)
-                {
-                    p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
-                }
-                p_spriteManager.SetLastMove(0, lastMove.y);
+                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
             }
-
-            anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
-            anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-            anim.SetBool("PlayerMoving", PlayerMoving);
-            anim.SetFloat("LastMoveX", lastMove.x);
-            anim.SetFloat("LastMoveY", lastMove.y);
+            p_spriteManager.SetLastMove(lastMove.x, 0);
         }
-       
+
+        // Move Up / Down
+        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
+        {
+            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
+            PlayerMoving = true;
+            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+            if (Input.GetAxisRaw("Vertical") > 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+            }
+            if (Input.GetAxisRaw("Vertical") < 0f)
+            {
+                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+            }
+            p_spriteManager.SetLastMove(0, lastMove.y);
+        }
+
+        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
+        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
+        anim.SetBool("PlayerMoving", PlayerMoving);
+        anim.SetFloat("LastMoveX", lastMove.x);
+        anim.SetFloat("LastMoveY", lastMove.y);
+    }
+
+    public void PlayerAttack2D()
+    {
+        /* When Clicked down */
+        if (Input.GetMouseButtonDown(0) && !attackClicked)
+        {
+            attackClicked = true;
+            p_spriteManager.SetBoolSM(true);
+            anim.SetBool("PlayerSlash", true);
+        }
+
+        // Change Animation
+        if (attackClicked)
+        {
+            canMove = false;
+            animTimer += Time.deltaTime;
+            if (animTimer >= m_fAniTime)
+            {
+                attackClicked = false;
+                p_spriteManager.SetBoolSM(false);
+                anim.SetBool("PlayerSlash", false);
+                canMove = true;
+                animTimer -= m_fAniTime;
+            }
+        }
     }
 
     /* For Mobile */
@@ -265,9 +301,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private void LevelUp()
     {
         /* Reset all Exp */
-        statsHolder.EXP = 0.0F;
-        statsHolder.MaxEXP += 1;
-        statsHolder.Level += 1;
 
         /* Create Text to show level up */
         cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
@@ -416,14 +449,18 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         statsHolder.Defense += item.Defense;
         statsHolder.MoveSpeed += item.MoveSpeed;
     }
+<<<<<<< HEAD
     public void AddStats(float _health, float _maxHealth, float _stamina,float _maxStamina, float _attack, float _defence, float _movespeed)
+=======
+    public void AddStats(float _health, float _maxHealth, float _stamina, float _maxStamina, float _attack, float _defence, float _movespeed)
+>>>>>>> 8922fe0bec0c2569483e20ad8a3d686b9677654a
     {
         statsHolder.Health += _health;
         statsHolder.MaxHealth += _maxHealth;
         statsHolder.Stamina += _stamina;
         statsHolder.MaxStamina += _maxStamina;
         statsHolder.Attack += _attack;
-        statsHolder.Defense+= _defence;
+        statsHolder.Defense += _defence;
         statsHolder.MoveSpeed += _movespeed;
     }
 
