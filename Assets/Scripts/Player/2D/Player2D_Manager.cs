@@ -10,8 +10,17 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private bool PlayerMoving;
     private Vector2 lastMove;
 
+    //attack animation
+    public float animTimer; // countdown timer
+    private float m_fAniTime; // value to countdown from
+
+    public bool attackClicked;
+
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
+
+    //textbox
+    public bool canMove = true;
 
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
@@ -23,6 +32,9 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
+
+    private GameObject temp; // store the created game object
+    private float m_timer, testTimer; // for duration of hitbox
 
     /* Direction Player will face */
     //enum Direction
@@ -42,11 +54,14 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
 
+        animTimer = 0.0f;
+        m_fAniTime = 1.0f;
+        attackClicked = false;
         anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
 
         // set default equipments
-        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
+        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.HEADP_DEFAULT, SpriteManager.S_Weapon.DAGGER);
     }
 
     // Update is called once per frame
@@ -62,8 +77,11 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             m_bCheckLevelUp = true;
             LevelUp();
         }
-
-        Movement2D();
+        if(canMove)
+        {
+            Movement2D();
+        }
+            PlayerAttack2D();
     }
 
     void KeyMove()
@@ -112,6 +130,32 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         anim.SetBool("PlayerMoving", PlayerMoving);
         anim.SetFloat("LastMoveX", lastMove.x);
         anim.SetFloat("LastMoveY", lastMove.y);
+    }
+
+    public void PlayerAttack2D()
+    {
+        /* When Clicked down */
+        if (Input.GetMouseButtonDown(0) && !attackClicked)
+        {
+            attackClicked = true;
+            p_spriteManager.SetBoolSM(true);
+            anim.SetBool("PlayerSlash", true);
+        }
+
+        // Change Animation
+        if (attackClicked)
+        {
+            canMove = false;
+            animTimer += Time.deltaTime;
+            if (animTimer >= m_fAniTime)
+            {
+                attackClicked = false;
+                p_spriteManager.SetBoolSM(false);
+                anim.SetBool("PlayerSlash", false);
+                canMove = true;
+                animTimer -= m_fAniTime;
+            }
+        }
     }
 
     /* For Mobile */
