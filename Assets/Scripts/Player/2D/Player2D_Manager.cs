@@ -90,6 +90,61 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             }
         }
 
+        // Hot bar key press
+        bool bA1State = false;
+        if (!bA1State && Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            bA1State = true;
+            HotKeyResponse(1);
+        }
+        else if (bA1State && !Input.GetKeyDown(KeyCode.Alpha1))
+            bA1State = false;
+
+        bool bA2State = false;
+        if (!bA2State && Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            bA2State = true;
+            HotKeyResponse(2);
+        }
+        else if (bA2State && !Input.GetKeyDown(KeyCode.Alpha2))
+            bA2State = false;
+
+        bool bA3State = false;
+        if (!bA3State && Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            bA3State = true;
+            HotKeyResponse(3);
+        }
+        else if (bA3State && !Input.GetKeyDown(KeyCode.Alpha3))
+            bA3State = false;
+
+        bool bA4State = false;
+        if (!bA4State && Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            bA4State = true;
+            HotKeyResponse(4);
+        }
+        else if (bA4State && !Input.GetKeyDown(KeyCode.Alpha4))
+            bA4State = false;
+
+        bool bA5State = false;
+        if (!bA5State && Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            bA5State = true;
+            HotKeyResponse(5);
+        }
+        else if (bA5State && !Input.GetKeyDown(KeyCode.Alpha5))
+            bA5State = false;
+
+        bool bA6State = false;
+        if (!bA6State && Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            bA6State = true;
+            HotKeyResponse(6);
+        }
+        else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
+            bA6State = false;
+
         if (canMove)
         {
             Movement2D();
@@ -185,6 +240,38 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         KeyMove();
         //AccMove();
     }
+
+    public void HotKeyResponse(int keynum)
+    {
+        
+        if (GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1] != null && Inventory.Contains(GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1]))
+        {
+            AddStats(GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1]);
+            
+
+            List<int> ListOfItemIndex = new List<int>();
+            for (int i = 0; i <Inventory.Count;++i)
+            {
+                if (Inventory[i] == GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1])
+                {
+                    ListOfItemIndex.Add(i);
+                }
+            }
+            if (ListOfItemIndex.Count == 1)
+            {
+                GetComponent<InventoryBar>().RemovePlayerHotBar(Inventory[ListOfItemIndex[0]], false);
+                Inventory.RemoveAt(ListOfItemIndex[0]);
+            }
+            else
+            {
+                Inventory[ListOfItemIndex[0]].Quantity--;
+                GetComponent<InventoryBar>().RemovePlayerHotBar(Inventory[ListOfItemIndex[0]], true);
+                Inventory.RemoveAt(ListOfItemIndex.Count - 1);
+            }
+
+        }
+    }
+
 
     /* Interaction with Objects */
     public void CollisionResponse(string _tag)
@@ -361,8 +448,14 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     {
         statsHolder.Health += _health;
         statsHolder.MaxHealth += _maxHealth;
+
+        if (statsHolder.Health > statsHolder.MaxHealth)
+            statsHolder.Health = statsHolder.MaxHealth;
+
         statsHolder.Stamina += _stamina;
         statsHolder.MaxStamina += _maxStamina;
+        if (statsHolder.Stamina > statsHolder.MaxStamina)
+            statsHolder.Stamina = statsHolder.MaxStamina;
         statsHolder.Attack += _attack;
         statsHolder.Defense += _defence;
         statsHolder.MoveSpeed += _movespeed;
