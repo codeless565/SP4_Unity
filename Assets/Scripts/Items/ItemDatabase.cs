@@ -123,25 +123,15 @@ public class ItemDatabase {
                         specialmultipler = 10.0f;
 
 
-                    int RandomQuality = Random.Range(1, 5);
+                    int RandomQuality = Random.Range(1, 2);
                     switch (RandomQuality)
                     {
                         case 1:
-                            OtherRarityItem.ItemRarity = "Uncommon";
-                            OtherRarityItem.Level = 10;
-                            multipler = OtherRarityItem.Level / 10 * 1.5f * specialmultipler;
-                            break;
-                        case 2:
-                            OtherRarityItem.ItemRarity = "Magic";
-                            OtherRarityItem.Level = 20;
-                            multipler = OtherRarityItem.Level / 10 * 2.0f * specialmultipler;
-                            break;
-                        case 3:
                             OtherRarityItem.ItemRarity = "Ancient";
                             OtherRarityItem.Level = 30;
                             multipler = OtherRarityItem.Level / 10 * 2.5f * specialmultipler;
                             break;
-                        case 4:
+                        case 2:
                             OtherRarityItem.ItemRarity = "Relic";
                             OtherRarityItem.Level = 40;
                             multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
