@@ -5,11 +5,15 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
+    public GameObject ShopUICanvas;
+
     public GameObject EquipmentDropdown;
     public GameObject UsesButton;
-    public GameObject ShopUICanvas;
+    public GameObject Page1Button;
+    public GameObject Page2Button;
+    public InputField SearchBar;
     public GameObject GoldText;
-
+    
     bool ShopUI;
     bool WeaponsDisplay;
     bool UsesDisplay;
@@ -26,6 +30,10 @@ public class Shop : MonoBehaviour
 
         EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
+        Page1Button.GetComponent<Image>().color = Color.red;
+        Page2Button.GetComponent<Image>().color = Color.cyan;
+
+        SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<ShopDisplay>().DisplaySearchMenu(SearchBar); });
     }
 
     // Update is called once per frame
@@ -91,5 +99,4 @@ public class Shop : MonoBehaviour
         OpenEquipment();
         ShopUI = true;
     }
-
 }
