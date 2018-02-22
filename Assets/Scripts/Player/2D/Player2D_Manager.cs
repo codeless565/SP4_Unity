@@ -6,12 +6,12 @@ using UnityEngine;
 public class Player2D_Manager : MonoBehaviour, CollisionBase
 {
     /*Base Animation(body)*/
-    private Animator anim;
     private bool PlayerMoving;
     private Vector2 lastMove;
 
-    //textbox
+    //if player can move(used when other canvas are open)
     public bool canMove = true;
+
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
 
@@ -60,11 +60,14 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         animTimer = 0.0f;
         m_fAniTime = 1.0f;
         attackClicked = false;
-        anim = GetComponent<Animator>();
         p_spriteManager = GetComponent<SpriteManager>();
 
-        // set default equipments
-        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.HEADP_DEFAULT, SpriteManager.S_Weapon.DAGGER);
+        // set default equipments(will be moved to savefile)
+        p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
+        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
+        p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
+        p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
+        p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
 
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
@@ -155,23 +158,16 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     void KeyMove()
     {
         PlayerMoving = false;
+        p_spriteManager.SetPlayerMoving(false);
 
         // Move Left / Right
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
             //transform.Rotate
-            PlayerMoving = true;
+            p_spriteManager.SetPlayerMoving(true);
+           PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
-
-            if (Input.GetAxisRaw("Horizontal") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
-            }
-            if (Input.GetAxisRaw("Horizontal") < 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
-            }
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
 
@@ -180,24 +176,12 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         {
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
             PlayerMoving = true;
+            p_spriteManager.SetPlayerMoving(true);
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
-
-            if (Input.GetAxisRaw("Vertical") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
-            }
-            if (Input.GetAxisRaw("Vertical") < 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
-            }
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
-
-        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
-        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-        anim.SetBool("PlayerMoving", PlayerMoving);
-        anim.SetFloat("LastMoveX", lastMove.x);
-        anim.SetFloat("LastMoveY", lastMove.y);
+        p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        p_spriteManager.SetPlayerMoving(PlayerMoving);
     }
 
     public void PlayerAttack2D()
@@ -206,8 +190,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (Input.GetMouseButtonDown(0) && !attackClicked)
         {
             attackClicked = true;
-            p_spriteManager.SetBoolSM(true);
-            anim.SetBool("PlayerSlash", true);
+            p_spriteManager.SetSlash(true);
         }
 
         // Change Animation
@@ -218,8 +201,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             if (animTimer >= m_fAniTime)
             {
                 attackClicked = false;
-                p_spriteManager.SetBoolSM(false);
-                anim.SetBool("PlayerSlash", false);
+                p_spriteManager.SetSlash(false);
                 canMove = true;
                 animTimer -= m_fAniTime;
             }
