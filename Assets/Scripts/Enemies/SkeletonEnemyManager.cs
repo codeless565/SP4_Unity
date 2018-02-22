@@ -207,7 +207,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Setting Enemy Attack Timer to 0.8f
         EnemyAttackTimer = 0.5f;
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this);
+        GetComponent<LevelingSystem>().Init(this, false);
 	}
 	
 	// Update is called once per frame

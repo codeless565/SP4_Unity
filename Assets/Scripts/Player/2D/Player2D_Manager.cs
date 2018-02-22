@@ -322,4 +322,5 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         statsHolder.MoveSpeed += _movespeed;
     }
 
+    public Player2D_StatsHolder getPlayerStats() { return statsHolder; }
 }

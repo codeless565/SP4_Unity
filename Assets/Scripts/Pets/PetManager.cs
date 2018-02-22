@@ -207,7 +207,7 @@ public class PetManager : MonoBehaviour, StatsBase
         PetGuardRange = 2f;
 
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this);
+        GetComponent<LevelingSystem>().Init(this, false);
     }
 
     void Update ()
