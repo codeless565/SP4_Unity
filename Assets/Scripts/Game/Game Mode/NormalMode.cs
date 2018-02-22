@@ -16,8 +16,10 @@ public class NormalMode : MonoBehaviour, GameMode
 
         Debug.Log("Current Floor: " + t_CurrFloor);
 
-        gameObject.GetComponent<BoardGenerator>().Init();
-        gameObject.GetComponent<ObjectSpawn>().Init(t_CurrFloor);
+        GetComponent<BoardGenerator>().Init();
+        GetComponent<ObjectSpawn>().Init(t_CurrFloor);
+        GetComponent<Shop>().Init();
+        GetComponent<ShopDisplay>().Init();
     }
 
     // Interface Functions // 
@@ -31,6 +33,7 @@ public class NormalMode : MonoBehaviour, GameMode
     public void GameOver()
     {
         PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");
+        PlayerPrefs.DeleteKey("CurrentLevel");
         SceneManager.LoadScene("SceneGameOver");
     }
 

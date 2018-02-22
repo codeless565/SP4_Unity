@@ -10,12 +10,17 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private bool PlayerMoving;
     private Vector2 lastMove;
 
+<<<<<<< HEAD
     //attack animation
     public float animTimer; // countdown timer
     private float m_fAniTime; // value to countdown from
 
     public bool attackClicked;
 
+=======
+    //textbox
+    public bool canMove = true;
+>>>>>>> 89a2f3a90f4829febdd7e5a45b45da203567baf6
     /*Equipment Animation Manager*/
     SpriteManager p_spriteManager;
 
@@ -33,6 +38,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
 
+<<<<<<< HEAD
     private GameObject temp; // store the created game object
     private float m_timer, testTimer; // for duration of hitbox
 
@@ -45,6 +51,21 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     //    Right,
     //};
     //Direction toMove = 0;
+=======
+    /* List storing Player equipment */
+    public List<Item> Inventory = new List<Item>();
+    public List<Item> getPlayerInventory() { return Inventory; }
+    enum EQTYPE
+    {
+        HELMET,
+        WEAPON,
+        CHESTPIECE,
+        LEGGING,
+        SHOE,
+        TOTAL
+    }
+    Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
+>>>>>>> 89a2f3a90f4829febdd7e5a45b45da203567baf6
 
     // Use this for initialization
     void Start()
@@ -61,7 +82,16 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         p_spriteManager = GetComponent<SpriteManager>();
 
         // set default equipments
+<<<<<<< HEAD
         p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.HEADP_DEFAULT, SpriteManager.S_Weapon.DAGGER);
+=======
+        p_spriteManager.SetEquipments(SpriteManager.S_Wardrobe.DEFAULT_HEADP);
+
+        // initialising the equipments
+        for (int i = 0; i < EquipmentList.Length; ++i)
+            EquipmentList[i] = null;
+
+>>>>>>> 89a2f3a90f4829febdd7e5a45b45da203567baf6
     }
 
     // Update is called once per frame
@@ -77,59 +107,79 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             m_bCheckLevelUp = true;
             LevelUp();
         }
+<<<<<<< HEAD
         if(canMove)
         {
             Movement2D();
         }
             PlayerAttack2D();
+=======
+
+        // Check Timer to despawn level up
+        if (m_bCheckLevelUp)
+        {
+            m_fLevelUpTimer += Time.deltaTime;
+            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
+            {
+                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
+                DestroyImmediate(cloneMesh);
+                m_bCheckLevelUp = false;
+            }
+        }
+        Movement2D();
+>>>>>>> 89a2f3a90f4829febdd7e5a45b45da203567baf6
     }
 
     void KeyMove()
     {
         PlayerMoving = false;
 
-        // Move Left / Right
-        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+        if(canMove)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
-            //transform.Rotate
-            PlayerMoving = true;
-            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+            // Move Left / Right
+            if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+            {
+                transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+                //transform.Rotate
+                PlayerMoving = true;
+                lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
 
-            if (Input.GetAxisRaw("Horizontal") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                if (Input.GetAxisRaw("Horizontal") > 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.RIGHT;
+                }
+                if (Input.GetAxisRaw("Horizontal") < 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+                }
+                p_spriteManager.SetLastMove(lastMove.x, 0);
             }
-            if (Input.GetAxisRaw("Horizontal") < 0f)
+
+            // Move Up / Down
+            if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
             {
-                p_spriteManager.direction = SpriteManager.S_Dir.LEFT;
+                transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
+                PlayerMoving = true;
+                lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+                if (Input.GetAxisRaw("Vertical") > 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.BACK;
+                }
+                if (Input.GetAxisRaw("Vertical") < 0f)
+                {
+                    p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
+                }
+                p_spriteManager.SetLastMove(0, lastMove.y);
             }
-            p_spriteManager.SetLastMove(lastMove.x, 0);
+
+            anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
+            anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
+            anim.SetBool("PlayerMoving", PlayerMoving);
+            anim.SetFloat("LastMoveX", lastMove.x);
+            anim.SetFloat("LastMoveY", lastMove.y);
         }
-
-        // Move Up / Down
-        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
-        {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-            PlayerMoving = true;
-            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
-
-            if (Input.GetAxisRaw("Vertical") > 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.BACK;
-            }
-            if (Input.GetAxisRaw("Vertical") < 0f)
-            {
-                p_spriteManager.direction = SpriteManager.S_Dir.FRONT;
-            }
-            p_spriteManager.SetLastMove(0, lastMove.y);
-        }
-
-        anim.SetFloat("MoveX", Input.GetAxisRaw("Horizontal"));
-        anim.SetFloat("MoveY", Input.GetAxisRaw("Vertical"));
-        anim.SetBool("PlayerMoving", PlayerMoving);
-        anim.SetFloat("LastMoveX", lastMove.x);
-        anim.SetFloat("LastMoveY", lastMove.y);
+       
     }
 
     public void PlayerAttack2D()
@@ -202,18 +252,143 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
 
         /* Create Text to show level up */
         cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
+    }
 
-        // Check Timer to despawn level up
-        if (m_bCheckLevelUp)
+    /* Adding Items to Inventory */
+    public void AddItem(Item newitem)
+    {
+        if (Inventory.Contains(newitem))
         {
-            m_fLevelUpTimer += Time.deltaTime;
-            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
+            foreach (Item item in Inventory)
             {
-                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                Destroy(cloneMesh);
-                Destroy(m_levelup_mesh);
-                m_bCheckLevelUp = false;
+                if (item == newitem)
+                {
+                    item.Quantity++;
+                    break;
+                }
+            }
+            Inventory.Add(newitem);
+        }
+        else
+            Inventory.Add(newitem);
+    }
+
+    /* Equipping EQ to the Player */
+    public void EquipEQ(Item _weapon)
+    {
+        // TODO display message
+        if (statsHolder.Level < _weapon.Level)
+            return;
+
+        if (_weapon.ItemType == "Weapons")
+        {
+            if (EquipmentList[(int)EQTYPE.WEAPON] == null)
+            {
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.WEAPON].Health,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Stamina,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Attack,
+                    -EquipmentList[(int)EQTYPE.WEAPON].Defense,
+                    -EquipmentList[(int)EQTYPE.WEAPON].MoveSpeed);
+                EquipmentList[(int)EQTYPE.WEAPON] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Helmets")
+        {
+            if (EquipmentList[(int)EQTYPE.HELMET] == null)
+            {
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.HELMET].Health,
+                    -EquipmentList[(int)EQTYPE.HELMET].Stamina,
+                    -EquipmentList[(int)EQTYPE.HELMET].Attack,
+                    -EquipmentList[(int)EQTYPE.HELMET].Defense,
+                    -EquipmentList[(int)EQTYPE.HELMET].MoveSpeed);
+                EquipmentList[(int)EQTYPE.HELMET] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Chestpieces")
+        {
+            if (EquipmentList[(int)EQTYPE.CHESTPIECE] == null)
+            {
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.CHESTPIECE].Health,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Stamina,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Attack,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].Defense,
+                    -EquipmentList[(int)EQTYPE.CHESTPIECE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.CHESTPIECE] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Leggings")
+        {
+            if (EquipmentList[(int)EQTYPE.LEGGING] == null)
+            {
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.LEGGING].Health,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Stamina,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Attack,
+                    -EquipmentList[(int)EQTYPE.LEGGING].Defense,
+                    -EquipmentList[(int)EQTYPE.LEGGING].MoveSpeed);
+                EquipmentList[(int)EQTYPE.LEGGING] = _weapon;
+                AddStats(_weapon);
+            }
+        }
+        if (_weapon.ItemType == "Shoes")
+        {
+            if (EquipmentList[(int)EQTYPE.SHOE] == null)
+            {
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
+            }
+            else
+            {
+                AddStats(-EquipmentList[(int)EQTYPE.SHOE].Health,
+                    -EquipmentList[(int)EQTYPE.SHOE].Stamina,
+                    -EquipmentList[(int)EQTYPE.SHOE].Attack,
+                    -EquipmentList[(int)EQTYPE.SHOE].Defense,
+                    -EquipmentList[(int)EQTYPE.SHOE].MoveSpeed);
+                EquipmentList[(int)EQTYPE.SHOE] = _weapon;
+                AddStats(_weapon);
             }
         }
     }
+
+    /* Stats will be added when Equipped */
+    public void AddStats(Item item)
+    {
+        statsHolder.Health += item.Health;
+        statsHolder.Stamina += item.Stamina;
+        statsHolder.Attack += item.Attack;
+        statsHolder.Defense += item.Defense;
+        statsHolder.MoveSpeed += item.MoveSpeed;
+    }
+    public void AddStats(float _health, float _mana, float _attack, float _defence, float _movespeed)
+    {
+        statsHolder.Health += _health;
+        statsHolder.Stamina += _mana;
+        statsHolder.Attack += _attack;
+        statsHolder.Defense+= _defence;
+        statsHolder.MoveSpeed += _movespeed;
+    }
+
+    public Player2D_StatsHolder getPlayerStats() { return statsHolder; }
 }

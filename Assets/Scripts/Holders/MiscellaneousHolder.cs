@@ -12,4 +12,7 @@ public class MiscellaneousHolder : MonoBehaviour
     public Sprite BorderMagic;
     public Sprite BorderAncient;
     public Sprite BorderRelic;
+
+    public GameObject InventoryBar;
+    public GameObject HUD;
 }

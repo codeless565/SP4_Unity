@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* Holding the Stats of the Player */
-public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
+public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 {
 	/* Player Stats */
-    int playerLevel = 1;
-    int health = 100;
+    public int playerLevel = 1;
+    float health = 100;
     float attack = 10;
-    int mana = 10;
+    float stamina = 10;
     float defense = 10;
-    float movespeed = 10;
+    public float movespeed = 10;
     public int gold = 9999999;
 
     private string m_name = "player2D";
     private float m_EXP = 0;
     private float m_MaxEXP = 2;
-    private int m_MaxHealth = 100;
-    private int m_MaxMana = 10;
+    private float m_MaxHealth = 100;
+    private float m_MaxStamina = 10;
 
     /* Setters and Getters */
     public string Name
@@ -46,7 +46,31 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
         }
     }
 
-    public int Health
+    public float EXP
+    {
+        get
+        {
+            return m_EXP;
+        }
+
+        set
+        {
+            m_EXP = value;
+        }
+    }
+    public float MaxEXP
+    {
+        get
+        {
+            return m_MaxEXP;
+        }
+        set
+        {
+            m_MaxEXP = value;
+        }
+    }
+
+    public float Health
     {
         get
         {
@@ -56,6 +80,41 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
         set
         {
             health = value;
+        }
+    }
+    public float MaxHealth
+    {
+        get
+        {
+            return m_MaxHealth;
+        }
+        set
+        {
+            m_MaxHealth = value;
+        }
+    }
+
+    public float Stamina
+    {
+        get
+        {
+            return stamina;
+        }
+
+        set
+        {
+            stamina = value;
+        }
+    }
+    public float MaxStamina
+    {
+        get
+        {
+            return m_MaxStamina;
+        }
+        set
+        {
+            m_MaxStamina = value;
         }
     }
 
@@ -71,7 +130,6 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
             attack = value;
         }
     }
-
     public float Defense
     {
         get
@@ -84,7 +142,6 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
             defense = value;
         }
     }
-
     public float MoveSpeed
     {
         get
@@ -98,68 +155,12 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
         }
     }
 
-    public int Mana
+    /* Initializing of Stats */
+    void Awake()
     {
-        get
-        {
-            return mana;
-        }
-
-        set
-        {
-            mana = value;
-        }
+        GetComponent<LevelingSystem>().Init(this, true);
+        /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
     }
-
-    public float EXP
-    {
-        get
-        {
-            return m_EXP;
-        }
-
-        set
-        {
-            m_EXP = value;
-        }
-    }
-
-    public float MaxEXP
-    {
-        get
-        {
-            return m_MaxEXP;
-        }
-        set
-        {
-            m_MaxEXP = value;
-        }
-    }
-
-    public int MaxHealth
-    {
-        get
-        {
-            return m_MaxHealth;
-        }
-        set
-        {
-            m_MaxHealth = value;
-        }
-    }
-
-    public int MaxMana
-    {
-        get
-        {
-            return m_MaxMana;
-        }
-        set
-        {
-            m_MaxMana = value;
-        }
-    }
-
 
     /* Print Debug Information */
     public void DebugPlayerStats()
@@ -170,8 +171,8 @@ public class Player2D_StatsHolder : MonoBehaviour, PlayerStatsBase
         Debug.Log("playerMaxHealth : " + MaxHealth);
         Debug.Log("exp : " + m_EXP);
         Debug.Log("max exp : " + m_MaxEXP);
-        Debug.Log("mp : " + mana);
-        Debug.Log("max mp : " + m_MaxMana);
+        Debug.Log("stamina : " + stamina);
+        Debug.Log("max stamina : " + m_MaxStamina);
         Debug.Log("Att : " + Attack);
         Debug.Log("Def : " + Defense);
         Debug.Log("MoveSpeed : " + MoveSpeed);

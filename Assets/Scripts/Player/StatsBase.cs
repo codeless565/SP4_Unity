@@ -7,23 +7,44 @@ public interface StatsBase
 {
     string Name
     {
-        get;set;
+        get; set;
     }
+
     int Level
-    {
-        get;set;
-    }
-    int Health
-    {
-        get;set;
-    }
-    int Mana
     {
         get; set;
     }
+
+    float EXP
+    {
+        get; set;
+    }
+    float MaxEXP
+    {
+        get; set;
+    }
+
+    float Health
+    {
+        get; set;
+    }
+    float MaxHealth
+    {
+        get; set;
+    }
+
+    float Stamina
+    {
+        get; set;
+    }
+    float MaxStamina
+    {
+        get; set;
+    }
+
     float Attack
     {
-        get;set;
+        get; set;
     }
     float Defense
     {
@@ -31,6 +52,6 @@ public interface StatsBase
     }
     float MoveSpeed
     {
-        get;set;
+        get; set;
     }
 }

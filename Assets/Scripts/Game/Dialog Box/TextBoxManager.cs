@@ -16,7 +16,7 @@ public class TextBoxManager : MonoBehaviour
     public int currentLine;
     public int endAtLine;
 
-    public PlayerManager player;
+    public Player2D_Manager player;
 
     //Activate text box
     public bool isActive;
@@ -31,7 +31,7 @@ public class TextBoxManager : MonoBehaviour
     void Start()
     {
 
-        player = FindObjectOfType<PlayerManager>();
+        player = FindObjectOfType<Player2D_Manager>();
         isActive = true;
         typeSpeed = 0.01f;
 

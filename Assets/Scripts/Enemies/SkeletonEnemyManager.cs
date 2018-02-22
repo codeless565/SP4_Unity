@@ -17,9 +17,17 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-    int enemyLevel = 0, health = 50, mana = 10;
+    int enemyLevel = 0;
+
+    float health;
+    float maxhealth;
+    float stamina;
+    float maxStamina;
+    float attack;
+    float defense;
+
     [SerializeField]
-    float attack = 10, defense = 10, movespeed = 10;
+    float movespeed = 10;
 
     // Enemy //
     EnemySkeletonState skeletonState;
@@ -42,6 +50,19 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private Player2D_StatsHolder playerStats;
 
     // Stats Setter and Getter //
+    public string Name
+    {
+        get
+        {
+            return "EnemySkeleton";
+        }
+
+        set
+        {
+            return;
+        }
+    }
+
     public int Level
     {
         get
@@ -55,7 +76,31 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
     }
 
-    public int Health
+    public float EXP
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+        }
+    }
+
+    public float MaxEXP
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+        }
+    }
+
+    public float Health
     {
         get
         {
@@ -65,6 +110,45 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         set
         {
             health = value;
+        }
+    }
+
+    public float MaxHealth
+    {
+        get
+        {
+            return maxhealth;
+        }
+
+        set
+        {
+            maxhealth = value;
+        }
+    }
+
+    public float Stamina
+    {
+        get
+        {
+            return stamina;
+        }
+
+        set
+        {
+            stamina = value;
+        }
+    }
+
+    public float MaxStamina
+    {
+        get
+        {
+            return maxStamina;
+        }
+
+        set
+        {
+            maxStamina = value;
         }
     }
 
@@ -106,33 +190,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             movespeed = value;
         }
     }
-
-    public string Name
-    {
-        get
-        {
-            return "EnemySkeleton";
-        }
-
-        set
-        {
-            return;
-        }
-    }
-
-    public int Mana
-    {
-        get
-        {
-            return mana;
-        }
-
-        set
-        {
-            mana = value;
-        }
-    }
-
+    
 
     // Use this for initialization
     void Start ()
@@ -148,6 +206,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         distanceOffset.Set(1f, 1f);
         // Setting Enemy Attack Timer to 0.8f
         EnemyAttackTimer = 0.5f;
+        //Initialize Stats from the leveling system
+        GetComponent<LevelingSystem>().Init(this, false);
 	}
 	
 	// Update is called once per frame

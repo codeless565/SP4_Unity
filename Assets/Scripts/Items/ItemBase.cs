@@ -33,8 +33,11 @@ public class Item : ItemBase
     int _itemlevel;
     string _itemrarity;
     int _itemcost;
-    int _health;
-    int _mana;
+    float _exp;
+    float _health;
+    float _maxHealth;
+    float _stamina;
+    float _maxStamina;
     float _attack;
     float _defense;
     float _movespeed;
@@ -48,8 +51,11 @@ public class Item : ItemBase
         _itemlevel = 0;
         _itemrarity = "";
         _itemcost = 0;
+        _exp = 0;
         _health = 0;
-        _mana = 0;
+        _maxHealth = 0;
+        _stamina = 0;
+        _maxStamina = 0;
         _attack = 0.0f;
         _defense = 0.0f;
         _movespeed = 0.0f;
@@ -64,8 +70,11 @@ public class Item : ItemBase
         _itemlevel = copy.Level;
         _itemrarity = copy.ItemRarity;
         _itemcost = copy.ItemCost;
+        _exp = copy.EXP;
         _health = copy.Health;
-        _mana = copy.Mana;
+        _maxHealth = copy.MaxHealth;
+        _stamina = copy.Stamina;
+        _maxStamina = copy.MaxStamina;
         _attack = copy.Attack;
         _defense = copy.Defense;
         _movespeed = copy.MoveSpeed;
@@ -140,7 +149,7 @@ public class Item : ItemBase
         }
     }
 
-    public int Health
+    public float Health
     {
         get
         {
@@ -153,16 +162,42 @@ public class Item : ItemBase
         }
     }
 
-    public int Mana
+    public float MaxHealth
     {
         get
         {
-            return _mana;
+            return _maxHealth;
         }
 
         set
         {
-            _mana = value;
+            _maxHealth = value;
+        }
+    }
+
+    public float Stamina
+    {
+        get
+        {
+            return _stamina;
+        }
+
+        set
+        {
+            _stamina = value;
+        }
+    }
+
+    public float MaxStamina
+    {
+        get
+        {
+            return _maxStamina;
+        }
+
+        set
+        {
+            _maxStamina = value;
         }
     }
 
@@ -231,8 +266,33 @@ public class Item : ItemBase
         }
     }
 
+    public float EXP
+    {
+        get
+        {
+            return _exp;
+        }
+
+        set
+        {
+            _exp = value;
+        }
+    }
+
+    public float MaxEXP
+    {
+        get
+        {
+            return 0;
+        }
+
+        set
+        {
+        }
+    }
+
     public void getImage()
     {
-        ItemImage = GameObject.FindGameObjectWithTag("ItemObjectHolder").GetComponent<ItemObjectHolder>().getSprite(_spritename);
+        ItemImage = GameObject.FindGameObjectWithTag("Holder").GetComponent<ItemObjectHolder>().getSprite(_spritename);
     }
 }
