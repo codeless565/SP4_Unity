@@ -198,7 +198,7 @@ public class PetManager : MonoBehaviour, StatsBase
         // Setting the range for Pet State to be GUARD.
         changeToGuardDistance = 2f;
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this);
+        GetComponent<LevelingSystem>().Init(this, false);
     }
 
     void Update ()

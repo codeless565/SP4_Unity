@@ -158,7 +158,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     /* Initializing of Stats */
     void Awake()
     {
-        GetComponent<LevelingSystem>().Init(this);
+        GetComponent<LevelingSystem>().Init(this, true);
         /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
     }
 
