@@ -78,17 +78,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (statsHolder.Health <= 0)
             return;
 
-<<<<<<< HEAD
         Movement2D();
-=======
-        /* When EXP is maxed */
-        if (statsHolder.EXP >= statsHolder.MaxEXP)
-        {
-            m_bCheckLevelUp = true;
-            LevelUp();
-
-        }
-
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -106,8 +96,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             Movement2D();
         }
         PlayerAttack2D();
-        
->>>>>>> 541dbaeb8a01115899d2b20b435f2950951a2819
     }
 
     void KeyMove()

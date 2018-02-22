@@ -170,19 +170,6 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
         m_EXP += Time.deltaTime;
 
         levelingSystem.UpdateStats(this);
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Level : " + playerLevel);
-            Debug.Log("EXP : " + m_EXP);
-            Debug.Log("Max EXP : " + m_MaxEXP);
-            Debug.Log("HP : " + health);
-            Debug.Log("Max HP : " + m_MaxHealth);
-            Debug.Log("Stamina : " + stamina);
-            Debug.Log("Max Stamina : " + m_MaxStamina);
-            Debug.Log("Attack : " + attack);
-            Debug.Log("Defense : " + defense);
-        }
     }
 
     /* Print Debug Information */
