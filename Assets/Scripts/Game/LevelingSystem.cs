@@ -19,7 +19,6 @@ public class LevelingSystem : MonoBehaviour
     {
         m_Stats = _stats;
 
-<<<<<<< HEAD
         if (_isPlayer)
         {
             if (!LoadStats()) // Check Loadable stats
@@ -29,16 +28,11 @@ public class LevelingSystem : MonoBehaviour
         {
             CalculateStats(m_Stats.Level);
         }
-
-=======
-        //CalculateStats(m_Stats.Level);
->>>>>>> 4f074525bafab6a4149f14b222fbaf162e365410
     }
 
     // Update is called once per frame
     void Update()
     {
-<<<<<<< HEAD
         if (isPlayer)
             if (m_Stats.EXP >= m_Stats.MaxEXP)
             {
@@ -54,15 +48,6 @@ public class LevelingSystem : MonoBehaviour
 
         return false;
     }
-=======
-        if (m_Stats.EXP >= m_Stats.MaxEXP)
-        {
-            m_Stats.EXP -= m_Stats.MaxEXP;
-            ++m_Stats.Level;
-            //CalculateStats(m_Stats.Level);
-        }
-	}
->>>>>>> 4f074525bafab6a4149f14b222fbaf162e365410
 
     private void CalculateStats(int _Level)
     {
