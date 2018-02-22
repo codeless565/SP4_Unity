@@ -78,7 +78,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (statsHolder.Health <= 0)
             return;
 
-        Movement2D();
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -90,8 +89,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
                 m_bCheckLevelUp = false;
             }
         }
-<<<<<<< HEAD
-        Movement2D();
 
         // Hot bar key press
         bool bA1State = false;
@@ -147,14 +144,12 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         }
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
-=======
 
         if (canMove)
         {
             Movement2D();
         }
         PlayerAttack2D();
->>>>>>> 8922fe0bec0c2569483e20ad8a3d686b9677654a
     }
 
     void KeyMove()
@@ -449,16 +444,18 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         statsHolder.Defense += item.Defense;
         statsHolder.MoveSpeed += item.MoveSpeed;
     }
-<<<<<<< HEAD
-    public void AddStats(float _health, float _maxHealth, float _stamina,float _maxStamina, float _attack, float _defence, float _movespeed)
-=======
     public void AddStats(float _health, float _maxHealth, float _stamina, float _maxStamina, float _attack, float _defence, float _movespeed)
->>>>>>> 8922fe0bec0c2569483e20ad8a3d686b9677654a
     {
         statsHolder.Health += _health;
         statsHolder.MaxHealth += _maxHealth;
+
+        if (statsHolder.Health > statsHolder.MaxHealth)
+            statsHolder.Health = statsHolder.MaxHealth;
+
         statsHolder.Stamina += _stamina;
         statsHolder.MaxStamina += _maxStamina;
+        if (statsHolder.Stamina > statsHolder.MaxStamina)
+            statsHolder.Stamina = statsHolder.MaxStamina;
         statsHolder.Attack += _attack;
         statsHolder.Defense += _defence;
         statsHolder.MoveSpeed += _movespeed;

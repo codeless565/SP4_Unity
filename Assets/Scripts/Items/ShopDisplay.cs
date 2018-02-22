@@ -41,6 +41,7 @@ public class ShopDisplay : MonoBehaviour
     GameObject QuantityAdd;
     GameObject QuantitySubtract;
 
+    private GameObject Player;
     // Use this for initialization
     public void Init()
     {
@@ -117,6 +118,8 @@ public class ShopDisplay : MonoBehaviour
         QuantitySubtract.transform.position = new Vector3(125.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
         QuantitySubtract.GetComponent<Button>().onClick.RemoveAllListeners();
         QuantitySubtract.GetComponent<Button>().onClick.AddListener(SubtractQuantity);
+
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -128,6 +131,8 @@ public class ShopDisplay : MonoBehaviour
             CostText.GetComponent<Text>().text = "Item cost: " + (SelectedItem.ItemCost * Quantity).ToString();
             QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
         }
+        if (ShopDisplayCanvas.activeSelf)
+            Player.GetComponent<Player2D_Manager>().canMove = false;
     }
 
     // On Click listener for shop buttons
