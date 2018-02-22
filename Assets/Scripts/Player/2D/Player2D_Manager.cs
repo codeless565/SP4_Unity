@@ -78,7 +78,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (statsHolder.Health <= 0)
             return;
 
-        Movement2D();
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {

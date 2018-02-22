@@ -19,15 +19,17 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     [SerializeField]
     int enemyLevel = 1;
 
-    float health = 50;
-    float maxhealth = 50;
+    float health;
+    float maxhealth;
     float stamina;
     float maxStamina;
-    float attack = 10;
+    float attack;
     float defense;
 
     [SerializeField]
     float movespeed = 10;
+
+    LevelingSystem levelingSystem;
 
     // Enemy //
     EnemySkeletonState skeletonState;
@@ -214,8 +216,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Setting Enemy Attack Timer to 0.8f
         EnemyAttackTimer = 0.5f;
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this, false);
-	}
+        levelingSystem = GetComponent<LevelingSystem>();
+        levelingSystem.Init(this, false);
+    }
 	
 	// Update is called once per frame
 	void Update ()

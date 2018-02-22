@@ -18,15 +18,17 @@ public class PetManager : MonoBehaviour, StatsBase
     [SerializeField]
     int petLevel = 0;
 
-    float health = 50;
-    float maxhealth = 50;
-    float stamina = 0;
-    float maxStamina = 0;
-    float attack = 10;
-    float defense = 0;
+    float health;
+    float maxhealth;
+    float stamina;
+    float maxStamina;
+    float attack;
+    float defense;
 
     [SerializeField]
     float movespeed = 10;
+
+    LevelingSystem levelingSystem;
 
     // Pet //
     PetState petState;
@@ -208,7 +210,8 @@ public class PetManager : MonoBehaviour, StatsBase
         // Setting the range for Pet to heal the Player.
         PetHealRange = 2.5f;
         //Initialize Stats from the leveling system
-        GetComponent<LevelingSystem>().Init(this, false);
+        levelingSystem = GetComponent<LevelingSystem>();
+        levelingSystem.Init(this, false);
     }
 
     void Update ()
