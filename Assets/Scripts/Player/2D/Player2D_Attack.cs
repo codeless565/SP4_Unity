@@ -11,7 +11,9 @@ public class Player2D_Attack : MonoBehaviour
     private GameObject temp; // store the created game object
 
     private float m_timer, testTimer; // for duration of hitbox
-    
+
+    private Animator anim;
+
     void Start()
     {
         m_timer = 0.4F;
@@ -37,7 +39,7 @@ public class Player2D_Attack : MonoBehaviour
             /* Translate the hitbox so that it can rotate according to player direction */
             temp.transform.Translate(0, 1.25F,0);
             //transform.Rotate(0, 0, 180 * Time.deltaTime);
-
+            //anim.SetBool("PlayerSlash", true);
             //Debug.Log(transform.rotation.ToString());
             //Debug.Log("CREATED MELEE HITBOX " + temp.transform.position.ToString());
         }
@@ -53,6 +55,8 @@ public class Player2D_Attack : MonoBehaviour
                 DestroyImmediate(temp);
                 m_timer = 0.4F;
             }
+
+           // anim.SetBool("PlayerSlash", false);
         }
     }
 }
