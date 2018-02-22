@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 public class SpriteManager : MonoBehaviour {
+
     public enum S_Weapon
     {
         DAGGER,
@@ -34,8 +35,8 @@ public class SpriteManager : MonoBehaviour {
         RIGHT
     };
 
-    public GameObject Head, otherHeads, Top, Bottom, Gloves, Shoes, Weapon;
-    public Animator HeadAnim, WeaponAnim;
+    public GameObject Body, Head, otherHeads, Top, Bottom, Gloves, Shoes, Weapon;
+    public Animator BodyAnim, HeadAnim, WeaponAnim;
     S_Wardrobe headEquipped, topEquipped, bottomEquipped, glovesEquipped, shoesEquipped;
     S_Weapon weaponEquipped;
     public S_Dir direction = 0;
@@ -55,14 +56,16 @@ public class SpriteManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-	}
+
+        Body = transform.Find("Body").gameObject;
+    }
 
     public void SetLastMove(float x, float y)
     {
         lastMove.x = x;
         lastMove.y = y;
     }
-
+    
     void ChangeHead()
     {
         //set other head styles inactive
@@ -105,10 +108,11 @@ public class SpriteManager : MonoBehaviour {
         WeaponAnim.SetFloat("MoveX", lastMove.x);
         WeaponAnim.SetFloat("MoveY", lastMove.y);
     }
-	
+
+
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("In Update");
+        RenderBody();
         ChangeHead();
         ChangeWeapon();
     }

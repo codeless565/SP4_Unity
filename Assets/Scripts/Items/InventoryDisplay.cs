@@ -94,8 +94,6 @@ public class InventoryDisplay : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         EquipConfirmationCanvas.SetActive(ConfirmationCanvas);
-        if (InventoryDisplayCanvas.activeSelf)
-            Player.GetComponent<Player2D_Manager>().canMove = false;
     }
     
     // On Click listener for inventory buttons

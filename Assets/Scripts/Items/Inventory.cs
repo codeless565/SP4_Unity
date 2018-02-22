@@ -21,8 +21,9 @@ public class Inventory : MonoBehaviour
     Color ButtonActiveColour = Color.red;
     Color ButtonInactiveColour = Color.cyan;
 
+    private GameObject Player;
     // Use this for initialization
-    void Init()
+    public void Init()
     {
         EquipmentDisplay = true;
         UsesDisplay = false;
@@ -33,6 +34,9 @@ public class Inventory : MonoBehaviour
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<InventoryDisplay>().DisplaySearchMenu(SearchBar); });
         PreviousPageButton.GetComponent<Image>().color = Color.red;
         NextPageButton.GetComponent<Image>().color = Color.cyan;
+
+        Player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log(Player);
     }
 
     // Update is called once per frame
@@ -91,11 +95,14 @@ public class Inventory : MonoBehaviour
         gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(false);
         gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
         InventoryUI = false;
+        Player.GetComponent<Player2D_Manager>().canMove = true;
     }
     public void OpenInventoryUI()
     {
         gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
         OpenEquipment();
         InventoryUI = true;
+        Player.GetComponent<Player2D_Manager>().canMove = false;
+
     }
 }
