@@ -73,11 +73,9 @@ public class SpriteManager : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update ()
-    {
+	void Update () {
         Debug.Log("In Update");
         ChangeHead();
-
         HeadAnim.SetFloat("MoveX", lastMove.x);
         HeadAnim.SetFloat("MoveY", lastMove.y);
         //Debug.Log("dir" + direction.ToString());
