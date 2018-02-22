@@ -67,24 +67,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         if (statsHolder.Health <= 0)
             return;
 
-        /* When EXP is maxed */
-        if (statsHolder.EXP >= statsHolder.MaxEXP)
-        {
-            m_bCheckLevelUp = true;
-            LevelUp();
-        }
-
-        // Check Timer to despawn level up
-        if (m_bCheckLevelUp)
-        {
-            m_fLevelUpTimer += Time.deltaTime;
-            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
-            {
-                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                DestroyImmediate(cloneMesh);
-                m_bCheckLevelUp = false;
-            }
-        }
         Movement2D();
     }
 
@@ -178,9 +160,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     private void LevelUp()
     {
         /* Reset all Exp */
-        statsHolder.EXP = 0.0F;
-        statsHolder.MaxEXP += 1;
-        statsHolder.Level += 1;
 
         /* Create Text to show level up */
         cloneMesh = Instantiate(m_levelup_mesh, gameObject.transform);
