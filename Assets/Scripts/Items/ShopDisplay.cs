@@ -220,6 +220,7 @@ public class ShopDisplay : MonoBehaviour
     public void DisplayAllEquipment()
     {
         ResetDisplay();
+
         int itemcount = 0;
         foreach (Item item in ItemDatabase.Instance.ItemList)
         {
@@ -228,12 +229,11 @@ public class ShopDisplay : MonoBehaviour
                 continue;
 
             itemcount++;
-
+            
             if (itemcount >= StartCount)
             {
                 for (int i = 0; i < ShopLayout.Length; ++i)
                 {
-
                     if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
                     {
 

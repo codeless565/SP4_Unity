@@ -151,7 +151,7 @@ public class Player2D_Manager : MonoBehaviour
         /* When canMove, move */
         if (canMove)
             Movement2D();
-
+        Debug.Log(canMove);
         /* Attack Animation */
         PlayerAttack2D();
     }
