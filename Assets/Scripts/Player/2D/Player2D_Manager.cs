@@ -63,11 +63,11 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager = GetComponent<SpriteManager>();
 
         // set default equipments(will be moved to savefile)
-        //p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
-        //p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
-        //p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
-        //p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
-        //p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
+        p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
+        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
+        p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
+        p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
+        p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
 
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
