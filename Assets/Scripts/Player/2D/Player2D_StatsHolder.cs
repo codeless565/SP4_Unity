@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 /* Holding the Stats of the Player */
 public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 {
@@ -21,6 +23,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     private float m_MaxStamina = 10;
 
     LevelingSystem levelingSystem;
+
 
     /* Setters and Getters */
     public string Name
@@ -82,6 +85,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
         set
         {
             health = value;
+			//healthBar.Value = health;
         }
     }
     public float MaxHealth
@@ -93,6 +97,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
         set
         {
             m_MaxHealth = value;
+			//healthBar.MaxValue = m_MaxHealth;
         }
     }
 
@@ -156,12 +161,15 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
             movespeed = value;
         }
     }
+		
 
     /* Initializing of Stats */
     void Awake()
     {
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, true);
+		this.MaxHealth = m_MaxHealth;
+		this.Health = health;
         /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
     }
     

@@ -23,6 +23,9 @@ public class Player2D_Manager : MonoBehaviour
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
 
+	[SerializeField]
+	private UIbar healthBar, EXPbar, StaminaBar;
+
     /* Show Level Up */
     [SerializeField]
     private TextMesh m_levelup_mesh;
@@ -55,7 +58,14 @@ public class Player2D_Manager : MonoBehaviour
         statsHolder = GetComponent<Player2D_StatsHolder>();
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
+        healthBar.MaxValue = statsHolder.MaxHealth;
+        healthBar.Value = statsHolder.Health;
+        EXPbar.MaxValue = statsHolder.MaxEXP;
+        EXPbar.Value = statsHolder.EXP;
+        StaminaBar.MaxValue = statsHolder.MaxStamina;
+        StaminaBar.Value = statsHolder.Stamina;
 
+        //statsHolder.
         /* Animation */
         animTimer = 0.0f;
         m_fAniTime = 1.0f;
@@ -86,6 +96,14 @@ public class Player2D_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+		healthBar.MaxValue = statsHolder.MaxHealth;
+		healthBar.Value = statsHolder.Health;
+        EXPbar.MaxValue = statsHolder.MaxEXP;
+        EXPbar.Value = statsHolder.EXP;
+        StaminaBar.MaxValue = statsHolder.MaxStamina;
+        StaminaBar.Value = statsHolder.Stamina;
+
         /* When Player Dies, Stop Updating */
         if (statsHolder.Health <= 0)
         {
@@ -93,6 +111,7 @@ public class Player2D_Manager : MonoBehaviour
             return;
         }
         Debug.Log("Player HP: " + statsHolder.Health);
+
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {

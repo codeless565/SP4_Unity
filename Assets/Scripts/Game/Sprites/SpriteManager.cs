@@ -37,13 +37,6 @@ public class SpriteManager : MonoBehaviour
         BOTTOM_PLATE,
 
         SHOES_PLATE,
-
-        //METAL_TOP,
-        //METAL_BOTTOM,
-        //METAL_GLOVES,
-        //METAL_SHOES,
-        //METAL_HEADP,
-        //HAT_HEADP,
         TOTAL
     };
 
@@ -113,7 +106,7 @@ public class SpriteManager : MonoBehaviour
         {
             Head.SetActive(true);
             HeadAnim = Head.GetComponent<Animator>();
-            HeadAnim.SetBool("Slash", Slash);
+            HeadAnim.SetBool(attackStyle.ToString(), attackPlaceHolder);
         }
     }
 
@@ -130,7 +123,7 @@ public class SpriteManager : MonoBehaviour
                 child.gameObject.SetActive(false);
             }
         }
-        //set selected weapons active
+        //set selected tops active
         switch (topEquipped)
         {
             case S_Wardrobe.TOP_DEFAULT:
@@ -154,7 +147,7 @@ public class SpriteManager : MonoBehaviour
         {
             Top.SetActive(true);
             TopAnim = Top.GetComponent<Animator>();
-            TopAnim.SetBool("Slash", Slash);
+            TopAnim.SetBool(attackStyle.ToString(), attackPlaceHolder);
 
         }
     }
@@ -171,7 +164,7 @@ public class SpriteManager : MonoBehaviour
                 child.gameObject.SetActive(false);
             }
         }
-        //set selected weapons active
+        //set selected bottoms active
         switch (bottomEquipped)
         {
             case S_Wardrobe.BOTTOM_DEFAULT:
@@ -185,7 +178,7 @@ public class SpriteManager : MonoBehaviour
         {
             Bottom.SetActive(true);
             BottomAnim = Bottom.GetComponent<Animator>();
-            BottomAnim.SetBool("Slash", Slash);
+            BottomAnim.SetBool(attackStyle.ToString(), attackPlaceHolder);
         }
 
     }
@@ -193,7 +186,7 @@ public class SpriteManager : MonoBehaviour
     public void SetShoesEquip(S_Wardrobe shoes)
     {
         shoesEquipped = shoes;
-        //set other tops inactive
+        //set other shoes inactive
         if (otherShoes != null)
         {
             foreach (object obj in otherShoes.transform)
@@ -202,7 +195,7 @@ public class SpriteManager : MonoBehaviour
                 child.gameObject.SetActive(false);
             }
         }
-        //set selected weapons active
+        //set selected shoes active
         switch (shoesEquipped)
         {
             case S_Wardrobe.SHOES_DEFAULT:
@@ -216,7 +209,7 @@ public class SpriteManager : MonoBehaviour
         {
             Shoes.SetActive(true);
             ShoesAnim = Shoes.GetComponent<Animator>();
-            ShoesAnim.SetBool("Slash", Slash);
+            ShoesAnim.SetBool(attackStyle.ToString(), attackPlaceHolder);
         }
 
     }
@@ -276,7 +269,7 @@ public class SpriteManager : MonoBehaviour
     
         Weapon.SetActive(true);
         WeaponAnim = Weapon.GetComponent<Animator>();
-        WeaponAnim.SetBool(attackStyle.ToString(), Slash);
+        WeaponAnim.SetBool(attackStyle.ToString(), attackPlaceHolder);
     }
 
     /**************************/
@@ -335,11 +328,8 @@ public class SpriteManager : MonoBehaviour
         if (attackPlaceHolder)
         {
             animTimer += Time.deltaTime;
-
-            Debug.Log("running!!");
             if (animTimer >= m_fAniTime)
             {
-                Debug.Log("ended!!");
                 attackPlaceHolder = false;
                 animTimer -= m_fAniTime;
             }

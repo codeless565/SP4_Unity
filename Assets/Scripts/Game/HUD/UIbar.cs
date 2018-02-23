@@ -3,27 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*remember to attach script to the bar itself*/
 public class UIbar : MonoBehaviour {
-	[SerializeField]
 	private float fillAmount;
 	Player2D_StatsHolder stats;
 	private Image content;
+
+	public float MaxValue{ get; set; }
+
+	public float Value
+	{
+		set
+		{ 
+			fillAmount = Map (value, 0, MaxValue, 0, 1); 
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		stats = GetComponent<Player2D_StatsHolder> ();
+		content = GetComponent<Image> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.J)) {
-			stats.Health -= 1;
-		}
 		HandleBar ();
 	}
 
 	private void HandleBar()
 	{
-		content.fillAmount = Map(stats.Health, 0, stats.MaxHealth, 0, 1);
+		if (fillAmount != content.fillAmount) {
+			content.fillAmount = fillAmount;
+		}
 	}
 
 	private float Map(float value, float inMin, float inMax, float outMin, float outMax)
