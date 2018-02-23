@@ -103,6 +103,5 @@ public class Inventory : MonoBehaviour
         OpenEquipment();
         InventoryUI = true;
         Player.GetComponent<Player2D_Manager>().canMove = false;
-
     }
 }
