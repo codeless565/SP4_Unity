@@ -12,9 +12,12 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject StoneWall;
 
     public GameObject WoodenChest;
+    public GameObject RoyalChest;
 
     //Mainly 2D
     public GameObject CloseDoor;
     public GameObject OpenDoor;
+
+    public GameObject EnemySkeleton;
 
 }

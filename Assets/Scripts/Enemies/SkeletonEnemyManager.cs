@@ -63,6 +63,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private GameObject pet;
     private int PetDamagedCounter;
 
+    SpriteManager e_spriteManager;
+
     // Stats Setter and Getter //
     public string Name
     {
@@ -353,6 +355,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Enemy Chase
     private void SkeletonChase(Vector2 _playerDesti, Vector2 _playerPos, Vector2 _distOffset)
     {
+        // Set Enemey Walk
+        e_spriteManager.SetMoving(true);
         // Enemy will walk to Player Position smoothly.
         transform.position = Vector2.SmoothDamp(transform.position, _playerPos - _distOffset, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
@@ -375,6 +379,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Enemy Attack
     private void SkeletonAttack(Vector2 _playerDesti)
     {
+        // Set Enemey Walk
+        e_spriteManager.SetMoving(false);
+
         // Distance between Player and Enemy.
         distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
@@ -385,6 +392,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         {
             EnemyAttackTimer = 0.5f;
             player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
+
+            // Play Slash Animation
+            e_spriteManager.SetAttack(true);
         }
 
         // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
@@ -392,6 +402,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         {
             // Set CountAttackTimer to false
             canCountAttackTimer = false;
+
+            e_spriteManager.SetAttack(false);
 
             // Start Parallel action.
             float _delayTime = /*anim.GetClip("Attack").length*/ 0.5F;

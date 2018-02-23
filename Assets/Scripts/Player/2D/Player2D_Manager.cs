@@ -157,7 +157,7 @@ public class Player2D_Manager : MonoBehaviour
         /* When canMove, move */
         if (canMove)
             Movement2D();
-
+        Debug.Log(canMove);
         /* Attack Animation */
         PlayerAttack2D();
     }
@@ -165,8 +165,9 @@ public class Player2D_Manager : MonoBehaviour
     /* Key Board Movement of the Player */
     void KeyMove()
     {
-        PlayerMoving = false;
+        //PlayerMoving = false;
 
+        p_spriteManager.SetMoving(false);
         /* Getting the Direction of the Player */
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -188,7 +189,7 @@ public class Player2D_Manager : MonoBehaviour
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
             p_spriteManager.SetMoving(true);
-            PlayerMoving = true;
+            //PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
@@ -197,14 +198,13 @@ public class Player2D_Manager : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
         {
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-            PlayerMoving = true;
+            //PlayerMoving = true;
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 
         p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        p_spriteManager.SetMoving(PlayerMoving);
     }
 
     public void setAttackClicked(bool _atk) { attackClicked = _atk; }
@@ -490,12 +490,13 @@ public class Player2D_Manager : MonoBehaviour
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
             else if (_equipment.Name.Contains("Leather"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_LEATHER);
+            else if (_equipment.Name.Contains("Purple"))
+                p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PURPLE);
             else if (_equipment.Name.Contains("Chain"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_CHAIN);
             else if (_equipment.Name.Contains("Plate"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PLATE);
-            else if (_equipment.Name.Contains("Purple"))
-                p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PURPLE);
+
         }
         else if (_equipment.ItemType == "Leggings")
         {

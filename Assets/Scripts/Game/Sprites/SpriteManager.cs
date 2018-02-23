@@ -6,7 +6,10 @@ public class SpriteManager : MonoBehaviour
     public enum S_Weapon
     {
         DAGGER,
-        SWORD,
+        RAPIER,
+        SPEAR,
+        LONGSPEAR,
+        LONGSWORD,
         ARROW,
         BOW,
     };
@@ -23,6 +26,19 @@ public class SpriteManager : MonoBehaviour
         HEADP_DEFAULT,
         HEADP_HAT,
         HEADP_HOOD,
+        HEADP_CHAIN,
+        HEADP_PLATE,
+
+        TOP_CHAIN,
+        TOP_LEATHER,
+        TOP_PLATE,
+        TOP_PURPLE,
+
+        BOTTOM_PLATE,
+        BOTTOM_GREEN,
+
+        SHOES_PLATE,
+
         //METAL_TOP,
         //METAL_BOTTOM,
         //METAL_GLOVES,
@@ -35,6 +51,8 @@ public class SpriteManager : MonoBehaviour
     enum AttackStyle
     {
         Slash,
+        Thrust,
+        Bow
     };
 
     public GameObject Body, Head, otherHeads, Top, otherTops, Bottom, otherBottoms, Shoes, otherShoes, Weapon, otherWeapons;
@@ -50,10 +68,11 @@ public class SpriteManager : MonoBehaviour
 
     //Player actions
     bool Slash = false;
-    bool ThrustAnim = false;
-    bool BowAnim = false;
-    bool SpellAnim = false;
-    bool DieAnim = false;
+    bool Thrust = false;
+    bool Bow = false;
+    bool Spell = false;
+
+    bool Die = false;
     //Player movement
     bool Moving = false;
     Vector2 MoveXY, lastMove;
@@ -86,6 +105,11 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.HEADP_HAT:
                 Head = transform.Find("Head/Hat").gameObject;
                 break;
+            case S_Wardrobe.HEADP_CHAIN:
+                Head = transform.Find("Head/HeadChain").gameObject;
+
+                break;
+
         }
         if (headEquipped != S_Wardrobe.HEADP_NULL)
         {
@@ -114,6 +138,19 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.TOP_DEFAULT:
                 Top = transform.Find("Top/Default").gameObject;
                 break;
+
+            case S_Wardrobe.TOP_LEATHER:
+                Top = transform.Find("Top/Armour1").gameObject;
+                break;
+            case S_Wardrobe.TOP_CHAIN:
+                Top = transform.Find("Top/Armour3").gameObject;
+                break;
+            case S_Wardrobe.TOP_PLATE:
+                Top = transform.Find("Top/Armour4").gameObject;
+                break;
+            case S_Wardrobe.TOP_PURPLE:
+                Top = transform.Find("Top/Armour2").gameObject;
+                break;
         }
         if (topEquipped != S_Wardrobe.TOP_NULL)
         {
@@ -141,6 +178,12 @@ public class SpriteManager : MonoBehaviour
         {
             case S_Wardrobe.BOTTOM_DEFAULT:
                 Bottom = transform.Find("Bottom/Default").gameObject;
+                break;
+            case S_Wardrobe.BOTTOM_PLATE:
+                Bottom = transform.Find("Bottom/BottomPlate").gameObject;
+                break;
+            case S_Wardrobe.BOTTOM_GREEN:
+                Bottom = transform.Find("Bottom/BottomGreen").gameObject;
                 break;
         }
         if (bottomEquipped != S_Wardrobe.BOTTOM_NULL)
@@ -201,6 +244,36 @@ public class SpriteManager : MonoBehaviour
                 attackStyle = AttackStyle.Slash;
                 attackPlaceHolder = Slash;
                 break;
+            case S_Weapon.RAPIER:
+                Weapon = transform.Find("Weapon/Rapier").gameObject;
+                attackStyle = AttackStyle.Slash;
+                attackPlaceHolder = Slash;
+                break;
+            case S_Weapon.SPEAR:
+                Weapon = transform.Find("Weapon/Spear").gameObject;
+                attackStyle = AttackStyle.Thrust;
+                attackPlaceHolder = Thrust;
+                break;
+            case S_Weapon.LONGSPEAR:
+                Weapon = transform.Find("Weapon/LongSpear").gameObject;
+                attackStyle = AttackStyle.Thrust;
+                attackPlaceHolder = Thrust;
+                break;
+            case S_Weapon.LONGSWORD:
+                Weapon = transform.Find("Weapon/LongSword").gameObject;
+                attackStyle = AttackStyle.Slash;
+                attackPlaceHolder = Slash;
+                break;
+            case S_Weapon.ARROW:
+                Weapon = transform.Find("Weapon/Arrow").gameObject;
+                attackStyle = AttackStyle.Bow;
+                attackPlaceHolder = Slash;
+                break;
+            case S_Weapon.BOW:
+                Weapon = transform.Find("Weapon/Bow").gameObject;
+                attackStyle = AttackStyle.Bow;
+                attackPlaceHolder = Slash;
+                break;
         }
         Weapon.SetActive(true);
         WeaponAnim = Weapon.GetComponent<Animator>();
@@ -215,24 +288,9 @@ public class SpriteManager : MonoBehaviour
         attackPlaceHolder = attack;
     }
 
-    public void SetSpell(bool spell)
-    {
-        SpellAnim = spell;
-    }
-
-    public void SetThrust(bool thrust)
-    {
-        ThrustAnim = thrust;
-    }
-
-    public void SetBow(bool bow)
-    {
-        BowAnim = bow;
-    }
-
     public void SetDie(bool die)
     {
-        DieAnim = die;
+        Die = die;
     }
 
     public void SetMoving(bool moving)
