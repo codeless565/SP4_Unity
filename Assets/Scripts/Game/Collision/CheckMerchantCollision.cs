@@ -15,13 +15,18 @@ public class CheckMerchantCollision : MonoBehaviour, CollisionBase
 
     /* Trigger Dialog */
     private bool _triggeredDialog;
-
+    public bool pauseBox;
+    
     void Start()
     {
         /* Setting Up Dialog Box */
         _textboxmanager = FindObjectOfType<TextBoxManager>();
         _textboxmanager.ReloadScript(_textAssets);
+        _textboxmanager.currentLine = startLine;
+        _textboxmanager.endAtLine = endLine;
         _textboxmanager.EnableTextBox();
+        
+        pauseBox = false;
     }
 
     /* Response to Player entering trigger box of Mercahnt */
@@ -45,7 +50,7 @@ public class CheckMerchantCollision : MonoBehaviour, CollisionBase
     {
         if(_triggeredDialog)
         {
-
+            
         }
     }
 }
