@@ -64,7 +64,7 @@ public class Player2D_Manager : MonoBehaviour
 
         // set default equipments(will be moved to savefile)
         p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
-        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_CHAIN);
+        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_LEATHER);
         p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
         p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
         p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
