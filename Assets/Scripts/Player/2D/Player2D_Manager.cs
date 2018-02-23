@@ -64,7 +64,7 @@ public class Player2D_Manager : MonoBehaviour
 
         // set default equipments(will be moved to savefile)
         p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
-        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_LEATHER);
+        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
         p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
         p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
         p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
@@ -165,8 +165,9 @@ public class Player2D_Manager : MonoBehaviour
     /* Key Board Movement of the Player */
     void KeyMove()
     {
-        PlayerMoving = false;
+        //PlayerMoving = false;
 
+        p_spriteManager.SetMoving(false);
         /* Getting the Direction of the Player */
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputY = Input.GetAxisRaw("Vertical");
@@ -188,7 +189,7 @@ public class Player2D_Manager : MonoBehaviour
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
             p_spriteManager.SetMoving(true);
-            PlayerMoving = true;
+            //PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
@@ -197,14 +198,13 @@ public class Player2D_Manager : MonoBehaviour
         if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
         {
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-            PlayerMoving = true;
+            //PlayerMoving = true;
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 
         p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        p_spriteManager.SetMoving(PlayerMoving);
     }
 
     public void setAttackClicked(bool _atk) { attackClicked = _atk; }
@@ -218,7 +218,7 @@ public class Player2D_Manager : MonoBehaviour
 
             canMove = false;
            // animTimer += Time.deltaTime;
-           // p_spriteManager.SetSlash(true);
+            p_spriteManager.SetAttack(true);
 
             if (animTimer >= m_fAniTime)
             {

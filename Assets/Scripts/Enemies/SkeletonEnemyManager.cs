@@ -6,8 +6,6 @@ using UnityEngine;
 // Handles Behaviour of Skeleton Enemy
 public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 {
-    SpriteManager e_spriteManager;
-
     enum EnemySkeletonState
     {
         IDLE,
@@ -43,6 +41,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Enemy //
     EnemySkeletonState skeletonState;
+    //public Animation anim;
 
     private Vector2 currentVelocity = Vector2.zero;
     private float minDistanceApart = 1.5f;
@@ -63,6 +62,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Pet //
     private GameObject pet;
     private int PetDamagedCounter;
+
+    SpriteManager e_spriteManager;
 
     // Stats Setter and Getter //
     public string Name
@@ -224,15 +225,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Use this for initialization
     void Start ()
     {
-        // Enemy Animation
-        e_spriteManager = GetComponent<SpriteManager>();
-        // set default equipments(will be moved to savefile)
-        e_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_HAT);
-        e_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
-        e_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
-        e_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
-        e_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
-
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
         if (GameObject.FindGameObjectWithTag("Pet") != null)
@@ -242,6 +234,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
+        //anim = GetComponent<Animation>();
 
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);
@@ -280,11 +273,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         //    // Change State to Chase
         //    skeletonState = EnemySkeletonState.CHASE;
         //}
-        if (Input.GetKey(KeyCode.Alpha4))
-        {
-            // Change State to Attack
-            skeletonState = EnemySkeletonState.ATTACK;
-        }
+        //if (Input.GetKey(KeyCode.Alpha4))
+        //{
+        //    // Change State to Attack
+        //    skeletonState = EnemySkeletonState.ATTACK;
+        //}
         //if (Input.GetKey(KeyCode.Alpha5))
         //{
         //    // Change State to Death
@@ -364,7 +357,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         // Set Enemey Walk
         e_spriteManager.SetMoving(true);
-
         // Enemy will walk to Player Position smoothly.
         transform.position = Vector2.SmoothDamp(transform.position, _playerPos - _distOffset, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
@@ -483,11 +475,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         //Debug.Log("Enemy Lvl" + enemyLevel);
 
         if (health <= 0)
-        {
-            // Play Die Animation
-            e_spriteManager.SetDie(true);
             skeletonState = EnemySkeletonState.DIE;
-        }
     }
     
 }

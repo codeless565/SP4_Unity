@@ -38,6 +38,7 @@ public class SpriteManager : MonoBehaviour
         BOTTOM_GREEN,
 
         SHOES_PLATE,
+
         //METAL_TOP,
         //METAL_BOTTOM,
         //METAL_GLOVES,
@@ -106,9 +107,7 @@ public class SpriteManager : MonoBehaviour
                 break;
             case S_Wardrobe.HEADP_CHAIN:
                 Head = transform.Find("Head/HeadChain").gameObject;
-                break;
-            case S_Wardrobe.HEADP_PLATE:
-                Head = transform.Find("Head/HeadPlate").gameObject;
+
                 break;
 
         }
@@ -139,6 +138,7 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.TOP_DEFAULT:
                 Top = transform.Find("Top/Default").gameObject;
                 break;
+
             case S_Wardrobe.TOP_LEATHER:
                 Top = transform.Find("Top/Armour1").gameObject;
                 break;
@@ -151,7 +151,6 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.TOP_PURPLE:
                 Top = transform.Find("Top/Armour2").gameObject;
                 break;
-
         }
         if (topEquipped != S_Wardrobe.TOP_NULL)
         {
@@ -214,9 +213,6 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.SHOES_DEFAULT:
                 Shoes = transform.Find("Shoes/Default").gameObject;
                 break;
-            case S_Wardrobe.SHOES_PLATE:
-                Shoes = transform.Find("Shoes/Default").gameObject;
-                break;
         }
         if (shoesEquipped != S_Wardrobe.SHOES_NULL)
         {
@@ -245,8 +241,8 @@ public class SpriteManager : MonoBehaviour
         {
             case S_Weapon.DAGGER:
                 Weapon = transform.Find("Weapon/Dagger").gameObject;
-                attackStyle = AttackStyle.Thrust;
-                attackPlaceHolder = Thrust;
+                attackStyle = AttackStyle.Slash;
+                attackPlaceHolder = Slash;
                 break;
             case S_Weapon.RAPIER:
                 Weapon = transform.Find("Weapon/Rapier").gameObject;
