@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PoisonTrapEffect : MonoBehaviour {
 
-    private float m_damage;
-    private float m_duration;
+    private float m_damage = 1;
+    private float m_duration = 5;
     private float m_elapseTime;
 
 	// Use this for initialization
 	void Start ()
     {
-        m_damage = 1;
-        m_duration = 5;
         m_elapseTime = m_duration;	
 	}
 	
@@ -25,7 +23,7 @@ public class PoisonTrapEffect : MonoBehaviour {
             Destroy(this);
 
         GetComponent<StatsBase>().Health -= m_damage * Time.deltaTime;
-	}
+    }
 
     public void SetDamage(float _value)
     {
@@ -37,4 +35,10 @@ public class PoisonTrapEffect : MonoBehaviour {
         m_duration = _value;
         m_elapseTime = m_duration;
     }
+
+    public void ResetTimer()
+    {
+        m_elapseTime = m_duration;
+    }
+
 }

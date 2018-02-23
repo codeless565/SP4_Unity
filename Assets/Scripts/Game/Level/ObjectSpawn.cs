@@ -23,7 +23,7 @@ public class ObjectSpawn : MonoBehaviour
     //Traps
     public IntRange NumBearTraps = new IntRange(1, 5);
     public IntRange NumPoisonTraps = new IntRange(1, 5);
-
+    public IntRange NumSlowTraps = new IntRange(1, 5);
 
     //GO
     private Room[] m_rooms;
@@ -44,6 +44,7 @@ public class ObjectSpawn : MonoBehaviour
         GameObject go_chest       = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
         GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
         GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
+        GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
 
         //if (m_currentFloor == 10)
         //{
@@ -53,10 +54,16 @@ public class ObjectSpawn : MonoBehaviour
         {
             PlayerSpawn();
             ExitSpawn();
+
+            // Chests
             ItemSpawn(go_chest, NumChest.Random);
             ItemSpawn(go_royalchest, NumRoyalChest.Random);
-            ItemSpawn(go_poisonTrap, NumPoisonTraps.Random);
 
+            // Traps
+            TrapwDamageSpawn(go_poisonTrap, NumPoisonTraps.Random);
+            ItemSpawn(go_slowTrap, NumSlowTraps.Random);
+
+            // Enemies
             EnemySpawn(_floor);
         }
     }
@@ -181,9 +188,35 @@ public class ObjectSpawn : MonoBehaviour
 
     }
     
-    private void TrapSpawn(GameObject _Trap)
+    private void TrapwDamageSpawn(GameObject _Trap, int amt)
     {
+        int tempRoom;
+        Vector2 tempPos = new Vector2(0, 0);
 
+        for (int i = 0; i < amt; ++i)
+        {
+            do
+            {
+                tempRoom = Random.Range(0, m_rooms.Length - 1);
+
+                int ranXpos = Random.Range(m_rooms[tempRoom].xPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
+                                           m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
+
+                int ranYpos = Random.Range(m_rooms[tempRoom].yPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
+                                           m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
+
+                tempPos.Set(ranXpos, ranYpos);
+
+            } while (tempPos == m_playerPos || tempPos == m_exitPos);
+
+            GameObject tempItem = Instantiate(_Trap, tempPos, Quaternion.identity, go_floorholder.transform);
+
+            if (tempItem.GetComponent<CollisionTrapPoison>() != null)
+                tempItem.GetComponent<CollisionTrapPoison>().CurrentFloor = m_currentFloor;
+
+            if (tempItem.GetComponent<ObjectInfo>() != null)
+                tempItem.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
+        }
     }
 
 

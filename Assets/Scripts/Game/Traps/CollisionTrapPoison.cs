@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* Slows Down Player When Collide with it */
-public class CollisionSlowDownTrap : MonoBehaviour
+public class CollisionTrapPoison : MonoBehaviour
 {
     private int m_currentLevel;
 
@@ -32,16 +31,23 @@ public class CollisionSlowDownTrap : MonoBehaviour
         if (b_isDestroying)
             return;
 
-        if (other.GetComponent<Player2D_StatsHolder>() == null)
+        if (other.GetComponent<Player2D_StatsHolder>() == null) 
             return;
 
-        if (other.gameObject.GetComponent<SlowDownTrapEffect>() == null)
+        if (other.gameObject.GetComponent<PoisonTrapEffect>() == null)
         {
-            other.gameObject.AddComponent<SlowDownTrapEffect>();
+            other.gameObject.AddComponent<PoisonTrapEffect>();
+            other.gameObject.GetComponent<PoisonTrapEffect>().SetDuration(10);
+            other.gameObject.GetComponent<PoisonTrapEffect>().SetDamage(m_currentLevel * 0.5f);
         }
         else
-            other.gameObject.GetComponent<SlowDownTrapEffect>().ResetTimer();
+            other.gameObject.GetComponent<PoisonTrapEffect>().ResetTimer();
 
         b_isDestroying = true;
+    }
+
+    public int CurrentFloor
+    {
+        set { m_currentLevel = value; }
     }
 }
