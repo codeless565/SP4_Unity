@@ -64,7 +64,7 @@ public class Player2D_Attack : MonoBehaviour
                 /* Transformation to rotate the Hitbox */
                 m_AngleToRotate = Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
                 temp.transform.Rotate(0, 0, -m_AngleToRotate);
-                temp.transform.Translate(new Vector3(0.0f, 1.5f, 0.0f));
+                temp.transform.Translate(new Vector3(0.0f, 0.8f, 0.0f));
 
                 /* Set Animation in Parent to Start */
                 Player2D_Manager.attackClicked = true;

@@ -218,14 +218,15 @@ public class Player2D_Manager : MonoBehaviour
         if (attackClicked)
         {
             //p_spriteManager.Attack2D();
-
+           // Debug.Log("attacking!!!  " + animTimer + "  " + m_fAniTime);
             canMove = false;
-           // animTimer += Time.deltaTime;
+            animTimer += Time.deltaTime;
             p_spriteManager.SetAttack(true);
 
             if (animTimer >= m_fAniTime)
             {
-               // attackClicked = false;
+              //  Debug.Log("");
+               attackClicked = false;
               //  p_spriteManager.SetSlash(false);
                 canMove = true;
                 animTimer -= m_fAniTime;

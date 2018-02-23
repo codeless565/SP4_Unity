@@ -62,8 +62,8 @@ public class SpriteManager : MonoBehaviour
     //Attack style
     AttackStyle attackStyle;
     bool attackPlaceHolder;
-    public float animTimer; // countdown timer
-    private float m_fAniTime; // value to countdown from
+    public float animTimer = 0.0f; // countdown timer
+    private float m_fAniTime = 1.0f; // value to countdown from
 
     //Player actions
     bool Slash = false;
@@ -273,6 +273,7 @@ public class SpriteManager : MonoBehaviour
                 attackPlaceHolder = Slash;
                 break;
         }
+    
         Weapon.SetActive(true);
         WeaponAnim = Weapon.GetComponent<Animator>();
         WeaponAnim.SetBool(attackStyle.ToString(), Slash);
@@ -284,6 +285,7 @@ public class SpriteManager : MonoBehaviour
     public void SetAttack(bool attack)
     {
         attackPlaceHolder = attack;
+    
     }
 
     public void SetDie(bool die)
@@ -334,8 +336,10 @@ public class SpriteManager : MonoBehaviour
         {
             animTimer += Time.deltaTime;
 
+            Debug.Log("running!!");
             if (animTimer >= m_fAniTime)
             {
+                Debug.Log("ended!!");
                 attackPlaceHolder = false;
                 animTimer -= m_fAniTime;
             }

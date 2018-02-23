@@ -5,7 +5,6 @@ using UnityEngine;
 public class MinimapEnemy : MonoBehaviour
 {
     private Sprite s_Unseen;
-    private Sprite s_TooFar;
     private Sprite s_Exposed;
     private Camera c_MainCam;
     private float viewDist;
@@ -15,7 +14,6 @@ public class MinimapEnemy : MonoBehaviour
     {
         // get Sprites from holder
         s_Unseen = GameObject.FindGameObjectWithTag("Holder").GetComponent<MinimapIconHolder>().Black;
-        s_TooFar = GameObject.FindGameObjectWithTag("Holder").GetComponent<MinimapIconHolder>().Floor;
         s_Exposed = GameObject.FindGameObjectWithTag("Holder").GetComponent<MinimapIconHolder>().Enemy;
 
         // Get Camera and set view distance
@@ -35,9 +33,6 @@ public class MinimapEnemy : MonoBehaviour
             Vector2 distFromCam = GetComponent<Transform>().position - c_MainCam.GetComponent<Transform>().position;
             if (distFromCam.magnitude > viewDist)
             {
-                if (exposed) // only change to floor instead if player has seen it
-                    gameObject.GetComponentInChildren<SpriteRenderer>().sprite = s_TooFar; // Disappear on the map once player is out of range
-
                 return;
             }
 
