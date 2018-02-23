@@ -79,10 +79,11 @@ public class Player2D_StatsMenu : MonoBehaviour
                 /* Create the Stats of Player */
                 tempText = Instantiate(player_Stats, transform.position, transform.rotation);
                 tempText.transform.SetParent(GameObject.FindGameObjectWithTag("StatsMenu").transform);
+                PrintData();
             }
         }
 
-        PrintData();
+       
     }
 
     /* Print the data */
