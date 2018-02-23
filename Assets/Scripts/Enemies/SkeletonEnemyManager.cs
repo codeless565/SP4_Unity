@@ -338,16 +338,13 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         float dist2waypoint = (GetComponent<Transform>().position - m_Waypoint[m_currWaypointID]).magnitude;
         if (dist2waypoint <= movespeed * Time.deltaTime / maxSpeed) //if it is possible to reach the waypoint by this frame
         {
-            Debug.Log("Enemy Changing Waypoint");
             ++m_currWaypointID;
             m_currWaypointID %= m_Waypoint.Length;
         }
         else 
         {
             // else move towards waypoint
-            Debug.Log("Enemy Moving to ID: " + m_currWaypointID);
             Vector3 dir = (m_Waypoint[m_currWaypointID] - GetComponent<Transform>().position ).normalized;
-            Debug.Log("Enemy Moving to: " + dir);
             GetComponent<Transform>().position += dir * movespeed * Time.deltaTime / maxSpeed;
         }
     }

@@ -155,10 +155,6 @@ public class ObjectSpawn : MonoBehaviour
             Waypoint[1] = new Vector3(m_rooms[tempRoom].xPos, m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1);
             Waypoint[2] = new Vector3(m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1, m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1);
             Waypoint[3] = new Vector3(m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1, m_rooms[tempRoom].yPos);
-            Debug.Log("Enemy " + i + ": " + Waypoint[0]);
-            Debug.Log("Enemy " + i + ": " + Waypoint[1]);
-            Debug.Log("Enemy " + i + ": " + Waypoint[2]);
-            Debug.Log("Enemy " + i + ": " + Waypoint[3]);
 
             int randomID = Random.Range(0, Waypoint.Length - 1);
             tempPos = Waypoint[randomID];
