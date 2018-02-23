@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class SpriteManager : MonoBehaviour {
+public class SpriteManager : MonoBehaviour
+{
 
     public enum S_Weapon
     {
@@ -35,7 +36,7 @@ public class SpriteManager : MonoBehaviour {
     {
         Slash,
     };
-    
+
     public GameObject Body, Head, otherHeads, Top, otherTops, Bottom, otherBottoms, Shoes, otherShoes, Weapon, otherWeapons;
     public Animator BodyAnim, HeadAnim, TopAnim, BottomAnim, ShoesAnim, WeaponAnim;
     S_Wardrobe headEquipped, topEquipped, bottomEquipped, shoesEquipped;
@@ -63,30 +64,30 @@ public class SpriteManager : MonoBehaviour {
         headEquipped = headp;
 
         //set other head styles inactive
-		if(otherHeads!=null)
-		{
-			foreach (object obj in otherHeads.transform)
-			{
-				Transform child = (Transform)obj;
-				child.gameObject.SetActive(false);
-			}
-		}
-		//set selected head style active
-		switch (headEquipped)
-		{
-		case S_Wardrobe.HEADP_DEFAULT:
-			Head = transform.Find("Head/Hair").gameObject;
-			break;
+        if (otherHeads != null)
+        {
+            foreach (object obj in otherHeads.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(false);
+            }
+        }
+        //set selected head style active
+        switch (headEquipped)
+        {
+            case S_Wardrobe.HEADP_DEFAULT:
+                Head = transform.Find("Head/Hair").gameObject;
+                break;
 
-		case S_Wardrobe.HEADP_HOOD:
-			Head = transform.Find("Head/Hood").gameObject;
-			break;
+            case S_Wardrobe.HEADP_HOOD:
+                Head = transform.Find("Head/Hood").gameObject;
+                break;
 
-		case S_Wardrobe.HEADP_HAT:
-			Head = transform.Find("Head/Hat").gameObject;
-			break;
-		}
-        if(headEquipped != S_Wardrobe.HEADP_NULL)
+            case S_Wardrobe.HEADP_HAT:
+                Head = transform.Find("Head/Hat").gameObject;
+                break;
+        }
+        if (headEquipped != S_Wardrobe.HEADP_NULL)
         {
             Head.SetActive(true);
             HeadAnim = Head.GetComponent<Animator>();
@@ -114,11 +115,11 @@ public class SpriteManager : MonoBehaviour {
                 Top = transform.Find("Top/Default").gameObject;
                 break;
         }
-        if(topEquipped != S_Wardrobe.TOP_NULL)
+        if (topEquipped != S_Wardrobe.TOP_NULL)
         {
-        Top.SetActive(true);
-        TopAnim = Top.GetComponent<Animator>();
-        TopAnim.SetBool("Slash", Slash);
+            Top.SetActive(true);
+            TopAnim = Top.GetComponent<Animator>();
+            TopAnim.SetBool("Slash", Slash);
 
         }
     }
@@ -139,16 +140,16 @@ public class SpriteManager : MonoBehaviour {
         switch (bottomEquipped)
         {
             case S_Wardrobe.BOTTOM_DEFAULT:
-				Bottom = transform.Find("Bottom/Default").gameObject;
+                Bottom = transform.Find("Bottom/Default").gameObject;
                 break;
         }
-        if(bottomEquipped != S_Wardrobe.BOTTOM_NULL)
+        if (bottomEquipped != S_Wardrobe.BOTTOM_NULL)
         {
             Bottom.SetActive(true);
             BottomAnim = Bottom.GetComponent<Animator>();
             BottomAnim.SetBool("Slash", Slash);
         }
-        
+
     }
 
     public void SetShoesEquip(S_Wardrobe shoes)
@@ -170,13 +171,13 @@ public class SpriteManager : MonoBehaviour {
                 Shoes = transform.Find("Shoes/Default").gameObject;
                 break;
         }
-        if(shoesEquipped != S_Wardrobe.SHOES_NULL)
+        if (shoesEquipped != S_Wardrobe.SHOES_NULL)
         {
             Shoes.SetActive(true);
             ShoesAnim = Shoes.GetComponent<Animator>();
             ShoesAnim.SetBool("Slash", Slash);
         }
-        
+
     }
 
     public void SetWeaponEquip(S_Weapon weapon)
@@ -184,26 +185,26 @@ public class SpriteManager : MonoBehaviour {
         weaponEquipped = weapon;
 
         //set other weapons inactive
-		if (otherWeapons != null)
-		{
-			foreach (object obj in otherWeapons.transform)
-			{
-				Transform child = (Transform)obj;
-				child.gameObject.SetActive(false);
-			}
-		}
-		//set selected weapons active
-		switch (weaponEquipped)
-		{
-			case S_Weapon.DAGGER:
-				Weapon = transform.Find ("Weapon/Dagger").gameObject;
-		        attackStyle = AttackStyle.Slash;
-		        attackPlaceHolder = Slash;
-				break;
-		}
-		Weapon.SetActive (true);
-		WeaponAnim = Weapon.GetComponent<Animator> ();
-		WeaponAnim.SetBool (attackStyle.ToString (), Slash);
+        if (otherWeapons != null)
+        {
+            foreach (object obj in otherWeapons.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(false);
+            }
+        }
+        //set selected weapons active
+        switch (weaponEquipped)
+        {
+            case S_Weapon.DAGGER:
+                Weapon = transform.Find("Weapon/Dagger").gameObject;
+                attackStyle = AttackStyle.Slash;
+                attackPlaceHolder = Slash;
+                break;
+        }
+        Weapon.SetActive(true);
+        WeaponAnim = Weapon.GetComponent<Animator>();
+        WeaponAnim.SetBool(attackStyle.ToString(), Slash);
     }
 
     /**************************/
@@ -216,7 +217,7 @@ public class SpriteManager : MonoBehaviour {
 
     public void SetSpell(bool spell)
     {
-       SpellAnim = spell;
+        SpellAnim = spell;
     }
 
     public void SetThrust(bool thrust)
@@ -255,7 +256,7 @@ public class SpriteManager : MonoBehaviour {
     /**************************/
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         Body = transform.Find("Body").gameObject;
         BodyAnim = Body.GetComponent<Animator>();
@@ -273,7 +274,7 @@ public class SpriteManager : MonoBehaviour {
 
     public void PlayAnimation()
     {
-        if(attackPlaceHolder)
+        if (attackPlaceHolder)
         {
             animTimer += Time.deltaTime;
 
@@ -285,7 +286,7 @@ public class SpriteManager : MonoBehaviour {
         }
     }
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         //movement
         UpdateAnim(BodyAnim);
