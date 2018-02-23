@@ -6,6 +6,8 @@ using UnityEngine;
 // Handles Behaviour of Skeleton Enemy
 public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 {
+    SpriteManager e_spriteManager;
+
     enum EnemySkeletonState
     {
         IDLE,
@@ -31,9 +33,16 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     LevelingSystem levelingSystem;
 
+    // EXP Reward for kill
+    public float EXPRewardScaling = 5;
+    private float expReward = 1;
+
+    // Waypoint
+    private Vector3[] m_Waypoint;
+    private int m_currWaypointID;
+
     // Enemy //
     EnemySkeletonState skeletonState;
-    //public Animation anim;
 
     private Vector2 currentVelocity = Vector2.zero;
     private float minDistanceApart = 1.5f;
@@ -197,19 +206,42 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
     }
     
+    public float EXPReward
+    {
+        set { expReward = value; }
+    }
+
+    public Vector3[] Waypoint
+    {
+        set { m_Waypoint = value; }
+    }
+
+    public int CurrWaypointID
+    {
+        set { m_currWaypointID = value; }
+    }
 
     // Use this for initialization
     void Start ()
     {
+        // Enemy Animation
+        e_spriteManager = GetComponent<SpriteManager>();
+        // set default equipments(will be moved to savefile)
+        e_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_HAT);
+        e_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
+        e_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
+        e_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
+        e_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
+
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
-        pet = GameObject.FindGameObjectWithTag("Pet").GetComponent<PetManager>().gameObject;
+        if (GameObject.FindGameObjectWithTag("Pet") != null)
+            pet = GameObject.FindGameObjectWithTag("Pet").GetComponent<PetManager>().gameObject;
 
         PetDamagedCounter = 0;
 
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
-        //anim = GetComponent<Animation>();
 
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);
@@ -248,11 +280,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         //    // Change State to Chase
         //    skeletonState = EnemySkeletonState.CHASE;
         //}
-        //if (Input.GetKey(KeyCode.Alpha4))
-        //{
-        //    // Change State to Attack
-        //    skeletonState = EnemySkeletonState.ATTACK;
-        //}
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            // Change State to Attack
+            skeletonState = EnemySkeletonState.ATTACK;
+        }
         //if (Input.GetKey(KeyCode.Alpha5))
         //{
         //    // Change State to Death
@@ -260,7 +292,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         //}
         //// END //
 
-        // Enemy States
+        //Enemy States
         switch (skeletonState)
         {
             case EnemySkeletonState.IDLE:
@@ -268,6 +300,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
                 break;
 
             case EnemySkeletonState.WALK:
+                SkeletonWalk();
                 break;
 
             case EnemySkeletonState.ATTACK:
@@ -284,9 +317,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
 
         //AnimationUpdate();
-        
+
         // If AttackTimer can be counted down.
-        if(canCountAttackTimer)
+        if (canCountAttackTimer)
         {
             EnemyAttackTimer -= Time.deltaTime;
         }
@@ -307,9 +340,31 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         }
     }
 
+    // Enemy Walk - waypoint to waypoint
+    private void SkeletonWalk()
+    {
+        // if reached currwaypointID reached, set nextID to currID
+        float dist2waypoint = (GetComponent<Transform>().position - m_Waypoint[m_currWaypointID]).magnitude;
+        if (dist2waypoint <= movespeed * Time.deltaTime / maxSpeed) //if it is possible to reach the waypoint by this frame
+        {
+            ++m_currWaypointID;
+            m_currWaypointID %= m_Waypoint.Length;
+        }
+        else 
+        {
+            // else move towards waypoint
+            Vector3 dir = (m_Waypoint[m_currWaypointID] - GetComponent<Transform>().position ).normalized;
+            GetComponent<Transform>().position += dir * movespeed * Time.deltaTime / maxSpeed;
+        }
+    }
+
+
     // Enemy Chase
     private void SkeletonChase(Vector2 _playerDesti, Vector2 _playerPos, Vector2 _distOffset)
     {
+        // Set Enemey Walk
+        e_spriteManager.SetPlayerMoving(true);
+
         // Enemy will walk to Player Position smoothly.
         transform.position = Vector2.SmoothDamp(transform.position, _playerPos - _distOffset, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
@@ -332,6 +387,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Enemy Attack
     private void SkeletonAttack(Vector2 _playerDesti)
     {
+        // Set Enemey Walk
+        e_spriteManager.SetPlayerMoving(false);
+
         // Distance between Player and Enemy.
         distanceApart = Vector2.Distance(transform.position, _playerDesti);
 
@@ -342,6 +400,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         {
             EnemyAttackTimer = 0.5f;
             player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
+
+            // Play Slash Animation
+            e_spriteManager.SetSlash(true);
         }
 
         // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
@@ -349,6 +410,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         {
             // Set CountAttackTimer to false
             canCountAttackTimer = false;
+
+            e_spriteManager.SetSlash(false);
 
             // Start Parallel action.
             float _delayTime = /*anim.GetClip("Attack").length*/ 0.5F;
@@ -363,7 +426,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         yield return new WaitForSeconds(_delayTime);
 
         /* Add EXP to Player when Die */
-        playerStats.EXP += 1;
+        playerStats.EXP += expReward;
         Debug.Log(playerStats.EXP);
 
         Destroy(gameObject);
@@ -371,7 +434,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         
     }
     
-
     // When Player moved out of Enemy attack range, play finish animation before chasing.
     IEnumerator SkeletonStateToChase(float _delay)
     {
@@ -421,7 +483,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         //Debug.Log("Enemy Lvl" + enemyLevel);
 
         if (health <= 0)
+        {
+            // Play Die Animation
+            e_spriteManager.SetDie(true);
             skeletonState = EnemySkeletonState.DIE;
+        }
     }
     
 }
