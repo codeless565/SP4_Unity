@@ -63,11 +63,11 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager = GetComponent<SpriteManager>();
 
         // set default equipments(will be moved to savefile)
-        p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
-        p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
-        p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
-        p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
-        p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
+        //p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
+        //p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
+        //p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
+        //p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_DEFAULT);
+        //p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
 
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
@@ -85,8 +85,11 @@ public class Player2D_Manager : MonoBehaviour
     {
         /* When Player Dies, Stop Updating */
         if (statsHolder.Health <= 0)
+        {
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
             return;
-
+        }
+        Debug.Log("Player HP: " + statsHolder.Health);
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -159,7 +162,7 @@ public class Player2D_Manager : MonoBehaviour
             Movement2D();
         Debug.Log(canMove);
         /* Attack Animation */
-        PlayerAttack2D();
+        //PlayerAttack2D();
     }
 
     /* Key Board Movement of the Player */

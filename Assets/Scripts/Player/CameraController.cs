@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
+        //player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         offset = new Vector3(0, 0, -10);
     }
 

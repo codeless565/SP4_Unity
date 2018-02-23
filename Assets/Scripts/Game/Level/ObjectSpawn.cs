@@ -18,16 +18,17 @@ public class ObjectSpawn : MonoBehaviour
     public IntRange NumRoyalChest = new IntRange(0, 2);
 
     //Enemy
-    private GameObject go_enemy;
     public IntRange NumEnemy = new IntRange(5, 10);
+
+    //Traps
+    public IntRange NumBearTraps = new IntRange(1, 5);
+    public IntRange NumPoisonTraps = new IntRange(1, 5);
+
 
     //GO
     private Room[] m_rooms;
     private GameObject go_floorholder;
     private GameObject go_exit;
-    private GameObject go_chest;
-    private GameObject go_royalchest;
-
     private Vector2 m_exitPos;
 
     private int m_currentFloor;
@@ -39,8 +40,10 @@ public class ObjectSpawn : MonoBehaviour
 
         go_floorholder = gameObject.GetComponent<BoardGenerator>().boardHolder;
         m_rooms        = gameObject.GetComponent<BoardGenerator>().GetRooms();
-        go_chest       = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
-        go_royalchest  = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
+
+        GameObject go_chest       = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
+        GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
+        GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
 
         //if (m_currentFloor == 10)
         //{
@@ -50,8 +53,10 @@ public class ObjectSpawn : MonoBehaviour
         {
             PlayerSpawn();
             ExitSpawn();
-            ItemSpawn(go_chest);
-            ItemSpawn(go_royalchest);
+            ItemSpawn(go_chest, NumChest.Random);
+            ItemSpawn(go_royalchest, NumRoyalChest.Random);
+            ItemSpawn(go_poisonTrap, NumPoisonTraps.Random);
+
             EnemySpawn(_floor);
         }
     }
@@ -93,15 +98,13 @@ public class ObjectSpawn : MonoBehaviour
         //Debug.Log("Exit Info: " + go_exit.GetComponent<ObjectInfo>().RoomIndex + "  " + go_exit.GetComponent<ObjectInfo>().MapPostion);
     }
 
-    private void ItemSpawn(GameObject _Item)
+    private void ItemSpawn(GameObject _Item, int amt)
     {
-        int AmtOfChest = NumChest.Random;
         int tempRoom;
         Vector2 tempPos = new Vector2(0, 0);
 
-        for (int i = 0; i < AmtOfChest; ++i)
+        for (int i = 0; i < amt; ++i)
         {
-
             do
             {
                 tempRoom = Random.Range(0, m_rooms.Length - 1);
@@ -129,7 +132,7 @@ public class ObjectSpawn : MonoBehaviour
          * Spawn enemy in the room, give 4 vector3 in a array as waypoint , waypoint are corners of the room
          * */
 
-        go_enemy = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().EnemySkeleton;
+        GameObject go_enemy = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().EnemySkeleton;
 
         int AmtOfEnemy = NumEnemy.Random;
 
@@ -175,6 +178,11 @@ public class ObjectSpawn : MonoBehaviour
             if (tempEnemy.GetComponent<ObjectInfo>() != null)
                 tempEnemy.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
         }
+
+    }
+    
+    private void TrapSpawn(GameObject _Trap)
+    {
 
     }
 

@@ -7,6 +7,8 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject GameLevel;
     public GameObject Floor;
     public GameObject Exit;
+    public GameObject CloseDoor;
+    public GameObject OpenDoor;
     public GameObject PlayerSpawnLocation;
     public GameObject BoarderWall;
     public GameObject StoneWall;
@@ -14,10 +16,10 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject WoodenChest;
     public GameObject RoyalChest;
 
-    //Mainly 2D
-    public GameObject CloseDoor;
-    public GameObject OpenDoor;
-
     public GameObject EnemySkeleton;
 
+    public GameObject BearTrap;
+    public GameObject PoisonTrap;
+    public GameObject SlowTrap;
+    public GameObject ConfusionTrap;
 }
