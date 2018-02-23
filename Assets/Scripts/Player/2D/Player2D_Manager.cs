@@ -181,7 +181,7 @@ public class Player2D_Manager : MonoBehaviour
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
-            p_spriteManager.SetPlayerMoving(true);
+            p_spriteManager.SetMoving(true);
             PlayerMoving = true;
             lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
@@ -192,29 +192,32 @@ public class Player2D_Manager : MonoBehaviour
         {
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
             PlayerMoving = true;
-            p_spriteManager.SetPlayerMoving(true);
+            p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 
         p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        p_spriteManager.SetPlayerMoving(PlayerMoving);
+        p_spriteManager.SetMoving(PlayerMoving);
     }
 
+    public void setAttackClicked(bool _atk) { attackClicked = _atk; }
     /* Attack Animation of Player */
     public void PlayerAttack2D()
     {
         // Change Animation
         if (attackClicked)
         {
+            //p_spriteManager.Attack2D();
+
             canMove = false;
-            animTimer += Time.deltaTime;
-            p_spriteManager.SetSlash(true);
+           // animTimer += Time.deltaTime;
+           // p_spriteManager.SetSlash(true);
 
             if (animTimer >= m_fAniTime)
             {
-                attackClicked = false;
-                p_spriteManager.SetSlash(false);
+               // attackClicked = false;
+              //  p_spriteManager.SetSlash(false);
                 canMove = true;
                 animTimer -= m_fAniTime;
             }

@@ -12,6 +12,10 @@ public class SpriteManager : MonoBehaviour {
 
     public enum S_Wardrobe
     {
+        TOP_NULL,
+        BOTTOM_NULL,
+        SHOES_NULL,
+        HEADP_NULL,
         TOP_DEFAULT,
         BOTTOM_DEFAULT,
         SHOES_DEFAULT,
@@ -29,8 +33,7 @@ public class SpriteManager : MonoBehaviour {
 
     enum AttackStyle
     {
-        PlayerSlash,
-
+        Slash,
     };
     
     public GameObject Body, Head, otherHeads, Top, otherTops, Bottom, otherBottoms, Shoes, otherShoes, Weapon, otherWeapons;
@@ -41,15 +44,17 @@ public class SpriteManager : MonoBehaviour {
     //Attack style
     AttackStyle attackStyle;
     bool attackPlaceHolder;
+    public float animTimer; // countdown timer
+    private float m_fAniTime; // value to countdown from
 
     //Player actions
-    bool PlayerSlash = false;
-    bool PlayerThrust = false;
-    bool PlayerBow = false;
-    bool PlayerSpell = false;
-    bool PlayerDie = false;
+    bool Slash = false;
+    bool ThrustAnim = false;
+    bool BowAnim = false;
+    bool SpellAnim = false;
+    bool DieAnim = false;
     //Player movement
-    bool PlayerMoving = false;
+    bool Moving = false;
     Vector2 MoveXY, lastMove;
 
     /******equipment setters******/
@@ -81,9 +86,12 @@ public class SpriteManager : MonoBehaviour {
 			Head = transform.Find("Head/Hat").gameObject;
 			break;
 		}
-		Head.SetActive(true);
-		HeadAnim = Head.GetComponent<Animator>();
-		HeadAnim.SetBool ("PlayerSlash", PlayerSlash);
+        if(headEquipped != S_Wardrobe.HEADP_NULL)
+        {
+            Head.SetActive(true);
+            HeadAnim = Head.GetComponent<Animator>();
+            HeadAnim.SetBool("Slash", Slash);
+        }
     }
 
     public void SetTopEquip(S_Wardrobe top)
@@ -106,10 +114,13 @@ public class SpriteManager : MonoBehaviour {
                 Top = transform.Find("Top/Default").gameObject;
                 break;
         }
-
+        if(topEquipped != S_Wardrobe.TOP_NULL)
+        {
         Top.SetActive(true);
         TopAnim = Top.GetComponent<Animator>();
-        TopAnim.SetBool("PlayerSlash", PlayerSlash);
+        TopAnim.SetBool("Slash", Slash);
+
+        }
     }
 
     public void SetBottomEquip(S_Wardrobe bottom)
@@ -131,10 +142,13 @@ public class SpriteManager : MonoBehaviour {
 				Bottom = transform.Find("Bottom/Default").gameObject;
                 break;
         }
-
-        Bottom.SetActive(true);
-        BottomAnim = Bottom.GetComponent<Animator>();
-        BottomAnim.SetBool("PlayerSlash", PlayerSlash);
+        if(bottomEquipped != S_Wardrobe.BOTTOM_NULL)
+        {
+            Bottom.SetActive(true);
+            BottomAnim = Bottom.GetComponent<Animator>();
+            BottomAnim.SetBool("Slash", Slash);
+        }
+        
     }
 
     public void SetShoesEquip(S_Wardrobe shoes)
@@ -156,10 +170,13 @@ public class SpriteManager : MonoBehaviour {
                 Shoes = transform.Find("Shoes/Default").gameObject;
                 break;
         }
-
-        Shoes.SetActive(true);
-        ShoesAnim = Shoes.GetComponent<Animator>();
-        ShoesAnim.SetBool("PlayerSlash", PlayerSlash);
+        if(shoesEquipped != S_Wardrobe.SHOES_NULL)
+        {
+            Shoes.SetActive(true);
+            ShoesAnim = Shoes.GetComponent<Animator>();
+            ShoesAnim.SetBool("Slash", Slash);
+        }
+        
     }
 
     public void SetWeaponEquip(S_Weapon weapon)
@@ -180,46 +197,46 @@ public class SpriteManager : MonoBehaviour {
 		{
 			case S_Weapon.DAGGER:
 				Weapon = transform.Find ("Weapon/Dagger").gameObject;
+		        attackStyle = AttackStyle.Slash;
+		        attackPlaceHolder = Slash;
 				break;
 		}
 		Weapon.SetActive (true);
-		attackStyle = AttackStyle.PlayerSlash;
-		attackPlaceHolder = PlayerSlash;
 		WeaponAnim = Weapon.GetComponent<Animator> ();
-		WeaponAnim.SetBool (attackStyle.ToString (), PlayerSlash);
+		WeaponAnim.SetBool (attackStyle.ToString (), Slash);
     }
 
     /**************************/
 
     /********bool setters******/
-    public void SetSlash(bool playerSlash)
+    public void SetSlash(bool slash)
     {
-        PlayerSlash = playerSlash;
+        Slash = slash;
     }
 
-    public void SetSpell(bool playerSpell)
+    public void SetSpell(bool spell)
     {
-        PlayerSpell = playerSpell;
+       SpellAnim = spell;
     }
 
-    public void SetThrust(bool playerThrust)
+    public void SetThrust(bool thrust)
     {
-        PlayerThrust = playerThrust;
+        ThrustAnim = thrust;
     }
 
-    public void SetBow(bool playerBow)
+    public void SetBow(bool bow)
     {
-        PlayerBow = playerBow;
+        BowAnim = bow;
     }
 
-    public void SetDie(bool playerDie)
+    public void SetDie(bool die)
     {
-        PlayerDie = playerDie;
+        DieAnim = die;
     }
 
-    public void SetPlayerMoving(bool playerMoving)
+    public void SetMoving(bool moving)
     {
-        PlayerMoving = playerMoving;
+        Moving = moving;
     }
     /**************************/
 
@@ -246,66 +263,48 @@ public class SpriteManager : MonoBehaviour {
 
     void UpdateAnim(Animator animator)
     {
-        //animator.SetBool("PlayerSlash", PlayerSlash);
+        animator.SetBool(attackStyle.ToString(), attackPlaceHolder);
         animator.SetFloat("MoveX", MoveXY.x);
         animator.SetFloat("MoveY", MoveXY.y);
-        animator.SetBool("PlayerMoving", PlayerMoving);
+        animator.SetBool("Moving", Moving);
         animator.SetFloat("LastMoveX", lastMove.x);
         animator.SetFloat("LastMoveY", lastMove.y);
     }
 
-    /*Animation cases*/
-    void RenderBody()
+    public void PlayAnimation()
+    {
+        if(attackPlaceHolder)
+        {
+            animTimer += Time.deltaTime;
+
+            if (animTimer >= m_fAniTime)
+            {
+                attackPlaceHolder = false;
+                animTimer -= m_fAniTime;
+            }
+        }
+    }
+    // Update is called once per frame
+    void Update ()
     {
         //movement
         UpdateAnim(BodyAnim);
 
-        //slash
-        BodyAnim.SetBool("PlayerSlash", PlayerSlash);
-        //bow
-        BodyAnim.SetBool("PlayerBow", PlayerBow);
-        //thrust
-        BodyAnim.SetBool("PlayerThrust", PlayerThrust);
-        //spell
-        BodyAnim.SetBool("PlayerSpell", PlayerSpell);
-        //die
-        BodyAnim.SetBool("PlayerDie", PlayerDie);
-    }
+        if (headEquipped != S_Wardrobe.HEADP_NULL)
+            UpdateAnim(HeadAnim);
 
-    void RenderHead()
-    {
-        HeadAnim.SetBool("PlayerSlash", PlayerSlash);
-        UpdateAnim(HeadAnim);
-    }
-    void RenderTop()
-    {
-        TopAnim.SetBool("PlayerSlash", PlayerSlash);
-        UpdateAnim(TopAnim);
-    }
-    void RenderBottom()
-    {
-        BottomAnim.SetBool("PlayerSlash", PlayerSlash);
-        UpdateAnim(BottomAnim);
-    }
-    void RenderShoes()
-    {
-        ShoesAnim.SetBool("PlayerSlash", PlayerSlash);
-        UpdateAnim(ShoesAnim);
-    }
-    void RenderWeapon()
-    {
-		WeaponAnim.SetBool (attackStyle.ToString (), PlayerSlash);
+        if (topEquipped != S_Wardrobe.TOP_NULL)
+            UpdateAnim(TopAnim);
+
+        if (bottomEquipped != S_Wardrobe.BOTTOM_NULL)
+            UpdateAnim(BottomAnim);
+
+        if (shoesEquipped != S_Wardrobe.SHOES_NULL)
+            UpdateAnim(ShoesAnim);
+
         UpdateAnim(WeaponAnim);
-    }
-    /**************************/
 
-    // Update is called once per frame
-    void Update () {
-        RenderBody();
-        RenderHead();
-        RenderTop();
-        RenderBottom();
-        RenderShoes();
-        RenderWeapon();
+        PlayAnimation();
     }
+
 }
