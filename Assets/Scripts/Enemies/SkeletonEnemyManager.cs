@@ -235,6 +235,14 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
         //anim = GetComponent<Animation>();
+        e_spriteManager = GetComponent<SpriteManager>();
+        // set default equipments(will be moved to savefile)
+        e_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_NULL);
+        e_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_NULL);
+        e_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_NULL);
+        e_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_NULL);
+        e_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
+
 
         // Setting an Offset.
         distanceOffset.Set(1f, 1f);

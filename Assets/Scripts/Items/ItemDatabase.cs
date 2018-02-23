@@ -212,6 +212,19 @@ public class ItemDatabase {
 
         return ItemOptions;
     }
+
+    public Item getItem(string itemname, string _rarity)
+    {
+        foreach (Item item in ItemList)
+        {
+            if (item.Name == itemname)
+            {
+                if (item.ItemRarity == _rarity)
+                    return item;
+            }
+        }
+        return null;
+    } 
 }
 
 // Adding Items?
