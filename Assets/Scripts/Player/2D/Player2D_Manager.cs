@@ -212,7 +212,7 @@ public class Player2D_Manager : MonoBehaviour
 
             canMove = false;
            // animTimer += Time.deltaTime;
-           // p_spriteManager.SetSlash(true);
+            p_spriteManager.SetAttack(true);
 
             if (animTimer >= m_fAniTime)
             {

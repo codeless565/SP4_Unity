@@ -209,9 +209,9 @@ public class SpriteManager : MonoBehaviour {
     /**************************/
 
     /********bool setters******/
-    public void SetSlash(bool slash)
+    public void SetAttack(bool attack)
     {
-        Slash = slash;
+        attackPlaceHolder = attack;
     }
 
     public void SetSpell(bool spell)
