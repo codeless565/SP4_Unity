@@ -79,19 +79,19 @@ public class Player2D_StatsMenu : MonoBehaviour
                 /* Create the Stats of Player */
                 tempText = Instantiate(player_Stats, transform.position, transform.rotation);
                 tempText.transform.SetParent(GameObject.FindGameObjectWithTag("StatsMenu").transform);
-                PrintData();
+                
             }
         }
 
-       
+        PrintData();
     }
 
     /* Print the data */
     private void PrintData()
     {
         tempText.text = "\n\n\nLevel : " + player.Level.ToString() + " \n"
-                       + "Health : " + player.MaxHealth.ToString() + " \n"
-                       + "Stamina : " + player.MaxStamina.ToString() + " \n"
+                       + "Health : " + player.Health.ToString() + " / " + player.MaxHealth.ToString() + " \n"
+                       + "Stamina : " + player.Stamina.ToString() + " / " + player.MaxStamina.ToString() + " \n"
                        + "Attack : " + player.Attack.ToString() + " \n"
                        + "Defense : " + player.Defense.ToString() + " \n"
                        + "MoveSpeed : " + player.MoveSpeed.ToString() + " \n";

@@ -78,6 +78,9 @@ public class Player2D_Manager : MonoBehaviour
         //{
         //    DisplayPosition[j] = new Vector3();
         //}
+        //AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));
+        //EquipEQ(Inventory[0]);
+
     }
 
     // Update is called once per frame
@@ -160,7 +163,7 @@ public class Player2D_Manager : MonoBehaviour
         /* When canMove, move */
         if (canMove)
             Movement2D();
-        Debug.Log(canMove);
+
         /* Attack Animation */
         //PlayerAttack2D();
     }
@@ -218,14 +221,15 @@ public class Player2D_Manager : MonoBehaviour
         if (attackClicked)
         {
             //p_spriteManager.Attack2D();
-
+           // Debug.Log("attacking!!!  " + animTimer + "  " + m_fAniTime);
             canMove = false;
-           // animTimer += Time.deltaTime;
+            animTimer += Time.deltaTime;
             p_spriteManager.SetAttack(true);
 
             if (animTimer >= m_fAniTime)
             {
-               // attackClicked = false;
+              //  Debug.Log("");
+               attackClicked = false;
               //  p_spriteManager.SetSlash(false);
                 canMove = true;
                 animTimer -= m_fAniTime;
@@ -461,6 +465,8 @@ public class Player2D_Manager : MonoBehaviour
 
     public void AddSprite(Item _equipment)
     {
+        
+
         if (_equipment.ItemType == "Weapons")
         {
             if (_equipment.Name.Contains("Dagger"))
@@ -482,10 +488,10 @@ public class Player2D_Manager : MonoBehaviour
         {
             if (_equipment.Name.Contains("Leather"))
                 p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_HAT);
-            else if (_equipment.Name.Contains("Chain"))
-                p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_CHAIN);
-            else if (_equipment.Name.Contains("Plate"))
-                p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_PLATE);
+            //else if (_equipment.Name.Contains("Chain"))
+            //    p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_CHAIN);
+            //else if (_equipment.Name.Contains("Plate"))
+            //    p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_PLATE);
         }
         else if (_equipment.ItemType == "Chestpieces")
         {
@@ -507,8 +513,6 @@ public class Player2D_Manager : MonoBehaviour
                 p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_DEFAULT);
             else if (_equipment.Name.Contains("Plate"))
                 p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_PLATE);
-            else if (_equipment.Name.Contains("Green"))
-                p_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_GREEN);
         }
         else if (_equipment.ItemType == "Shoes")
         {

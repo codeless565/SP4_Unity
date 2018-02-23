@@ -35,7 +35,6 @@ public class SpriteManager : MonoBehaviour
         TOP_PURPLE,
 
         BOTTOM_PLATE,
-        BOTTOM_GREEN,
 
         SHOES_PLATE,
 
@@ -63,8 +62,8 @@ public class SpriteManager : MonoBehaviour
     //Attack style
     AttackStyle attackStyle;
     bool attackPlaceHolder;
-    public float animTimer; // countdown timer
-    private float m_fAniTime; // value to countdown from
+    public float animTimer = 0.0f; // countdown timer
+    private float m_fAniTime = 1.0f; // value to countdown from
 
     //Player actions
     bool Slash = false;
@@ -105,10 +104,9 @@ public class SpriteManager : MonoBehaviour
             case S_Wardrobe.HEADP_HAT:
                 Head = transform.Find("Head/Hat").gameObject;
                 break;
-            case S_Wardrobe.HEADP_CHAIN:
-                Head = transform.Find("Head/HeadChain").gameObject;
-
-                break;
+            //case S_Wardrobe.HEADP_CHAIN:
+            //    Head = transform.Find("Head/HeadChain").gameObject;
+                //break;
 
         }
         if (headEquipped != S_Wardrobe.HEADP_NULL)
@@ -180,10 +178,7 @@ public class SpriteManager : MonoBehaviour
                 Bottom = transform.Find("Bottom/Default").gameObject;
                 break;
             case S_Wardrobe.BOTTOM_PLATE:
-                Bottom = transform.Find("Bottom/BottomPlate").gameObject;
-                break;
-            case S_Wardrobe.BOTTOM_GREEN:
-                Bottom = transform.Find("Bottom/BottomGreen").gameObject;
+                Bottom = transform.Find("Bottom/Armour1").gameObject;
                 break;
         }
         if (bottomEquipped != S_Wardrobe.BOTTOM_NULL)
@@ -212,6 +207,9 @@ public class SpriteManager : MonoBehaviour
         {
             case S_Wardrobe.SHOES_DEFAULT:
                 Shoes = transform.Find("Shoes/Default").gameObject;
+                break;
+            case S_Wardrobe.SHOES_PLATE:
+                Shoes = transform.Find("Shoes/Armour1").gameObject;
                 break;
         }
         if (shoesEquipped != S_Wardrobe.SHOES_NULL)
@@ -275,6 +273,7 @@ public class SpriteManager : MonoBehaviour
                 attackPlaceHolder = Slash;
                 break;
         }
+    
         Weapon.SetActive(true);
         WeaponAnim = Weapon.GetComponent<Animator>();
         WeaponAnim.SetBool(attackStyle.ToString(), Slash);
@@ -286,6 +285,7 @@ public class SpriteManager : MonoBehaviour
     public void SetAttack(bool attack)
     {
         attackPlaceHolder = attack;
+    
     }
 
     public void SetDie(bool die)
@@ -336,8 +336,10 @@ public class SpriteManager : MonoBehaviour
         {
             animTimer += Time.deltaTime;
 
+            Debug.Log("running!!");
             if (animTimer >= m_fAniTime)
             {
+                Debug.Log("ended!!");
                 attackPlaceHolder = false;
                 animTimer -= m_fAniTime;
             }
