@@ -146,7 +146,7 @@ public class SpriteManager : MonoBehaviour
                 Top = transform.Find("Top/Armour3").gameObject;
                 break;
             case S_Wardrobe.TOP_PLATE:
-                Top = transform.Find("Top/TopPlate").gameObject;
+                Top = transform.Find("Top/Armour4").gameObject;
                 break;
             case S_Wardrobe.TOP_PURPLE:
                 Top = transform.Find("Top/Armour2").gameObject;

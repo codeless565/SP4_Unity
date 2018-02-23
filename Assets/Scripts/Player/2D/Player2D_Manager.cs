@@ -490,12 +490,13 @@ public class Player2D_Manager : MonoBehaviour
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
             else if (_equipment.Name.Contains("Leather"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_LEATHER);
+            else if (_equipment.Name.Contains("Purple"))
+                p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PURPLE);
             else if (_equipment.Name.Contains("Chain"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_CHAIN);
             else if (_equipment.Name.Contains("Plate"))
                 p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PLATE);
-            else if (_equipment.Name.Contains("Purple"))
-                p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_PURPLE);
+
         }
         else if (_equipment.ItemType == "Leggings")
         {
