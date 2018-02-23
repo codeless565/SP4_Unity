@@ -39,6 +39,8 @@ public class Shop : MonoBehaviour
 
         SearchBar.onEndEdit.AddListener(delegate { gameObject.GetComponent<ShopDisplay>().DisplaySearchMenu(SearchBar); });
         Player = GameObject.FindGameObjectWithTag("Player");
+        if (Player != null)
+            Debug.Log(Player);
     }
 
     // Update is called once per frame
