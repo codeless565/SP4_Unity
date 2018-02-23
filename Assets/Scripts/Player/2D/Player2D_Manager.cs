@@ -62,6 +62,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
         attackClicked = false;
         p_spriteManager = GetComponent<SpriteManager>();
 
+        Debug.Log(p_spriteManager);
         // set default equipments(will be moved to savefile)
         p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
         p_spriteManager.SetTopEquip(SpriteManager.S_Wardrobe.TOP_DEFAULT);
@@ -159,7 +160,6 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     void KeyMove()
     {
         PlayerMoving = false;
-        p_spriteManager.SetPlayerMoving(false);
 
         // Move Left / Right
         if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
@@ -181,6 +181,7 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
+
         p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         p_spriteManager.SetPlayerMoving(PlayerMoving);
     }
@@ -307,12 +308,12 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     }
 
     /* Equipping EQ to the Player */
-    public void EquipEQ(Item _equipment)
+    public bool EquipEQ(Item _equipment)
     {
-        // TODO display message
+        
         // If Player level is under equipment Level
         if (statsHolder.Level < _equipment.Level)
-            return;
+            return false;
 
         // If new equipment type is weapons
         if (_equipment.ItemType == "Weapons")
@@ -414,6 +415,8 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
             }
             AddStats(_equipment);
         }
+
+        return true;
     }
 
     /* Stats will be added when Equipped */
@@ -448,5 +451,9 @@ public class Player2D_Manager : MonoBehaviour, CollisionBase
     public void AddGold(int _gold)
     {
         statsHolder.gold += _gold;
+    }
+
+    public void DisplayEquipments()
+    {
     }
 }

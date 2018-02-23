@@ -332,7 +332,14 @@ public class InventoryDisplay : MonoBehaviour {
         if (SelectedItem.ItemType == "Uses")
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
         else
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().EquipEQ(SelectedItem);
+        {
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().EquipEQ(SelectedItem))
+                GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement("Succesfully Equipped!");
+            else
+                GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement("Not enough levels!");
+
+
+        }
         ConfirmationCanvas = false;
     }
     void CancelEquip()
