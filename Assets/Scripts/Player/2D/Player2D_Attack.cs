@@ -10,8 +10,8 @@ public class Player2D_Attack : MonoBehaviour
     private GameObject melee; // game object to spawn at its location
     private GameObject temp; // store the created game object
 
-    private float m_timer; // for duration of hitbox
-    
+    private float m_timer; // for duration of sprite
+
     /* Direction the Attack will be facing */
     private float m_AngleToRotate;
     public static Vector2 Direction;
@@ -33,7 +33,7 @@ public class Player2D_Attack : MonoBehaviour
 
     void Start()
     {
-        m_timer = 0.4F;
+        m_timer = 1.0F;
         m_AngleToRotate = 0.0f;
 
         /* Set Start Downwards */
@@ -81,83 +81,14 @@ public class Player2D_Attack : MonoBehaviour
             if (m_timer <= 0.0F)
             {
                 DestroyImmediate(temp);
-                m_timer = 0.4F;
+                m_timer = 1.0F;
             }
         }
-        
     }
 
-    //private float ThisShallBeMyRotation()
+    /* Collsion Box of Attack hits another Collidable */
+    //private void OnCollisionEnter2D(Collision2D collision)
     //{
-    //    transform.Rotate(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0));
-
-    //    return 0.0f;
-    //}
-
-    ///* Shifting the Attack Melee Box according to direction */
-    //private float CalculateRotationAngle(int _verticalOffset, int _horizontalOffset)
-    //{
-    //    /* Store the values of the offsets */
-    //    int storeVertical = _verticalOffset;
-    //    int storeHorizontal = _horizontalOffset;
-
-    //    /* Work with Positive values */
-    //    if (storeVertical < 0)
-    //        storeVertical = 2;
-    //    if (storeHorizontal < 0)
-    //        storeHorizontal = 2;
-
-    //    /* Store the angles to be rotated by in arrays */
-    //    float[] horizontalAngles = { 90, 270 };
-    //    float[] verticalAngles = { 0, 180, 360 };
-
-    //    /* To get the angle to Rotate by */
-    //    switch (storeHorizontal)
-    //    {
-    //        case 0:
-    //            {
-    //                if (storeVertical != 0)
-    //                {
-    //                    if (storeVertical == 1)
-    //                        return verticalAngles[storeVertical - 1];
-    //                    else
-    //                        return (verticalAngles[storeVertical - 1] == m_AngleToRotate ? (0): (verticalAngles[storeVertical - 1])) ;
-    //                }
-
-    //                return m_AngleToRotate; // when 0, just return the horizontal angle
-    //            }
-
-    //        case 1: // when going in the positive direction
-    //            {
-    //                Debug.Log("the vertical: " + verticalAngles[storeVertical] + " the horizontal : " + horizontalAngles[storeHorizontal]);
-                    
-    //                /* Check if the vertical is not 0 */
-    //                if (storeVertical != 0)
-    //                    return (verticalAngles[storeVertical - 1] + horizontalAngles[storeHorizontal - 1]) * 0.5f - m_AngleToRotate;
-                    
-    //                return horizontalAngles[storeHorizontal - 1] - m_AngleToRotate; // when 0, just return the horizontal angle
-    //            }
-    //        case 2: // when going in the negative direction
-    //            {
-    //                if (storeVertical == 1)
-    //                {
-    //                    Debug.Log("the vertical: " + verticalAngles[storeVertical] + " the horizontal : " + horizontalAngles[storeHorizontal]);
-    //                    return (verticalAngles[storeVertical] + horizontalAngles[storeHorizontal - 1]) * 0.5f - m_AngleToRotate;
-    //                }
-    //                else
-    //                {
-    //                    if (storeVertical != 0)
-    //                    {
-    //                        Debug.Log("the vertical: " + verticalAngles[storeVertical] + " the horizontal : " + horizontalAngles[storeHorizontal]);
-    //                        return (verticalAngles[storeVertical - 1] + horizontalAngles[storeHorizontal - 1]) * 0.5f - m_AngleToRotate;
-    //                    }
-    //                    return horizontalAngles[storeHorizontal - 1] - m_AngleToRotate; // if 0, return horizontal angle
-    //                }
-    //            }
-    //        default: // when player is not moving, take the last move direction
-    //            {
-    //                return m_AngleToRotate;
-    //            }
-    //    }
+    //    Destroy(temp);
     //}
 }

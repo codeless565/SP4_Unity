@@ -2,62 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* Collision with Bear Traps - Minus Health */
-/* A Simple Trap - Maybe for Tutorial */
-public class CollisionBearTrap : MonoBehaviour, CollisionBase
+/* Collision with Bear Traps */
+/* Will create effect when generated on collision */
+public class CollisionBearTrap : MonoBehaviour
 {
-    private Player2D_StatsHolder m_hold;
-
+    /* Damage according to Level */
+    private int m_currLevel;
     /* Timer for destroying it ( since its not gonna be shown )*/
     private float m_fTimer, maxTime;
-    private bool isRendered;
-    private int count; // bad way to do this
-    private SpriteRenderer test;
+    /* Sprite Renderer */
+    private SpriteRenderer m_sprite;
+    /* Limit Damage */
+    private bool m_isAffected;
 
     void Start()
     {
-        /* Player Stats */
-        m_hold = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
-        
         /* The sprite to be not rendered */
-        test = GetComponent<SpriteRenderer>();
-        test.enabled = false;
-
+        m_sprite = GetComponent<SpriteRenderer>();
+        m_sprite.enabled = false;
+        
         /* After Render */
-        m_fTimer = 0.0f;
-        maxTime = 3.0f;
-        isRendered = false;
-        count = 0;
+        m_fTimer = maxTime = 3.0f;
+        m_isAffected = false;
     }
 
     void Update()
     {
-        /* For the Health Effect on Player */
-        if (test.enabled && count == 0)
-        {
-            m_hold.Health -= m_hold.Level * m_hold.Health * 0.02f;
-            count = 1;
-        }
-
         /* For the Rendering of the Trap */
-        if (test.enabled)
+        if (m_sprite.enabled)
         {
-            m_fTimer += Time.deltaTime;
-            if (m_fTimer > maxTime)
-            {
-                Destroy(gameObject);
-                m_fTimer -= maxTime;
-            }
+            m_fTimer -= Time.deltaTime;
+            if (m_fTimer <= 0)
+                Destroy(gameObject); // auto reset
         }
     }
-    
-    public void CollisionResponse(string _tag)
+
+    /* When Enter, Attack Entities ( any Entities )*/
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        /* Further checking for player only */
-        if (_tag != "Player")
+        /* If Only want player to be affected */
+        //if (collision.GetComponent<Player2D_StatsHolder>() == null)
+        //    return;
+
+        if (m_isAffected)
             return;
 
-        isRendered = true;
-        test.enabled = true;
+        /* Affect all those with stats */
+        if (collision.GetComponent<StatsBase>() != null)
+        {
+            m_isAffected = true;
+            collision.GetComponent<StatsBase>().Health -= m_currLevel * 0.75f;
+            Debug.Log("HP : " + collision.GetComponent<StatsBase>().Health);
+        }
+        m_sprite.enabled = true;
+    }
+
+    /* Setter for level */
+    public int CurrentLevel
+    {
+        set
+        {
+            m_currLevel = value;
+        }
     }
 }
