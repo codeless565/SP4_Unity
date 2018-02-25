@@ -2,7 +2,7 @@
 
 public class SpriteManager : MonoBehaviour
 {
-
+    /* Enum of Weapon Sprites */
     public enum S_Weapon
     {
         DAGGER,
@@ -14,6 +14,7 @@ public class SpriteManager : MonoBehaviour
         BOW,
     };
 
+    /* Enum of Equipment Sprites */
     public enum S_Wardrobe
     {
         TOP_NULL,
@@ -40,11 +41,13 @@ public class SpriteManager : MonoBehaviour
         TOTAL
     };
 
+    /* Enum of Player Attack Style */
     enum AttackStyle
     {
         Slash,
         Thrust,
         Bow
+        // SpellCast maybe 
     };
 
     public GameObject Body, Head, otherHeads, Top, otherTops, Bottom, otherBottoms, Shoes, otherShoes, Weapon, otherWeapons;
@@ -63,8 +66,8 @@ public class SpriteManager : MonoBehaviour
     bool Thrust = false;
     bool Bow = false;
     bool Spell = false;
-
     bool Die = false;
+
     //Player movement
     bool Moving = false;
     Vector2 MoveXY, lastMove;

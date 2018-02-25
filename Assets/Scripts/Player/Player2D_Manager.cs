@@ -23,18 +23,15 @@ public class Player2D_Manager : MonoBehaviour
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
 
-	[SerializeField]
-	private UIbar healthBar, EXPbar, StaminaBar;
+	//[SerializeField]
+	//private UIbar healthBar, EXPbar, StaminaBar;
 
     /* Show Level Up */
-    [SerializeField]
-    private TextMesh m_levelup_mesh;
+   // [SerializeField]
+   // private TextMesh m_levelup_mesh;
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
-
-    private GameObject temp; // store the created game object
-    private float m_timer, testTimer; // for duration of hitbox
 
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
@@ -51,6 +48,10 @@ public class Player2D_Manager : MonoBehaviour
     Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL-1];
     Sprite[] EQDisplayLayout = new Sprite[(int)EQTYPE.TOTAL-1];
 
+    /* Player Movement for KeyBoard */
+    private float inputX, inputY;
+
+    // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
     void Start()
     {
@@ -58,14 +59,15 @@ public class Player2D_Manager : MonoBehaviour
         statsHolder = GetComponent<Player2D_StatsHolder>();
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
-        healthBar.MaxValue = statsHolder.MaxHealth;
-        healthBar.Value = statsHolder.Health;
-        EXPbar.MaxValue = statsHolder.MaxEXP;
-        EXPbar.Value = statsHolder.EXP;
-        StaminaBar.MaxValue = statsHolder.MaxStamina;
-        StaminaBar.Value = statsHolder.Stamina;
 
-        //statsHolder.
+        /* UI of Player */
+        //healthBar.MaxValue = statsHolder.MaxHealth;
+        //healthBar.Value = statsHolder.Health;
+        //EXPbar.MaxValue = statsHolder.MaxEXP;
+        //EXPbar.Value = statsHolder.EXP;
+        //StaminaBar.MaxValue = statsHolder.MaxStamina;
+        //StaminaBar.Value = statsHolder.Stamina;
+
         /* Animation */
         animTimer = 0.0f;
         m_fAniTime = 1.0f;
@@ -90,27 +92,25 @@ public class Player2D_Manager : MonoBehaviour
         //}
         //AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));
         //EquipEQ(Inventory[0]);
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        /* UI of Player */
+        //healthBar.MaxValue = statsHolder.MaxHealth;
+        //healthBar.Value = statsHolder.Health;
+        //EXPbar.MaxValue = statsHolder.MaxEXP;
+        //EXPbar.Value = statsHolder.EXP;
+        //StaminaBar.MaxValue = statsHolder.MaxStamina;
+        //StaminaBar.Value = statsHolder.Stamina;
 
-		healthBar.MaxValue = statsHolder.MaxHealth;
-		healthBar.Value = statsHolder.Health;
-        EXPbar.MaxValue = statsHolder.MaxEXP;
-        EXPbar.Value = statsHolder.EXP;
-        StaminaBar.MaxValue = statsHolder.MaxStamina;
-        StaminaBar.Value = statsHolder.Stamina;
-
-        /* When Player Dies, Stop Updating */
+        /* When Player Dies, Stop Updating and go to Game Over Scene */
         if (statsHolder.Health <= 0)
         {
             GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
             return;
         }
-        Debug.Log("Player HP: " + statsHolder.Health);
 
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
@@ -119,7 +119,6 @@ public class Player2D_Manager : MonoBehaviour
             if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
             {
                 m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-               
                 m_bCheckLevelUp = false;
             }
         }
@@ -184,56 +183,43 @@ public class Player2D_Manager : MonoBehaviour
             Movement2D();
 
         /* Attack Animation */
-        //PlayerAttack2D();
+        PlayerAttack2D();
     }
 
     /* Key Board Movement of the Player */
     void KeyMove()
     {
-        //PlayerMoving = false;
-
+        /* Movement of Sprite Animation */
         p_spriteManager.SetMoving(false);
-        /* Getting the Direction of the Player */
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
-        if (inputX != 0f && inputY != 0f)
-        {
-            Player2D_Attack.Direction.Set(inputX, inputY);
-        }
-        else if (inputX != 0f)
-        {
-            Player2D_Attack.Direction.Set(inputX, 0);
-        }
-        else if (inputY != 0f)
-        {
-            Player2D_Attack.Direction.Set(0, inputY);
-        }
+
+        /* Player Movement */
+        inputX = Input.GetAxisRaw("Horizontal");
+        inputY = Input.GetAxisRaw("Vertical");
 
         // Move Left / Right
-        if (Input.GetAxisRaw("Horizontal") > 0f || Input.GetAxisRaw("Horizontal") < 0f)
+        if (inputX > 0f || inputX < 0f)
         {
-            transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
             p_spriteManager.SetMoving(true);
-            //PlayerMoving = true;
-            lastMove = new Vector2(Input.GetAxisRaw("Horizontal"), 0f);
+
+            lastMove = new Vector2(inputX, 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
 
         // Move Up / Down
-        if (Input.GetAxisRaw("Vertical") > 0f || Input.GetAxisRaw("Vertical") < 0f)
+        if (inputY > 0f || inputY < 0f)
         {
-            transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-            //PlayerMoving = true;
+            transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed * Time.deltaTime, 0f));
             p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(0f, Input.GetAxisRaw("Vertical"));
+
+            lastMove = new Vector2(0f, inputY);
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
-
-        p_spriteManager.SetMove(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        p_spriteManager.SetMove(inputX, inputY);
     }
 
-    public void setAttackClicked(bool _atk) { attackClicked = _atk; }
     /* Attack Animation of Player */
+    public void setAttackClicked(bool _atk) { attackClicked = _atk; }
     public void PlayerAttack2D()
     {
         // Change Animation
@@ -259,9 +245,9 @@ public class Player2D_Manager : MonoBehaviour
     /* For Mobile */
     void AccMove()
     {
-        //values from accelerometer;
-        float x = Input.acceleration.x;
-        float y = Input.acceleration.y;
+        /* Player Movement */
+        inputX = Input.acceleration.x;
+        inputY = Input.acceleration.y;
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
@@ -269,6 +255,20 @@ public class Player2D_Manager : MonoBehaviour
     {
         KeyMove();
         //AccMove();
+
+        /* Getting the Direction of the Player ( both key and mobile ) */
+        if (inputX != 0f && inputY != 0f)
+        {
+            Player2D_Attack.Direction.Set(inputX, inputY);
+        }
+        else if (inputX != 0f)
+        {
+            Player2D_Attack.Direction.Set(inputX, 0);
+        }
+        else if (inputY != 0f)
+        {
+            Player2D_Attack.Direction.Set(0, inputY);
+        }
     }
 
     /* HotKeys */
@@ -484,8 +484,6 @@ public class Player2D_Manager : MonoBehaviour
 
     public void AddSprite(Item _equipment)
     {
-        
-
         if (_equipment.ItemType == "Weapons")
         {
             if (_equipment.Name.Contains("Dagger"))

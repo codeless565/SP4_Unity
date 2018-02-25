@@ -18,7 +18,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 
     private string m_name = "player2D";
     private float m_EXP = 0;
-    private float m_MaxEXP = 2;
+    private float m_MaxEXP = 10;
     private float m_MaxHealth = 100;
     private float m_MaxStamina = 10;
 
@@ -176,24 +176,23 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     void Update()
     {
         m_EXP += Time.deltaTime;
-
         levelingSystem.UpdateStats(this);
     }
 
     /* Print Debug Information */
     public void DebugPlayerStats()
     {
-        Debug.Log("Name : " + Name);
-        Debug.Log("Level : " + Level);
-        Debug.Log("playerHealth : " + Health);
-        Debug.Log("playerMaxHealth : " + MaxHealth);
-        Debug.Log("exp : " + m_EXP);
-        Debug.Log("max exp : " + m_MaxEXP);
-        Debug.Log("stamina : " + stamina);
-        Debug.Log("max stamina : " + m_MaxStamina);
-        Debug.Log("Att : " + Attack);
-        Debug.Log("Def : " + Defense);
-        Debug.Log("MoveSpeed : " + MoveSpeed);
-        Debug.Log("Gold : " + gold.ToString());
+        Debug.Log("Name : " + Name + "\n" 
+                 + "Level : " + Level + "\n" 
+                 + "playerHealth : " + Health + "\n" 
+                 + "playerMaxHealth : " + MaxHealth + "\n"
+                 + "exp : " + m_EXP + "\n"
+                 + "Max EXP : " + m_MaxEXP + "\n" 
+                 + "stamina : " + stamina + "\n"
+                 + "max stamina : " + m_MaxStamina + "\n" 
+                 + "Att : " + Attack + "\n"
+                 + "Def : " + Defense + "\n"
+                 + "MoveSpeed : " + MoveSpeed + "\n"
+                 + "Gold : " + gold.ToString());
     }
 }
