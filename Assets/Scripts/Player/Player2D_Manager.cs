@@ -199,7 +199,8 @@ public class Player2D_Manager : MonoBehaviour
         // Move Left / Right
         if (inputX > 0f || inputX < 0f)
         {
-            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f, 0f));
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed 
+                * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f, 0f));
             p_spriteManager.SetMoving(true);
 
             lastMove = new Vector2(inputX, 0f);
@@ -209,7 +210,8 @@ public class Player2D_Manager : MonoBehaviour
         // Move Up / Down
         if (inputY > 0f || inputY < 0f)
         {
-            transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f));
+            transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed 
+                * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f));
             p_spriteManager.SetMoving(true);
 
             lastMove = new Vector2(0f, inputY);

@@ -6,36 +6,34 @@ using UnityEngine;
 /* Specific to player */
 public class CollisionConfusionTrap : MonoBehaviour
 {
-    /* Modifiers to adjust player movement */
-    static public int m_confusedModifier;
-
     /* Timer for Confused Effect */
     private float m_fDuration;
     private bool m_isActivated;
 
+    /* Direction of Movement */
+    static public int m_confusedModifier;
+
+    /* Level */
+    private int currLevel;
+
     // Use this for initialization
     void Start()
     {
-        m_confusedModifier = 1;
-
         m_fDuration = 5.0F;
         m_isActivated = false;
+
+        m_confusedModifier = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        /* For Rendering the Sprite */
         if (m_isActivated)
         {
             m_fDuration -= Time.deltaTime;
-
-            /* For Rendering the Sprite */
             if (m_fDuration <= 0.0F)
-            {
                 Destroy(gameObject);
-                m_confusedModifier = 1;
-                m_fDuration = 5.0f;
-            }
         }
     }
 
@@ -51,7 +49,23 @@ public class CollisionConfusionTrap : MonoBehaviour
             return;
 
         /* Set Timer for Duration of Confusion */
-        m_confusedModifier = -1;
         m_isActivated = true;
+
+        /* Doing Effect in another Script, Check if have Script alr */
+        if (collision.GetComponent<ConfusedEffect>() == null)
+        {
+            collision.gameObject.AddComponent<ConfusedEffect>(); // added to other
+            collision.gameObject.AddComponent<ConfusedEffect>().SetDuration(5 /* 2 * currLevel */);
+        }
+        else /* If alr have script, entend the duration */
+        {
+            collision.gameObject.AddComponent<ConfusedEffect>().Resets();
+        }
+    }
+
+    /* Setter for level */
+    public int CurrentLevel
+    {
+        set { currLevel = value; }
     }
 }
