@@ -552,7 +552,6 @@ public class Player2D_Manager : MonoBehaviour
 
     void PlayerEquipmentInit()
     {
-        Debug.Log("hi");
         AddItem(ItemDatabase.Instance.getItem("Leather Helmet", "Common"));
         EquipEQ(Inventory[0]);
         AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));

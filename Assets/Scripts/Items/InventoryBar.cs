@@ -30,9 +30,8 @@ public class InventoryBar : MonoBehaviour
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
             GameObject HotKeyText = Instantiate(ItemHotkey, newIcon.transform);
-            HotKeyText.transform.position = new Vector3(60.0f, 30.0f) + newIcon.transform.position;
             HotKeyText.GetComponentInChildren<Text>().text = currentX.ToString();
-            HotKeyText.GetComponentInChildren<Text>().alignment = TextAnchor.UpperLeft;
+            HotKeyText.GetComponentInChildren<Text>().alignment = TextAnchor.UpperCenter;
 #endif
             HotBar[i] = newIcon;
         }
