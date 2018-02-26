@@ -13,7 +13,7 @@ public class LevelingSystem : MonoBehaviour
     private bool isPlayer;
 
     // Use this for initialization
-    public void Init(StatsBase _stats, bool _isPlayer)
+    public void Init(StatsBase _stats, bool _isPlayer = false)
     {
         isPlayer = _isPlayer;
 
