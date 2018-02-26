@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemDatabase {
+public class ItemDatabase
+{
     public List<Item> ItemList = new List<Item>();
 
     private static ItemDatabase instance;
@@ -52,7 +53,7 @@ public class ItemDatabase {
             float.TryParse(linedata[7], out temp2);
             newItem.Stamina = temp2;
             float.TryParse(linedata[8], out temp2);
-            newItem.MaxStamina= temp2;
+            newItem.MaxStamina = temp2;
             float.TryParse(linedata[9], out temp2);
             newItem.Attack = temp2;
             float.TryParse(linedata[10], out temp2);
@@ -66,86 +67,68 @@ public class ItemDatabase {
             ItemList.Add(newItem);
 
 
-                for (int j = 1; j <= 4; ++j)
+            for (int j = 1; j <= 4; ++j)
+            {
+                float multipler = 0.0f;
+                Item OtherRarityItem = new Item(newItem);
+                switch (j)
                 {
-                    float multipler = 0.0f;
-                    Item OtherRarityItem = new Item(newItem);
-                    switch (j)
-                    {
-                        case 1:
-                            OtherRarityItem.ItemRarity = "Uncommon";
-                            OtherRarityItem.Level = 10;
-                            multipler = OtherRarityItem.Level / 10 * 1.5f;
-                            break;
-                        case 2:
-                            OtherRarityItem.ItemRarity = "Magic";
-                            OtherRarityItem.Level = 20;
-                            multipler = OtherRarityItem.Level / 10 * 2.0f;
-                            break;
-                        case 3:
-                            OtherRarityItem.ItemRarity = "Ancient";
-                            OtherRarityItem.Level = 30;
-                            multipler = OtherRarityItem.Level / 10 * 2.5f;
-                            break;
-                        case 4:
-                            OtherRarityItem.ItemRarity = "Relic";
-                            OtherRarityItem.Level = 40;
-                            multipler = OtherRarityItem.Level / 10 * 3.0f;
-                            break;
-                    }
-                    OtherRarityItem.Health *= multipler;
-                    OtherRarityItem.MaxHealth *= multipler;
-                    OtherRarityItem.Stamina *= multipler;
-                    OtherRarityItem.MaxStamina *= multipler;
-                    OtherRarityItem.Attack *= multipler;
-                    OtherRarityItem.Defense *= multipler;
-                    OtherRarityItem.MoveSpeed *= multipler;
-
-                    ItemList.Add(OtherRarityItem);
+                    case 1:
+                        OtherRarityItem.ItemRarity = "Uncommon";
+                        OtherRarityItem.Level = 10;
+                        multipler = OtherRarityItem.Level / 10 * 1.5f;
+                        break;
+                    case 2:
+                        OtherRarityItem.ItemRarity = "Magic";
+                        OtherRarityItem.Level = 20;
+                        multipler = OtherRarityItem.Level / 10 * 2.0f;
+                        break;
+                    case 3:
+                        OtherRarityItem.ItemRarity = "Ancient";
+                        OtherRarityItem.Level = 30;
+                        multipler = OtherRarityItem.Level / 10 * 2.5f;
+                        break;
+                    case 4:
+                        OtherRarityItem.ItemRarity = "Relic";
+                        OtherRarityItem.Level = 40;
+                        multipler = OtherRarityItem.Level / 10 * 3.0f;
+                        break;
                 }
+                OtherRarityItem._spritename = newItem._spritename;
+                OtherRarityItem.Health *= multipler;
+                OtherRarityItem.MaxHealth *= multipler;
+                OtherRarityItem.Stamina *= multipler;
+                OtherRarityItem.MaxStamina *= multipler;
+                OtherRarityItem.Attack *= multipler;
+                OtherRarityItem.Defense *= multipler;
+                OtherRarityItem.MoveSpeed *= multipler;
+
+                ItemList.Add(OtherRarityItem);
+            }
 
             if (newItem.ItemType != "Uses")
             {
-                // Special Items?!?!?!
-                float createspecial = Random.Range(0.0f, 1.0f);
-                if (createspecial >= 0.0f && createspecial <= 1.0f) // add special items
+                // Special Items
+                for (int k = 1; k < listofspecialname.Length - 1; ++k)
                 {
-                    int randomSpecial = Random.Range(1, listofspecialname.Length - 1);
                     float multipler = 0.0f;
                     float specialmultipler = 1.0f;
-                    string[] itemdetails = listofspecialname[randomSpecial].Split(new char[] { ',' });
+                    string[] itemdetails = listofspecialname[k].Split(new char[] { ',' });
 
                     Item OtherRarityItem = new Item(newItem);
 
                     if (itemdetails[1] == "0") // suffix
-                    {
                         OtherRarityItem.Name = itemdetails[0] + " " + OtherRarityItem.Name;
-                    }
                     else if (itemdetails[1] == "1") // prefix
-                    {
                         OtherRarityItem.Name = OtherRarityItem.Name + " " + itemdetails[0];
-                    }
 
                     float.TryParse(itemdetails[2], out specialmultipler);
                     if (specialmultipler >= 10.0f)
                         specialmultipler = 10.0f;
 
-
-                    int RandomQuality = Random.Range(1, 2);
-                    switch (RandomQuality)
-                    {
-                        case 1:
-                            OtherRarityItem.ItemRarity = "Ancient";
-                            OtherRarityItem.Level = 30;
-                            multipler = OtherRarityItem.Level / 10 * 2.5f * specialmultipler;
-                            break;
-                        case 2:
-                            OtherRarityItem.ItemRarity = "Relic";
-                            OtherRarityItem.Level = 40;
-                            multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
-                            break;
-                    }
-
+                    OtherRarityItem.ItemRarity = "Relic";
+                    OtherRarityItem.Level = 40;
+                    multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
 
                     OtherRarityItem.Health *= multipler;
                     OtherRarityItem.MaxHealth *= multipler;
@@ -202,7 +185,7 @@ public class ItemDatabase {
     {
         List<Item> ItemOptions = new List<Item>(); // List of Possible Items
 
-        foreach (Item item in ItemList)         
+        foreach (Item item in ItemList)
         {
             if (item.ItemRarity != _rarity)
                 continue;
@@ -224,7 +207,7 @@ public class ItemDatabase {
             }
         }
         return null;
-    } 
+    }
 }
 
 // Adding Items?

@@ -18,8 +18,10 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<BoardGenerator>().Init();
         GetComponent<ObjectSpawn>().Init(t_CurrFloor);
+        GetComponent<Player2D_StatsMenu>().Init();
 
         GetComponent<Inventory>().Init();
+        GetComponent<InventoryDisplay>().Init();
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
@@ -34,6 +36,8 @@ public class NormalMode : MonoBehaviour, GameMode
     public void GameClear()
     {
         //player curr floor + 1
+        CSVSaviour.Instance.Save(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
         SceneManager.LoadScene("SceneGame_2D");
     }
