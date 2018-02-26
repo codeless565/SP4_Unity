@@ -85,10 +85,4 @@ public class Player2D_Attack : MonoBehaviour
             }
         }
     }
-
-    /* Collsion Box of Attack hits another Collidable */
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Destroy(temp);
-    //}
 }

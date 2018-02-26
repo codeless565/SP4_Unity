@@ -16,13 +16,15 @@ public class ActivateTextAtLine : MonoBehaviour {
     private bool waitForPress;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         theTextBox = FindObjectOfType<TextBoxManager>();
 
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (waitForPress && Input.GetKeyDown(KeyCode.I))
         {
             theTextBox.ReloadScript(theText);
@@ -38,7 +40,7 @@ public class ActivateTextAtLine : MonoBehaviour {
 	}
 
     //triggered collison with item/NPC
-    void onTriggerEnter(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if(other.name == "player")
         {
