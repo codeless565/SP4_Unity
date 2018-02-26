@@ -19,7 +19,7 @@ public class CollisionConfusionTrap : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_fDuration = 5.0F;
+        m_fDuration = 3.0F;
         m_isActivated = false;
 
         m_confusedModifier = 1;

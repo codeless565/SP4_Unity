@@ -217,7 +217,10 @@ public class Player2D_Manager : MonoBehaviour
             lastMove = new Vector2(0f, inputY);
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
-        p_spriteManager.SetMove(inputX, inputY);
+
+        /* Sprite Movement */
+        p_spriteManager.SetMove(inputX * CollisionConfusionTrap.m_confusedModifier, 
+            inputY * CollisionConfusionTrap.m_confusedModifier);
     }
 
     /* Attack Animation of Player */
