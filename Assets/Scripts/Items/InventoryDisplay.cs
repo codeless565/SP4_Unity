@@ -334,9 +334,9 @@ public class InventoryDisplay : MonoBehaviour {
         else
         {
             if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().EquipEQ(SelectedItem))
-                GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement("Succesfully Equipped!");
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Succesfully Equipped!");
             else
-                GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement("Not enough levels!");
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Not enough levels!");
 
 
         }

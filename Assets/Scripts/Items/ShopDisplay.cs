@@ -350,6 +350,7 @@ public class ShopDisplay : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(SelectedItem);
         }
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddGold(-SelectedItem.ItemCost * Quantity);
+        GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Succesfully Purchased " + SelectedItem.Name + "!");
 
         ConfirmationDisplay = false;
         Quantity = 1;
