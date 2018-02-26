@@ -30,13 +30,19 @@ public class NormalMode : MonoBehaviour, GameMode
     // Interface Functions // 
     public void GameStart()
     {
-        //Initialize Interface and clock
+        //New Progression
+        if (t_CurrFloor <= 0)
+        {
+            t_CurrFloor = 1;
+
+        }
     }
 
     public void GameClear()
     {
         //player curr floor + 1
-        CSVSaviour.Instance.Save(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        //CSVSaviour.Instance.Save(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        PlayerInvSaviour.Instance.SaveInv(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
 
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
         SceneManager.LoadScene("SceneGame_2D");
@@ -44,8 +50,20 @@ public class NormalMode : MonoBehaviour, GameMode
 
     public void GameOver()
     {
+        // Set Previous Scene and Delete level progression
         PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");
         PlayerPrefs.DeleteKey("CurrentLevel");
+
+        // Clear player's inventory
+        PlayerInvSaviour.Instance.SaveInv(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+
+        int TotalItems = PlayerPrefs.GetInt("NumStoredItems");
+        for (int i =0;i<TotalItems;++i)
+        {
+            //Debug.Log
+            PlayerPrefs.DeleteKey("item " + i);
+        }
+        PlayerPrefs.DeleteKey("NumStoredItems");
         SceneManager.LoadScene("SceneGameOver");
     }
 

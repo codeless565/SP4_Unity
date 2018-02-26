@@ -85,9 +85,11 @@ public class Player2D_Manager : MonoBehaviour
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
 
-        Inventory = CSVSaviour.Instance.LoadInv();
-
-        PlayerEquipmentInit();
+        
+        Inventory = PlayerInvSaviour.Instance.LoadInv();
+        
+        if (PlayerPrefs.GetInt("NumStoredItems") == 0)
+            PlayerEquipmentInit();
     }
 
     // Update is called once per frame
@@ -550,6 +552,7 @@ public class Player2D_Manager : MonoBehaviour
 
     void PlayerEquipmentInit()
     {
+        Debug.Log("hi");
         AddItem(ItemDatabase.Instance.getItem("Leather Helmet", "Common"));
         EquipEQ(Inventory[0]);
         AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));
