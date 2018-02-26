@@ -42,7 +42,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // Enemy //
     EnemySkeletonState skeletonState;
     private Vector2 currentVelocity = Vector2.zero;
-    private Vector2 enemyDestination;
+    private Vector3 enemyDestination;
     private float distanceApart;
     private float enemyChaseRange;
     private float enemyAttackRange;
@@ -57,9 +57,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     public float maxSpeed = 5f;
 
     // Player //
-    private Vector2 playerPos;
-    private Vector2 distanceOffset;
-    private Vector2 PlayerDestination;
     private GameObject player;
     private Player2D_StatsHolder playerStats;
 
@@ -250,7 +247,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         canCountDownPatrolTimer = false;
         canPatrol = false;
         // Setting the range for Enemy State to be CHASE.
-        enemyChaseRange = 10f;
+        enemyChaseRange = 5f;
         // Setting the range for Enemy State to be ATTACk.
         enemyAttackRange = 1f;
         enemyAttackTimer = 3f;
@@ -318,12 +315,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Enemy Idle
-    private void SkeletonIdle(Vector2 _enemyDesti)
+    private void SkeletonIdle(Vector3 _enemyDesti)
     {
         // Set Enemey Walk to FALSE
         e_spriteManager.SetMoving(false);
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        distanceApart = (transform.position - _enemyDesti).magnitude;
         // Change State to CHASE if Player is near.
         if(distanceApart < enemyChaseRange)
         {
@@ -345,12 +342,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Enemy Walk - waypoint to waypoint
-    private void SkeletonPatrol(Vector2 _enemyDesti)
+    private void SkeletonPatrol(Vector3 _enemyDesti)
     {
         // Set Enemey Walk to TRUE
         e_spriteManager.SetMoving(true);
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        distanceApart = (transform.position - _enemyDesti).magnitude;
 
         // Change State to CHASE if Player is within its range.
         if (distanceApart < enemyChaseRange)
@@ -376,7 +373,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
 
     // Enemy Chase
-    private void SkeletonChase(Vector2 _enemyDesti)
+    private void SkeletonChase(Vector3 _enemyDesti)
     {
         // Set Enemey Walk to TRUE
         e_spriteManager.SetMoving(true);
@@ -384,7 +381,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         transform.position = Vector2.SmoothDamp(transform.position, _enemyDesti, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        distanceApart = (transform.position - _enemyDesti).magnitude;
         
         // Change State to ATTACK if Player is within range.
         if(distanceApart < enemyAttackRange)
@@ -399,13 +396,13 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Enemy Attack
-    private void SkeletonAttack(Vector2 _enemyDesti)
+    private void SkeletonAttack(Vector3 _enemyDesti)
     {
         // Set Enemey Walk to FALSE
         e_spriteManager.SetMoving(false);
 
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        distanceApart = (transform.position - _enemyDesti).magnitude;
         // Change State to CHASE if Player is outside of Attack Range.
         if(distanceApart > enemyAttackRange)
         {
@@ -432,6 +429,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     // When Enemy is Dead, wait for a few secs before destroying it.
     IEnumerator SkeletonStateToDie()
     {
+        // Set Enemey Walk to FALSE
+        e_spriteManager.SetMoving(false);
+
         float _delayTime = 1f;
         yield return new WaitForSeconds(_delayTime);
 
