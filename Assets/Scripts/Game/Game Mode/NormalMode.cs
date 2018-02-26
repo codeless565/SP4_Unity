@@ -26,6 +26,11 @@ public class NormalMode : MonoBehaviour, GameMode
     }
 
     // Interface Functions // 
+    public void GameStart()
+    {
+        //Initialize Interface and clock
+    }
+
     public void GameClear()
     {
         //player curr floor + 1

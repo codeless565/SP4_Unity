@@ -39,9 +39,8 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
             Item RandomItem = m_ItemList[Random.Range(0, m_ItemList.Count)];
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(RandomItem);
 
-            Debug.Log(GameObject.FindGameObjectWithTag("Announcement"));
             string Input = "You've got " + RandomItem.Name + "(" + RandomItem.ItemRarity + ")!";
-            GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement(Input);
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(Input);
         }
 
         Destroy(gameObject);

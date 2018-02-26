@@ -29,7 +29,6 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
             selectedRarity = monsterHouse;
         }
 
-
         if (selectedRarity != monsterHouse)
         {
             m_ItemList = ItemDatabase.Instance.GenerateItem(selectedRarity);
@@ -44,7 +43,7 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(RandomItem);
 
                 string Input = "You've got " + RandomItem.Name + "(" + RandomItem.ItemRarity + ")!";
-                GameObject.FindGameObjectWithTag("Announcement").GetComponent<Announcement>().SetNewAnnouncement(Input);
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(Input);
             }
         }
         else
