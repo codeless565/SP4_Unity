@@ -220,10 +220,17 @@ public class Player2D_Manager : MonoBehaviour
         // Move Left / Right
         if (inputX > 0f || inputX < 0f)
         {
-            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed 
-                /** CollisionConfusionTrap.m_confusedModifier */* Time.deltaTime, 0f, 0f));
-            p_spriteManager.SetMoving(true);
+            /* If have then move by Confusion */
+            if (GetComponent<ConfusedEffect>() != null)
+            {
+                transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed
+                 * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f, 0f));
+            }
+            else
+                transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
 
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
             lastMove = new Vector2(inputX, 0f);
             p_spriteManager.SetLastMove(lastMove.x, 0);
         }
@@ -231,17 +238,27 @@ public class Player2D_Manager : MonoBehaviour
         // Move Up / Down
         if (inputY > 0f || inputY < 0f)
         {
-            transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed 
-                /** CollisionConfusionTrap.m_confusedModifier */ * Time.deltaTime, 0f));
-            p_spriteManager.SetMoving(true);
+            /* If have then move by Confusion */
+            if (GetComponent<ConfusedEffect>() != null)
+            {
+                transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed
+                * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f));
+            }
+            else
+                transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed * Time.deltaTime, 0f));
 
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0f, inputY);
             p_spriteManager.SetLastMove(0, lastMove.y);
         }
 
         /* Sprite Movement */
-        p_spriteManager.SetMove(inputX /** CollisionConfusionTrap.m_confusedModifier*/, 
-            inputY/* * CollisionConfusionTrap.m_confusedModifier*/);
+        if (GetComponent<ConfusedEffect>() != null)
+            p_spriteManager.SetMove(inputX * CollisionConfusionTrap.m_confusedModifier, 
+                inputY * CollisionConfusionTrap.m_confusedModifier);
+        else
+            p_spriteManager.SetMove(inputX, inputY);
     }
 
     /* Attack Animation of Player */
