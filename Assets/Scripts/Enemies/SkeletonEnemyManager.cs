@@ -53,16 +53,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     private bool canCountDownPatrolTimer;
     private bool canPatrol;
 
-    public float chasingTimer = 4f;
-    public float maxSpeed = 5f;
+    public float chasingTimer;
+    public float maxSpeed;
 
     // Player //
     private GameObject player;
     private Player2D_StatsHolder playerStats;
-
-    // Pet //
-    private GameObject pet;
-    private int PetDamagedCounter;
 
     SpriteManager e_spriteManager;
 
@@ -71,7 +67,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         get
         {
-            return "EnemySkeleton";
+            return "Enemy";
         }
 
         set
@@ -228,10 +224,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
-        if (GameObject.FindGameObjectWithTag("Pet") != null)
-            pet = GameObject.FindGameObjectWithTag("Pet").GetComponent<PetManager>().gameObject;
-
-        PetDamagedCounter = 0;
 
         e_spriteManager = GetComponent<SpriteManager>();
         // set default equipments(will be moved to savefile)
@@ -240,6 +232,9 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         e_spriteManager.SetBottomEquip(SpriteManager.S_Wardrobe.BOTTOM_NULL);
         e_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_NULL);
         e_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
+
+        chasingTimer = 4f;
+        maxSpeed = 5f;
 
         // Setting Skeleton Initial State as IDLE.
         skeletonState = EnemySkeletonState.IDLE;
