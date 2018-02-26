@@ -12,19 +12,49 @@ public class Player2D_StatsMenu : MonoBehaviour
     /* Menu to open */
     [SerializeField]
     private GameObject Stats_Menu;
+    [SerializeField]
+    private GameObject EQDisplay_Menu;
     private Vector3 menu_scale;
 
     /* Text */
     [SerializeField]
     private Text m_playerStats;
-    private Player2D_StatsHolder player;
+    private GameObject player;
 
-	// Use this for initialization
-	private void Start ()
+    private GameObject SpritePrefab;
+    GameObject[] EQDisplayLayout;
+
+
+    // Use this for initialization
+    public void Init()
     {
         Stats_Reset();
+        menu_scale = new Vector3(1, 1, 1f); // save local scale of menu
 
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        EQDisplayLayout = new GameObject[5];
+        SpritePrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderPrefab;
+
+        Vector2 AnchorMin = new Vector2(0.5f, 1);
+        Vector2 AnchorMax = new Vector2(0.5f, 1);
+
+        for (int j = 0; j < EQDisplayLayout.Length; ++j)
+        {
+            EQDisplayLayout[j] = Instantiate(SpritePrefab, EQDisplay_Menu.transform);
+            EQDisplayLayout[j].GetComponent<RectTransform>().anchorMin = AnchorMin;
+            EQDisplayLayout[j].GetComponent<RectTransform>().anchorMax = AnchorMax;
+            if (j == EQDisplayLayout.Length - 1)
+            {
+                EQDisplayLayout[j].GetComponent<RectTransform>().anchoredPosition = new Vector3(150, (j * 0.5f - 1) * -150);
+            }
+            else
+            {
+                EQDisplayLayout[j].GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, (j * -150));
+            }
+        }
+        
+
     }
 
     /* Reset Stats Animation */
@@ -33,8 +63,7 @@ public class Player2D_StatsMenu : MonoBehaviour
         m_isOpen = false;
 
         /* Menu */
-        menu_scale = new Vector3(Stats_Menu.transform.localScale.x, Stats_Menu.transform.localScale.y, 0f); // save local scale of menu
-        Stats_Menu.transform.localScale = new Vector3(Stats_Menu.transform.localScale.x, 0.0F, 1.0F); // set menu scale
+        Stats_Menu.GetComponent<RectTransform>().localScale = new Vector3(Stats_Menu.transform.localScale.x, 0.0f, 1.0f); // set menu scale
         Stats_Menu.SetActive(false);
 
         /* Text */
@@ -57,9 +86,11 @@ public class Player2D_StatsMenu : MonoBehaviour
             Stats_Menu.SetActive(true);
 
             // If scale.y of Skill Screen is not local scale
-            if (Stats_Menu.transform.localScale.y < menu_scale.y)
+            if (Stats_Menu.GetComponent<RectTransform>().localScale.y < menu_scale.y)
             {
-                Stats_Menu.transform.localScale += new Vector3(0f, menu_scale.y, 0f) * Time.deltaTime * 2f;
+                Stats_Menu.GetComponent<RectTransform>().localScale += new Vector3(0f, menu_scale.y, 0f) * Time.deltaTime;
+                if (Stats_Menu.GetComponent<RectTransform>().localScale.y >= menu_scale.y)
+                    Stats_Menu.GetComponent<RectTransform>().localScale = menu_scale;
             }
             else
             {
@@ -75,18 +106,19 @@ public class Player2D_StatsMenu : MonoBehaviour
     /* Print Data of Player */
     private void PrintData()
     {
-        m_playerStats.text = "Level : " + player.Level.ToString() + " \n"
-                       + "Health : " + player.Health.ToString() + " / " + player.MaxHealth.ToString() + " \n"
-                       + "Stamina : " + player.Stamina.ToString() + " / " + player.MaxStamina.ToString() + " \n"
-                       + "Attack : " + player.Attack.ToString() + " \n"
-                       + "Defense : " + player.Defense.ToString() + " \n"
-                       + "MoveSpeed : " + player.MoveSpeed.ToString() + " \n";
+        m_playerStats.text = "Level : " + player.GetComponent<Player2D_StatsHolder>().Level.ToString() + " \n"
+                       + "Health : " + player.GetComponent<Player2D_StatsHolder>().Health.ToString() + " / " + player.GetComponent<Player2D_StatsHolder>().MaxHealth.ToString() + " \n"
+                       + "Stamina : " + player.GetComponent<Player2D_StatsHolder>().Stamina.ToString() + " / " + player.GetComponent<Player2D_StatsHolder>().MaxStamina.ToString() + " \n"
+                       + "Attack : " + player.GetComponent<Player2D_StatsHolder>().Attack.ToString() + " \n"
+                       + "Defense : " + player.GetComponent<Player2D_StatsHolder>().Defense.ToString() + " \n"
+                       + "MoveSpeed : " + player.GetComponent<Player2D_StatsHolder>().MoveSpeed.ToString() + " \n";
     }
 
     /* Open Stats Menu */
     public void OpenStatsMenu()
     {
         m_isOpen = true;
+        DisplayEquipments();
         Stats_Update();
     }
 
@@ -95,4 +127,16 @@ public class Player2D_StatsMenu : MonoBehaviour
     {
         Stats_Reset();
     }
+
+    public void DisplayEquipments()
+    {
+        for (int i = 0; i < player.GetComponent<Player2D_Manager>().getEQList().Length; ++i)
+        {
+            if (player.GetComponent<Player2D_Manager>().getEQList()[i] == null)
+                EQDisplayLayout[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
+            else
+                EQDisplayLayout[i].GetComponent<Image>().sprite = player.GetComponent<Player2D_Manager>().getEQList()[i].ItemImage;
+        }
+    }
+
 }

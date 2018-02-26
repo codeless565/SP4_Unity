@@ -36,7 +36,7 @@ public class InventoryDisplay : MonoBehaviour {
 
     private GameObject Player;
     // Use this for initialization
-    void Start ()
+    public void Init ()
     {
         PageCount = 0;
         StartCount = 0;
@@ -223,7 +223,6 @@ public class InventoryDisplay : MonoBehaviour {
                             InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
                         else if (item.ItemRarity == "Relic")
                             InventoryBorders[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
-
 
                         InventoryItems[i] = item;
                         InventoryLayout[i].name = item.Name + " " + item.ItemRarity;

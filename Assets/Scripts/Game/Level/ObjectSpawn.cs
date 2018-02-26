@@ -11,7 +11,8 @@ public class ObjectSpawn : MonoBehaviour
     private Vector2 m_playerPos;
 
     //Main Camera/Player Camera
-    public GameObject Camera;
+    public GameObject MainCamera;
+    public GameObject MiniMap;
 
     //Chests
     public IntRange NumChest = new IntRange(5, 10);
@@ -80,7 +81,8 @@ public class ObjectSpawn : MonoBehaviour
         if (t_player.GetComponent<ObjectInfo>() != null)
             t_player.GetComponent<ObjectInfo>().Init(m_playerRoom, m_rooms[m_playerRoom], m_playerPos); //Set Starting Spawn location and detail to object
 
-        Camera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
+        MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
+        MiniMap.GetComponent<ExplorationMap>().Init();
     }
 
     private void ExitSpawn()
