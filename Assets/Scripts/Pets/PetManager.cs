@@ -16,7 +16,7 @@ public class PetManager : MonoBehaviour, StatsBase
 
     // Stats //
     [SerializeField]
-    int petLevel = 0;
+    int petLevel = 1;
 
     float health;
     float maxhealth;
@@ -33,19 +33,28 @@ public class PetManager : MonoBehaviour, StatsBase
     // Pet //
     PetState petState;
     private Vector2 currentVelocity = Vector2.zero;
-    private Vector2 petDestination;
-    private Vector2 destinationOffset;
-    private float followTimer = 2f;
-    private float maxSpeed = 20f;
+    private Vector3 petDestination;
+    private float followTimer;
+    private float maxSpeed;
     private float distanceApart;
     private float PetGuardRange;
-    private float PetFollowRange;
     private float PetHealRange;
+    private float PetFollowRange;
+    private float PetDetectRange;
+    private float PetAttackRange;
     private float HealCoolDownTimer;
     private float SpriteRenderTimer;
+    private float PetRecoverTimer;
     private bool HasPetHeal;
     private bool CanHealCoolDown;
     private bool CanActivateSprite;
+    private bool HasPetTeleport;
+    private bool CanPetRecover;
+    private bool HasPetRecover;
+    private bool CanPetAttack;
+
+    GameObject closestEnemy;
+    public GameObject petRecoveringSprite;
 
     // Player //
     private Player2D_StatsHolder playerStats;
@@ -201,6 +210,9 @@ public class PetManager : MonoBehaviour, StatsBase
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
 
+        maxSpeed = 30f;
+        followTimer = 2f;
+
         // The amount of HP that a Pet will use to heal Player.
         addPlayerHP = 20f;
         HealCoolDownTimer = 10f;
@@ -209,14 +221,25 @@ public class PetManager : MonoBehaviour, StatsBase
         CanHealCoolDown = false;
         CanActivateSprite = false;
 
+        // Pet Recovery State
+        CanPetRecover = false;
+        HasPetRecover = false;
+        PetRecoverTimer = 20f;
+
         // Pet current state to be GUARD.
-        petState = PetState.GUARD;
-        // Setting an Offset.
-        destinationOffset.Set(1f, 1f);
+        petState = PetState.FOLLOW;
         // Setting the range for Pet State to be GUARD.
-        PetGuardRange = 2f;
+        PetGuardRange = 1f;
         // Setting the range for Pet to heal the Player.
         PetHealRange = 2.5f;
+        // Setting the range for Pet State to be TELEPORT.
+        PetFollowRange = 5f;
+        HasPetTeleport = false;
+        // Setting the range for Pet to Attack.
+        PetDetectRange = 6f;
+        PetAttackRange = 2f;
+        CanPetAttack = false;
+
         //Initialize Stats from the leveling system
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, false);
@@ -226,30 +249,63 @@ public class PetManager : MonoBehaviour, StatsBase
     {
         // Getting Player Position for Pet.
         petDestination = player.transform.position;
+        //Debug.Log("player hp" + playerStats.Health);
 
-        // Checks for Player's Health, if it's below 1/3. Pet will heal Player Health.
+        //Debug.Log("following...");
+        //petState = PetState.FOLLOW;
+
+        // If Player's Health is 1/3 of its maximum. Pet will heal Player Health.
         if (playerStats.Health <= (playerStats.MaxHealth * 0.3f))
         {
             if (!HasPetHeal)
                 petState = PetState.HEAL; 
         }
 
+        //// If Pet is going to Attack
+        //closestEnemy = FindClosestEnemy("Enemy");
+        //if(closestEnemy != null)
+        //{
+        //    Debug.Log("can see enemy...");
+        //    distanceApart = (transform.position - closestEnemy.transform.position).magnitude;
+
+        //    if (distanceApart < PetDetectRange)
+        //    {
+        //        Debug.Log("Pet Detecting...");
+
+        //        if (playerStats.Health <= (playerStats.MaxHealth * 0.5f))
+        //        {
+        //            Debug.Log("Pet Attacking...");
+        //            CanPetAttack = true;
+        //            petState = PetState.ATTACK;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    Debug.Log("cannot see enemy...");
+        //    petState = PetState.FOLLOW;
+        //}
+
         // Pet Heal Player Cool Down
-        if(CanHealCoolDown)
+        if (CanHealCoolDown)
         {
             // Start Cool Down Timer
             HealCoolDownTimer -= Time.deltaTime;
 
-            if(HealCoolDownTimer <= 0f)
+            if (HealCoolDownTimer <= 0f)
             {
                 HealCoolDownTimer = 10f;
                 CanHealCoolDown = false;
                 HasPetHeal = false;
             }
+
+            // If Pet's HP is 0, change State to Recovery.
+            if (health <= 0f)
+                petState = PetState.RECOVERY;
         }
 
         // If Healing Sprite is activated.
-        if(CanActivateSprite)
+        if (CanActivateSprite)
         {
             // Start Sprite Render Timer
             SpriteRenderTimer -= Time.deltaTime;
@@ -263,6 +319,20 @@ public class PetManager : MonoBehaviour, StatsBase
             }
         }
 
+        // If Pet is going to Recover
+        if(CanPetRecover)
+        {
+            // Start Count Down Timer
+            PetRecoverTimer -= Time.deltaTime;
+            // Heal Pet
+            health = maxhealth;
+
+            if(PetRecoverTimer <= 0f)
+            {
+                HasPetRecover = true;
+            }
+        }
+
         // Pet States
         switch (petState)
         {
@@ -270,54 +340,63 @@ public class PetManager : MonoBehaviour, StatsBase
                 PetGuard(petDestination);
                 break;
             case PetState.FOLLOW:
-                PetFollow(petDestination, destinationOffset);
+                PetFollow(petDestination);
                 break;
             case PetState.HEAL:
                 PetHeal(petDestination);
                 break;
             case PetState.ATTACK:
-                PetAttack();
+                PetAttack(closestEnemy);
                 break;
             case PetState.RECOVERY:
-                PetRecovery();
+                PetRecovery(petDestination);
                 break;
             case PetState.TELEPORT:
-                PetTeleport();
+                PetTeleport(petDestination);
                 break;
         }
+
+        //Debug.Log("State: " + petState);
+        //Debug.Log("Dist Apart: " + distanceApart);
+        //Debug.Log("Detect Range: " + PetDetectRange);
     }
 
     // Similar to IDLE state of Enemy, Pet will stay still when it's near the Player and "Guard" it.
-    private void PetGuard(Vector2 _petDesti)
+    private void PetGuard(Vector3 _petDesti)
     {
         // Distance between Player and Pet.
-        distanceApart = Vector2.Distance(transform.position, _petDesti);
+        distanceApart = (transform.position - _petDesti).magnitude;
 
         // If Player is out of Pet range, change to FOLLOW.
-        if (distanceApart > PetGuardRange)
+        if (distanceApart > PetGuardRange && distanceApart < PetFollowRange)
         {
             petState = PetState.FOLLOW;
         }
     }
 
     // If Player moves beyond Pet Guard Range, Pet State will change to Follow, and follow the Player.
-    private void PetFollow(Vector2 _petDesti, Vector2 _distOffset)
+    private void PetFollow(Vector3 _petDesti)
     {
         // Pet will walk to Player smoothly.
         transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
 
         // Distance between Player and Pet.
-        distanceApart = Vector2.Distance(transform.position, _petDesti);
+        distanceApart = (transform.position - _petDesti).magnitude;
 
         // If Player is within its GUard Range, change to GUARD.
         if (distanceApart < PetGuardRange)
         {
             petState = PetState.GUARD;
         }
+        // If Player is outside its Follow Range, change to TELEPORT.
+        if(distanceApart > PetFollowRange)
+        {
+            petState = PetState.TELEPORT;
+        }
     }
 
     // If Player Health is below x, the Pet will heal the Player to for x seconds.
-    private void PetHeal(Vector2 _petDesti)
+    private void PetHeal(Vector3 _petDesti)
     {
         if(!HasPetHeal)
         {
@@ -325,15 +404,16 @@ public class PetManager : MonoBehaviour, StatsBase
             transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
 
             // Distance between Player and Pet.
-            distanceApart = Vector2.Distance(transform.position, _petDesti);
+            distanceApart = (transform.position - _petDesti).magnitude;
 
             if (distanceApart < PetHealRange)
             {
                 // Activate Healing Sprite
                 playerHealingSprite.SetActive(true);
                 CanActivateSprite = true;
-                // Increase Player Health.
+                // Increase Player Health from Pet's HP.
                 playerStats.Health += addPlayerHP;
+                health -= addPlayerHP;
                 HasPetHeal = true;
             }
         }
@@ -347,21 +427,106 @@ public class PetManager : MonoBehaviour, StatsBase
         }
     }
 
-    // If there are Enemies near the Player, Pet State will change to Attack and deal damage to the nearest Enemy.
-    private void PetAttack()
+    // If there Player Health is 1/2, Pet State will deal damage to the nearest Enemy.
+    private void PetAttack(GameObject _closest)
     {
+        //// Distance between Pet and Enemy.
+        //distanceApart = (transform.position - _closest.transform.position).magnitude;
 
+        //if(CanPetAttack)
+        //{
+        //    transform.position = Vector2.SmoothDamp(transform.position, _closest.transform.position, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
+        //}
+        //if(distanceApart < PetAttackRange)
+        //{
+        //    Debug.Log("Attacked...");
+        //    // Minus Enemy Health
+        //    _closest.GetComponent<SkeletonEnemyManager>().Health -= attack;
+        //    if(_closest.GetComponent<SkeletonEnemyManager>().Health <= 0f)
+        //    {
+        //        Debug.Log("Changing to Follow...");
+        //        CanPetAttack = false;
+        //        _closest = null;
+        //        petState = PetState.FOLLOW;
+        //    }
+        //}
     }
 
     // If Pet HP is 0, the Pet will still follow Player but it will not help unless its HP is maximum again.
-    private void PetRecovery()
+    private void PetRecovery(Vector3 _petDesti)
     {
+        // Pet will walk to Player smoothly.
+        transform.position = Vector2.SmoothDamp(transform.position, _petDesti, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
 
+        // Activate a Sprite, or Change Sprite to show that it's recovering.
+        petRecoveringSprite.SetActive(true);
+        CanPetRecover = true;
+
+        if(HasPetRecover)
+        {
+            // Reset
+            PetRecoverTimer = 20f;
+            petRecoveringSprite.SetActive(false);
+            CanPetRecover = false;
+            HasPetRecover = false;
+
+            // Change State to FOLLOW after it has recovered finish.
+            petState = PetState.FOLLOW;
+        }
     }
 
     // If Pet is beyond x Range, Pet will be teleported to the Player Pos.
-    private void PetTeleport()
+    private void PetTeleport(Vector3 _petDesti)
     {
+        if(!HasPetTeleport)
+        {
+            // Teleport Pet to Player
+            transform.position = _petDesti;
+            HasPetTeleport = true;
+        }
 
+        if(HasPetTeleport)
+        {
+            // Distance between Player and Pet.
+            distanceApart = (transform.position - _petDesti).magnitude;
+            
+            // Change State to GUARD if Player is within its range.
+            if(distanceApart < PetGuardRange)
+            {
+                petState = PetState.GUARD;
+                HasPetTeleport = false;
+            }
+        }
+    }
+
+    
+    private void SetCurrentLevel(int _currLevel)
+    {
+        petLevel = _currLevel;
+        levelingSystem.Init(this, false);
+    }
+
+    // Find the closest enemy in range.
+    private GameObject FindClosestEnemy(string tag)
+    {
+        GameObject[] enemies;
+        GameObject closestEnemy = null;
+        enemies = GameObject.FindGameObjectsWithTag(tag);
+
+        float distance = Mathf.Infinity;
+        Vector3 petPos = transform.position;
+
+        foreach(GameObject enemy in enemies)
+        {
+            distanceApart = (enemy.transform.position - petPos).sqrMagnitude;
+            if(distanceApart < distance)
+            {
+                closestEnemy = enemy;
+                distance = distanceApart;
+            }
+        }
+
+        Debug.DrawLine(transform.position, closestEnemy.transform.position);
+        return closestEnemy;
     }
 }
