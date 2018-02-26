@@ -19,4 +19,5 @@ public class MiscellaneousHolder : MonoBehaviour
     public GameObject ButtonPrefab;
     public GameObject TextPrefab;
     public GameObject BorderPrefab;
+    public GameObject UIPrefab;
 }

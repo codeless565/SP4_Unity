@@ -68,7 +68,8 @@ public class ShopDisplay : MonoBehaviour
             newIcon.GetComponent<Button>().onClick.AddListener(delegate { ShopButtonOnClick(newIcon); });
 
             GameObject newBorder = Instantiate(BorderPrefab, ShopLayout[i].transform);
-            newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(55.0f, 55.0f);
+            //newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(55.0f, 55.0f);
+            newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(newIcon.GetComponent<RectTransform>().rect.width, newIcon.GetComponent<RectTransform>().rect.height);
             ShopBorders[i] = newBorder;
         }
 
