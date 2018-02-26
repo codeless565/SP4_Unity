@@ -9,7 +9,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     enum EnemySkeletonState
     {
         IDLE,
-        WALK,
+        PATROL,
         CHASE,
         ATTACK,
         DIE,
@@ -41,14 +41,18 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
     // Enemy //
     EnemySkeletonState skeletonState;
-    //public Animation anim;
-
     private Vector2 currentVelocity = Vector2.zero;
-    private float minDistanceApart = 1.5f;
-    private float chaseDistanceRange = 15f;
+    private Vector2 enemyDestination;
     private float distanceApart;
-    private float EnemyAttackTimer;
-    private bool canCountAttackTimer = false;
+    private float enemyChaseRange;
+    private float enemyAttackRange;
+    private float enemyAttackTimer;
+    private float enemyToPatrolTimer;
+    private bool canCountDownAttackTimer;
+    private bool canAttack;
+    private bool canCountDownPatrolTimer;
+    private bool canPatrol;
+
     public float chasingTimer = 4f;
     public float maxSpeed = 5f;
 
@@ -232,9 +236,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         PetDamagedCounter = 0;
 
-        // Setting Skeleton Initial State as IDLE.
-        skeletonState = EnemySkeletonState.IDLE;
-        //anim = GetComponent<Animation>();
         e_spriteManager = GetComponent<SpriteManager>();
         // set default equipments(will be moved to savefile)
         e_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_NULL);
@@ -243,11 +244,19 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         e_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_NULL);
         e_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.DAGGER);
 
+        // Setting Skeleton Initial State as IDLE.
+        skeletonState = EnemySkeletonState.IDLE;
+        enemyToPatrolTimer = 5f;
+        canCountDownPatrolTimer = false;
+        canPatrol = false;
+        // Setting the range for Enemy State to be CHASE.
+        enemyChaseRange = 10f;
+        // Setting the range for Enemy State to be ATTACk.
+        enemyAttackRange = 1f;
+        enemyAttackTimer = 3f;
+        canCountDownAttackTimer = false;
+        canAttack = false;
 
-        // Setting an Offset.
-        distanceOffset.Set(1f, 1f);
-        // Setting Enemy Attack Timer to 0.8f
-        EnemyAttackTimer = 0.5f;
         //Initialize Stats from the leveling system
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, false);
@@ -257,59 +266,47 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 	void Update ()
     {   
         // Getting Player Position.
-        playerPos = player.transform.position;
-        PlayerDestination = playerPos - distanceOffset;
+        enemyDestination = player.transform.position;
 
-        //if (skeletonState == EnemySkeletonState.IDLE)
-        //{
-        //    anim.Play("Idle");
-        //}
-
-        //// Changing Enemy States Manually //
-        //if(Input.GetKey(KeyCode.Alpha1))
-        //{
-        //    // Change State to Idle
-        //    skeletonState = EnemySkeletonState.IDLE;
-        //}
-        //if(Input.GetKey(KeyCode.Alpha2))
-        //{
-        //    // Change State to Walk
-        //    skeletonState = EnemySkeletonState.WALK;
-        //}
-        //if(Input.GetKey(KeyCode.Alpha3))
-        //{
-        //    // Change State to Chase
-        //    skeletonState = EnemySkeletonState.CHASE;
-        //}
-        //if (Input.GetKey(KeyCode.Alpha4))
-        //{
-        //    // Change State to Attack
-        //    skeletonState = EnemySkeletonState.ATTACK;
-        //}
-        //if (Input.GetKey(KeyCode.Alpha5))
-        //{
-        //    // Change State to Death
-        //    skeletonState = EnemySkeletonState.DIE;
-        //}
-        //// END //
+        // Enemy Attack Timer
+        if(canCountDownAttackTimer)
+        {
+            // Start counting down.
+            enemyAttackTimer -= Time.deltaTime;
+            if(enemyAttackTimer <= 0f)
+            {
+                canAttack = true;
+            }
+        }
+        
+        // Enemy Going To Patrol Timer
+        if(canCountDownPatrolTimer)
+        {
+            // Start counting down.
+            enemyToPatrolTimer -= Time.deltaTime;
+            if(enemyToPatrolTimer <= 0f)
+            {
+                canPatrol = true;
+            }
+        }
 
         //Enemy States
         switch (skeletonState)
         {
             case EnemySkeletonState.IDLE:
-                SkeletonIdle(PlayerDestination);
+                SkeletonIdle(enemyDestination);
                 break;
 
-            case EnemySkeletonState.WALK:
-                SkeletonWalk();
+            case EnemySkeletonState.PATROL:
+                SkeletonPatrol(enemyDestination);
                 break;
 
             case EnemySkeletonState.ATTACK:
-                SkeletonAttack(PlayerDestination);
+                SkeletonAttack(enemyDestination);
                 break;
 
             case EnemySkeletonState.CHASE:
-                SkeletonChase(PlayerDestination, playerPos, distanceOffset);
+                SkeletonChase(enemyDestination);
                 break;
 
             case EnemySkeletonState.DIE:
@@ -317,33 +314,51 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
                 break;
         }
 
-        //AnimationUpdate();
-
-        // If AttackTimer can be counted down.
-        if (canCountAttackTimer)
-        {
-            EnemyAttackTimer -= Time.deltaTime;
-        }
-
         PlayerHitEnemy();
     }
 
     // Enemy Idle
-    private void SkeletonIdle(Vector2 _playerDesti)
+    private void SkeletonIdle(Vector2 _enemyDesti)
     {
+        // Set Enemey Walk to FALSE
+        e_spriteManager.SetMoving(false);
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _playerDesti);
-
-        // If Player is within Enemy Chase Range, then change State to CHASE.
-        if(distanceApart < chaseDistanceRange)
+        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        // Change State to CHASE if Player is near.
+        if(distanceApart < enemyChaseRange)
         {
             skeletonState = EnemySkeletonState.CHASE;
+        }
+
+        // Change State to PATROL if Player is not near, and x secs has passed.
+        canCountDownPatrolTimer = true;
+        // If Enemy Can Patrol
+        if(canPatrol)
+        {
+            // Reset
+            enemyToPatrolTimer = 5f;
+            canCountDownPatrolTimer = false;
+            canPatrol = false;
+
+            skeletonState = EnemySkeletonState.PATROL;
         }
     }
 
     // Enemy Walk - waypoint to waypoint
-    private void SkeletonWalk()
+    private void SkeletonPatrol(Vector2 _enemyDesti)
     {
+        // Set Enemey Walk to TRUE
+        e_spriteManager.SetMoving(true);
+        // Distance between Player and Enemy.
+        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+
+        // Change State to CHASE if Player is within its range.
+        if (distanceApart < enemyChaseRange)
+        {
+            skeletonState = EnemySkeletonState.CHASE;
+        }
+
+        // Patrolling
         // if reached currwaypointID reached, set nextID to currID
         float dist2waypoint = (GetComponent<Transform>().position - m_Waypoint[m_currWaypointID]).magnitude;
         if (dist2waypoint <= movespeed * Time.deltaTime / maxSpeed) //if it is possible to reach the waypoint by this frame
@@ -351,78 +366,73 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             ++m_currWaypointID;
             m_currWaypointID %= m_Waypoint.Length;
         }
-        else 
+        else
         {
             // else move towards waypoint
-            Vector3 dir = (m_Waypoint[m_currWaypointID] - GetComponent<Transform>().position ).normalized;
+            Vector3 dir = (m_Waypoint[m_currWaypointID] - GetComponent<Transform>().position).normalized;
             GetComponent<Transform>().position += dir * movespeed * Time.deltaTime / maxSpeed;
         }
     }
 
 
     // Enemy Chase
-    private void SkeletonChase(Vector2 _playerDesti, Vector2 _playerPos, Vector2 _distOffset)
+    private void SkeletonChase(Vector2 _enemyDesti)
     {
-        // Set Enemey Walk
+        // Set Enemey Walk to TRUE
         e_spriteManager.SetMoving(true);
         // Enemy will walk to Player Position smoothly.
-        transform.position = Vector2.SmoothDamp(transform.position, _playerPos - _distOffset, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
+        transform.position = Vector2.SmoothDamp(transform.position, _enemyDesti, ref currentVelocity, chasingTimer, maxSpeed, Time.deltaTime);
 
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _playerDesti);
-
-        // If Enemy has reached the destination, change State to Attack.
-        if (distanceApart < minDistanceApart)
+        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        
+        // Change State to ATTACK if Player is within range.
+        if(distanceApart < enemyAttackRange)
         {
             skeletonState = EnemySkeletonState.ATTACK;
         }
-
-        // If Player is outside of Enemy Chase Range, then change State to IDLE.
-        if(distanceApart > chaseDistanceRange)
+        // Change State to IDLE if Player is outside of Chase Range.
+        if(distanceApart > enemyChaseRange)
         {
             skeletonState = EnemySkeletonState.IDLE;
         }
     }
 
     // Enemy Attack
-    private void SkeletonAttack(Vector2 _playerDesti)
+    private void SkeletonAttack(Vector2 _enemyDesti)
     {
-        // Set Enemey Walk
+        // Set Enemey Walk to FALSE
         e_spriteManager.SetMoving(false);
 
         // Distance between Player and Enemy.
-        distanceApart = Vector2.Distance(transform.position, _playerDesti);
-
-        // Set CountAttackTimer to true.
-        canCountAttackTimer = true;
-
-        if(EnemyAttackTimer <= 0f)
+        distanceApart = Vector2.Distance(transform.position, _enemyDesti);
+        // Change State to CHASE if Player is outside of Attack Range.
+        if(distanceApart > enemyAttackRange)
         {
-            EnemyAttackTimer = 0.5f;
-            player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
-
-            // Play Slash Animation
-            e_spriteManager.SetAttack(true);
+            skeletonState = EnemySkeletonState.CHASE;
         }
 
-        // If Player has moved and its not within range for Enemy to Attack, change State to Chase.
-        if (distanceApart > minDistanceApart)
+        // Enemy Attack
+        // Start CountDownTimer, so that Enemy will deal damage to Player for every x secs.
+        canCountDownAttackTimer = true;
+        // If Enemy can Attack
+        if (canAttack)
         {
-            // Set CountAttackTimer to false
-            canCountAttackTimer = false;
+            // Reset 
+            enemyAttackTimer = 3f;
+            canCountDownAttackTimer = false;
+            canAttack = false;
 
-            e_spriteManager.SetAttack(false);
-
-            // Start Parallel action.
-            float _delayTime = /*anim.GetClip("Attack").length*/ 0.5F;
-            StartCoroutine(SkeletonStateToChase(_delayTime));
+            // Start to attack.
+            player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
+            e_spriteManager.SetAttack(true);
         }
     }
 
-    // When Skeleton Die, wait for animation to be done playing before destroying it.
+    // When Enemy is Dead, wait for a few secs before destroying it.
     IEnumerator SkeletonStateToDie()
     {
-        float _delayTime = /*anim.GetClip("Death").length*/ 0.5F;
+        float _delayTime = 1f;
         yield return new WaitForSeconds(_delayTime);
 
         /* Add EXP to Player when Die */
@@ -430,44 +440,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         Debug.Log(playerStats.EXP);
 
         Destroy(gameObject);
-
-        
-    }
-    
-    // When Player moved out of Enemy attack range, play finish animation before chasing.
-    IEnumerator SkeletonStateToChase(float _delay)
-    {
-        yield return new WaitForSeconds(_delay);
-
-        // Change State to Chase.
-        skeletonState = EnemySkeletonState.CHASE;
-    }
-
-    // Animation Changes based on States.
-    private void AnimationUpdate()
-    {
-        switch(skeletonState)
-        {
-            case EnemySkeletonState.IDLE:
-                //anim.Play("Idle");
-                break;
-
-            case EnemySkeletonState.WALK:
-               // anim.Play("Walk");
-                break;
-
-            case EnemySkeletonState.ATTACK:
-                //anim.Play("Attack");
-                break;
-
-            case EnemySkeletonState.CHASE:
-               // anim.Play("Run");
-                break;
-
-            case EnemySkeletonState.DIE:
-               // anim.Play("Death");
-                break;
-        }
     }
 
     // Handles Player Attack Enemy 
@@ -479,11 +451,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             GetComponent<CollisionPlayerMelee>().Attacked = false;
         }
 
-        //Debug.Log("Enemy HP" + health);
-        //Debug.Log("Enemy Lvl" + enemyLevel);
-
         if (health <= 0)
             skeletonState = EnemySkeletonState.DIE;
     }
-    
 }
