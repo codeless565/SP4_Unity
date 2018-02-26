@@ -13,45 +13,43 @@ public class ExplorationMap : MonoBehaviour {
 
     private bool b_isOpened;
 
-    private int m_CurrFrame;
+    private Camera m_MinimapCam;
+    private float m_DefaultCamSize;
+    private float m_OpenedCamSize;
 
     // Use this for initialization
-    void Start () {
+    public void Init () {
         m_ClosedPos  = GetComponent<RectTransform>().anchoredPosition;
         m_ClosedSize = GetComponent<RectTransform>().sizeDelta;
 
         m_OpenedSize = m_ClosedSize * 3;
         m_OpenedPos  = new Vector2(m_OpenedSize.x * -0.5f, m_OpenedSize.y * -0.5f);
-        Debug.Log("OpenPos:" + m_OpenedPos);
+
+        m_MinimapCam = GameObject.FindGameObjectWithTag("Minimap Camera").GetComponent<Camera>();
+
+        m_DefaultCamSize = m_MinimapCam.orthographicSize;
+        m_OpenedCamSize = m_DefaultCamSize * 3;
 
         b_isOpened = false;
-        m_CurrFrame = -1;
     }
 
-    public void OpenMap()
+    public void ToggleMap()
     {
-        if (!b_isOpened && m_CurrFrame != Time.frameCount)
+        if (!b_isOpened)
         {
             GetComponent<RectTransform>().sizeDelta = m_OpenedSize;
             GetComponent<RectTransform>().anchoredPosition = m_OpenedPos;
-            Debug.Log("O_size new:" + GetComponent<RectTransform>().sizeDelta);
-            Debug.Log("O_Pos new:" + GetComponent<RectTransform>().localPosition);
-            Debug.Log("O_rect new:" + GetComponent<RectTransform>().rect);
+            m_MinimapCam.orthographicSize = m_OpenedCamSize;
 
             b_isOpened = true;
-            m_CurrFrame = Time.frameCount;
         }
-    }
-
-    public void CloseMap()
-    {
-        if (b_isOpened && m_CurrFrame != Time.frameCount)
+        else
         {
             GetComponent<RectTransform>().sizeDelta = m_ClosedSize;
             GetComponent<RectTransform>().anchoredPosition = m_ClosedPos;
+            m_MinimapCam.orthographicSize = m_DefaultCamSize;
 
             b_isOpened = false;
-            m_CurrFrame = Time.frameCount;
         }
     }
 }

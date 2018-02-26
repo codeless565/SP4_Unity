@@ -29,6 +29,7 @@ public class Player2D_StatsMenu : MonoBehaviour
     public void Init()
     {
         Stats_Reset();
+        menu_scale = new Vector3(1, 1, 1f); // save local scale of menu
 
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -62,8 +63,7 @@ public class Player2D_StatsMenu : MonoBehaviour
         m_isOpen = false;
 
         /* Menu */
-        menu_scale = new Vector3(Stats_Menu.transform.localScale.x, Stats_Menu.transform.localScale.y, 0f); // save local scale of menu
-        Stats_Menu.transform.localScale = new Vector3(Stats_Menu.transform.localScale.x, 0.0F, 1.0F); // set menu scale
+        Stats_Menu.GetComponent<RectTransform>().localScale = new Vector3(Stats_Menu.transform.localScale.x, 0.0f, 1.0f); // set menu scale
         Stats_Menu.SetActive(false);
 
         /* Text */
@@ -86,9 +86,11 @@ public class Player2D_StatsMenu : MonoBehaviour
             Stats_Menu.SetActive(true);
 
             // If scale.y of Skill Screen is not local scale
-            if (Stats_Menu.transform.localScale.y < menu_scale.y)
+            if (Stats_Menu.GetComponent<RectTransform>().localScale.y < menu_scale.y)
             {
-                Stats_Menu.transform.localScale += new Vector3(0f, menu_scale.y, 0f) * Time.deltaTime * 2f;
+                Stats_Menu.GetComponent<RectTransform>().localScale += new Vector3(0f, menu_scale.y, 0f) * Time.deltaTime;
+                if (Stats_Menu.GetComponent<RectTransform>().localScale.y >= menu_scale.y)
+                    Stats_Menu.GetComponent<RectTransform>().localScale = menu_scale;
             }
             else
             {
