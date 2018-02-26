@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /* For Player in 2D */
 public class Player2D_Manager : MonoBehaviour
@@ -45,8 +46,11 @@ public class Player2D_Manager : MonoBehaviour
         WEAPON,
         TOTAL
     }
-    Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL-1];
-    Sprite[] EQDisplayLayout = new Sprite[(int)EQTYPE.TOTAL-1];
+    Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
+    GameObject[] EQDisplayLayout = new GameObject[(int)EQTYPE.TOTAL];
+    private GameObject EQDisplayCanvas;
+    private GameObject HUD;
+    private GameObject SpritePrefab;
 
     /* Player Movement for KeyBoard */
     private float inputX, inputY;
@@ -85,13 +89,24 @@ public class Player2D_Manager : MonoBehaviour
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
 
-        //Vector3[] DisplayPosition = new Vector3[(int)EQTYPE.TOTAL-1];
-        //for (int j = 0; j < DisplayPosition.Length ; ++j)
-        //{
-        //    DisplayPosition[j] = new Vector3();
-        //}
-        //AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));
-        //EquipEQ(Inventory[0]);
+        PlayerEquipmentInit();
+
+        EQDisplayCanvas = Instantiate(GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().UIPrefab, GameObject.FindGameObjectWithTag("HUD").transform);
+        SpritePrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderPrefab;
+        for (int j = 0; j < EQDisplayLayout.Length; ++j)
+        {
+            if (j == EQDisplayLayout.Length-1)
+            {
+                EQDisplayLayout[j] = Instantiate(SpritePrefab, EQDisplayCanvas.transform);
+                EQDisplayLayout[j].transform.position = new Vector3(75.0f, (1.5f * 75.0f)) + EQDisplayCanvas.transform.position;
+            }
+            else
+            {
+                EQDisplayLayout[j] = Instantiate(SpritePrefab, EQDisplayCanvas.transform);
+                EQDisplayLayout[j].transform.position = new Vector3(0.0f, (j * 75.0f)) + EQDisplayCanvas.transform.position;
+            }
+        }
+        EQDisplayCanvas.SetActive(false);
     }
 
     // Update is called once per frame
@@ -177,6 +192,12 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
+
+        if (Input.GetKey(KeyCode.T))
+        {
+            EQDisplayCanvas.SetActive(true);
+            DisplayEquipments();
+        }
 
         /* When canMove, move */
         if (canMove)
@@ -481,9 +502,9 @@ public class Player2D_Manager : MonoBehaviour
         for (int i = 0; i < EquipmentList.Length; ++i)
         {
             if (EquipmentList[i] == null)
-                EQDisplayLayout[i] = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
+                EQDisplayLayout[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
             else
-                EQDisplayLayout[i] = EquipmentList[i].ItemImage;
+                EQDisplayLayout[i].GetComponent<Image>().sprite = EquipmentList[i].ItemImage;
         }
     }
 
@@ -543,5 +564,17 @@ public class Player2D_Manager : MonoBehaviour
             else if (_equipment.Name.Contains("Plate"))
                 p_spriteManager.SetShoesEquip(SpriteManager.S_Wardrobe.SHOES_PLATE);
         }
+    }
+
+    void PlayerEquipmentInit()
+    {
+        AddItem(ItemDatabase.Instance.getItem("Leather Helmet", "Common"));
+        EquipEQ(Inventory[0]);
+        AddItem(ItemDatabase.Instance.getItem("Robe Chestpiece", "Common"));
+        EquipEQ(Inventory[1]);
+        AddItem(ItemDatabase.Instance.getItem("Robe Leggings", "Common"));
+        EquipEQ(Inventory[2]);
+        AddItem(ItemDatabase.Instance.getItem("Leather Shoes", "Common"));
+        EquipEQ(Inventory[3]);
     }
 }

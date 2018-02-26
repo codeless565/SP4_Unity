@@ -37,9 +37,8 @@ public class MinimapExit : MonoBehaviour
             Vector2 distFromCam = GetComponent<Transform>().position - c_MainCam.GetComponent<Transform>().position;
             if (distFromCam.magnitude > viewDist)
             {
-                if (highDifficulty)
-                    if (exposed) // only change to floor instead if player has seen it
-                        gameObject.GetComponentInChildren<SpriteRenderer>().sprite = s_TooFar; // Disappear on the map once player is out of range
+                if (exposed) // only change to floor instead if player has seen it
+                    gameObject.GetComponentInChildren<SpriteRenderer>().sprite = s_TooFar; // Disappear on the map once player is out of range
 
                 return;
             }
@@ -50,6 +49,8 @@ public class MinimapExit : MonoBehaviour
             {
                 gameObject.GetComponentInChildren<SpriteRenderer>().sprite = s_Exposed; // Change the mapicon sprite
                 exposed = true;
+                if (!highDifficulty)
+                    Destroy(this);
             }
         }
     }

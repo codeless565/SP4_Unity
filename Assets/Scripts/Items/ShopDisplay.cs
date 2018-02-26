@@ -68,7 +68,8 @@ public class ShopDisplay : MonoBehaviour
             newIcon.GetComponent<Button>().onClick.AddListener(delegate { ShopButtonOnClick(newIcon); });
 
             GameObject newBorder = Instantiate(BorderPrefab, ShopLayout[i].transform);
-            newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(55.0f, 55.0f);
+            //newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(55.0f, 55.0f);
+            newBorder.GetComponent<RectTransform>().sizeDelta = new Vector2(newIcon.GetComponent<RectTransform>().rect.width, newIcon.GetComponent<RectTransform>().rect.height);
             ShopBorders[i] = newBorder;
         }
 
@@ -349,6 +350,7 @@ public class ShopDisplay : MonoBehaviour
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddItem(SelectedItem);
         }
         GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().AddGold(-SelectedItem.ItemCost * Quantity);
+        GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Succesfully Purchased " + SelectedItem.Name + "!");
 
         ConfirmationDisplay = false;
         Quantity = 1;

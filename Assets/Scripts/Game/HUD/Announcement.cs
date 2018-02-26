@@ -14,8 +14,8 @@ public class Announcement : MonoBehaviour
 	void Start ()
     {
         elapseTime = timeLimit;
-        movingDir = new Vector3(0, 10, 0);
-        acceleration = new Vector3(0, 5, 0);
+        movingDir = new Vector3(0, 20, 0);
+        acceleration = new Vector3(0, 10, 0);
     }
 	
 	// Update is called once per frame
