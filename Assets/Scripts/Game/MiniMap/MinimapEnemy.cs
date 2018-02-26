@@ -8,6 +8,7 @@ public class MinimapEnemy : MonoBehaviour
     private Sprite s_Exposed;
     private Camera c_MainCam;
     private float viewDist;
+    public bool highDifficulty = false;
     private bool exposed;
 
     void Start()
@@ -42,6 +43,8 @@ public class MinimapEnemy : MonoBehaviour
             {
                 gameObject.GetComponentInChildren<SpriteRenderer>().sprite = s_Exposed; // Change the mapicon sprite
                 exposed = true;
+                if (!highDifficulty)
+                    Destroy(this);
             }
         }
     }
