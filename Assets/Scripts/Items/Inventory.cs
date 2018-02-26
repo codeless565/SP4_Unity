@@ -36,7 +36,6 @@ public class Inventory : MonoBehaviour
         NextPageButton.GetComponent<Image>().color = Color.cyan;
 
         Player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log(Player);
     }
 
     // Update is called once per frame

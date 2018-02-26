@@ -37,7 +37,7 @@ public class Player2D_Manager : MonoBehaviour
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
-    enum EQTYPE
+    public enum EQTYPE
     {
         HELMET,
         CHESTPIECE,
@@ -47,11 +47,7 @@ public class Player2D_Manager : MonoBehaviour
         TOTAL
     }
     Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
-    GameObject[] EQDisplayLayout = new GameObject[(int)EQTYPE.TOTAL];
-    private GameObject EQDisplayCanvas;
-    private GameObject HUD;
-    private GameObject SpritePrefab;
-
+    public Item[] getEQList() { return EquipmentList; }
     /* Player Movement for KeyBoard */
     private float inputX, inputY;
 
@@ -89,24 +85,9 @@ public class Player2D_Manager : MonoBehaviour
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
 
-        PlayerEquipmentInit();
+        Inventory = CSVSaviour.Instance.LoadInv();
 
-        EQDisplayCanvas = Instantiate(GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().UIPrefab, GameObject.FindGameObjectWithTag("HUD").transform);
-        SpritePrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderPrefab;
-        for (int j = 0; j < EQDisplayLayout.Length; ++j)
-        {
-            if (j == EQDisplayLayout.Length-1)
-            {
-                EQDisplayLayout[j] = Instantiate(SpritePrefab, EQDisplayCanvas.transform);
-                EQDisplayLayout[j].transform.position = new Vector3(75.0f, (1.5f * 75.0f)) + EQDisplayCanvas.transform.position;
-            }
-            else
-            {
-                EQDisplayLayout[j] = Instantiate(SpritePrefab, EQDisplayCanvas.transform);
-                EQDisplayLayout[j].transform.position = new Vector3(0.0f, (j * 75.0f)) + EQDisplayCanvas.transform.position;
-            }
-        }
-        EQDisplayCanvas.SetActive(false);
+        PlayerEquipmentInit();
     }
 
     // Update is called once per frame
@@ -192,12 +173,6 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
-
-        if (Input.GetKey(KeyCode.T))
-        {
-            EQDisplayCanvas.SetActive(true);
-            DisplayEquipments();
-        }
 
         /* When canMove, move */
         if (canMove)
@@ -514,16 +489,6 @@ public class Player2D_Manager : MonoBehaviour
         statsHolder.gold += _gold;
     }
 
-    public void DisplayEquipments()
-    {
-        for (int i = 0; i < EquipmentList.Length; ++i)
-        {
-            if (EquipmentList[i] == null)
-                EQDisplayLayout[i].GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
-            else
-                EQDisplayLayout[i].GetComponent<Image>().sprite = EquipmentList[i].ItemImage;
-        }
-    }
 
     public void AddSprite(Item _equipment)
     {
