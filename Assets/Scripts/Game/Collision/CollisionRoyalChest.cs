@@ -17,13 +17,13 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
         string selectedRarity;
         string monsterHouse = "MonsterHouse";
 
-        if (diceResult <= 0.6f)
-            selectedRarity = "Magic";
-        else if (diceResult > 0.6f && diceResult <= 0.8f)
-            selectedRarity = "Ancient";
-        else if (diceResult > 0.8f && diceResult <= 0.9f)
-            selectedRarity = "Relic";
-        else
+        //if (diceResult <= 0.6f)
+        //    selectedRarity = "Magic";
+        //else if (diceResult > 0.6f && diceResult <= 0.8f)
+        //    selectedRarity = "Ancient";
+        //else if (diceResult > 0.8f && diceResult <= 0.9f)
+        //    selectedRarity = "Relic";
+        //else
         {
             //trigger monster house 10%
             selectedRarity = monsterHouse;
@@ -93,6 +93,7 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
                 if (tempEnemy.GetComponent<ObjectInfo>() != null)
                     tempEnemy.GetComponent<ObjectInfo>().Init(0, thisRoom, tempPos);
             }
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("You have triggered a trap!");
         }
 
         Destroy(gameObject);
