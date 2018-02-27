@@ -68,13 +68,11 @@ public class InventoryDisplay : MonoBehaviour {
         ItemNameText.transform.position = new Vector3(0.0f,100.0f) + EquipConfirmationCanvas.transform.position;
 
         ItemNameStats = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(650.0f, 30.0f);
         ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + EquipConfirmationCanvas.transform.position;
 
         ConfirmButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
         ConfirmButton.transform.position = new Vector3(-50.0f, -100.0f) + EquipConfirmationCanvas.transform.position;
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
-
         ConfirmButton.GetComponent<Button>().onClick.RemoveAllListeners();
         ConfirmButton.GetComponent<Button>().onClick.AddListener(ConfirmEquip);
         

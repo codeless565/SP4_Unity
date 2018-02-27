@@ -50,6 +50,7 @@ public class Player2D_Manager : MonoBehaviour
     public Item[] getEQList() { return EquipmentList; }
     /* Player Movement for KeyBoard */
     private float inputX, inputY;
+    private ControlsManager cm;
 
     // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
@@ -93,6 +94,7 @@ public class Player2D_Manager : MonoBehaviour
         
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
+        cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
     }
 
     // Update is called once per frame
@@ -123,7 +125,7 @@ public class Player2D_Manager : MonoBehaviour
                 m_bCheckLevelUp = false;
             }
         }
-
+        //if (!bA1State && Input.GetKeyDown(cm.GetKey("moveforward")))
         // Hot bar key press
         bool bA1State = false;
         if (!bA1State && Input.GetKeyDown(KeyCode.Alpha1))
