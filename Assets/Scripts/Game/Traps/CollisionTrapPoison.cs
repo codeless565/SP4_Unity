@@ -34,14 +34,14 @@ public class CollisionTrapPoison : MonoBehaviour
         if (other.GetComponent<Player2D_StatsHolder>() == null) 
             return;
 
-        if (other.gameObject.GetComponent<PoisonTrapEffect>() == null)
+        if (other.GetComponent<PoisonTrapEffect>() == null)
         {
             other.gameObject.AddComponent<PoisonTrapEffect>();
-            other.gameObject.GetComponent<PoisonTrapEffect>().SetDuration(10);
-            other.gameObject.GetComponent<PoisonTrapEffect>().SetDamage(m_currentLevel * 0.5f);
+            other.GetComponent<PoisonTrapEffect>().SetDuration(10);
+            other.GetComponent<PoisonTrapEffect>().SetDamage(m_currentLevel * 0.5f);
         }
         else
-            other.gameObject.GetComponent<PoisonTrapEffect>().ResetTimer();
+            other.GetComponent<PoisonTrapEffect>().ResetTimer();
 
         b_isDestroying = true;
     }

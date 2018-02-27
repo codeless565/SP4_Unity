@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class GameTimer : MonoBehaviour {
 
     public Text TimeDisplay;
-    public float m_Gametime = 500; //In Seconds
+    public float m_Gametime = 100; //In Seconds
 
 	public void Init () {
-        if (m_Gametime <= 10)
+        if (m_Gametime < 10)
             m_Gametime = 10;
+        else if (m_Gametime > 300)
+            m_Gametime = 300;
 	}
 	
 	void Update () {

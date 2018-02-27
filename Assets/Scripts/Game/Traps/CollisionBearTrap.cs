@@ -6,7 +6,7 @@ using UnityEngine;
 /* Will create effect when generated on collision */
 public class CollisionBearTrap : MonoBehaviour
 {
-    /* Damage according to Level */
+    /* Damage according to Floor */
     private int m_currLevel;
     /* Timer for destroying it ( since its not gonna be shown )*/
     private float m_fTimer, maxTime;
@@ -22,7 +22,7 @@ public class CollisionBearTrap : MonoBehaviour
         m_sprite.enabled = false;
         
         /* After Render */
-        m_fTimer = maxTime = 3.0f;
+        m_fTimer = maxTime = 1.0f;
         m_isAffected = false;
     }
 
@@ -38,7 +38,7 @@ public class CollisionBearTrap : MonoBehaviour
     }
 
     /* When Enter, Attack Entities ( any Entities )*/
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D otherEntity)
     {
         /* If Only want player to be affected */
         //if (collision.GetComponent<Player2D_StatsHolder>() == null)
@@ -48,17 +48,17 @@ public class CollisionBearTrap : MonoBehaviour
             return;
 
         /* Affect all those with stats */
-        if (collision.GetComponent<StatsBase>() != null)
+        if (otherEntity.GetComponent<StatsBase>() != null)
         {
             m_isAffected = true;
-            collision.GetComponent<StatsBase>().Health -= m_currLevel * 0.75f;
-            Debug.Log("HP : " + collision.GetComponent<StatsBase>().Health);
+            float entityMaxHP = otherEntity.GetComponent<StatsBase>().MaxHealth;
+            otherEntity.GetComponent<StatsBase>().Health -= entityMaxHP * 0.01f * m_currLevel; // deal by percentage of hp
         }
         m_sprite.enabled = true;
     }
 
     /* Setter for level */
-    public int CurrentLevel
+    public int CurrentFloor
     {
         set
         {

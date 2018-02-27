@@ -22,9 +22,7 @@ public class ObjectSpawn : MonoBehaviour
     public IntRange NumEnemy = new IntRange(5, 10);
 
     //Traps
-    public IntRange NumBearTraps = new IntRange(1, 5);
-    public IntRange NumPoisonTraps = new IntRange(1, 5);
-    public IntRange NumSlowTraps = new IntRange(1, 5);
+    public IntRange NumTraps = new IntRange(5, 10);
 
     //GO
     private Room[] m_rooms;
@@ -44,8 +42,6 @@ public class ObjectSpawn : MonoBehaviour
 
         GameObject go_chest       = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
         GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
-        GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
-        GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
 
         //if (m_currentFloor == 10)
         //{
@@ -61,8 +57,7 @@ public class ObjectSpawn : MonoBehaviour
             ItemSpawn(go_royalchest, NumRoyalChest.Random);
 
             // Traps
-            TrapwDamageSpawn(go_poisonTrap, NumPoisonTraps.Random);
-            ItemSpawn(go_slowTrap, NumSlowTraps.Random);
+            TrapSpawn(NumTraps.Random);
 
             // Enemies
             EnemySpawn(_floor);
@@ -190,13 +185,24 @@ public class ObjectSpawn : MonoBehaviour
 
     }
     
-    private void TrapwDamageSpawn(GameObject _Trap, int amt)
+    private void TrapSpawn(int amt)
     {
+        /* Get all traps from holder */
+        GameObject go_bearTrap      = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
+        GameObject go_poisonTrap    = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
+        GameObject go_slowTrap      = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
+        GameObject go_confusionTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ConfusionTrap;
+
+        /* Initialize repeatable variable for use */
+        GameObject tempTrap;
+        int trapChoice;
         int tempRoom;
         Vector2 tempPos = new Vector2(0, 0);
 
+        /* Spawn required number of traps */
         for (int i = 0; i < amt; ++i)
         {
+            /* Get a space that is not on player or exit */
             do
             {
                 tempRoom = Random.Range(0, m_rooms.Length - 1);
@@ -209,18 +215,37 @@ public class ObjectSpawn : MonoBehaviour
 
                 tempPos.Set(ranXpos, ranYpos);
 
-            } while (tempPos == m_playerPos || tempPos == m_exitPos);
+            } while (tempRoom == m_playerRoom || tempPos == m_exitPos);
 
-            GameObject tempItem = Instantiate(_Trap, tempPos, Quaternion.identity, go_floorholder.transform);
+            /* Randomly choose 1 type of trap to spawn */
+            trapChoice = Random.Range(1, 4);
+            
+            switch (trapChoice)
+            {
+                case 1: // Spawns a Poison Trap
+                    tempTrap = Instantiate(go_poisonTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+                case 2: // Spawns a Slow Trap
+                    tempTrap = Instantiate(go_slowTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+                case 3: // Spawns a Confusion Trap
+                    tempTrap = Instantiate(go_confusionTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+                default: // Spawns a Bear Trap (DEFAULT if no selection)
+                    Debug.Log("Spawned Bear");
+                    tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+            }
 
-            if (tempItem.GetComponent<CollisionTrapPoison>() != null)
-                tempItem.GetComponent<CollisionTrapPoison>().CurrentFloor = m_currentFloor;
+            if (tempTrap.GetComponent<CollisionTrapPoison>() != null)
+                tempTrap.GetComponent<CollisionTrapPoison>().CurrentFloor = m_currentFloor;
+            else if (tempTrap.GetComponent<CollisionBearTrap>() != null)
+                tempTrap.GetComponent<CollisionBearTrap>().CurrentFloor = m_currentFloor;
 
-            if (tempItem.GetComponent<ObjectInfo>() != null)
-                tempItem.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
+            if (tempTrap.GetComponent<ObjectInfo>() != null)
+                tempTrap.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
         }
     }
-
 
     // Getters
     public GameObject GameLevel
