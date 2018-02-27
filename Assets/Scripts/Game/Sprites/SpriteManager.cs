@@ -98,11 +98,14 @@ public class SpriteManager : MonoBehaviour
                 break;
 
             case S_Wardrobe.HEADP_HAT:
-                Head = transform.Find("Head/Hat").gameObject;
+                Head = transform.Find("Head/Armour1").gameObject;
                 break;
-            //case S_Wardrobe.HEADP_CHAIN:
-            //    Head = transform.Find("Head/HeadChain").gameObject;
-                //break;
+            case S_Wardrobe.HEADP_CHAIN:
+                Head = transform.Find("Head/Armour2").gameObject;
+                break;
+            case S_Wardrobe.HEADP_PLATE:
+                Head = transform.Find("Head/Armour3").gameObject;
+                break;
 
         }
         if (headEquipped != S_Wardrobe.HEADP_NULL)
