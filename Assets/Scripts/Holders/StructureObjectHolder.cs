@@ -22,4 +22,9 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject PoisonTrap;
     public GameObject SlowTrap;
     public GameObject ConfusionTrap;
+
+    public GameObject ProfileAlimentDamage;
+    public GameObject ProfileAlimentPoison;
+    public GameObject ProfileAlimentSlow;
+    public GameObject ProfileAlimentConfusion;
 }

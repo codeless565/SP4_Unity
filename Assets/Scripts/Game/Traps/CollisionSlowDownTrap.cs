@@ -8,6 +8,7 @@ public class CollisionSlowDownTrap : MonoBehaviour
     private int m_currentLevel;
 
     public  float DestroyDelayTime = 3;
+    public  float EffectDuration = 5;
     private float m_elapseTimer;
     private bool b_isDestroying;
 
@@ -38,9 +39,18 @@ public class CollisionSlowDownTrap : MonoBehaviour
         if (other.GetComponent<SlowDownTrapEffect>() == null)
         {
             other.gameObject.AddComponent<SlowDownTrapEffect>();
+            other.GetComponent<SlowDownTrapEffect>().SetDuration(EffectDuration);
         }
         else
             other.GetComponent<SlowDownTrapEffect>().ResetTimer();
+
+        GameObject Profile = GameObject.FindGameObjectWithTag("PlayerProfileHUD");
+        if (Profile != null)
+        {
+            GameObject Aliment = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ProfileAlimentSlow;
+            Aliment = Instantiate(Aliment, Profile.transform);
+            Aliment.GetComponent<PlayerProfileStatusAliment>().Init(EffectDuration);
+        }
 
         b_isDestroying = true;
     }

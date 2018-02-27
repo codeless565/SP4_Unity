@@ -6,7 +6,10 @@ using UnityEngine;
 /* Specific to player */
 public class CollisionConfusionTrap : MonoBehaviour
 {
-    /* Timer for Confused Effect */
+    /* Timer for Confuseion Effect on Player */
+    public float EffectDuration = 5;
+
+    /* Timer for Confused Trap */
     private float m_fDuration;
     private bool m_isActivated;
 
@@ -47,11 +50,19 @@ public class CollisionConfusionTrap : MonoBehaviour
         if (collision.GetComponent<ConfusedEffect>() == null)
         {
             collision.gameObject.AddComponent<ConfusedEffect>(); // added to other
-            collision.GetComponent<ConfusedEffect>().SetDuration(5);
+            collision.GetComponent<ConfusedEffect>().SetDuration(EffectDuration);
         }
         else /* If alr have script, entend the duration */
         {
             collision.GetComponent<ConfusedEffect>().Resets();
+        }
+
+        GameObject Profile = GameObject.FindGameObjectWithTag("PlayerProfileHUD");
+        if (Profile != null)
+        {
+            GameObject Aliment = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ProfileAlimentConfusion;
+            Aliment = Instantiate(Aliment, Profile.transform);
+            Aliment.GetComponent<PlayerProfileStatusAliment>().Init(EffectDuration);
         }
     }
 }
