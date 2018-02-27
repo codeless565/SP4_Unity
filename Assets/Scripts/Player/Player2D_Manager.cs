@@ -51,24 +51,16 @@ public class Player2D_Manager : MonoBehaviour
 
     /* Player Movement */
     private float inputX, inputY;
-
-    private ControlsManager cm;
-
     static public int m_confusedModifier;
+    private float m_Sprint, m_maxSprint; // sprint 
 
-
+    /* Options */
+    private ControlsManager cm;
+    
     // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
     void Start()
     {
-        /* Stats Things */
-        statsHolder = GetComponent<Player2D_StatsHolder>();
-        m_bCheckLevelUp = false;
-        //statsHolder.DebugPlayerStats();
-
-        /* Effects */
-        m_confusedModifier = 1;
-
         /* UI of Player */
         //healthBar.MaxValue = statsHolder.MaxHealth;
         //healthBar.Value = statsHolder.Health;
@@ -76,6 +68,10 @@ public class Player2D_Manager : MonoBehaviour
         //EXPbar.Value = statsHolder.EXP;
         //StaminaBar.MaxValue = statsHolder.MaxStamina;
         //StaminaBar.Value = statsHolder.Stamina;
+
+        /* Stats Things */
+        statsHolder = GetComponent<Player2D_StatsHolder>();
+        m_bCheckLevelUp = false;
 
         /* Animation */
         animTimer = 0.0f;
@@ -94,8 +90,8 @@ public class Player2D_Manager : MonoBehaviour
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
         
+        /* Storing Player Info */
         Inventory = PlayerSaviour.Instance.LoadInv();
-
         if (PlayerPrefs.GetString("Player_Stats") != "")
             PlayerSaviour.Instance.LoadPlayerStats(statsHolder);
         
@@ -104,8 +100,11 @@ public class Player2D_Manager : MonoBehaviour
 
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
-
+        /* Player Movement */
         inputX = inputY = 0;
+        m_confusedModifier = 1;
+        m_Sprint = 1.0f; // cannot be zero
+        m_maxSprint = 2.0f; // cannot be zero
     }
 
     // Update is called once per frame
@@ -136,6 +135,7 @@ public class Player2D_Manager : MonoBehaviour
                 m_bCheckLevelUp = false;
             }
         }
+
         //if (!bA1State && Input.GetKeyDown(cm.GetKey("moveforward")))
         // Hot bar key press
         bool bA1State = false;
@@ -215,12 +215,29 @@ public class Player2D_Manager : MonoBehaviour
             inputX = 1;
         if (Input.GetKey(KeyCode.A))
             inputX = -1;
+        
+        /* Player Sprint */
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            && (inputX != 0 || inputY != 0))
+        {
+            /* More then 20% Stamina , Can Sprint */
+            if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
+            {
+                /* Decrease Stamina */
+                statsHolder.Stamina--;
+                m_Sprint = 2;
+            }
+            else
+                m_Sprint = 1;
+        }
+        else
+            m_Sprint = 1;
 
         // Move Player
         if (inputX > 0f || inputX < 0f)
         {
             /* If have then move by Confusion */
-            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0.0f, 0f));
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
 
             /* Sprite Movement */
             p_spriteManager.SetMoving(true);
@@ -230,7 +247,7 @@ public class Player2D_Manager : MonoBehaviour
         if (inputY > 0f || inputY < 0f)
         {
             /* If have then move by Confusion */
-            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0f));
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
 
             /* Sprite Movement */
             p_spriteManager.SetMoving(true);
@@ -273,14 +290,6 @@ public class Player2D_Manager : MonoBehaviour
         /* Player Movement */
         inputX = Input.acceleration.x;
         inputY = Input.acceleration.y;
-
-        /* Getting the Direction of the Player */
-        if (inputX != 0f && inputY != 0f)
-            Player2D_Attack.Direction.Set(inputX, inputY);
-        else if (inputX != 0f)
-            Player2D_Attack.Direction.Set(inputX, 0);
-        else if (inputY != 0f)
-            Player2D_Attack.Direction.Set(0, inputY);
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
@@ -299,6 +308,12 @@ public class Player2D_Manager : MonoBehaviour
 
         inputY = 0;
         inputX = 0;
+    }
+
+    /* Sprinting */
+    public void Sprint()
+    {
+
     }
 
     /* HotKeys */

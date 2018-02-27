@@ -26,6 +26,8 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 
     float hpcheck;
 
+    private float m_timer = 5.0f;
+
     /* Setters and Getters */
     #region StatsSetterAndGetter
 
@@ -180,6 +182,17 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     {
         hpcheck = health;
         levelingSystem.UpdateStats(this); //if player levelsup, it will refresh hp, for now
+
+        /* If Stamina is not full, regen some Stamina over time */
+        if (stamina <= m_MaxStamina)
+        {
+            m_timer -= Time.deltaTime;
+            if (m_timer <= 0.0f)
+            {
+                ++stamina;
+                m_timer = 5.0f;
+            }
+        }
     }
 
     void LateUpdate()
