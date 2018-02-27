@@ -55,9 +55,9 @@ public class Player2D_Attack : MonoBehaviour
         if (!m_bisInteracting)
         {
             // Only when no created hitbox
-            if (Input.GetMouseButtonDown(0) /*Player2D_TriggerAttack._triggered*/ && !temp)
+            if (GetTrigger() && !temp)
             {
-                //create a hitbox
+                //create a hit
                 temp = Instantiate(melee, transform.position, transform.rotation);
                 temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 
 
@@ -89,5 +89,12 @@ public class Player2D_Attack : MonoBehaviour
         }
     }
 
-   
+    private bool GetTrigger()
+    {
+#if UNITY_EDITOR
+        return Input.GetMouseButtonDown(0);
+#elif UNITY_ANDROID || UNITY_IPHONE
+        return Player2D_TriggerAttack._triggered;
+#endif
+    }
 }
