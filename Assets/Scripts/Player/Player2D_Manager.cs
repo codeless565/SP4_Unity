@@ -86,7 +86,10 @@ public class Player2D_Manager : MonoBehaviour
             EquipmentList[i] = null;
 
         
-        Inventory = PlayerInvSaviour.Instance.LoadInv();
+        Inventory = PlayerSaviour.Instance.LoadInv();
+
+        if (PlayerPrefs.GetString("Player_Stats") != "")
+            statsHolder = PlayerSaviour.Instance.LoadStats();
         
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();

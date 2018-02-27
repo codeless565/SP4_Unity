@@ -35,7 +35,9 @@ public class InventoryBar : MonoBehaviour
 #endif
             HotBar[i] = newIcon;
         }
-
+        Debug.Log("centered text for everything else");
+            Debug.Log("Hotkey text for hotkey ");
+        Debug.Log("Create inside holder!");
     }
 
     // Update is called once per frame
