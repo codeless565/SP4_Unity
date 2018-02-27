@@ -70,7 +70,9 @@ public class Player2D_Attack : MonoBehaviour
                 Player2D_Manager.attackClicked = true;
 
                 /* Set Trigger to False */
+#if UNITY_ANDROID || UNITY_IPHONE
                 Player2D_TriggerAttack._triggered = false;
+#endif
             }
 
             /* When a hitbox is created */
@@ -93,6 +95,7 @@ public class Player2D_Attack : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetMouseButtonDown(0);
+        //return Player2D_TriggerAttack._triggered;
 #elif UNITY_ANDROID || UNITY_IPHONE
         return Player2D_TriggerAttack._triggered;
 #else

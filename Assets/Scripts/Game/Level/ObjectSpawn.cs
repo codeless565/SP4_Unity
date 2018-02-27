@@ -10,6 +10,11 @@ public class ObjectSpawn : MonoBehaviour
     private int m_playerRoom;
     private Vector2 m_playerPos;
 
+    //Merchant
+    public GameObject Merchant;
+    private int m_MerchantRoom;
+    private Vector2 m_MerchantPos;
+
     //Main Camera/Player Camera
     public GameObject MainCamera;
     public GameObject MiniMap;
@@ -50,6 +55,7 @@ public class ObjectSpawn : MonoBehaviour
         //else
         {
             PlayerSpawn();
+            MerchantSpawn();
             ExitSpawn();
 
             // Chests
@@ -78,6 +84,22 @@ public class ObjectSpawn : MonoBehaviour
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
+    }
+
+    private void MerchantSpawn()
+    {
+        m_MerchantRoom = 0;
+
+        //if (RandomPlayerSpawn)
+        //   m_playerRoom = Random.Range(0, m_rooms.Length - 1);
+
+        m_MerchantPos = new Vector2(m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth * 0.5f, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight * 0.5f);
+        GameObject t_Merchant = Instantiate(Merchant, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
+        if (t_Merchant.GetComponent<ObjectInfo>() != null)
+            t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_MerchantPos); //Set Starting Spawn location and detail to object
+
+        //MainCamera.GetComponent<CameraController>().SetPlayer(t_Merchant); //Spawn Player and Set the Instantiated player into Camera
+        //MiniMap.GetComponent<ExplorationMap>().Init();
     }
 
     private void ExitSpawn()

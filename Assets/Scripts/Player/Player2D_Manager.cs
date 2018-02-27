@@ -224,7 +224,7 @@ public class Player2D_Manager : MonoBehaviour
             if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
             {
                 /* Decrease Stamina */
-                statsHolder.Stamina--;
+                statsHolder.Stamina -= 0.2f;
                 m_Sprint = 2;
             }
             else
@@ -295,9 +295,12 @@ public class Player2D_Manager : MonoBehaviour
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
     void Movement2D()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE
         KeyMove();
-        //AccMove();
-
+#elif UNITY_ANDROID || UNITY_IPHONE
+        AccMove();
+#endif
+        
         /* Getting the Direction of the Player ( both key and mobile ) */
         if (inputX != 0f && inputY != 0f)
             Player2D_Attack.Direction.Set(inputX, inputY);
@@ -308,12 +311,6 @@ public class Player2D_Manager : MonoBehaviour
 
         inputY = 0;
         inputX = 0;
-    }
-
-    /* Sprinting */
-    public void Sprint()
-    {
-
     }
 
     /* HotKeys */
