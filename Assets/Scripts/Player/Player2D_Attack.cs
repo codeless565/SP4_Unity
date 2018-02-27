@@ -8,7 +8,7 @@ public class Player2D_Attack : MonoBehaviour
     /* For Attacking */
     [SerializeField]
     private GameObject melee; // game object to spawn at its location
-    private GameObject temp; // store the created game object
+    static public GameObject temp; // store the created game object
 
     private float m_timer; // for duration of sprite
 
@@ -33,7 +33,7 @@ public class Player2D_Attack : MonoBehaviour
 
     void Start()
     {
-        m_timer = 0.4F;
+        m_timer = 0.9F;
         m_AngleToRotate = 0.0f;
 
         /* Set Start Downwards */
@@ -55,7 +55,7 @@ public class Player2D_Attack : MonoBehaviour
         if (!m_bisInteracting)
         {
             // Only when no created hitbox
-            if (Input.GetMouseButtonDown(0) && !temp)
+            if (Input.GetMouseButtonDown(0) /*Player2D_TriggerAttack._triggered*/ && !temp)
             {
                 //create a hitbox
                 temp = Instantiate(melee, transform.position, transform.rotation);
@@ -68,21 +68,26 @@ public class Player2D_Attack : MonoBehaviour
 
                 /* Set Animation in Parent to Start */
                 Player2D_Manager.attackClicked = true;
+
+                /* Set Trigger to False */
+                Player2D_TriggerAttack._triggered = false;
             }
-        }
 
-        /* When a hitbox is created */
-        if (temp)
-        {
-            // Start timers
-            m_timer -= Time.deltaTime;
-
-            /* After timer is up, upspawn detection box */
-            if (m_timer <= 0.0F)
+            /* When a hitbox is created */
+            if (temp)
             {
-                DestroyImmediate(temp);
-                m_timer = 0.4F;
+                // Start timers
+                m_timer -= Time.deltaTime;
+
+                /* After timer is up, upspawn detection box */
+                if (m_timer <= 0.0F)
+                {
+                    DestroyImmediate(temp);
+                    m_timer = 0.9F;
+                }
             }
         }
     }
+
+   
 }

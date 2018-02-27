@@ -31,9 +31,6 @@ public class TextBoxManager : MonoBehaviour
     public bool cancelTyping;
     private float typeSpeed;
 
-    /* Bool to Trigger when finish typing */
-    public bool _canShow;
-
     // Use this for initialization
     void Start()
     {
@@ -55,9 +52,6 @@ public class TextBoxManager : MonoBehaviour
 
         /* Rendering Text Box */
         isActive = false;
-
-        /* Can Show Things */
-        _canShow = false;
     }
 
     void Update()
@@ -110,9 +104,6 @@ public class TextBoxManager : MonoBehaviour
             theText.text += lineOfText[letter];
             letter += 1;
             yield return new WaitForSeconds(typeSpeed);
-
-            /* Finish Typing, set true to render Buttons */
-            _canShow = true;
         }
         //when cancelled, print everything
         theText.text = lineOfText;
