@@ -257,8 +257,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 	// Update is called once per frame
 	void Update ()
     {   
-        // Getting Player Position.
-        enemyDestination = player.transform.position;
+        // Update every 10 frames
+        if(Time.frameCount % 10 == 0)
+        {
+            // Getting Player Position.
+            enemyDestination = player.transform.position;
+        }
 
         // Enemy Attack Timer
         if(canCountDownAttackTimer)

@@ -246,34 +246,38 @@ public class PetManager : MonoBehaviour, StatsBase
 
     void Update ()
     {
-        // Getting Player Position for Pet.
-        petDestination = player.transform.position;
-
-        // If Player's Health is 1/3 of its maximum. Pet will heal Player Health.
-        if (playerStats.Health <= (playerStats.MaxHealth * 0.2f))
+        // Update every 10 frames.
+        if (Time.frameCount % 10 == 0)
         {
-            if (!HasPetHeal)
-                petState = PetState.HEAL; 
-        }
+            // Getting Player Position for Pet.
+            petDestination = player.transform.position;
 
-        // Check if Pet need to attack.
-        if (playerStats.Health > (playerStats.MaxHealth * 0.2f) && 
-            playerStats.Health < (playerStats.MaxHealth * 0.6f))
-        {
-            closestEnemy = FindClosestEnemy("Enemy");
-            closestEnemyState = closestEnemy.GetComponent<SkeletonEnemyManager>().GetState();
-
-            // If Closest Enemy is still alive.
-            if(closestEnemy.GetComponent<SkeletonEnemyManager>().Health > 0f)
+            // If Player's Health is 1/3 of its maximum. Pet will heal Player Health.
+            if (playerStats.Health <= (playerStats.MaxHealth * 0.2f))
             {
-                // Change State to ATTACK.
-                if(closestEnemyState == "ATTACK")
+                if (!HasPetHeal)
+                    petState = PetState.HEAL; 
+            }
+
+            // Check if Pet need to attack.
+            if (playerStats.Health > (playerStats.MaxHealth * 0.2f) && 
+                playerStats.Health < (playerStats.MaxHealth * 0.6f))
+            {
+                closestEnemy = FindClosestEnemy("Enemy");
+                closestEnemyState = closestEnemy.GetComponent<SkeletonEnemyManager>().GetState();
+
+                // If Closest Enemy is still alive.
+                if(closestEnemy.GetComponent<SkeletonEnemyManager>().Health > 0f)
                 {
-                    petState = PetState.ATTACK;
+                    // Change State to ATTACK.
+                    if(closestEnemyState == "ATTACK")
+                    {
+                        petState = PetState.ATTACK;
+                    }
                 }
             }
         }
-
+        
         // Pet Heal Player Cool Down
         if (CanHealCoolDown)
         {
