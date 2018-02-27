@@ -97,6 +97,8 @@ public class Player2D_Manager : MonoBehaviour
         
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
+
+        inputX = inputY = 0;
     }
 
     // Update is called once per frame
@@ -198,8 +200,25 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMoving(false);
 
         /* Player Movement */
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputY = Input.GetAxisRaw("Vertical");
+        if (Input.GetKey(KeyCode.W))
+            inputY = 1;
+        else
+            inputY = 0;
+
+        if (Input.GetKey(KeyCode.S))
+            inputY = -1;
+        else
+            inputY = 0;
+
+        if (Input.GetKey(KeyCode.D))
+            inputX = 1;
+        else
+            inputX = 0;
+
+        if (Input.GetKey(KeyCode.A))
+            inputX = -1;
+        else
+            inputX = 0;
 
         // Move Player
         if (inputX > 0f || inputX < 0f || inputY > 0f || inputY < 0f)
