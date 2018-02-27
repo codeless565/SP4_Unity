@@ -5,6 +5,7 @@ using UnityEngine;
 public interface GameMode
 {
     void GameStart();
+    void GamePause();
     void GameClear();
     void GameOver();
     void RestartGame();
