@@ -241,8 +241,7 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Sprite Movement */
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
-        inputY = 0;
-        inputX = 0;
+        
     }
 
     /* Attack Animation of Player */
@@ -275,6 +274,14 @@ public class Player2D_Manager : MonoBehaviour
         /* Player Movement */
         inputX = Input.acceleration.x;
         inputY = Input.acceleration.y;
+
+        /* Getting the Direction of the Player */
+        if (inputX != 0f && inputY != 0f)
+            Player2D_Attack.Direction.Set(inputX, inputY);
+        else if (inputX != 0f)
+            Player2D_Attack.Direction.Set(inputX, 0);
+        else if (inputY != 0f)
+            Player2D_Attack.Direction.Set(0, inputY);
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
@@ -285,17 +292,14 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Getting the Direction of the Player ( both key and mobile ) */
         if (inputX != 0f && inputY != 0f)
-        {
             Player2D_Attack.Direction.Set(inputX, inputY);
-        }
         else if (inputX != 0f)
-        {
             Player2D_Attack.Direction.Set(inputX, 0);
-        }
         else if (inputY != 0f)
-        {
             Player2D_Attack.Direction.Set(0, inputY);
-        }
+
+        inputY = 0;
+        inputX = 0;
     }
 
     /* HotKeys */
