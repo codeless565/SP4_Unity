@@ -200,25 +200,27 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMoving(false);
 
         /* Player Movement */
-        if (Input.GetKey(KeyCode.W))
-            inputY = 1;
-        else
-            inputY = 0;
+        //if (Input.GetKey(KeyCode.W))
+        //    inputY = 1;
+        //else
+        //    inputY = 0;
 
-        if (Input.GetKey(KeyCode.S))
-            inputY = -1;
-        else
-            inputY = 0;
+        //if (Input.GetKey(KeyCode.S))
+        //    inputY = -1;
+        //else
+        //    inputY = 0;
 
-        if (Input.GetKey(KeyCode.D))
-            inputX = 1;
-        else
-            inputX = 0;
+        //if (Input.GetKey(KeyCode.D))
+        //    inputX = 1;
+        //else
+        //    inputX = 0;
 
-        if (Input.GetKey(KeyCode.A))
-            inputX = -1;
-        else
-            inputX = 0;
+        //if (Input.GetKey(KeyCode.A))
+        //    inputX = -1;
+        //else
+        //    inputX = 0;
+        inputX = Input.GetAxisRaw("Horizontal");
+        inputY = Input.GetAxisRaw("Vertical");
 
         // Move Player
         if (inputX > 0f || inputX < 0f || inputY > 0f || inputY < 0f)
