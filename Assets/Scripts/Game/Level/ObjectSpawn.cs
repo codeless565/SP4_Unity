@@ -89,17 +89,30 @@ public class ObjectSpawn : MonoBehaviour
     private void MerchantSpawn()
     {
         m_MerchantRoom = 0;
+        do { m_MerchantRoom = Random.Range(0, m_rooms.Length - 1); }
+        while (m_MerchantRoom == m_playerRoom);
 
         //if (RandomPlayerSpawn)
         //   m_playerRoom = Random.Range(0, m_rooms.Length - 1);
 
-        m_MerchantPos = new Vector2(m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth * 0.5f, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight * 0.5f);
-        GameObject t_Merchant = Instantiate(Merchant, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
-        if (t_Merchant.GetComponent<ObjectInfo>() != null)
-            t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_MerchantPos); //Set Starting Spawn location and detail to object
+        //m_MerchantPos = new Vector2(m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth * 0.5f, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight * 0.5f);
+        //GameObject t_Merchant = Instantiate(Merchant, m_MerchantPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
+        //if (t_Merchant.GetComponent<ObjectInfo>() != null)
+        //    t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_MerchantPos); //Set Starting Spawn location and detail to object
 
         //MainCamera.GetComponent<CameraController>().SetPlayer(t_Merchant); //Spawn Player and Set the Instantiated player into Camera
         //MiniMap.GetComponent<ExplorationMap>().Init();
+
+
+        // Spawn the Exit on 1 of the tile in the room except the edges
+        int ranXpos = Random.Range(m_rooms[m_MerchantRoom].xPos + 1, m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth - 1);
+        int ranYpos = Random.Range(m_rooms[m_MerchantRoom].yPos + 1, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight - 1);
+
+        m_MerchantPos = new Vector2(ranXpos, ranYpos);
+
+        GameObject t_Merchant = Instantiate(Merchant, m_MerchantPos, Quaternion.identity, go_floorholder.transform);
+        if (t_Merchant.GetComponent<ObjectInfo>() != null)
+            t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_exitPos); //Set Starting Spawn location and detail to object
     }
 
     private void ExitSpawn()
