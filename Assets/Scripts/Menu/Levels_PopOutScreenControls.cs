@@ -24,7 +24,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        m_delayTime = 0.25f;
+        m_delayTime = 0.05f;
     }
 	
 	// Update is called once per frame

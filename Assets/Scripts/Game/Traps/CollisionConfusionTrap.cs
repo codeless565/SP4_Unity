@@ -6,23 +6,18 @@ using UnityEngine;
 /* Specific to player */
 public class CollisionConfusionTrap : MonoBehaviour
 {
-    /* Timer for Confused Effect */
+    /* Timer for Confuseion Effect on Player */
+    public float EffectDuration = 5;
+
+    /* Timer for Confused Trap */
     private float m_fDuration;
     private bool m_isActivated;
-
-    /* Direction of Movement */
-    static public int m_confusedModifier;
-
-    /* Level */
-    private int currLevel;
 
     // Use this for initialization
     void Start()
     {
         m_fDuration = 3.0F;
         m_isActivated = false;
-
-        m_confusedModifier = 1;
     }
 
     // Update is called once per frame
@@ -55,17 +50,19 @@ public class CollisionConfusionTrap : MonoBehaviour
         if (collision.GetComponent<ConfusedEffect>() == null)
         {
             collision.gameObject.AddComponent<ConfusedEffect>(); // added to other
-            collision.gameObject.AddComponent<ConfusedEffect>().SetDuration(5);
+            collision.GetComponent<ConfusedEffect>().SetDuration(EffectDuration);
         }
         else /* If alr have script, entend the duration */
         {
-            collision.gameObject.AddComponent<ConfusedEffect>().Resets();
+            collision.GetComponent<ConfusedEffect>().Resets();
         }
-    }
 
-    /* Setter for level */
-    public int CurrentLevel
-    {
-        set { currLevel = value; }
+        GameObject Profile = GameObject.FindGameObjectWithTag("PlayerProfileHUD");
+        if (Profile != null)
+        {
+            GameObject Aliment = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ProfileAlimentConfusion;
+            Aliment = Instantiate(Aliment, Profile.transform);
+            Aliment.GetComponent<PlayerProfileStatusAliment>().Init(EffectDuration);
+        }
     }
 }

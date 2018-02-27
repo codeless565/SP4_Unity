@@ -24,6 +24,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 
     LevelingSystem levelingSystem;
 
+    float hpcheck;
 
     /* Setters and Getters */
     public string Name
@@ -175,8 +176,30 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     
     void Update()
     {
+        hpcheck = health;
         m_EXP += Time.deltaTime;
         levelingSystem.UpdateStats(this);
+    }
+
+    void LateUpdate()
+    {
+        if (health < hpcheck)
+        {
+            if (GameObject.FindGameObjectWithTag("PlayerProfileDamage") == null)
+            {
+                GameObject Profile = GameObject.FindGameObjectWithTag("PlayerProfileHUD");
+                if (Profile != null)
+                {
+                    GameObject Aliment = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ProfileAlimentDamage;
+                    Aliment = Instantiate(Aliment, Profile.transform);
+                    Aliment.GetComponent<PlayerProfileStatusAliment>().Init(1);
+                }
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("PlayerProfileDamage").GetComponent<PlayerProfileStatusAliment>().KillTime = 1;
+            }
+        }
     }
 
     /* Print Debug Information */

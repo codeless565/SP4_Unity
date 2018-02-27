@@ -7,6 +7,7 @@ public class CollisionTrapPoison : MonoBehaviour
     private int m_currentLevel;
 
     public  float DestroyDelayTime = 3;
+    public float EffectDuration = 5;
     private float m_elapseTimer;
     private bool b_isDestroying;
 
@@ -34,14 +35,23 @@ public class CollisionTrapPoison : MonoBehaviour
         if (other.GetComponent<Player2D_StatsHolder>() == null) 
             return;
 
-        if (other.gameObject.GetComponent<PoisonTrapEffect>() == null)
+        if (other.GetComponent<PoisonTrapEffect>() == null)
         {
             other.gameObject.AddComponent<PoisonTrapEffect>();
-            other.gameObject.GetComponent<PoisonTrapEffect>().SetDuration(10);
-            other.gameObject.GetComponent<PoisonTrapEffect>().SetDamage(m_currentLevel * 0.5f);
+            other.GetComponent<PoisonTrapEffect>().SetDuration(EffectDuration);
+            other.GetComponent<PoisonTrapEffect>().SetDamage(m_currentLevel * 0.5f);
         }
         else
-            other.gameObject.GetComponent<PoisonTrapEffect>().ResetTimer();
+            other.GetComponent<PoisonTrapEffect>().ResetTimer();
+
+        /* Create Status Aliment Indicator over Profile */
+        GameObject Profile = GameObject.FindGameObjectWithTag("PlayerProfileHUD");
+        if (Profile != null)
+        {
+            GameObject Aliment = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ProfileAlimentPoison;
+            Aliment = Instantiate(Aliment, Profile.transform);
+            Aliment.GetComponent<PlayerProfileStatusAliment>().Init(EffectDuration);
+        }
 
         b_isDestroying = true;
     }
