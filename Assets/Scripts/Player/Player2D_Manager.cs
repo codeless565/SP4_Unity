@@ -97,7 +97,7 @@ public class Player2D_Manager : MonoBehaviour
         Inventory = PlayerSaviour.Instance.LoadInv();
 
         if (PlayerPrefs.GetString("Player_Stats") != "")
-            statsHolder = PlayerSaviour.Instance.LoadStats();
+            PlayerSaviour.Instance.LoadPlayerStats(statsHolder);
         
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
@@ -106,7 +106,6 @@ public class Player2D_Manager : MonoBehaviour
 
 
         inputX = inputY = 0;
-
     }
 
     // Update is called once per frame

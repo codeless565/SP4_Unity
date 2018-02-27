@@ -106,12 +106,13 @@ public class Player2D_StatsMenu : MonoBehaviour
     /* Print Data of Player */
     private void PrintData()
     {
-        m_playerStats.text = "Level : " + player.GetComponent<Player2D_StatsHolder>().Level.ToString() + " \n"
-                       + "Health : " + player.GetComponent<Player2D_StatsHolder>().Health.ToString() + " / " + player.GetComponent<Player2D_StatsHolder>().MaxHealth.ToString() + " \n"
-                       + "Stamina : " + player.GetComponent<Player2D_StatsHolder>().Stamina.ToString() + " / " + player.GetComponent<Player2D_StatsHolder>().MaxStamina.ToString() + " \n"
-                       + "Attack : " + player.GetComponent<Player2D_StatsHolder>().Attack.ToString() + " \n"
-                       + "Defense : " + player.GetComponent<Player2D_StatsHolder>().Defense.ToString() + " \n"
-                       + "MoveSpeed : " + player.GetComponent<Player2D_StatsHolder>().MoveSpeed.ToString() + " \n";
+        m_playerStats.text = "Level : " + player.GetComponent<Player2D_StatsHolder>().Level.ToString("0") + " \n"
+                           + "EXP : " + player.GetComponent<Player2D_StatsHolder>().EXP.ToString("0") + " / " + player.GetComponent<Player2D_StatsHolder>().MaxEXP.ToString("0") + " \n"
+                           + "Health : " + player.GetComponent<Player2D_StatsHolder>().Health.ToString("0") + " / " + player.GetComponent<Player2D_StatsHolder>().MaxHealth.ToString("0") + " \n"
+                           + "Stamina : " + player.GetComponent<Player2D_StatsHolder>().Stamina.ToString("0") + " / " + player.GetComponent<Player2D_StatsHolder>().MaxStamina.ToString("0") + " \n"
+                           + "Attack : " + player.GetComponent<Player2D_StatsHolder>().Attack.ToString("0") + " \n"
+                           + "Defense : " + player.GetComponent<Player2D_StatsHolder>().Defense.ToString("0") + " \n"
+                           + "MoveSpeed : " + player.GetComponent<Player2D_StatsHolder>().MoveSpeed.ToString("0") + " \n";
     }
 
     /* Open Stats Menu */

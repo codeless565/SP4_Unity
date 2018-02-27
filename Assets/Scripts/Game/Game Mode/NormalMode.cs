@@ -68,21 +68,25 @@ public class NormalMode : MonoBehaviour, GameMode
 
     public void GameClear()
     {
-        //player curr floor + 1
+        /* Save Player Inventory */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        
+        /* Save Player Stats */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
 
+        /* Set next level */
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
+
+        /* Load next level */
         SceneManager.LoadScene("SceneGame_2D");
     }
 
     public void GameOver()
     {
-        // Set Previous Scene and Delete level progression
-        PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");
+        /* Reset Progression */
         PlayerPrefs.DeleteKey("CurrentLevel");
 
-        // Clear player's inventory
+        /* Clear player's inventory */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
         
         int TotalItems = PlayerPrefs.GetInt("NumStoredItems");
@@ -92,10 +96,12 @@ public class NormalMode : MonoBehaviour, GameMode
         }
         PlayerPrefs.DeleteKey("NumStoredItems");
 
-        // Clear player's stats
+        /* Clear player's stats */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
         PlayerPrefs.DeleteKey("Player_Stats");
 
+        /* Set PreviousGameScene before going next scene*/
+        PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");
         SceneManager.LoadScene("SceneGameOver");
     }
 

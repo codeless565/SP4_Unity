@@ -42,9 +42,8 @@ public class LevelingSystem : MonoBehaviour
 
     private bool LoadStats()
     {
-        //Check if player has stats in save files
-
-        return false;
+        /* Check if there is an available save in PlayerPref to load stats from. */
+        return PlayerPrefs.GetString("Player_Stats") != "";
     }
 
     private void CalculateStats(StatsBase _stats)

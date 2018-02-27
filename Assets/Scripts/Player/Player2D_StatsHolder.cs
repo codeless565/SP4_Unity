@@ -9,24 +9,26 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 {
 	/* Player Stats */
     public int playerLevel = 1;
-    float health = 100;
-    float attack = 10;
-    float stamina = 10;
-    float defense = 10;
-    public float movespeed = 10;
+    float health;
+    float attack;
+    float stamina;
+    float defense;
+    public float movespeed;
     public int gold = 9999999;
 
     private string m_name = "player2D";
-    private float m_EXP = 0;
-    private float m_MaxEXP = 10;
-    private float m_MaxHealth = 100;
-    private float m_MaxStamina = 10;
+    private float m_EXP;
+    private float m_MaxEXP;
+    private float m_MaxHealth;
+    private float m_MaxStamina;
 
     LevelingSystem levelingSystem;
 
     float hpcheck;
 
     /* Setters and Getters */
+    #region StatsSetterAndGetter
+
     public string Name
     {
         get
@@ -162,27 +164,27 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
             movespeed = value;
         }
     }
-		
+
+    #endregion
 
     /* Initializing of Stats */
     void Awake()
     {
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, true);
-		this.MaxHealth = m_MaxHealth;
-		this.Health = health;
+
         /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
     }
     
     void Update()
     {
         hpcheck = health;
-        m_EXP += Time.deltaTime;
-        levelingSystem.UpdateStats(this);
+        levelingSystem.UpdateStats(this); //if player levelsup, it will refresh hp, for now
     }
 
     void LateUpdate()
     {
+        /* Check if player has received damaged in this frame, if so, play animation on profile and flash Red */
         if (health < hpcheck)
         {
             if (GameObject.FindGameObjectWithTag("PlayerProfileDamage") == null)

@@ -91,10 +91,12 @@ public class Player2D_Attack : MonoBehaviour
 
     private bool GetTrigger()
     {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetMouseButtonDown(0);
 #elif UNITY_ANDROID || UNITY_IPHONE
         return Player2D_TriggerAttack._triggered;
+#else
+        return false;
 #endif
     }
 }
