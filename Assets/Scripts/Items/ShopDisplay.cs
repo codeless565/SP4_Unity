@@ -81,7 +81,6 @@ public class ShopDisplay : MonoBehaviour
         ItemNameText.transform.position = new Vector3(0.0f, 100.0f) + ShopConfirmationCanvas.transform.position;
 
         ItemNameStats = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameStats.GetComponent<RectTransform>().sizeDelta = new Vector2(650.0f, 30.0f);
         ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + ShopConfirmationCanvas.transform.position;
 
         CostText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;

@@ -51,11 +51,11 @@ public class Player2D_Manager : MonoBehaviour
 
     /* Player Movement */
     private float inputX, inputY;
-<<<<<<< HEAD
+
     private ControlsManager cm;
-=======
+
     static public int m_confusedModifier;
->>>>>>> 8826746781147450058a037b3d2069052e9bde88
+
 
     // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
@@ -101,12 +101,12 @@ public class Player2D_Manager : MonoBehaviour
         
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
-<<<<<<< HEAD
+
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
-=======
+
 
         inputX = inputY = 0;
->>>>>>> 8826746781147450058a037b3d2069052e9bde88
+
     }
 
     // Update is called once per frame
