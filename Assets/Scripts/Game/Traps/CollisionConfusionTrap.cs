@@ -10,19 +10,11 @@ public class CollisionConfusionTrap : MonoBehaviour
     private float m_fDuration;
     private bool m_isActivated;
 
-    /* Direction of Movement */
-    static public int m_confusedModifier;
-
-    /* Level */
-    private int currLevel;
-
     // Use this for initialization
     void Start()
     {
         m_fDuration = 3.0F;
         m_isActivated = false;
-
-        m_confusedModifier = 1;
     }
 
     // Update is called once per frame
@@ -61,11 +53,5 @@ public class CollisionConfusionTrap : MonoBehaviour
         {
             collision.GetComponent<ConfusedEffect>().Resets();
         }
-    }
-
-    /* Setter for level */
-    public int CurrentLevel
-    {
-        set { currLevel = value; }
     }
 }
