@@ -40,7 +40,6 @@ public class PetManager : MonoBehaviour, StatsBase
     private float PetGuardRange;
     private float PetHealRange;
     private float PetFollowRange;
-    private float PetDetectRange;
     private float PetAttackRange;
     private float HealCoolDownTimer;
     private float SpriteRenderTimer;
@@ -51,9 +50,10 @@ public class PetManager : MonoBehaviour, StatsBase
     private bool HasPetTeleport;
     private bool CanPetRecover;
     private bool HasPetRecover;
-    private bool CanPetAttack;
+    private bool HasPetAttack;
 
     GameObject closestEnemy;
+    string closestEnemyState;
     public GameObject petRecoveringSprite;
 
     // Player //
@@ -235,10 +235,9 @@ public class PetManager : MonoBehaviour, StatsBase
         // Setting the range for Pet State to be TELEPORT.
         PetFollowRange = 5f;
         HasPetTeleport = false;
-        // Setting the range for Pet to Attack.
-        PetDetectRange = 6f;
-        PetAttackRange = 2f;
-        CanPetAttack = false;
+        // Setting the range for Pet to ATTACK.
+        PetAttackRange = 1f;
+        HasPetAttack = false;
 
         //Initialize Stats from the leveling system
         levelingSystem = GetComponent<LevelingSystem>();
@@ -247,45 +246,38 @@ public class PetManager : MonoBehaviour, StatsBase
 
     void Update ()
     {
-        // Getting Player Position for Pet.
-        petDestination = player.transform.position;
-        //Debug.Log("player hp" + playerStats.Health);
-
-        //Debug.Log("following...");
-        //petState = PetState.FOLLOW;
-
-        // If Player's Health is 1/3 of its maximum. Pet will heal Player Health.
-        if (playerStats.Health <= (playerStats.MaxHealth * 0.3f))
+        // Update every 10 frames.
+        if (Time.frameCount % 10 == 0)
         {
-            if (!HasPetHeal)
-                petState = PetState.HEAL; 
+            // Getting Player Position for Pet.
+            petDestination = player.transform.position;
+
+            // If Player's Health is 1/3 of its maximum. Pet will heal Player Health.
+            if (playerStats.Health <= (playerStats.MaxHealth * 0.2f))
+            {
+                if (!HasPetHeal)
+                    petState = PetState.HEAL; 
+            }
+
+            // Check if Pet need to attack.
+            if (playerStats.Health > (playerStats.MaxHealth * 0.2f) && 
+                playerStats.Health < (playerStats.MaxHealth * 0.6f))
+            {
+                closestEnemy = FindClosestEnemy("Enemy");
+                closestEnemyState = closestEnemy.GetComponent<SkeletonEnemyManager>().GetState();
+
+                // If Closest Enemy is still alive.
+                if(closestEnemy.GetComponent<SkeletonEnemyManager>().Health > 0f)
+                {
+                    // Change State to ATTACK.
+                    if(closestEnemyState == "ATTACK")
+                    {
+                        petState = PetState.ATTACK;
+                    }
+                }
+            }
         }
-
-        //// If Pet is going to Attack
-        //closestEnemy = FindClosestEnemy("Enemy");
-        //if(closestEnemy != null)
-        //{
-        //    Debug.Log("can see enemy...");
-        //    distanceApart = (transform.position - closestEnemy.transform.position).magnitude;
-
-        //    if (distanceApart < PetDetectRange)
-        //    {
-        //        Debug.Log("Pet Detecting...");
-
-        //        if (playerStats.Health <= (playerStats.MaxHealth * 0.5f))
-        //        {
-        //            Debug.Log("Pet Attacking...");
-        //            CanPetAttack = true;
-        //            petState = PetState.ATTACK;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.Log("cannot see enemy...");
-        //    petState = PetState.FOLLOW;
-        //}
-
+        
         // Pet Heal Player Cool Down
         if (CanHealCoolDown)
         {
@@ -355,10 +347,6 @@ public class PetManager : MonoBehaviour, StatsBase
                 PetTeleport(petDestination);
                 break;
         }
-
-        //Debug.Log("State: " + petState);
-        //Debug.Log("Dist Apart: " + distanceApart);
-        //Debug.Log("Detect Range: " + PetDetectRange);
     }
 
     // Similar to IDLE state of Enemy, Pet will stay still when it's near the Player and "Guard" it.
@@ -430,26 +418,35 @@ public class PetManager : MonoBehaviour, StatsBase
     // If there Player Health is 1/2, Pet State will deal damage to the nearest Enemy.
     private void PetAttack(GameObject _closest)
     {
-        //// Distance between Pet and Enemy.
-        //distanceApart = (transform.position - _closest.transform.position).magnitude;
+        // Distance between Enemy and Pet.
+        distanceApart = (transform.position - _closest.transform.position).magnitude;
 
-        //if(CanPetAttack)
-        //{
-        //    transform.position = Vector2.SmoothDamp(transform.position, _closest.transform.position, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
-        //}
-        //if(distanceApart < PetAttackRange)
-        //{
-        //    Debug.Log("Attacked...");
-        //    // Minus Enemy Health
-        //    _closest.GetComponent<SkeletonEnemyManager>().Health -= attack;
-        //    if(_closest.GetComponent<SkeletonEnemyManager>().Health <= 0f)
-        //    {
-        //        Debug.Log("Changing to Follow...");
-        //        CanPetAttack = false;
-        //        _closest = null;
-        //        petState = PetState.FOLLOW;
-        //    }
-        //}
+        // If Pet is not within Attack Range, walk to Enemy smoothly.
+        if(distanceApart > PetAttackRange)
+        {
+            // Pet will walk to Enemy smoothly.
+            transform.position = Vector2.SmoothDamp(transform.position, _closest.transform.position, ref currentVelocity, followTimer, maxSpeed, Time.deltaTime);
+        }
+        // Pet is within its Attack Range.
+        else if(distanceApart < PetAttackRange)
+        {
+            // Minus Enemy Health.
+            if (!HasPetAttack)
+            {
+                _closest.GetComponent<SkeletonEnemyManager>().Health -= (Attack * 0.5f);
+                HasPetAttack = true;
+            }
+            else if (HasPetAttack)
+            {
+                HasPetAttack = false;
+            }
+
+            if(_closest.GetComponent<SkeletonEnemyManager>().Health <= 0f)
+            {
+                petState = PetState.GUARD;
+            }
+        }
+
     }
 
     // If Pet HP is 0, the Pet will still follow Player but it will not help unless its HP is maximum again.
@@ -514,11 +511,11 @@ public class PetManager : MonoBehaviour, StatsBase
         enemies = GameObject.FindGameObjectsWithTag(tag);
 
         float distance = Mathf.Infinity;
-        Vector3 petPos = transform.position;
+        Vector3 playerPos = player.transform.position;
 
         foreach(GameObject enemy in enemies)
         {
-            distanceApart = (enemy.transform.position - petPos).sqrMagnitude;
+            distanceApart = (enemy.transform.position - playerPos).sqrMagnitude;
             if(distanceApart < distance)
             {
                 closestEnemy = enemy;
@@ -526,7 +523,6 @@ public class PetManager : MonoBehaviour, StatsBase
             }
         }
 
-        Debug.DrawLine(transform.position, closestEnemy.transform.position);
         return closestEnemy;
     }
 }

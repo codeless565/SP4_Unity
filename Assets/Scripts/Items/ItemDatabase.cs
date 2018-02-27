@@ -37,76 +37,82 @@ public class ItemDatabase
             Item newItem = new Item();
             newItem.Name = linedata[0];
             newItem.ItemType = linedata[1];
-
+            newItem.ItemRarity = linedata[2];
             float temp2 = 0.0f;
 
-            float.TryParse(linedata[2], out temp2);
-            newItem.Level = (int)temp2;
             float.TryParse(linedata[3], out temp2);
-            newItem.ItemCost = (int)temp2;
+            newItem.Level = (int)temp2;
             float.TryParse(linedata[4], out temp2);
-            newItem.EXP = temp2;
+            newItem.ItemCost = (int)temp2;
             float.TryParse(linedata[5], out temp2);
-            newItem.Health = temp2;
+            newItem.EXP = temp2;
             float.TryParse(linedata[6], out temp2);
-            newItem.MaxHealth = temp2;
+            newItem.Health = temp2;
             float.TryParse(linedata[7], out temp2);
-            newItem.Stamina = temp2;
+            newItem.MaxHealth = temp2;
             float.TryParse(linedata[8], out temp2);
-            newItem.MaxStamina = temp2;
+            newItem.Stamina = temp2;
             float.TryParse(linedata[9], out temp2);
-            newItem.Attack = temp2;
+            newItem.MaxStamina = temp2;
             float.TryParse(linedata[10], out temp2);
-            newItem.Defense = temp2;
+            newItem.Attack = temp2;
             float.TryParse(linedata[11], out temp2);
+            newItem.Defense = temp2;
+            float.TryParse(linedata[12], out temp2);
             newItem.MoveSpeed = temp2;
-            newItem.ItemRarity = "Common";
-            newItem._spritename = linedata[12];
+            
+            newItem._spritename = linedata[13];
             newItem.getImage();
 
             ItemList.Add(newItem);
 
-
-            for (int j = 1; j <= 4; ++j)
+            bool massproduce;
+            bool.TryParse(linedata[14], out massproduce);
+            bool special;
+            bool.TryParse(linedata[15], out special);
+            if (newItem.ItemRarity == "Common" && massproduce)
             {
-                float multipler = 0.0f;
-                Item OtherRarityItem = new Item(newItem);
-                switch (j)
+                for (int j = 1; j <= 4; ++j)
                 {
-                    case 1:
-                        OtherRarityItem.ItemRarity = "Uncommon";
-                        OtherRarityItem.Level = 10;
-                        multipler = OtherRarityItem.Level / 10 * 1.5f;
-                        break;
-                    case 2:
-                        OtherRarityItem.ItemRarity = "Magic";
-                        OtherRarityItem.Level = 20;
-                        multipler = OtherRarityItem.Level / 10 * 2.0f;
-                        break;
-                    case 3:
-                        OtherRarityItem.ItemRarity = "Ancient";
-                        OtherRarityItem.Level = 30;
-                        multipler = OtherRarityItem.Level / 10 * 2.5f;
-                        break;
-                    case 4:
-                        OtherRarityItem.ItemRarity = "Relic";
-                        OtherRarityItem.Level = 40;
-                        multipler = OtherRarityItem.Level / 10 * 3.0f;
-                        break;
-                }
-                OtherRarityItem._spritename = newItem._spritename;
-                OtherRarityItem.Health *= multipler;
-                OtherRarityItem.MaxHealth *= multipler;
-                OtherRarityItem.Stamina *= multipler;
-                OtherRarityItem.MaxStamina *= multipler;
-                OtherRarityItem.Attack *= multipler;
-                OtherRarityItem.Defense *= multipler;
-                OtherRarityItem.MoveSpeed *= multipler;
+                    float multipler = 0.0f;
+                    Item OtherRarityItem = new Item(newItem);
+                    switch (j)
+                    {
+                        case 1:
+                            OtherRarityItem.ItemRarity = "Uncommon";
+                            OtherRarityItem.Level = 10;
+                            multipler = OtherRarityItem.Level / 10 * 1.5f;
+                            break;
+                        case 2:
+                            OtherRarityItem.ItemRarity = "Magic";
+                            OtherRarityItem.Level = 20;
+                            multipler = OtherRarityItem.Level / 10 * 2.0f;
+                            break;
+                        case 3:
+                            OtherRarityItem.ItemRarity = "Ancient";
+                            OtherRarityItem.Level = 30;
+                            multipler = OtherRarityItem.Level / 10 * 2.5f;
+                            break;
+                        case 4:
+                            OtherRarityItem.ItemRarity = "Relic";
+                            OtherRarityItem.Level = 40;
+                            multipler = OtherRarityItem.Level / 10 * 3.0f;
+                            break;
+                    }
+                    OtherRarityItem._spritename = newItem._spritename;
+                    OtherRarityItem.Health *= multipler;
+                    OtherRarityItem.MaxHealth *= multipler;
+                    OtherRarityItem.Stamina *= multipler;
+                    OtherRarityItem.MaxStamina *= multipler;
+                    OtherRarityItem.Attack *= multipler;
+                    OtherRarityItem.Defense *= multipler;
+                    OtherRarityItem.MoveSpeed *= multipler;
 
-                ItemList.Add(OtherRarityItem);
+                    ItemList.Add(OtherRarityItem);
+                }
             }
 
-            if (newItem.ItemType != "Uses")
+            if (newItem.ItemType != "Uses" && special)
             {
                 // Special Items
                 for (int k = 1; k < listofspecialname.Length - 1; ++k)

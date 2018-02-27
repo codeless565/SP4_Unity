@@ -245,7 +245,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         enemyChaseRange = 5f;
         // Setting the range for Enemy State to be ATTACk.
         enemyAttackRange = 1f;
-        enemyAttackTimer = 3f;
+        enemyAttackTimer = 1f;
         canCountDownAttackTimer = false;
         canAttack = false;
 
@@ -257,8 +257,12 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 	// Update is called once per frame
 	void Update ()
     {   
-        // Getting Player Position.
-        enemyDestination = player.transform.position;
+        // Update every 10 frames
+        if(Time.frameCount % 10 == 0)
+        {
+            // Getting Player Position.
+            enemyDestination = player.transform.position;
+        }
 
         // Enemy Attack Timer
         if(canCountDownAttackTimer)
@@ -448,5 +452,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         if (health <= 0)
             skeletonState = EnemySkeletonState.DIE;
+    }
+
+    // Get SkeletonState
+    public string GetState()
+    {
+        return skeletonState.ToString();
     }
 }
