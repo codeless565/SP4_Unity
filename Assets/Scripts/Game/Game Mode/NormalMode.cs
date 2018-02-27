@@ -13,17 +13,29 @@ public class NormalMode : MonoBehaviour, GameMode
 
     void Start ()
     {
-        t_CurrFloor = PlayerPrefs.GetInt("CurrentLevel");// set from player's curr floor
-        //check player's curr florr and init accordingly
+        GameStart();
 
+        if (PauseMenu != null)
+            PauseMenu.SetActive(false);
+    }
+
+    // Interface Functions // 
+    public void GameStart()
+    {
+        //check player's curr florr and init accordingly
+        t_CurrFloor = PlayerPrefs.GetInt("CurrentLevel");// set from player's curr floor
+        if (t_CurrFloor <= 0)
+        {
+            t_CurrFloor = 1;
+        }
         Debug.Log("Current Floor: " + t_CurrFloor);
 
         /* Initialize Level */
         GetComponent<BoardGenerator>().Init();
-        
+
         /* Spawn Objects in Level */
         GetComponent<ObjectSpawn>().Init(t_CurrFloor);
-        
+
         /* Start Timer */
         GetComponent<GameTimer>().Init();
 
@@ -36,20 +48,6 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
-
-        if (PauseMenu != null)
-            PauseMenu.SetActive(false);
-    }
-
-    // Interface Functions // 
-    public void GameStart()
-    {
-        //New Progression
-        if (t_CurrFloor <= 0)
-        {
-            t_CurrFloor = 1;
-
-        }
     }
 
     public void GamePause()

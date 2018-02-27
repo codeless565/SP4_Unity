@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Merchant_InteractionUI : MonoBehaviour {
+/* This is to Trigger the close Button */
+public class MerchantTriggerClose : MonoBehaviour
+{
 
 	// Use this for initialization
 	void Start () {

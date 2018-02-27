@@ -47,11 +47,11 @@ public class CollisionConfusionTrap : MonoBehaviour
         if (collision.GetComponent<ConfusedEffect>() == null)
         {
             collision.gameObject.AddComponent<ConfusedEffect>(); // added to other
-            collision.gameObject.AddComponent<ConfusedEffect>().SetDuration(5);
+            collision.GetComponent<ConfusedEffect>().SetDuration(5);
         }
         else /* If alr have script, entend the duration */
         {
-            collision.gameObject.AddComponent<ConfusedEffect>().Resets();
+            collision.GetComponent<ConfusedEffect>().Resets();
         }
     }
 }

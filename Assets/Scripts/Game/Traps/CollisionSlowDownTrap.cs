@@ -35,12 +35,12 @@ public class CollisionSlowDownTrap : MonoBehaviour
         if (other.GetComponent<Player2D_StatsHolder>() == null)
             return;
 
-        if (other.gameObject.GetComponent<SlowDownTrapEffect>() == null)
+        if (other.GetComponent<SlowDownTrapEffect>() == null)
         {
             other.gameObject.AddComponent<SlowDownTrapEffect>();
         }
         else
-            other.gameObject.GetComponent<SlowDownTrapEffect>().ResetTimer();
+            other.GetComponent<SlowDownTrapEffect>().ResetTimer();
 
         b_isDestroying = true;
     }
