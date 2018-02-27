@@ -8,7 +8,7 @@ public class GameTimer : MonoBehaviour {
     public Text TimeDisplay;
     public float m_Gametime = 500; //In Seconds
 
-	void Init () {
+	public void Init () {
         if (m_Gametime <= 10)
             m_Gametime = 10;
 	}

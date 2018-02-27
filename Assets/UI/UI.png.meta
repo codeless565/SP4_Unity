@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 72a5b0b1b3957cd4a99b9572f6f42f1e
-timeCreated: 1519380156
+timeCreated: 1519696568
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -37,6 +37,7 @@ TextureImporter:
     21300060: UI_30
     21300062: UI_31
     21300064: UI_32
+    21300066: UI_33
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -153,6 +154,19 @@ TextureImporter:
       name: UI_3
       rect:
         serializedVersion: 2
+        x: 1417
+        y: 1378
+        width: 329
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: UI_4
+      rect:
+        serializedVersion: 2
         x: 1044
         y: 1285
         width: 327
@@ -163,7 +177,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_4
+      name: UI_5
       rect:
         serializedVersion: 2
         x: 11
@@ -176,7 +190,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_5
+      name: UI_6
       rect:
         serializedVersion: 2
         x: 1042
@@ -189,7 +203,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_6
+      name: UI_7
       rect:
         serializedVersion: 2
         x: 27
@@ -202,7 +216,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_7
+      name: UI_8
       rect:
         serializedVersion: 2
         x: 865
@@ -215,7 +229,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_8
+      name: UI_9
       rect:
         serializedVersion: 2
         x: 882
@@ -228,7 +242,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_9
+      name: UI_10
       rect:
         serializedVersion: 2
         x: 1032
@@ -241,7 +255,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_10
+      name: UI_11
       rect:
         serializedVersion: 2
         x: 27
@@ -254,7 +268,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_11
+      name: UI_12
       rect:
         serializedVersion: 2
         x: 865
@@ -267,20 +281,20 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_12
+      name: UI_13
       rect:
         serializedVersion: 2
-        x: 1029
-        y: 916
-        width: 582
-        height: 181
+        x: 968
+        y: 894
+        width: 643
+        height: 203
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_13
+      name: UI_14
       rect:
         serializedVersion: 2
         x: 86
@@ -293,7 +307,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_14
+      name: UI_15
       rect:
         serializedVersion: 2
         x: 157
@@ -306,7 +320,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_15
+      name: UI_16
       rect:
         serializedVersion: 2
         x: 731
@@ -319,7 +333,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_16
+      name: UI_17
       rect:
         serializedVersion: 2
         x: 1033
@@ -332,7 +346,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_17
+      name: UI_18
       rect:
         serializedVersion: 2
         x: 874
@@ -345,7 +359,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_18
+      name: UI_19
       rect:
         serializedVersion: 2
         x: 895
@@ -358,7 +372,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_19
+      name: UI_20
       rect:
         serializedVersion: 2
         x: 0
@@ -371,7 +385,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_20
+      name: UI_21
       rect:
         serializedVersion: 2
         x: 30
@@ -384,7 +398,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_21
+      name: UI_22
       rect:
         serializedVersion: 2
         x: 1719
@@ -397,7 +411,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_22
+      name: UI_23
       rect:
         serializedVersion: 2
         x: 881
@@ -410,7 +424,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_23
+      name: UI_24
       rect:
         serializedVersion: 2
         x: 1719
@@ -423,7 +437,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_24
+      name: UI_25
       rect:
         serializedVersion: 2
         x: 881
@@ -436,7 +450,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_25
+      name: UI_26
       rect:
         serializedVersion: 2
         x: 1719
@@ -449,7 +463,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_26
+      name: UI_27
       rect:
         serializedVersion: 2
         x: 1758
@@ -462,7 +476,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_27
+      name: UI_28
       rect:
         serializedVersion: 2
         x: 853
@@ -475,7 +489,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_28
+      name: UI_29
       rect:
         serializedVersion: 2
         x: 0
@@ -488,7 +502,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_29
+      name: UI_30
       rect:
         serializedVersion: 2
         x: 585
@@ -501,7 +515,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_30
+      name: UI_31
       rect:
         serializedVersion: 2
         x: 836
@@ -514,7 +528,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_31
+      name: UI_32
       rect:
         serializedVersion: 2
         x: 1742
@@ -527,7 +541,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: UI_32
+      name: UI_33
       rect:
         serializedVersion: 2
         x: 1044

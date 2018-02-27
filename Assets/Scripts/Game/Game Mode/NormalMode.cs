@@ -6,7 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class NormalMode : MonoBehaviour, GameMode
 {
-    private float elapseTime;
+    public GameObject PauseMenu;
+
+    bool b_isPaused;
     int t_CurrFloor;
 
     void Start ()
@@ -16,8 +18,17 @@ public class NormalMode : MonoBehaviour, GameMode
 
         Debug.Log("Current Floor: " + t_CurrFloor);
 
+        /* Initialize Level */
         GetComponent<BoardGenerator>().Init();
+        
+        /* Spawn Objects in Level */
         GetComponent<ObjectSpawn>().Init(t_CurrFloor);
+        
+        /* Start Timer */
+        GetComponent<GameTimer>().Init();
+
+        /* Initialize Player Required Scripts */
+        GetComponent<PlayerHUD>().Init();
         GetComponent<Player2D_StatsMenu>().Init();
 
         GetComponent<Inventory>().Init();
@@ -25,6 +36,9 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
+
+        if (PauseMenu != null)
+            PauseMenu.SetActive(false);
     }
 
     // Interface Functions // 
@@ -35,6 +49,22 @@ public class NormalMode : MonoBehaviour, GameMode
         {
             t_CurrFloor = 1;
 
+        }
+    }
+
+    public void GamePause()
+    {
+        if (!b_isPaused)
+        {
+            Time.timeScale = 0;
+            b_isPaused = true;
+            PauseMenu.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            b_isPaused = false;
+            PauseMenu.SetActive(false);
         }
     }
 
