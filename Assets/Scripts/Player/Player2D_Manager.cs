@@ -518,10 +518,10 @@ public class Player2D_Manager : MonoBehaviour
         {
             if (_equipment.Name.Contains("Leather"))
                 p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_HAT);
-            //else if (_equipment.Name.Contains("Chain"))
-            //    p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_CHAIN);
-            //else if (_equipment.Name.Contains("Plate"))
-            //    p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_PLATE);
+            else if (_equipment.Name.Contains("Chain"))
+                p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_CHAIN);
+            else if (_equipment.Name.Contains("Plate"))
+                p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_PLATE);
         }
         else if (_equipment.ItemType == "Chestpieces")
         {
