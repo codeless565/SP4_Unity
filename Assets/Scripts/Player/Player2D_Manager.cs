@@ -48,8 +48,10 @@ public class Player2D_Manager : MonoBehaviour
     }
     Item[] EquipmentList = new Item[(int)EQTYPE.TOTAL];
     public Item[] getEQList() { return EquipmentList; }
-    /* Player Movement for KeyBoard */
+
+    /* Player Movement */
     private float inputX, inputY;
+    static public int m_confusedModifier;
 
     // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
@@ -59,6 +61,9 @@ public class Player2D_Manager : MonoBehaviour
         statsHolder = GetComponent<Player2D_StatsHolder>();
         m_bCheckLevelUp = false;
         //statsHolder.DebugPlayerStats();
+
+        /* Effects */
+        m_confusedModifier = 1;
 
         /* UI of Player */
         //healthBar.MaxValue = statsHolder.MaxHealth;
@@ -84,7 +89,6 @@ public class Player2D_Manager : MonoBehaviour
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
-
         
         Inventory = PlayerSaviour.Instance.LoadInv();
 
@@ -197,48 +201,21 @@ public class Player2D_Manager : MonoBehaviour
         inputX = Input.GetAxisRaw("Horizontal");
         inputY = Input.GetAxisRaw("Vertical");
 
-        // Move Left / Right
-        if (inputX > 0f || inputX < 0f)
+        // Move Player
+        if (inputX > 0f || inputX < 0f || inputY > 0f || inputY < 0f)
         {
             /* If have then move by Confusion */
-            if (GetComponent<ConfusedEffect>() != null)
-            {
-                transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed
-                 * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f, 0f));
-            }
-            else
-                transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * Time.deltaTime, 0f, 0f));
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime,
+                                    inputY * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0f));
 
             /* Sprite Movement */
             p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(inputX, 0f);
-            p_spriteManager.SetLastMove(lastMove.x, 0);
-        }
-
-        // Move Up / Down
-        if (inputY > 0f || inputY < 0f)
-        {
-            /* If have then move by Confusion */
-            if (GetComponent<ConfusedEffect>() != null)
-            {
-                transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed
-                * CollisionConfusionTrap.m_confusedModifier * Time.deltaTime, 0f));
-            }
-            else
-                transform.Translate(new Vector3(0f, inputY * statsHolder.MoveSpeed * Time.deltaTime, 0f));
-
-            /* Sprite Movement */
-            p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(0f, inputY);
-            p_spriteManager.SetLastMove(0, lastMove.y);
+            lastMove = new Vector2(inputX, inputY);
+            p_spriteManager.SetLastMove(lastMove.x, lastMove.y);
         }
 
         /* Sprite Movement */
-        if (GetComponent<ConfusedEffect>() != null)
-            p_spriteManager.SetMove(inputX * CollisionConfusionTrap.m_confusedModifier, 
-                inputY * CollisionConfusionTrap.m_confusedModifier);
-        else
-            p_spriteManager.SetMove(inputX, inputY);
+        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
     }
 
     /* Attack Animation of Player */

@@ -18,13 +18,13 @@ public class ConfusedEffect : MonoBehaviour
 	void Update ()
     {
         /* Set the Direction of the movement to be opposite */
-        CollisionConfusionTrap.m_confusedModifier = -1;
+        Player2D_Manager.m_confusedModifier = -1;
 
         m_fDuration -= Time.deltaTime;
         /* Duration Up, Script will be removed */
         if (m_fDuration < 0)
         {
-            CollisionConfusionTrap.m_confusedModifier = 1;
+            Player2D_Manager.m_confusedModifier = 1;
             Destroy(this);
         }
     }
