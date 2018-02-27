@@ -207,43 +207,40 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMoving(false);
 
         /* Player Movement */
-        //if (Input.GetKey(KeyCode.W))
-        //    inputY = 1;
-        //else
-        //    inputY = 0;
-
-        //if (Input.GetKey(KeyCode.S))
-        //    inputY = -1;
-        //else
-        //    inputY = 0;
-
-        //if (Input.GetKey(KeyCode.D))
-        //    inputX = 1;
-        //else
-        //    inputX = 0;
-
-        //if (Input.GetKey(KeyCode.A))
-        //    inputX = -1;
-        //else
-        //    inputX = 0;
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputY = Input.GetAxisRaw("Vertical");
+        if (Input.GetKey(KeyCode.W))
+            inputY = 1;
+        if (Input.GetKey(KeyCode.S))
+            inputY = -1;
+        if (Input.GetKey(KeyCode.D))
+            inputX = 1;
+        if (Input.GetKey(KeyCode.A))
+            inputX = -1;
 
         // Move Player
-        if (inputX > 0f || inputX < 0f || inputY > 0f || inputY < 0f)
+        if (inputX > 0f || inputX < 0f)
         {
             /* If have then move by Confusion */
-            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime,
-                                    inputY * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0f));
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0.0f, 0f));
 
             /* Sprite Movement */
             p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(inputX, inputY);
-            p_spriteManager.SetLastMove(lastMove.x, lastMove.y);
+            lastMove = new Vector2(inputX, 0.0f);
+            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
+        }
+        if (inputY > 0f || inputY < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * Time.deltaTime, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(0.0f, inputY);
+            p_spriteManager.SetLastMove(0.0f, lastMove.y);
         }
 
         /* Sprite Movement */
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
+        
     }
 
     /* Attack Animation of Player */
@@ -276,6 +273,14 @@ public class Player2D_Manager : MonoBehaviour
         /* Player Movement */
         inputX = Input.acceleration.x;
         inputY = Input.acceleration.y;
+
+        /* Getting the Direction of the Player */
+        if (inputX != 0f && inputY != 0f)
+            Player2D_Attack.Direction.Set(inputX, inputY);
+        else if (inputX != 0f)
+            Player2D_Attack.Direction.Set(inputX, 0);
+        else if (inputY != 0f)
+            Player2D_Attack.Direction.Set(0, inputY);
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
@@ -286,17 +291,14 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Getting the Direction of the Player ( both key and mobile ) */
         if (inputX != 0f && inputY != 0f)
-        {
             Player2D_Attack.Direction.Set(inputX, inputY);
-        }
         else if (inputX != 0f)
-        {
             Player2D_Attack.Direction.Set(inputX, 0);
-        }
         else if (inputY != 0f)
-        {
             Player2D_Attack.Direction.Set(0, inputY);
-        }
+
+        inputY = 0;
+        inputX = 0;
     }
 
     /* HotKeys */
