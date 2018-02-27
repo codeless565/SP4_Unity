@@ -286,7 +286,10 @@ public class InventoryDisplay : MonoBehaviour {
     // Display Selected Item
     void DisplayConfirmedItem()
     {
-        ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
+        if (SelectedItem.ItemType != "Uses")
+            ItemNameText.GetComponent<Text>().text = "Confirm Equip " + SelectedItem.Name + " ? ";
+        else
+            ItemNameText.GetComponent<Text>().text = "Confirm " + SelectedItem.Name + " on Hotbar? ";
         ItemNameRarity.GetComponent<Text>().text = SelectedItem.ItemRarity;
 
 

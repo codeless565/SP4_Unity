@@ -41,8 +41,8 @@ public class NormalMode : MonoBehaviour, GameMode
     public void GameClear()
     {
         //player curr floor + 1
-        //CSVSaviour.Instance.Save(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
-        PlayerInvSaviour.Instance.SaveInv(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
 
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
         SceneManager.LoadScene("SceneGame_2D");
@@ -55,15 +55,19 @@ public class NormalMode : MonoBehaviour, GameMode
         PlayerPrefs.DeleteKey("CurrentLevel");
 
         // Clear player's inventory
-        PlayerInvSaviour.Instance.SaveInv(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
-
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
+        
         int TotalItems = PlayerPrefs.GetInt("NumStoredItems");
-        for (int i =0;i<TotalItems;++i)
+        for (int i = 0; i < TotalItems; ++i) 
         {
-            //Debug.Log
             PlayerPrefs.DeleteKey("item " + i);
         }
         PlayerPrefs.DeleteKey("NumStoredItems");
+
+        // Clear player's stats
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
+        PlayerPrefs.DeleteKey("Player_Stats");
+
         SceneManager.LoadScene("SceneGameOver");
     }
 
