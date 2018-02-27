@@ -245,7 +245,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         enemyChaseRange = 5f;
         // Setting the range for Enemy State to be ATTACk.
         enemyAttackRange = 1f;
-        enemyAttackTimer = 3f;
+        enemyAttackTimer = 1f;
         canCountDownAttackTimer = false;
         canAttack = false;
 
@@ -448,5 +448,11 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         if (health <= 0)
             skeletonState = EnemySkeletonState.DIE;
+    }
+
+    // Get SkeletonState
+    public string GetState()
+    {
+        return skeletonState.ToString();
     }
 }
