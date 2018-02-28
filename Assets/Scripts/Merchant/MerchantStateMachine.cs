@@ -11,7 +11,15 @@ public class MerchantStateMachine : MonoBehaviour
     private GameObject _player;
 
     /* Trigger Dialog */
-    private bool _isinRange, m_isClicked;
+    private bool _isinRange;
+    private bool _goBackIdle = false;
+    public bool IsBackIdle
+    {
+        get
+        { return _goBackIdle; }
+        set
+        { _goBackIdle = value; }
+    }
 
 #if UNITY_ANDROID || UNITY_IPHONE
 {
@@ -26,7 +34,6 @@ public class MerchantStateMachine : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
-        m_isClicked = false;
 
         /* Default state */
         m_state = "IDLE";
@@ -50,11 +57,10 @@ public class MerchantStateMachine : MonoBehaviour
     void Update ()
     {
         /* If Trigger Dialougue, change State to INTERACT */
-        if (_isinRange && GetTriggerForInteraction() && !m_isClicked)
+        if (_isinRange && GetTriggerForInteraction() && m_state == "IDLE")
         {
             m_state = "INTERACT";
             _player.GetComponent<Player2D_Manager>().canMove = false;
-            m_isClicked = true; // so wont overlap merchant interact 
 
 #if UNITY_ANDROID || UNITY_IPHONE
             MerchantTriggerInteract.m_interact = false;
@@ -68,7 +74,6 @@ public class MerchantStateMachine : MonoBehaviour
 		if (!_isinRange)
 		{
             m_state = "IDLE";
-            m_isClicked = false;
 
             interact.SetActive(false);
 			idle.SetActive(true);
@@ -85,12 +90,11 @@ public class MerchantStateMachine : MonoBehaviour
         }
         
         /* If GOODBYE and Duration , change State to IDLE */
-        if (m_state == "GOODBYE" && GetComponentInChildren<Merchant_GoodBye>().isBackIdle)
+        if (m_state == "GOODBYE" && _goBackIdle)
         {
             m_state = "IDLE";
-            GetComponentInChildren<Merchant_GoodBye>().isBackIdle = false;
+            _goBackIdle = false;
             _player.GetComponent<Player2D_Manager>().canMove = true;
-            m_isClicked = false;
 
             bye.SetActive(false);
             idle.SetActive(true);
@@ -116,7 +120,7 @@ public class MerchantStateMachine : MonoBehaviour
 #endif
     }
 
-    /* Response to Player entering trigger box of Merchant */
+    /* Response to Player Staying in trigger box of Merchant */
     public void OnTriggerStay2D(Collider2D other)
     {
         /* Update every frame to see for Interact Btn pressed */
