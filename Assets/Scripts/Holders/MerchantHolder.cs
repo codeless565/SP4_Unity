@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-/* To hold and get items from scene for Merchant ( idk if im doing it right ) */
+/* To hold and get items from scene for Merchant */
 public class MerchantHolder : MonoBehaviour
 {
     public GameObject Attack_Btn;
     public GameObject Interact_Btn;
-
     public GameObject Merchant_Interaction;
 }

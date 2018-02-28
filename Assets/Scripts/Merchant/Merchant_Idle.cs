@@ -12,17 +12,15 @@ public class Merchant_Idle : MonoBehaviour
     /* Getting the Buttons */
     private GameObject m_buttons;
 
+
     // Use this for initialization
     void Start()
     {
         /* Getting the Text Box Renderer */
         _theManager = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TextBoxManager>();
-        _theManager.DisableTextBox();
 
         /* Buttons */
         m_buttons = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Merchant_Interaction;
-        m_buttons.SetActive(false);
-
     }
 
     // Update is called once per frame
@@ -30,6 +28,9 @@ public class Merchant_Idle : MonoBehaviour
     {
         if (GetComponentInParent<MerchantStateMachine>().m_state != "IDLE")
             return;
+		
+        _theManager.DisableTextBox();
+        m_buttons.SetActive(false);
 
         //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
