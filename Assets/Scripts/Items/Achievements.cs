@@ -48,6 +48,4 @@ public class Achievements {
         _property.PropertyName = _property.PropertyName.ToUpper();
         PropertiesList.Add(_property);
     }
-
-     
 }

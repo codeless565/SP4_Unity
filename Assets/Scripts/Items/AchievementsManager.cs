@@ -11,15 +11,15 @@ public class AchievementsManager : MonoBehaviour {
         PropertiesList = new Dictionary<string, AchievementsProperties>();
         AchievementsList = new Dictionary<string, Achievements>();
 
-        //Achievements ach1 = new Achievements("testachievement","testingonlyrelak",false);
-        //AchievementsList.Add(ach1.AchievementName, ach1);
-        //ach1.AchievementActive = true;
-
-        //AchievementsProperties achprop1 = new AchievementsProperties("Kill_Enemy", 3);
-        //AddProperties("testachievement", achprop1);
         Load();
 	}
-	
+	public AchievementsProperties GetProperty(string _propname)
+    {
+        if (PropertiesList.ContainsKey(_propname))
+            return PropertiesList[_propname];
+
+                return null;
+    }
 	// Update is called once per frame
 	void Update () {
 		foreach (KeyValuePair<string,Achievements> ach in AchievementsList)
