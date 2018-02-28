@@ -24,6 +24,8 @@ public class TutorialSpawn : MonoBehaviour {
     private int m_arenaSizeRow;
     private int m_arenaSizeColum;
 
+	//enemy
+	bool eIsSpawned = false;
     public void Init()
     {
         m_currentFloor = 1;
@@ -113,14 +115,16 @@ public class TutorialSpawn : MonoBehaviour {
         //}
     }
 
-    private void EnemySpawn(int _arenaSizeR, int _arenaSizeC)
+    public void EnemySpawn(/*int _arenaSizeR, int _arenaSizeC*/)
     {
         //spawn enemy and init their level based on the curr floor's level
         /* floor just set to 1
          * Spawn enemy in the room, give 4 vector3 in a array as waypoint , waypoint are corners of the room
          * */
-
-        //GameObject go_enemy = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().EnemySkeleton;
+		if (eIsSpawned) {
+			return;
+		}
+        GameObject go_enemy = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().EnemySkeleton;
 
         //int AmtOfEnemy = NumEnemy.Random;
 
@@ -154,7 +158,7 @@ public class TutorialSpawn : MonoBehaviour {
         //    tempPos = Waypoint[randomID];
 
         //    // Instantiate Object, Set waypoint and Set room info into ObjectInfo
-        //    GameObject tempEnemy = Instantiate(go_enemy, tempPos, Quaternion.identity, go_floorholder.transform);
+		GameObject tempEnemy = Instantiate(go_enemy, new Vector2(m_playerPos.x, m_playerPos.y + 5), Quaternion.identity, go_floorholder.transform);
         //    if (tempEnemy.GetComponent<SkeletonEnemyManager>() != null)
         //    {
         //        //Set EXP Reward for enemy 
@@ -166,6 +170,7 @@ public class TutorialSpawn : MonoBehaviour {
         //    if (tempEnemy.GetComponent<ObjectInfo>() != null)
         //        tempEnemy.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
         //}
+		eIsSpawned = true;
 
     }
 

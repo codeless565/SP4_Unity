@@ -24,6 +24,7 @@ public class Player2D_StatsMenu : MonoBehaviour
     private GameObject SpritePrefab;
     GameObject[] EQDisplayLayout;
 
+    public bool statsMenuClosed = false;
 
     // Use this for initialization
     public void Init()
@@ -119,6 +120,7 @@ public class Player2D_StatsMenu : MonoBehaviour
     public void OpenStatsMenu()
     {
         m_isOpen = true;
+        statsMenuClosed = false;
         DisplayEquipments();
         Stats_Update();
     }
@@ -126,6 +128,7 @@ public class Player2D_StatsMenu : MonoBehaviour
     /* Close the Stats Menu */
     public void CloseStatsMenu()
     {
+        statsMenuClosed = true;
         Stats_Reset();
     }
 
