@@ -14,7 +14,7 @@ public class TutorialMode : MonoBehaviour, GameMode
     bool b_isPaused;
     int t_CurrFloor;
 
-    void Start()
+    void Awake()
     {
         GameStart();
 
@@ -70,6 +70,7 @@ public class TutorialMode : MonoBehaviour, GameMode
 
     public void GameClear()
     {
+		Time.timeScale = 1;
         SceneManager.LoadScene("SceneMainMenu");
     }
 

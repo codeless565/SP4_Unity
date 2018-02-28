@@ -12,7 +12,8 @@ public class TutorialTextBox : MonoBehaviour
     public int endLine;
 
     public bool MovedW, MovedA, MovedS, MovedD;
-    bool triedAttack, triedInteract, triedChangeW;
+
+    bool triedPause, triedPP, triedAttack, triedMove, triedCollecting, triedInventory, triedMerchant, triedTrap1, triedTrap2, triedTrap3, triedTrap4;
     public bool pauseBox;
 
     //Arrows
@@ -38,13 +39,8 @@ public class TutorialTextBox : MonoBehaviour
         MovedA = false;
         MovedS = false;
         MovedD = false;
-        triedAttack = false;
-        triedInteract = false;
-        triedChangeW = false;
-
+        triedPause= triedPP= triedAttack= triedMove= triedCollecting= triedInventory= triedMerchant= triedTrap1= triedTrap2= triedTrap3= triedTrap4 = false;
         pauseBox = false;
-
-        ArrowShown = null;
     }
 
     // Update is called once per frame
@@ -52,8 +48,8 @@ public class TutorialTextBox : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         KeyPressedUpdate();
-#elif UNITY_ANDROID || UNITY_IPHONE
-        AccMove();
+//#elif UNITY_ANDROID || UNITY_IPHONE
+    //    AccMove();
 #endif
 
         if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
@@ -92,37 +88,44 @@ public class TutorialTextBox : MonoBehaviour
         {
             case 1:
                 LevelArrow.gameObject.SetActive(true);
-                //ArrowShown = transform.Find("Arrows/LevelArrow").gameObject;
                 break;
 
             case 2:
                 TimerArrow.gameObject.SetActive(true);
                 break;
-                
-            case 4:
+
+            case 3:
+                TimerArrow.gameObject.SetActive(true);
+                if(triedPause)
+                {
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                break;
+
+            case 5:
                 MinimapArrow.gameObject.SetActive(true);
                 break;
+
+            //case 5:
+            //    HealthArrow.gameObject.SetActive(true);
+            //    break;
+
+            //case 6:
+            //    StaminaArrow.gameObject.SetActive(true);
+            //    break;
                 
-            case 5:
-                HealthArrow.gameObject.SetActive(true);
-                break;
+            //case 7:
+            //    EXPArrow.gameObject.SetActive(true);
+            //    break;
 
-            case 6:
-                StaminaArrow.gameObject.SetActive(true);
-                break;
+            //case 8:
+            //    PPArrow.gameObject.SetActive(true);
+            //    break;
 
-
-            case 7:
-                EXPArrow.gameObject.SetActive(true);
-                break;
-
-            case 8:
-                PPArrow.gameObject.SetActive(true);
-                break;
-
-            case 13:
-                InventoryArrow.gameObject.SetActive(true);
-                break;
+            //case 13:
+            //    InventoryArrow.gameObject.SetActive(true);
+            //    break;
 
 
                 //case 2:
@@ -215,7 +218,13 @@ public class TutorialTextBox : MonoBehaviour
     {
         switch(textboxManager.currentLine)
         {
-            
+            case 4:
+                if(!triedPause)
+                {
+                    pauseBox = true;
+                    textboxManager.DisableTextBox();
+                }
+                break;
         }
         //if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
         //{
