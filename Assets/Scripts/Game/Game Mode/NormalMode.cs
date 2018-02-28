@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class NormalMode : MonoBehaviour, GameMode
 {
     public GameObject LoadingInScreen;
+    public GameObject LoadingNextScreen;
     public GameObject PauseMenu;
     public Text FloorDetails;
 
@@ -84,7 +85,9 @@ public class NormalMode : MonoBehaviour, GameMode
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
 
         /* Load next level */
-        SceneManager.LoadScene("SceneGame_2D");
+        //SceneManager.LoadScene("SceneGame_2D");
+        //GamePause();
+        StartCoroutine(LoadingNextLevelScreen());
     }
 
     public void GameOver()
@@ -137,4 +140,24 @@ public class NormalMode : MonoBehaviour, GameMode
             GamePause();
         }
     }
+
+
+    IEnumerator LoadingNextLevelScreen()
+    {
+        LoadingNextScreen.GetComponent<LoadingNextFloor>().Init();
+        AsyncOperation async = SceneManager.LoadSceneAsync("SceneGame_2D");
+        async.allowSceneActivation = false;
+
+        // If SceneGame is not loaded fully.
+        while (async.isDone == false)
+        {
+            LoadingNextScreen.GetComponent<LoadingNextFloor>().UpdateLoadAnimation();
+
+            if (async.progress >= 0.9f)
+                async.allowSceneActivation = true;
+
+            yield return null;
+        }
+    }
+
 }
