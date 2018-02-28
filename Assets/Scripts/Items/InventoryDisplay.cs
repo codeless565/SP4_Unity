@@ -31,6 +31,7 @@ public class InventoryDisplay : MonoBehaviour {
     GameObject ItemNameRarity;
     GameObject ItemNameText;
     GameObject ItemNameStats;
+    GameObject SellButton;
     GameObject ConfirmButton;
     GameObject CancelButton;
 
@@ -71,7 +72,7 @@ public class InventoryDisplay : MonoBehaviour {
         ItemNameStats.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 100.0f);
 
         ConfirmButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ConfirmButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-100.0f, -250.0f);
+        ConfirmButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-300.0f, -250.0f);
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
         ConfirmButton.GetComponent<Button>().onClick.RemoveAllListeners();
         ConfirmButton.GetComponent<Button>().onClick.AddListener(ConfirmEquip);
@@ -80,7 +81,13 @@ public class InventoryDisplay : MonoBehaviour {
         CancelButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelEquip);
-        CancelButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(100.0f, -250.0f);
+        CancelButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -250.0f);
+
+
+        SellButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
+        SellButton.GetComponentInChildren<Text>().text = "Sell";
+        SellButton.GetComponent<Button>().onClick.AddListener(SellItem);
+        SellButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(300, -250.0f);
 
         Player = GameObject.FindGameObjectWithTag("Player");
         #endregion
@@ -120,10 +127,10 @@ public class InventoryDisplay : MonoBehaviour {
         foreach (GameObject go in InventoryLayout)
         {
             go.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
+            go.transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
         }
         for (int i = 0; i < InventoryItems.Length; ++i)
         {
-            if (InventoryItems[i] != null)
                 InventoryItems[i] = null;
         }
     }
@@ -326,10 +333,10 @@ public class InventoryDisplay : MonoBehaviour {
             return;
 
         if (SelectedItem.ItemType == "Uses")
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
+            Player.GetComponent<Player2D_Manager>().GetComponent<InventoryBar>().AddPlayerHotBar(SelectedItem);
         else
         {
-            if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().EquipEQ(SelectedItem))
+            if (Player.GetComponent<Player2D_Manager>().EquipEQ(SelectedItem))
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Succesfully Equipped!");
             else
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Not enough levels!");
@@ -340,6 +347,31 @@ public class InventoryDisplay : MonoBehaviour {
     }
     void CancelEquip()
     {
+        ConfirmationCanvas = false;
+    }
+    void SellItem()
+    {
+        if (SelectedItem == null)
+            return;
+
+        List<int> Indexes = new List<int>();
+        for(int i = 0;i<Player.GetComponent<Player2D_Manager>().Inventory.Count;++i)
+        {
+            if (Player.GetComponent<Player2D_Manager>().Inventory[i] == SelectedItem)
+                Indexes.Add(i);
+        }
+
+        if (Indexes.Count == 1)
+        {
+            Player.GetComponent<Player2D_Manager>().Inventory.RemoveAt(Indexes[0]);
+        }
+        else
+        {
+            Player.GetComponent<Player2D_Manager>().Inventory.RemoveAt(Indexes[Indexes.Count-1]);
+            Player.GetComponent<Player2D_Manager>().Inventory[Indexes[0]].Quantity--;
+        }
+        Player.GetComponent<Player2D_Manager>().getPlayerStats().gold += (SelectedItem.ItemCost/2);
+
         ConfirmationCanvas = false;
     }
 
