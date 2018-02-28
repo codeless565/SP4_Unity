@@ -9,5 +9,11 @@ public interface GameMode
     void GameClear();
     void GameOver();
     void RestartGame();
+
+    int CurrentFloor
+    { get; }
+
+    bool Pause
+    { get; set; }
 }
 
