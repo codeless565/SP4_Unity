@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class NormalMode : MonoBehaviour, GameMode
 {
+    public GameObject LoadingInScreen;
     public GameObject PauseMenu;
     public Text FloorDetails;
 
@@ -32,7 +33,7 @@ public class NormalMode : MonoBehaviour, GameMode
         {
             t_CurrFloor = 1;
         }
-        Debug.Log("Current Floor: " + t_CurrFloor);
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
 
         /* Initialize Level */
         GetComponent<BoardGenerator>().Init();
@@ -113,5 +114,27 @@ public class NormalMode : MonoBehaviour, GameMode
     public void RestartGame()
     {
         SceneManager.LoadScene("SceneGame_2D");
+    }
+
+    public int CurrentFloor
+    {
+        get
+        {
+            return t_CurrFloor;
+        }
+    }
+
+    public bool Pause
+    {
+        get
+        {
+            return b_isPaused;
+        }
+
+        set
+        {
+            b_isPaused = !value; // set opposing effect to trigger desired effect
+            GamePause();
+        }
     }
 }

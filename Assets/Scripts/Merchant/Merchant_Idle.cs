@@ -31,6 +31,6 @@ public class Merchant_Idle : MonoBehaviour
         if (GetComponentInParent<MerchantStateMachine>().m_state != "IDLE")
             return;
 
-        Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
+        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
 }

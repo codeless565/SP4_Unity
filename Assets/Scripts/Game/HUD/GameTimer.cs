@@ -6,20 +6,23 @@ using UnityEngine.UI;
 public class GameTimer : MonoBehaviour {
 
     public Text TimeDisplay;
-    public float m_Gametime = 100; //In Seconds
+    public float Gametime = 100; //In Seconds
+    private float m_elapseTime;
 
 	public void Init () {
-        if (m_Gametime < 10)
-            m_Gametime = 10;
-        else if (m_Gametime > 300)
-            m_Gametime = 300;
-	}
+        if (Gametime < 10)
+            Gametime = 10;
+        else if (Gametime > 300)
+            Gametime = 300;
+
+        m_elapseTime = Gametime;
+    }
 	
 	void Update () {
-        m_Gametime -= Time.deltaTime;
-        TimeDisplay.text = "Time: " + m_Gametime.ToString("0") + " seconds";
+        m_elapseTime -= Time.deltaTime;
+        TimeDisplay.text = "Time: " + m_elapseTime.ToString("0") + " seconds";
 
-        if (m_Gametime <= 0)
+        if (m_elapseTime <= 0)
         {
             GetComponent<GameMode>().GameOver();
         }
@@ -28,14 +31,14 @@ public class GameTimer : MonoBehaviour {
     // Modifiers //
     void AddTime(float _time)
     {
-        m_Gametime += _time;
+        m_elapseTime += _time;
     }
 
     void DeductTime(float _time)
     {
-        m_Gametime -= _time;
+        m_elapseTime -= _time;
 
-        if (m_Gametime < 0)
-            m_Gametime = 0;
+        if (m_elapseTime < 0)
+            m_elapseTime = 0;
     }
 }
