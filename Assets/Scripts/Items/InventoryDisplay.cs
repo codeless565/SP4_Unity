@@ -62,26 +62,26 @@ public class InventoryDisplay : MonoBehaviour {
         }
         #region Confirmation
         ItemNameRarity = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameRarity.transform.position = new Vector3(0.0f, 125.0f) + EquipConfirmationCanvas.transform.position;
+        ItemNameRarity.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 300.0f);
 
         ItemNameText = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameText.transform.position = new Vector3(0.0f,100.0f) + EquipConfirmationCanvas.transform.position;
+        ItemNameText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 200.0f);
 
         ItemNameStats = Instantiate(TextPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + EquipConfirmationCanvas.transform.position;
+        ItemNameStats.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 100.0f);
 
         ConfirmButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        ConfirmButton.transform.position = new Vector3(-50.0f, -100.0f) + EquipConfirmationCanvas.transform.position;
+        ConfirmButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-100.0f, -250.0f);
         ConfirmButton.GetComponentInChildren<Text>().text = "Confirm";
         ConfirmButton.GetComponent<Button>().onClick.RemoveAllListeners();
         ConfirmButton.GetComponent<Button>().onClick.AddListener(ConfirmEquip);
         
 
         CancelButton = Instantiate(ButtonPrefab, EquipConfirmationCanvas.transform) as GameObject;
-        CancelButton.transform.position = new Vector3(50.0f, -100.0f) + EquipConfirmationCanvas.transform.position;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelEquip);
-        
+        CancelButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(100.0f, -250.0f);
+
         Player = GameObject.FindGameObjectWithTag("Player");
         #endregion
     }

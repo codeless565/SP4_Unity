@@ -8,15 +8,16 @@ public class ControlsManager : MonoBehaviour
 {
     public GameObject DisplayCanvas;
     private GameObject ButtonPrefab;
-
+    private GameObject player;
     GameObject[] ControlButtons;
-    KeyCode[] ControlsKeyCodes;
+    public KeyCode[] ControlsKeyCodes;
     public enum EControls
     {
         MOVEFORWARD,
         MOVEBACKWARD,
         MOVELEFT,
         MOVERIGHT,
+        INVENTORY,
         OPTIONS,
         TOTAL
     }
@@ -25,19 +26,13 @@ public class ControlsManager : MonoBehaviour
     bool editingkey;
     int SelectedControl;
     // Use this for initialization
-    void Start()
+    public void Init()
     {
         ControlsKeyCodes = new KeyCode[(int)EControls.TOTAL];
         ControlButtons = new GameObject[(int)EControls.TOTAL];
         SelectedControl = (int)EControls.TOTAL;
         editingkey = false;
         CanvasActive = false;
-
-        ControlsKeyCodes[(int)EControls.MOVEFORWARD] = KeyCode.W;
-        ControlsKeyCodes[(int)EControls.MOVEBACKWARD] = KeyCode.S;
-        ControlsKeyCodes[(int)EControls.MOVELEFT] = KeyCode.A;
-        ControlsKeyCodes[(int)EControls.MOVERIGHT] = KeyCode.D;
-        ControlsKeyCodes[(int)EControls.OPTIONS] = KeyCode.O;
 
         ButtonPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().ButtonPrefab;
         for (int i = 0; i < (int)EControls.TOTAL; ++i)
@@ -47,39 +42,38 @@ public class ControlsManager : MonoBehaviour
             ControlButtons[i] = newIcon;
             newIcon.GetComponent<Button>().onClick.RemoveAllListeners();
             newIcon.GetComponent<Button>().onClick.AddListener(delegate { ControlClicked(newIcon); });
-            
         }
+
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (PlayerPrefs.GetString("Player_Controls") != "")
+            PlayerSaviour.Instance.LoadControls(ControlsKeyCodes);
+        else
+            InitDefaultControls();
     }
 
     // Update is called once per frame
     void Update()
     {
         DisplayCanvas.SetActive(CanvasActive);
+        ControlButtonsUpdate();
+
         if (editingkey)
         {
-            Debug.Log(SelectedControl);
             if (Input.anyKeyDown)
                 if (CheckKey(Input.inputString))
                 {
                     ControlsKeyCodes[SelectedControl] = ReturnKey(Input.inputString);
-
+                    player.GetComponent<Player2D_Manager>().canMove = true;
                     editingkey = false;
                     CanvasActive = false;
+                    PlayerSaviour.Instance.SavePref(ControlsKeyCodes);
                 }
         }
 
-        ControlButtonsUpdate();
-
-        bool bOptionState = false;
-        if (!bOptionState && Input.GetKeyDown(ControlsKeyCodes[(int)EControls.OPTIONS]))
-        {
-            bOptionState = true;
-            CanvasActive = !CanvasActive;
-        }
-        else if (bOptionState && !Input.GetKeyDown(ControlsKeyCodes[(int)EControls.OPTIONS]))
-            bOptionState = false;
+        if(CanvasActive)
+            player.GetComponent<Player2D_Manager>().canMove = false;
     }
-
+    public void setCanvasActive() { CanvasActive = !CanvasActive; }
     public void ControlClicked(GameObject icon)
     {
         SelectedControl = 0;
@@ -112,13 +106,25 @@ public class ControlsManager : MonoBehaviour
                 case EControls.MOVERIGHT:
                     ControlButtons[i].GetComponentInChildren<Text>().text = "Move right " + ControlsKeyCodes[i];
                     break;
+                case EControls.INVENTORY:
+                    ControlButtons[i].GetComponentInChildren<Text>().text = "Inventory " + ControlsKeyCodes[i];
+                    break;
                 case EControls.OPTIONS:
                     ControlButtons[i].GetComponentInChildren<Text>().text = "Options " + ControlsKeyCodes[i];
                     break;
             }
 
         }
+    }
 
+    void InitDefaultControls()
+    {
+        ControlsKeyCodes[(int)EControls.MOVEFORWARD] = KeyCode.W;
+        ControlsKeyCodes[(int)EControls.MOVEBACKWARD] = KeyCode.S;
+        ControlsKeyCodes[(int)EControls.MOVELEFT] = KeyCode.A;
+        ControlsKeyCodes[(int)EControls.MOVERIGHT] = KeyCode.D;
+        ControlsKeyCodes[(int)EControls.INVENTORY] = KeyCode.I;
+        ControlsKeyCodes[(int)EControls.OPTIONS] = KeyCode.O;
     }
 
     public KeyCode ReturnKey(string input)
@@ -151,6 +157,8 @@ public class ControlsManager : MonoBehaviour
             thisKeyCode = ControlsKeyCodes[(int)EControls.MOVELEFT];
         else if (_control.ToUpper() == EControls.MOVERIGHT.ToString())
             thisKeyCode = ControlsKeyCodes[(int)EControls.MOVERIGHT];
+        else if (_control.ToUpper() == EControls.INVENTORY.ToString())
+            thisKeyCode = ControlsKeyCodes[(int)EControls.INVENTORY];
         else if (_control.ToUpper() == EControls.OPTIONS.ToString())
             thisKeyCode = ControlsKeyCodes[(int)EControls.OPTIONS];
 
