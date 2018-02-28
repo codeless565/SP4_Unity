@@ -48,7 +48,7 @@ public class Merchant_GoodBye : MonoBehaviour
 		m_buttons.SetActive(false);
 
 		m_timer += Time.deltaTime;
-		if (m_timer <= 5.0f)
+		if (m_timer <= 3.0f)
 		{
 			_theManager.ReloadScript(theText);
 			_theManager.currentLine = startLine;
@@ -60,8 +60,6 @@ public class Merchant_GoodBye : MonoBehaviour
 			m_timer = 0.0f;
 			isBackIdle = true;
 		}
-
-        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
 
 }

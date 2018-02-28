@@ -31,7 +31,5 @@ public class Merchant_Idle : MonoBehaviour
 		
         _theManager.DisableTextBox();
         m_buttons.SetActive(false);
-
-        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
 }

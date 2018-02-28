@@ -47,11 +47,12 @@ public class MerchantStateMachine : MonoBehaviour
             m_state = "INTERACT";
             MerchantTriggerInteract.m_interact = false;
             _player.GetComponent<Player2D_Manager>().canMove = false;
+
             interact.SetActive(true);
             idle.SetActive(false);
         }
 
-		/* When not near the enemy, back to idle */
+		/* When not near the Merchant, back to idle */
 		if (!_isinRange)
 		{
             m_state = "IDLE";
@@ -64,16 +65,16 @@ public class MerchantStateMachine : MonoBehaviour
         {
             m_state = "GOODBYE";
 			MerchantTriggerClose.m_close = false;
+
             interact.SetActive(false);
             bye.SetActive(true);
         }
         
-        /* If GOODBYE and tap textbox, change State to IDLE */
+        /* If GOODBYE and Duration , change State to IDLE */
         if (m_state == "GOODBYE" && GetComponentInChildren<Merchant_GoodBye>().isBackIdle)
         {
             m_state = "IDLE";
             GetComponentInChildren<Merchant_GoodBye>().isBackIdle = false;
-            Debug.Log(GetComponentInChildren<Merchant_GoodBye>().isBackIdle);
             _player.GetComponent<Player2D_Manager>().canMove = true;
 
             bye.SetActive(false);
