@@ -32,7 +32,7 @@ public class NormalMode : MonoBehaviour, GameMode
         //check player's curr florr and init accordingly
         t_CurrFloor = PlayerPrefs.GetInt("CurrentLevel");// set from player's curr floor
         if (t_CurrFloor <= 0)
-            t_CurrFloor = 1;
+        { t_CurrFloor = 1; }
 
         /* Initialize Level
          * Spawn Objects in Level */
@@ -173,8 +173,9 @@ public class NormalMode : MonoBehaviour, GameMode
             LoadingNextScreen.GetComponent<LoadingNextFloor>().UpdateLoadAnimation();
 
             if (async.progress >= 0.9f)
+            {
                 async.allowSceneActivation = true;
-
+            }
             yield return null;
         }
     }
