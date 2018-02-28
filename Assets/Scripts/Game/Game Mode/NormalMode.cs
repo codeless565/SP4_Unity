@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class NormalMode : MonoBehaviour, GameMode
 {
     public GameObject PauseMenu;
+    public Text FloorDetails;
 
     bool b_isPaused;
     int t_CurrFloor;
@@ -17,6 +19,8 @@ public class NormalMode : MonoBehaviour, GameMode
 
         if (PauseMenu != null)
             PauseMenu.SetActive(false);
+
+        FloorDetails.text = "Floor " + t_CurrFloor.ToString();
     }
 
     // Interface Functions // 
