@@ -11,11 +11,14 @@ public class MerchantStateMachine : MonoBehaviour
     private GameObject _player;
 
     /* Trigger Dialog */
-    private bool _triggeredDialog;
-    private bool _isinRange;
+    private bool _isinRange, m_isClicked;
 
+#if UNITY_ANDROID || UNITY_IPHONE
+{
     /* Interact and Attack Button */
     private GameObject Attack_Btn, Interact_Btn;
+}
+#endif
 
     /* GameObjects to Store states */
     public GameObject idle, interact, bye;
@@ -23,6 +26,7 @@ public class MerchantStateMachine : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player");
+        m_isClicked = false;
 
         /* Default state */
         m_state = "IDLE";
@@ -31,21 +35,26 @@ public class MerchantStateMachine : MonoBehaviour
         bye.SetActive(false);
 
         /* Default Btn Layout */
+#if UNITY_ANDROID || UNITY_IPHONE
+{
         Attack_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Attack_Btn;
         Attack_Btn.SetActive(true);
-
+        
         Interact_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Interact_Btn;
         Interact_Btn.SetActive(false);
+}
+#endif
     }
 
     /* Every Frame, Update what Merchant is doing */
     void Update ()
     {
         /* If Trigger Dialougue, change State to INTERACT */
-        if (_isinRange && GetTriggerForInteraction())
+        if (_isinRange && GetTriggerForInteraction() && !m_isClicked)
         {
             m_state = "INTERACT";
             _player.GetComponent<Player2D_Manager>().canMove = false;
+            m_isClicked = true; // so wont overlap merchant interact 
 
 #if UNITY_ANDROID || UNITY_IPHONE
             MerchantTriggerInteract.m_interact = false;
@@ -59,6 +68,7 @@ public class MerchantStateMachine : MonoBehaviour
 		if (!_isinRange)
 		{
             m_state = "IDLE";
+            m_isClicked = false;
 
             interact.SetActive(false);
 			idle.SetActive(true);
@@ -80,6 +90,7 @@ public class MerchantStateMachine : MonoBehaviour
             m_state = "IDLE";
             GetComponentInChildren<Merchant_GoodBye>().isBackIdle = false;
             _player.GetComponent<Player2D_Manager>().canMove = true;
+            m_isClicked = false;
 
             bye.SetActive(false);
             idle.SetActive(true);
@@ -96,13 +107,17 @@ public class MerchantStateMachine : MonoBehaviour
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
         _player.GetComponentInChildren<Player2D_Attack>().Interact = true;
 
+#if UNITY_ANDROID || UNITY_IPHONE
+{
         /* Change Attack Button to Interact Button */
         Interact_Btn.SetActive(true);
         Attack_Btn.SetActive(false);
+}
+#endif
     }
 
     /* Response to Player entering trigger box of Merchant */
-	public void OnTriggerStay2D(Collider2D other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         /* Update every frame to see for Interact Btn pressed */
         _isinRange = true;
@@ -113,9 +128,14 @@ public class MerchantStateMachine : MonoBehaviour
     {
         _player.GetComponentInChildren<Player2D_Attack>().Interact = false;
 		_isinRange = false;
-
+        
+#if UNITY_ANDROID || UNITY_IPHONE
+{
+        /* Change Attack Button to Interact Button */
         Attack_Btn.SetActive(true);
         Interact_Btn.SetActive(false);
+}
+#endif
     }
 
     /* Get Trigger for Merchant Interaction */
@@ -123,7 +143,6 @@ public class MerchantStateMachine : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetMouseButtonDown(0);
-        //return Player2D_TriggerAttack._triggered;
 #elif UNITY_ANDROID || UNITY_IPHONE
         return MerchantTriggerInteract.m_interact;
 #else
