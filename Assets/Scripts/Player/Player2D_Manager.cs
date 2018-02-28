@@ -75,7 +75,7 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Animation */
         animTimer = 0.0f;
-        m_fAniTime = 1.0f;
+        m_fAniTime = 0.1f;
         attackClicked = false;
         p_spriteManager = GetComponent<SpriteManager>();
 

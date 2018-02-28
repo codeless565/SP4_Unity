@@ -59,7 +59,7 @@ public class SpriteManager : MonoBehaviour
     AttackStyle attackStyle;
     bool attackPlaceHolder;
     public float animTimer = 0.0f; // countdown timer
-    private float m_fAniTime = 1.0f; // value to countdown from
+    private float m_fAniTime = 0.5f; // value to countdown from
 
     //Player actions
     bool Slash = false;

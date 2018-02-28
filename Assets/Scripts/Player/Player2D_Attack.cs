@@ -33,7 +33,7 @@ public class Player2D_Attack : MonoBehaviour
 
     void Start()
     {
-        m_timer = 0.9F;
+        m_timer = 0.1f;
         m_AngleToRotate = 0.0f;
 
         /* Set Start Downwards */
@@ -85,7 +85,7 @@ public class Player2D_Attack : MonoBehaviour
                 if (m_timer <= 0.0F)
                 {
                     DestroyImmediate(temp);
-                    m_timer = 0.9F;
+                    m_timer = 0.1F;
                 }
             }
         }
