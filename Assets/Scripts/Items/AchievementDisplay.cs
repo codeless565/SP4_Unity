@@ -51,7 +51,7 @@ public class AchievementDisplay : MonoBehaviour {
                     if (TextLayout[j].GetComponent<Text>().text == "")
                     {
                         TextLayout[j].GetComponent<Text>().text = i.Value.AchievementName + "\n \t"
-                                                                  + i.Value.AchievementDetails + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+                                                                  + i.Value.AchievementDetails + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
                                                                   + temp; ;
                         break;
                     }
