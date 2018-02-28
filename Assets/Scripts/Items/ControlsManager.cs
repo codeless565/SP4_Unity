@@ -62,12 +62,15 @@ public class ControlsManager : MonoBehaviour
             if (Input.anyKeyDown)
                 if (CheckKey(Input.inputString))
                 {
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(ControlsKeyCodes[SelectedControl] + " has been changed to " + ReturnKey(Input.inputString));
                     ControlsKeyCodes[SelectedControl] = ReturnKey(Input.inputString);
                     player.GetComponent<Player2D_Manager>().canMove = true;
                     editingkey = false;
                     CanvasActive = false;
                     PlayerSaviour.Instance.SavePref(ControlsKeyCodes);
                 }
+                else
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Incorrect Key! Only Alphabetical");
         }
 
         if(CanvasActive)
