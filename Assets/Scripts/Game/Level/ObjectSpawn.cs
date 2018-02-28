@@ -10,6 +10,11 @@ public class ObjectSpawn : MonoBehaviour
     private int m_playerRoom;
     private Vector2 m_playerPos;
 
+    // Pet
+    public GameObject Pet;
+    private int m_PetRoom;
+    private Vector2 m_petPos;
+
     //Merchant
     public GameObject Merchant;
     private int m_MerchantRoom;
@@ -63,10 +68,14 @@ public class ObjectSpawn : MonoBehaviour
         }
 
         /* Normal spawns */
-        //Player and Exit
+        //Player, Pet and Exit
         PlayerSpawn();
         ExitSpawn();
 
+        //if(m_currentFloor % 2 == 0)
+        //{
+            PetSpawn();
+        //}
 
         // Chests
         m_itemPos = new List<Vector2>();
@@ -95,6 +104,22 @@ public class ObjectSpawn : MonoBehaviour
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
+    }
+
+    private void PetSpawn()
+    {
+        // Spawn Pet with the Player in the same room. Pet will be beside Player.
+        m_PetRoom = m_playerRoom;
+
+        int ranXpos = m_rooms[m_PetRoom].xPos + m_rooms[m_PetRoom].roomWidth + 1;
+        int ranYpos = m_rooms[m_PetRoom].yPos + m_rooms[m_PetRoom].roomHeight + 1;
+
+        m_petPos = new Vector2(ranXpos, ranYpos);
+        GameObject t_Pet = Instantiate(Pet, m_petPos, Quaternion.identity, go_floorholder.transform);
+
+        if (t_Pet.GetComponent<ObjectInfo>() != null)
+            t_Pet.GetComponent<ObjectInfo>().Init(m_PetRoom, m_rooms[m_PetRoom], m_exitPos);
+
     }
 
     private void MerchantSpawn()
