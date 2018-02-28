@@ -371,6 +371,7 @@ public class InventoryDisplay : MonoBehaviour {
             Player.GetComponent<Player2D_Manager>().Inventory[Indexes[0]].Quantity--;
         }
         Player.GetComponent<Player2D_Manager>().getPlayerStats().gold += (SelectedItem.ItemCost/2);
+        GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Successfully sold " + SelectedItem.Name + " for " + SelectedItem.ItemCost / 2);
 
         ConfirmationCanvas = false;
     }

@@ -23,6 +23,7 @@ public class NormalMode : MonoBehaviour, GameMode
             PauseMenu.SetActive(false);
 
         FloorDetails.text = "Floor " + t_CurrFloor.ToString();
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
     }
 
     // Interface Functions // 
@@ -31,16 +32,22 @@ public class NormalMode : MonoBehaviour, GameMode
         //check player's curr florr and init accordingly
         t_CurrFloor = PlayerPrefs.GetInt("CurrentLevel");// set from player's curr floor
         if (t_CurrFloor <= 0)
+        { t_CurrFloor = 1; }
+
+        /* Initialize Level
+         * Spawn Objects in Level */
+        //if (t_CurrFloor % 10 == 0)
+        //{
+        //    // Spawn Boss Level
+        //    GetComponent<ArenaGenerator>().Init();
+        //    GetComponent<ArenaBossSpawn>().Init(t_CurrFloor);
+        //}
+        //else
         {
-            t_CurrFloor = 1;
+            // Spawn Normal Level
+            GetComponent<BoardGenerator>().Init();
+            GetComponent<ObjectSpawn>().Init(t_CurrFloor);
         }
-        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
-
-        /* Initialize Level */
-        GetComponent<BoardGenerator>().Init();
-
-        /* Spawn Objects in Level */
-        GetComponent<ObjectSpawn>().Init(t_CurrFloor);
 
         /* Start Timer */
         GetComponent<GameTimer>().Init();
@@ -166,8 +173,9 @@ public class NormalMode : MonoBehaviour, GameMode
             LoadingNextScreen.GetComponent<LoadingNextFloor>().UpdateLoadAnimation();
 
             if (async.progress >= 0.9f)
+            {
                 async.allowSceneActivation = true;
-
+            }
             yield return null;
         }
     }

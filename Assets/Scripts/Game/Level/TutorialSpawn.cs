@@ -38,7 +38,6 @@ public class TutorialSpawn : MonoBehaviour {
         //Player and Exit
         PlayerSpawn(m_arenaSizeRow, m_arenaSizeColum);
        // ExitSpawn();
-
      //   MerchantSpawn();
     }
 

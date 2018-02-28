@@ -88,6 +88,7 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
                     tempEnemy.GetComponent<SkeletonEnemyManager>().EXPReward = tempEnemy.GetComponent<SkeletonEnemyManager>().EXPRewardScaling * currentLevel;
                     tempEnemy.GetComponent<SkeletonEnemyManager>().Waypoint = Waypoint;
                     tempEnemy.GetComponent<SkeletonEnemyManager>().CurrWaypointID = randomID;
+                    tempEnemy.GetComponent<SkeletonEnemyManager>().Init(currentLevel);
                 }
 
                 if (tempEnemy.GetComponent<ObjectInfo>() != null)

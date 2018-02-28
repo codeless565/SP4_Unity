@@ -161,7 +161,7 @@ public class ShopDisplay : MonoBehaviour
             go.transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Empty;
 
         }
-        for (int i = 0; i < ShopItems.Length;++i)
+        for (int i = 0; i < ShopItems.Length; ++i)
         {
             ShopItems[i] = null;
         }
@@ -229,33 +229,34 @@ public class ShopDisplay : MonoBehaviour
             {
                 for (int i = 0; i < ShopLayout.Length; ++i)
                 {
+
                     if (ShopLayout[i].GetComponent<Image>().sprite.name == item.ItemImage.name && ShopItems[i].ItemRarity == item.ItemRarity && ShopItems[i].Name == item.Name)
-                    {
+                        {
+                            break;
+                        }
+                        else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (item.ItemRarity == "Common")
+                                ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
+                            else if (item.ItemRarity == "Uncommon")
+                                ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
+                            else if (item.ItemRarity == "Magic")
+                                ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
+                            else if (item.ItemRarity == "Ancient")
+                                ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
+                            else if (item.ItemRarity == "Relic")
+                                ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
 
-                        break;
-                    }
-                    else if (ShopLayout[i].GetComponent<Image>().sprite.name != "UISprite")
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        if (item.ItemRarity == "Common")
-                            ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderCommon;
-                        else if (item.ItemRarity == "Uncommon")
-                            ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderUncommon;
-                        else if (item.ItemRarity == "Magic")
-                            ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderMagic;
-                        else if (item.ItemRarity == "Ancient")
-                            ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderAncient;
-                        else if (item.ItemRarity == "Relic")
-                            ShopLayout[i].transform.GetChild(0).GetComponentInChildren<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().BorderRelic;
-
-                        ShopItems[i] = item;
-                        ShopLayout[i].name = item.Name + " " + item.ItemRarity;
-                        ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
-                        break;
-                    }
+                            ShopItems[i] = item;
+                            ShopLayout[i].name = item.Name + " " + item.ItemRarity;
+                            ShopLayout[i].GetComponent<Image>().sprite = item.ItemImage;
+                            break;
+                        }
+                    
                 }
             }
             
