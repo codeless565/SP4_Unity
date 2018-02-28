@@ -120,27 +120,27 @@ public class PlayerSaviour{
         _stats.Name = statstring[0];
         float tempvalue = 0.0f;
 
-        float.TryParse(statstring[1], out tempvalue);
+        float.TryParse(statstring[1], out tempvalue); //Level
         _stats.Level = (int)tempvalue;
-        float.TryParse(statstring[2], out tempvalue);
+        float.TryParse(statstring[2], out tempvalue); //HP
         _stats.Health = tempvalue;
-        float.TryParse(statstring[3], out tempvalue);
+        float.TryParse(statstring[3], out tempvalue); //Attack
         _stats.Attack = tempvalue;
-        float.TryParse(statstring[4], out tempvalue);
+        float.TryParse(statstring[4], out tempvalue); //Stamina
         _stats.Stamina = tempvalue;
-        float.TryParse(statstring[5], out tempvalue);
+        float.TryParse(statstring[5], out tempvalue); //Defense
         _stats.Defense = tempvalue;
-        float.TryParse(statstring[6], out tempvalue);
+        float.TryParse(statstring[6], out tempvalue); //MovementSpeed
         _stats.MoveSpeed = tempvalue;
-        float.TryParse(statstring[7], out tempvalue);
+        float.TryParse(statstring[7], out tempvalue); //gold
         _stats.gold = (int)tempvalue;
-        float.TryParse(statstring[8], out tempvalue);
+        float.TryParse(statstring[8], out tempvalue); //EXP
         _stats.EXP = tempvalue;
-        float.TryParse(statstring[9], out tempvalue);
+        float.TryParse(statstring[9], out tempvalue); //MaxEXP
         _stats.MaxEXP= tempvalue;
-        float.TryParse(statstring[10], out tempvalue);
+        float.TryParse(statstring[10], out tempvalue); //MaxHP
         _stats.MaxHealth= tempvalue;
-        float.TryParse(statstring[11], out tempvalue);
+        float.TryParse(statstring[11], out tempvalue); //MaxStamina
         _stats.MaxStamina= tempvalue;
     }
 

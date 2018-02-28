@@ -31,11 +31,11 @@ public class MerchantStateMachine : MonoBehaviour
         bye.SetActive(false);
 
         /* Default Btn Layout */
-        Attack_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Attack_Btn;
-        Attack_Btn.SetActive(true);
+        //Attack_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Attack_Btn;
+        //Attack_Btn.SetActive(true);
 
-        Interact_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Interact_Btn;
-        Interact_Btn.SetActive(false);
+        //Interact_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Interact_Btn;
+        //Interact_Btn.SetActive(false);
     }
 
     /* Every Frame, Update what Merchant is doing */
@@ -90,11 +90,11 @@ public class MerchantStateMachine : MonoBehaviour
             return;
 
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
-        _player.GetComponentInChildren<Player2D_Attack>().Interact = true;
+        //_player.GetComponentInChildren<Player2D_Attack>().Interact = true;
 
         /* Change Attack Button to Interact Button */
-        Interact_Btn.SetActive(true);
-        Attack_Btn.SetActive(false);
+        //Interact_Btn.SetActive(true);
+        //Attack_Btn.SetActive(false);
     }
 
     /* Response to Player entering trigger box of Merchant */
@@ -110,7 +110,7 @@ public class MerchantStateMachine : MonoBehaviour
         _player.GetComponentInChildren<Player2D_Attack>().Interact = false;
 		_isinRange = false;
 
-        Attack_Btn.SetActive(true);
-        Interact_Btn.SetActive(false);
+        //Attack_Btn.SetActive(true);
+        //Interact_Btn.SetActive(false);
     }
 }

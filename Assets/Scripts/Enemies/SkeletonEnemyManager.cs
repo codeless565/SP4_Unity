@@ -220,7 +220,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     }
 
     // Use this for initialization
-    void Start ()
+    public void Init (int _level)
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().gameObject;
         playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_StatsHolder>();
@@ -250,6 +250,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         canAttack = false;
 
         //Initialize Stats from the leveling system
+        enemyLevel = _level;
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, false);
     }
@@ -420,7 +421,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
             canAttack = false;
 
             // Start to attack.
-            player.GetComponent<Player2D_StatsHolder>().Health -= (int)Attack;
+            player.GetComponent<Player2D_StatsHolder>().Health -= Calculator.Instance.CalculateDamage(attack, player.GetComponent<Player2D_StatsHolder>().Defense);
             e_spriteManager.SetAttack(true);
         }
     }
@@ -446,7 +447,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
     {
         if (GetComponent<CollisionPlayerMelee>().Attacked)
         {
-            health -= (int)playerStats.Attack;
+            health -= Calculator.Instance.CalculateDamage(playerStats.Attack, defense);
             GetComponent<CollisionPlayerMelee>().Attacked = false;
         }
 
