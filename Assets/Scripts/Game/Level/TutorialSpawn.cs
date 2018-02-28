@@ -38,9 +38,9 @@ public class TutorialSpawn : MonoBehaviour {
         
         //Player and Exit
         PlayerSpawn(m_arenaSizeRow, m_arenaSizeColum);
-        ExitSpawn();
+//        ExitSpawn();
 
-        MerchantSpawn();
+//        MerchantSpawn();
     }
 
     private void PlayerSpawn(int _arenaSizeR, int _arenaSizeC)
