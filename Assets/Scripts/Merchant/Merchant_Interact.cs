@@ -10,13 +10,13 @@ public class Merchant_Interact : MonoBehaviour
 {
     /* Dialouge With Merchant */
     private TextBoxManager _theManager;
-    public TextAsset theText;
-    public int startLine;
-    public int endLine;
+	public TextAsset theText;
+	public int startLine;
+	public int endLine;
 
     /* Getting the Buttons */
     private GameObject m_buttons;
-
+    
     // Use this for initialization
     void Start ()
     {
@@ -25,20 +25,18 @@ public class Merchant_Interact : MonoBehaviour
 
         /* Buttons */
         m_buttons = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Merchant_Interaction;
-        m_buttons.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
         if (GetComponentInParent<MerchantStateMachine>().m_state != "INTERACT")
             return;
-        
+		
+		_theManager.ReloadScript(theText);
+		_theManager.currentLine = startLine;
+		_theManager.endAtLine = endLine;
         _theManager.EnableTextBox();
         m_buttons.SetActive(true);
-            
-        Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
-
-
 }

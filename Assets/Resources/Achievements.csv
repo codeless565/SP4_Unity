@@ -1,2 +1,3 @@
 Name,Details,Active,PropertyName,CompletionCounter
 Zombie Slayer,Kill 3 zombies,TRUE,KILL_ENEMY,3
+Adventurer,Move 1000m,true,PLAYER_MOVE,1000

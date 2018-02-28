@@ -99,6 +99,9 @@ public class Player2D_Manager : MonoBehaviour
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
 
+        PlayerSaviour.Instance.LoadEquipment(EquipmentList);
+        Requip();
+
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
         /* Player Movement */
@@ -107,7 +110,14 @@ public class Player2D_Manager : MonoBehaviour
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
     }
-
+    void Requip()
+    {
+        foreach (Item item in EquipmentList)
+        {
+            if(item != null)
+                EquipEQ(item);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -262,6 +272,7 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(inputX, 0.0f);
             p_spriteManager.SetLastMove(lastMove.x, 0.0f);
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
         if (inputY > 0f || inputY < 0f)
         {
@@ -272,6 +283,7 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0.0f, inputY);
             p_spriteManager.SetLastMove(0.0f, lastMove.y);
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
 
         /* Sprite Movement */
