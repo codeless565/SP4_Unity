@@ -243,7 +243,7 @@ public class Player2D_Manager : MonoBehaviour
             if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
             {
                 /* Decrease Stamina */
-                statsHolder.Stamina -= 0.2f;
+                statsHolder.Stamina -= 0.05f;
                 m_Sprint = 2;
             }
             else
