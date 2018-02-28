@@ -13,6 +13,7 @@ public class TutorialTextBox : MonoBehaviour
     public bool MovedW, MovedA, MovedS, MovedD;
     bool triedAttack, triedInteract, triedChangeW;
     public bool pauseBox;
+
     // Use this for initialization
     void Start()
     {
@@ -36,7 +37,7 @@ public class TutorialTextBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        KeyPressedUpdate();
+        //KeyPressedUpdate();
 
         if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
         {
@@ -150,29 +151,29 @@ public class TutorialTextBox : MonoBehaviour
 
     void TutorialUpdate()
     {
-        if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
-        {
-            if(!MovedA || !MovedD || !MovedS || !MovedW)
-            {
-                pauseBox = true;
-                textboxManager.DisableTextBox();
-            }
-            else if(!triedAttack)
-            {
-                pauseBox = true;
-                textboxManager.DisableTextBox();
-            }
-            else if(!triedChangeW)
-            {
-                pauseBox = true;
-                textboxManager.DisableTextBox();
-            }
-            else if(!triedInteract)
-            {
-                pauseBox = true;
-                textboxManager.DisableTextBox();
-            }
-        }  
+        //if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
+        //{
+        //    if(!MovedA || !MovedD || !MovedS || !MovedW)
+        //    {
+        //        pauseBox = true;
+        //        textboxManager.DisableTextBox();
+        //    }
+        //    else if(!triedAttack)
+        //    {
+        //        pauseBox = true;
+        //        textboxManager.DisableTextBox();
+        //    }
+        //    else if(!triedChangeW)
+        //    {
+        //        pauseBox = true;
+        //        textboxManager.DisableTextBox();
+        //    }
+        //    else if(!triedInteract)
+        //    {
+        //        pauseBox = true;
+        //        textboxManager.DisableTextBox();
+        //    }
+        //}  
         //show text letter by letter
         StartCoroutine(textboxManager.TypeText(textboxManager.textLines[textboxManager.currentLine]));
 
