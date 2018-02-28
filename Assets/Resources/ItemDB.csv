@@ -1,25 +1,24 @@
 Name,Type,Rarity,Level,Cost,Experience,Health,MaxHealth,Stamina,MaxStamina,Attack,Defence,Movespeed,Sprite name,b_mass,b_special,,,,Item type,Item Rarity
-Long Sword,Weapons,Common,0,1,0,0,0,0,0,100,0,0,weaponlongsword,true,false,,,,Weapons,Common
-Rapier,Weapons,Common,0,0,0,0,0,0,0,300,0,0,weaponrapier,false,true,,,,Helmets,Uncommon
-Bow,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponbow,true,true,,,,Chestpieces,Magic
-Dagger,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weapondagger,true,true,,,,Leggings,Ancient
-Long Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponlongspear,true,true,,,,Shoes,Relic
-Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponspear,true,true,,,,Uses,
-Arrow,Uses,Common,0,0,0,0,0,0,0,0,0,0,arrow,true,false,,,,,
-HP Potion,Uses,Common,0,0,0,40,0,0,0,0,0,0,hp,false,false,,,,,
-MP Potion,Uses,Common,0,1000,0,0,0,100,0,0,0,0,mp,true,false,,,,b_mass,COMMON Items that will automatically have upgraded rarity up to Relic
-Leather Helmet,Helmets,Common,0,1000,0,0,100,0,0,0,0,0,helmetleather,true,true,,,,b_special,non-Uses Items with special name
-Chain Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetchain,true,true,,,,Use 'true and 'false!!!,
-Plated Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetplate,true,true,,,,,
-Robe Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecerobe,true,true,,,, ,
-Purple Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecepurple,true,true,,,,,
-Plated Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceplate,true,true,,,,,
-Leather Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather2,true,true,,,,,
-White Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather,true,true,,,,,
-Chain Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpiecechain,true,true,,,,,
-Robe Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,0,leggingsrobe,true,true,,,,,
-Green Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsgreen,true,true,,,,,
-Plated Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsplate,true,true,,,,,
-Leather Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,0,shoesleather,true,true,,,,,
-Plated Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,,shoesplate,true,true,,,,,
-,,,,,,,,,,,,,,,,,,,,
+Long Sword,Weapons,Common,0,1,0,0,0,0,0,100,0,0,weaponlongsword,TRUE,FALSE,,,,Weapons,Common
+Rapier,Weapons,Common,0,0,0,0,0,0,0,300,0,0,weaponrapier,FALSE,TRUE,,,,Helmets,Uncommon
+Bow,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponbow,TRUE,TRUE,,,,Chestpieces,Magic
+Dagger,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weapondagger,TRUE,TRUE,,,,Leggings,Ancient
+Long Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponlongspear,TRUE,TRUE,,,,Shoes,Relic
+Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponspear,TRUE,TRUE,,,,Uses,
+Arrow,Uses,Common,0,0,0,0,0,0,0,0,0,0,arrow,TRUE,FALSE,,,,,
+HP Potion,Uses,Common,0,0,0,40,0,0,0,0,0,0,hp,FALSE,FALSE,,,,,
+MP Potion,Uses,Common,0,1000,0,0,0,100,0,0,0,0,mp,TRUE,FALSE,,,,b_mass,COMMON Items that will automatically have upgraded rarity up to Relic
+Leather Helmet,Helmets,Common,0,1000,0,0,100,0,0,0,0,0,helmetleather,TRUE,TRUE,,,,b_special,non-Uses Items with special name
+Chain Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetchain,TRUE,TRUE,,,,Use 'true and 'false!!!,
+Plated Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetplate,TRUE,TRUE,,,,,
+Robe Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecerobe,TRUE,TRUE,,,, ,
+Purple Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecepurple,TRUE,TRUE,,,,,
+Plated Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceplate,TRUE,TRUE,,,,,
+Leather Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather2,TRUE,TRUE,,,,,
+White Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather,TRUE,TRUE,,,,,
+Chain Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpiecechain,TRUE,TRUE,,,,,
+Robe Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,0,leggingsrobe,TRUE,TRUE,,,,,
+Green Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsgreen,TRUE,TRUE,,,,,
+Plated Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsplate,TRUE,TRUE,,,,,
+Leather Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,0,shoesleather,TRUE,TRUE,,,,,
+Plated Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,,shoesplate,TRUE,TRUE,,,,,

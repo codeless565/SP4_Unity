@@ -75,6 +75,13 @@ public class ControlsManager : MonoBehaviour
 
         if(CanvasActive)
             player.GetComponent<Player2D_Manager>().canMove = false;
+
+        if (!CanvasActive)
+        {
+            editingkey = false;
+            player.GetComponent<Player2D_Manager>().canMove = true;
+        }
+
     }
     public void setCanvasActive() { CanvasActive = !CanvasActive; }
     public void ControlClicked(GameObject icon)
