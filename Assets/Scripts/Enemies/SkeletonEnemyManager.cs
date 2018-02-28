@@ -437,7 +437,6 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         /* Add EXP to Player when Die */
         playerStats.EXP += expReward;
         Debug.Log(playerStats.EXP);
-        Debug.Log("add achievementsmanager to gamescript");
         GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("KILL_ENEMY", 1);
         Destroy(gameObject);
     }
