@@ -80,25 +80,22 @@ public class ItemDatabase
                     {
                         case 1:
                             OtherRarityItem.ItemRarity = "Uncommon";
-                            OtherRarityItem.Level = 10;
                             multipler = OtherRarityItem.Level / 10 * 1.5f;
                             break;
                         case 2:
                             OtherRarityItem.ItemRarity = "Magic";
-                            OtherRarityItem.Level = 20;
                             multipler = OtherRarityItem.Level / 10 * 2.0f;
                             break;
                         case 3:
                             OtherRarityItem.ItemRarity = "Ancient";
-                            OtherRarityItem.Level = 30;
                             multipler = OtherRarityItem.Level / 10 * 2.5f;
                             break;
                         case 4:
                             OtherRarityItem.ItemRarity = "Relic";
-                            OtherRarityItem.Level = 40;
                             multipler = OtherRarityItem.Level / 10 * 3.0f;
                             break;
                     }
+                    OtherRarityItem.Level = newItem.Level;
                     OtherRarityItem._spritename = newItem._spritename;
                     OtherRarityItem.Health *= multipler;
                     OtherRarityItem.MaxHealth *= multipler;
@@ -133,7 +130,6 @@ public class ItemDatabase
                         specialmultipler = 10.0f;
 
                     OtherRarityItem.ItemRarity = "Relic";
-                    OtherRarityItem.Level = 40;
                     multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
 
                     OtherRarityItem.Health *= multipler;
