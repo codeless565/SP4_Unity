@@ -70,9 +70,6 @@ public class PlayerSaviour{
     {
         string[] statstring = PlayerPrefs.GetString("Player_Stats").Split(new char[] { ',' });
 
-        foreach(string a in statstring)
-        Debug.Log(a);
-
         _stats.Name = statstring[0];
         float tempvalue = 0.0f;
 

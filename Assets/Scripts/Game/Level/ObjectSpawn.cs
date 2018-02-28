@@ -5,8 +5,8 @@ using UnityEngine;
 public class ObjectSpawn : MonoBehaviour
 {
     //Player
-    public  GameObject Player;
-    public  bool RandomPlayerSpawn = false;
+    public GameObject Player;
+    public bool RandomPlayerSpawn = false;
     private int m_playerRoom;
     private Vector2 m_playerPos;
 
@@ -43,31 +43,36 @@ public class ObjectSpawn : MonoBehaviour
         m_currentFloor = _floor;
 
         go_floorholder = gameObject.GetComponent<BoardGenerator>().boardHolder;
-        m_rooms        = gameObject.GetComponent<BoardGenerator>().GetRooms();
+        m_rooms = gameObject.GetComponent<BoardGenerator>().GetRooms();
 
-        GameObject go_chest       = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
+        GameObject go_chest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
         GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
 
-        //if (m_currentFloor == 10)
-        //{
-        //    //spawn Boss / bonus floor
-        //}
-        //else
+        /* Spawn Mechant only at every 5th floor */
+        //if (m_currentFloor % 5 == 0)
         {
-            PlayerSpawn();
             MerchantSpawn();
-            ExitSpawn();
-
-            // Chests
-            ItemSpawn(go_chest, NumChest.Random);
-            ItemSpawn(go_royalchest, NumRoyalChest.Random);
-
-            // Traps
-            TrapSpawn(NumTraps.Random);
-
-            // Enemies
-            EnemySpawn(_floor);
         }
+
+        /* Spawn Boss floor only at every 10th floor */
+        if (m_currentFloor % 10 == 0)
+        {
+        }
+
+        /* Normal spawns */
+        //Player and Exit
+        PlayerSpawn();
+        ExitSpawn();
+
+        // Chests
+        ItemSpawn(go_chest, NumChest.Random);
+        ItemSpawn(go_royalchest, NumRoyalChest.Random);
+
+        // Traps
+        TrapSpawn(NumTraps.Random);
+
+        // Enemies
+        EnemySpawn(_floor);
     }
 
     private void PlayerSpawn()
@@ -88,25 +93,12 @@ public class ObjectSpawn : MonoBehaviour
 
     private void MerchantSpawn()
     {
-        m_MerchantRoom = 0;
-        do { m_MerchantRoom = Random.Range(0, m_rooms.Length - 1); }
-        while (m_MerchantRoom == m_playerRoom);
+        /* Spawns merchant with the player in the same room at start of level, 
+           Merchant will be at the top right corner of the room */
+        m_MerchantRoom = m_playerRoom;
 
-        //if (RandomPlayerSpawn)
-        //   m_playerRoom = Random.Range(0, m_rooms.Length - 1);
-
-        //m_MerchantPos = new Vector2(m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth * 0.5f, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight * 0.5f);
-        //GameObject t_Merchant = Instantiate(Merchant, m_MerchantPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
-        //if (t_Merchant.GetComponent<ObjectInfo>() != null)
-        //    t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_MerchantPos); //Set Starting Spawn location and detail to object
-
-        //MainCamera.GetComponent<CameraController>().SetPlayer(t_Merchant); //Spawn Player and Set the Instantiated player into Camera
-        //MiniMap.GetComponent<ExplorationMap>().Init();
-
-
-        // Spawn the Exit on 1 of the tile in the room except the edges
-        int ranXpos = Random.Range(m_rooms[m_MerchantRoom].xPos + 1, m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth - 1);
-        int ranYpos = Random.Range(m_rooms[m_MerchantRoom].yPos + 1, m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight - 1);
+        int ranXpos = m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth - 2;
+        int ranYpos = m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight - 2;
 
         m_MerchantPos = new Vector2(ranXpos, ranYpos);
 
@@ -219,13 +211,13 @@ public class ObjectSpawn : MonoBehaviour
         }
 
     }
-    
+
     private void TrapSpawn(int amt)
     {
         /* Get all traps from holder */
-        GameObject go_bearTrap      = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
-        GameObject go_poisonTrap    = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
-        GameObject go_slowTrap      = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
+        GameObject go_bearTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
+        GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
+        GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
         GameObject go_confusionTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ConfusionTrap;
 
         /* Initialize repeatable variable for use */
@@ -254,7 +246,7 @@ public class ObjectSpawn : MonoBehaviour
 
             /* Randomly choose 1 type of trap to spawn */
             trapChoice = Random.Range(1, 4);
-            
+
             switch (trapChoice)
             {
                 case 1: // Spawns a Poison Trap

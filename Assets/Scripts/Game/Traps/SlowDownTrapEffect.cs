@@ -25,8 +25,7 @@ public class SlowDownTrapEffect : MonoBehaviour {
 
         if (m_elapseTime <= 0)
         {
-            GetComponent<StatsBase>().MoveSpeed = m_originalSpeed;
-            Destroy(this);
+            RemoveEffect();
             return;
         }
 
@@ -42,5 +41,11 @@ public class SlowDownTrapEffect : MonoBehaviour {
     public void ResetTimer()
     {
         m_elapseTime = m_duration;
+    }
+
+    public void RemoveEffect()
+    {
+        GetComponent<StatsBase>().MoveSpeed = m_originalSpeed;
+        Destroy(this);
     }
 }
