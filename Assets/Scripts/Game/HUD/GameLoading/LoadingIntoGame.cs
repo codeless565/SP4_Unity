@@ -16,7 +16,12 @@ public class LoadingIntoGame : MonoBehaviour
         GameScripts = _GameScripts;
 
         if (transform.GetChild(0).GetComponent<Text>() != null)
-            transform.GetChild(0).GetComponent<Text>().text = "Entering Floor " + _currFloor.ToString();
+        {
+            if (_currFloor > 0)
+                transform.GetChild(0).GetComponent<Text>().text = "Entering Floor " + _currFloor.ToString();
+            else
+                transform.GetChild(0).GetComponent<Text>().text = "Entering Tutorial";
+        }
     }
 	
 	// Update is called once per frame
