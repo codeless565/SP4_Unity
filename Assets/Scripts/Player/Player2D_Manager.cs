@@ -379,11 +379,11 @@ public class Player2D_Manager : MonoBehaviour
                     break;
                 }
             }
-            // Still Adds towards inventory
             Inventory.Add(newitem);
         }
         else
             Inventory.Add(newitem);
+        // Still Adds towards inventory
     }
 
     /* Equipping EQ to the Player */
