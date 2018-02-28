@@ -40,6 +40,7 @@ public class NormalMode : MonoBehaviour, GameMode
         GetComponent<GameTimer>().Init();
 
         /* Initialize Player Required Scripts */
+        GetComponent<ControlsManager>().Init();
         GetComponent<PlayerHUD>().Init();
         GetComponent<Player2D_StatsMenu>().Init();
 

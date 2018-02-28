@@ -40,17 +40,30 @@ public class PlayerSaviour{
                           + _stats.Stamina + "," + _stats.Defense + "," + _stats.movespeed + "," + _stats.gold   + "," 
                           + _stats.EXP     + "," + _stats.MaxEXP  + "," + _stats.MaxHealth + "," + _stats.MaxStamina;
 
-        Debug.Log(tempstring);
+        //Debug.Log(tempstring);
 
         PlayerPrefs.SetString("Player_Stats", tempstring);
     }
 
+
+    /* Save Controls */
+    public void SavePref(KeyCode[] _controls)
+    {
+        string tempstring =  _controls[0] + "," +
+                             _controls[1] + "," +
+                             _controls[2] + "," +
+                             _controls[3] + "," +
+                             _controls[4] + "," +
+                             _controls[5];
+
+        PlayerPrefs.SetString("Player_Controls", tempstring);
+    }
+
     /* Load Inventory */
-    public List<Item> LoadInv()
+    public void LoadInv(List<Item> _inventory)
     {
         int TotalItems = PlayerPrefs.GetInt("NumStoredItems");
         
-        List<Item> tempInv = new List<Item>();
         if (TotalItems > 0)
         {
             for (int i = 0; i < TotalItems; ++i)
@@ -58,20 +71,15 @@ public class PlayerSaviour{
                 string[] tempitem = PlayerPrefs.GetString("item " + i).Split(new char[] { ',' });
 
                 Item newItem = ItemDatabase.Instance.getItem(tempitem[0], tempitem[1]);
-                tempInv.Add(newItem);
+                _inventory.Add(newItem);
             }
         }
-
-        return tempInv;
     }
 
     /* Load Stats */
     public void LoadPlayerStats(Player2D_StatsHolder _stats)
     {
         string[] statstring = PlayerPrefs.GetString("Player_Stats").Split(new char[] { ',' });
-
-        foreach(string a in statstring)
-        Debug.Log(a);
 
         _stats.Name = statstring[0];
         float tempvalue = 0.0f;
@@ -98,5 +106,16 @@ public class PlayerSaviour{
         _stats.MaxHealth= tempvalue;
         float.TryParse(statstring[11], out tempvalue);
         _stats.MaxStamina= tempvalue;
+    }
+
+    /* Load Controls */
+    public void LoadControls(KeyCode[] _controls)
+    {
+        string[] controlstring = PlayerPrefs.GetString("Player_Controls").Split(new char[] { ',' });
+
+        for (int i = 0; i < _controls.Length; ++i)
+        {
+            _controls[i] = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>().ReturnKey(controlstring[i]);
+        }
     }
 }

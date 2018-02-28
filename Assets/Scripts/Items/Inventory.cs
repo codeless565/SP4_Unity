@@ -98,9 +98,29 @@ public class Inventory : MonoBehaviour
     }
     public void OpenInventoryUI()
     {
-        gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
-        OpenEquipment();
+
+            gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
+            OpenEquipment();
+            Player.GetComponent<Player2D_Manager>().canMove = false;
         InventoryUI = true;
-        Player.GetComponent<Player2D_Manager>().canMove = false;
+    }
+
+    public void OpenInventoryFromKey()
+    {
+        InventoryUI = !InventoryUI;
+        if (InventoryUI)
+        {
+            gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
+            OpenEquipment();
+            Player.GetComponent<Player2D_Manager>().canMove = false;
+        }
+        else
+        {
+            gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(false);
+            gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
+            InventoryUI = false;
+            Player.GetComponent<Player2D_Manager>().canMove = true;
+        }
+
     }
 }

@@ -91,7 +91,8 @@ public class Player2D_Manager : MonoBehaviour
             EquipmentList[i] = null;
         
         /* Storing Player Info */
-        Inventory = PlayerSaviour.Instance.LoadInv();
+        PlayerSaviour.Instance.LoadInv(Inventory);
+
         if (PlayerPrefs.GetString("Player_Stats") != "")
             PlayerSaviour.Instance.LoadPlayerStats(statsHolder);
         
@@ -136,7 +137,6 @@ public class Player2D_Manager : MonoBehaviour
             }
         }
 
-        //if (!bA1State && Input.GetKeyDown(cm.GetKey("moveforward")))
         // Hot bar key press
         bool bA1State = false;
         if (!bA1State && Input.GetKeyDown(KeyCode.Alpha1))
@@ -198,6 +198,25 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Attack Animation */
         PlayerAttack2D();
+
+
+        bool bIState = false;
+        if (!bIState && Input.GetKeyDown(cm.GetKey("inventory")))
+        {
+            bIState = true;
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<Inventory>().OpenInventoryFromKey();
+        }
+        else if (bIState && !Input.GetKeyDown(cm.GetKey("inventory")))
+            bIState = false;
+
+        bool bOptionState = false;
+        if (!bOptionState && Input.GetKeyDown(cm.GetKey("options")))
+        {
+            bOptionState = true;
+            cm.GetComponent<ControlsManager>().setCanvasActive();
+        }
+        else if (bOptionState && !Input.GetKeyDown(cm.GetKey("options")))
+            bOptionState = false;
     }
 
     /* Key Board Movement of the Player */
@@ -207,13 +226,13 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMoving(false);
 
         /* Player Movement */
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(cm.GetKey("moveforward")))
             inputY = 1;
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(cm.GetKey("movebackward")))
             inputY = -1;
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(cm.GetKey("moveright")))
             inputX = 1;
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(cm.GetKey("moveleft")))
             inputX = -1;
         
         /* Player Sprint */
