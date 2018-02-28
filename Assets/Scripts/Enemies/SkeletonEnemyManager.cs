@@ -306,7 +306,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
                 break;
 
             case EnemySkeletonState.DIE:
-                StartCoroutine(SkeletonStateToDie());
+                StartCoroutine(SkeletonStateToDie());                
                 break;
         }
 
@@ -437,7 +437,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         /* Add EXP to Player when Die */
         playerStats.EXP += expReward;
         Debug.Log(playerStats.EXP);
-
+        GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("KILL_ENEMY", 1);
         Destroy(gameObject);
     }
 
