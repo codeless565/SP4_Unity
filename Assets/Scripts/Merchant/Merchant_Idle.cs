@@ -6,17 +6,31 @@ using UnityEngine;
    When Checked, Changed to INTERACT */
 public class Merchant_Idle : MonoBehaviour
 {
-    //private void Start()
-    //{
-    //    if (GetComponentInParent<MerchantStateMachine>().m_state != "IDLE")
-    //        return;
-    //}
+    /* Dialouge With Merchant */
+    private TextBoxManager _theManager;
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
+    /* Getting the Buttons */
+    private GameObject m_buttons;
 
-    //    //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
-    //}
+    // Use this for initialization
+    void Start()
+    {
+        /* Getting the Text Box Renderer */
+        _theManager = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TextBoxManager>();
+        _theManager.DisableTextBox();
+
+        /* Buttons */
+        m_buttons = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Merchant_Interaction;
+        m_buttons.SetActive(false);
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (GetComponentInParent<MerchantStateMachine>().m_state != "IDLE")
+            return;
+
+        Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
+    }
 }
