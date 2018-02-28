@@ -84,7 +84,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour
     IEnumerator LoadingScreenToSceneTutorial()
     {
         LoadingScreen.SetActive(true);
-        async = SceneManager.LoadSceneAsync("SceneTutorial");
+        async = SceneManager.LoadSceneAsync("SceneTutorial_2D");
         async.allowSceneActivation = false;
 
         // If SceneTutorial is not loaded fully.

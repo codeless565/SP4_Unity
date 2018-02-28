@@ -35,6 +35,9 @@ public class ObjectSpawn : MonoBehaviour
     private GameObject go_exit;
     private Vector2 m_exitPos;
 
+    private List<Vector2> m_itemPos;
+    private List<Vector2> m_trapPos;
+
     private int m_currentFloor;
 
 
@@ -64,11 +67,14 @@ public class ObjectSpawn : MonoBehaviour
         PlayerSpawn();
         ExitSpawn();
 
+
         // Chests
+        m_itemPos = new List<Vector2>();
         ItemSpawn(go_chest, NumChest.Random);
         ItemSpawn(go_royalchest, NumRoyalChest.Random);
 
         // Traps
+        m_trapPos = new List<Vector2>();
         TrapSpawn(NumTraps.Random);
 
         // Enemies
@@ -140,15 +146,13 @@ public class ObjectSpawn : MonoBehaviour
             {
                 tempRoom = Random.Range(0, m_rooms.Length - 1);
 
-                int ranXpos = Random.Range(m_rooms[tempRoom].xPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
-                                           m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
-
-                int ranYpos = Random.Range(m_rooms[tempRoom].yPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
-                                           m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
+                int ranXpos = Random.Range(m_rooms[tempRoom].xPos, m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth);
+                int ranYpos = Random.Range(m_rooms[tempRoom].yPos, m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight);
 
                 tempPos.Set(ranXpos, ranYpos);
+            } while (tempPos == m_playerPos || tempPos == m_exitPos || CheckCollide(m_itemPos, tempPos));
 
-            } while (tempPos == m_playerPos || tempPos == m_exitPos);
+            m_itemPos.Add(tempPos);
 
             GameObject tempItem = Instantiate(_Item, tempPos, Quaternion.identity, go_floorholder.transform);
             if (tempItem.GetComponent<ObjectInfo>() != null)
@@ -204,6 +208,7 @@ public class ObjectSpawn : MonoBehaviour
                 tempEnemy.GetComponent<SkeletonEnemyManager>().EXPReward = tempEnemy.GetComponent<SkeletonEnemyManager>().EXPRewardScaling * m_currentFloor;
                 tempEnemy.GetComponent<SkeletonEnemyManager>().Waypoint = Waypoint;
                 tempEnemy.GetComponent<SkeletonEnemyManager>().CurrWaypointID = randomID;
+                tempEnemy.GetComponent<SkeletonEnemyManager>().Init(m_currentFloor);
             }
 
             if (tempEnemy.GetComponent<ObjectInfo>() != null)
@@ -242,7 +247,9 @@ public class ObjectSpawn : MonoBehaviour
 
                 tempPos.Set(ranXpos, ranYpos);
 
-            } while (tempRoom == m_playerRoom || tempPos == m_exitPos);
+            } while (tempRoom == m_playerRoom || tempPos == m_exitPos || CheckCollide(m_trapPos, tempPos));
+
+            m_trapPos.Add(tempPos);
 
             /* Randomly choose 1 type of trap to spawn */
             trapChoice = Random.Range(1, 4);
@@ -272,6 +279,17 @@ public class ObjectSpawn : MonoBehaviour
             if (tempTrap.GetComponent<ObjectInfo>() != null)
                 tempTrap.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
         }
+    }
+
+    private bool CheckCollide(List<Vector2> _array, Vector2 _pos)
+    {
+        for (int i = 0; i < _array.Count; ++i)
+        {
+            if (_pos == _array[i])
+                return true;
+        }
+
+        return false;
     }
 
     // Getters

@@ -16,10 +16,7 @@ public class Merchant_Interact : MonoBehaviour
 
     /* Getting the Buttons */
     private GameObject m_buttons;
-
-	/* Bool to get that it is in INTERACT */
-	//private bool _printText = false;
-
+    
     // Use this for initialization
     void Start ()
     {
@@ -35,16 +32,11 @@ public class Merchant_Interact : MonoBehaviour
     {
         if (GetComponentInParent<MerchantStateMachine>().m_state != "INTERACT")
             return;
-
-        //if (_printText)
-        //    return;
 		
 		_theManager.ReloadScript(theText);
 		_theManager.currentLine = startLine;
 		_theManager.endAtLine = endLine;
         _theManager.EnableTextBox();
         m_buttons.SetActive(true);
-        //_printText = true;
-        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
 }

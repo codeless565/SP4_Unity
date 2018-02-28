@@ -75,7 +75,7 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Animation */
         animTimer = 0.0f;
-        m_fAniTime = 1.0f;
+        m_fAniTime = 0.1f;
         attackClicked = false;
         p_spriteManager = GetComponent<SpriteManager>();
 
@@ -93,14 +93,19 @@ public class Player2D_Manager : MonoBehaviour
         /* Storing Player Info */
         PlayerSaviour.Instance.LoadInv(Inventory);
 
+        Debug.Log("Player Manager: " + PlayerPrefs.GetString("Player_Stats"));
         if (PlayerPrefs.GetString("Player_Stats") != "")
             PlayerSaviour.Instance.LoadPlayerStats(statsHolder);
-        
+
+        //Debug.Log("Player Manager: HP - " + statsHolder.Health);
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
 
-        PlayerSaviour.Instance.LoadEquipment(EquipmentList);
-        Requip();
+        if (PlayerPrefs.GetInt("NumStoredEquipments") == 0)
+        {
+            PlayerSaviour.Instance.LoadEquipment(EquipmentList);
+            Requip();
+        }
 
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
@@ -112,11 +117,13 @@ public class Player2D_Manager : MonoBehaviour
     }
     void Requip()
     {
+        Debug.Log("Player Manager: HP - " + statsHolder.Health);
         foreach (Item item in EquipmentList)
         {
             if(item != null)
                 EquipEQ(item);
         }
+        Debug.Log("Player Manager: HP - " + statsHolder.Health);
     }
     // Update is called once per frame
     void Update()
@@ -128,11 +135,13 @@ public class Player2D_Manager : MonoBehaviour
         //EXPbar.Value = statsHolder.EXP;
         //StaminaBar.MaxValue = statsHolder.MaxStamina;
         //StaminaBar.Value = statsHolder.Stamina;
+               
+
 
         /* When Player Dies, Stop Updating and go to Game Over Scene */
         if (statsHolder.Health <= 0)
         {
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
+            //GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
             return;
         }
 
@@ -431,8 +440,11 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (_equipment.ItemType == "Helmets")
         {
+            Debug.Log(_equipment.Health + " " + _equipment.MaxHealth);
             if (EquipmentList[(int)EQTYPE.HELMET] == null)
             {
+                Debug.Log("Player Manager: HP update - " + statsHolder.Health);
+
                 EquipmentList[(int)EQTYPE.HELMET] = _equipment;
             }
             else
