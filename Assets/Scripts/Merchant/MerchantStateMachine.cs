@@ -42,11 +42,14 @@ public class MerchantStateMachine : MonoBehaviour
     void Update ()
     {
         /* If Trigger Dialougue, change State to INTERACT */
-        if (_isinRange && MerchantTriggerInteract.m_interact)
+        if (_isinRange && GetTriggerForInteraction())
         {
             m_state = "INTERACT";
-            MerchantTriggerInteract.m_interact = false;
             _player.GetComponent<Player2D_Manager>().canMove = false;
+
+#if UNITY_ANDROID || UNITY_IPHONE
+            MerchantTriggerInteract.m_interact = false;
+#endif
 
             interact.SetActive(true);
             idle.SetActive(false);
@@ -56,6 +59,7 @@ public class MerchantStateMachine : MonoBehaviour
 		if (!_isinRange)
 		{
             m_state = "IDLE";
+
             interact.SetActive(false);
 			idle.SetActive(true);
 		}
@@ -112,5 +116,18 @@ public class MerchantStateMachine : MonoBehaviour
 
         Attack_Btn.SetActive(true);
         Interact_Btn.SetActive(false);
+    }
+
+    /* Get Trigger for Merchant Interaction */
+    private bool GetTriggerForInteraction()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        return Input.GetMouseButtonDown(0);
+        //return Player2D_TriggerAttack._triggered;
+#elif UNITY_ANDROID || UNITY_IPHONE
+        return MerchantTriggerInteract.m_interact;
+#else
+        return false;
+#endif
     }
 }
