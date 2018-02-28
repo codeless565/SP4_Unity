@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* Handles the changing of states 
- * ( what condition to change to each state ) 
- * And other things like a holder ? */
+ * ( what condition to change to each state ) */
 public class MerchantStateMachine : MonoBehaviour
 {
     /* String to store states */
@@ -46,17 +45,40 @@ public class MerchantStateMachine : MonoBehaviour
         if (_isinRange && MerchantTriggerInteract.m_interact)
         {
             m_state = "INTERACT";
-            //_player.GetComponent<Player2D_Manager>().canMove = false;
+            MerchantTriggerInteract.m_interact = false;
+            _player.GetComponent<Player2D_Manager>().canMove = false;
             interact.SetActive(true);
             idle.SetActive(false);
         }
 
+		/* When not near the enemy, back to idle */
+		if (!_isinRange)
+		{
+            m_state = "IDLE";
+            interact.SetActive(false);
+			idle.SetActive(true);
+		}
+
         /* if INTERACT and Close Button, change State to GOODBYE */
-
-
+        if (MerchantTriggerClose.m_close && m_state == "INTERACT")
+        {
+            m_state = "GOODBYE";
+			MerchantTriggerClose.m_close = false;
+            interact.SetActive(false);
+            bye.SetActive(true);
+        }
+        
         /* If GOODBYE and tap textbox, change State to IDLE */
-        //Debug.Log("Attack : " + Attack_Btn.activeSelf);
-        //Debug.Log("Interact : " + Interact_Btn.activeSelf);
+        if (m_state == "GOODBYE" && GetComponentInChildren<Merchant_GoodBye>().isBackIdle)
+        {
+            m_state = "IDLE";
+            GetComponentInChildren<Merchant_GoodBye>().isBackIdle = false;
+            Debug.Log(GetComponentInChildren<Merchant_GoodBye>().isBackIdle);
+            _player.GetComponent<Player2D_Manager>().canMove = true;
+
+            bye.SetActive(false);
+            idle.SetActive(true);
+        }
     }
 
     /* Run only Once */
@@ -69,48 +91,25 @@ public class MerchantStateMachine : MonoBehaviour
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
         _player.GetComponentInChildren<Player2D_Attack>().Interact = true;
 
-        /* For now, when near test for changing states */
-        //m_state = "INTERACT";
-
         /* Change Attack Button to Interact Button */
         Interact_Btn.SetActive(true);
         Attack_Btn.SetActive(false);
-
-
     }
 
     /* Response to Player entering trigger box of Merchant */
-    public void OnTriggerStay2D(Collider2D other)
+	public void OnTriggerStay2D(Collider2D other)
     {
         /* Update every frame to see for Interact Btn pressed */
         _isinRange = true;
-
-        
     }
 
     /* When Player exits the area of Interaction */
     void OnTriggerExit2D(Collider2D other)
     {
-        m_state = "IDLE";
         _player.GetComponentInChildren<Player2D_Attack>().Interact = false;
-        Reset_Merchant();
+		_isinRange = false;
 
         Attack_Btn.SetActive(true);
         Interact_Btn.SetActive(false);
-    }
-
-    /* Set Trigger Dialog */
-    public void SetTriggerDialougeTrue()
-    {
-        if (_isinRange)
-            _triggeredDialog = true;
-    }
-    
-    /* Close Button - Reset Merchant */
-    public void Reset_Merchant()
-    {
-        //_player.GetComponent<Player2D_Manager>().canMove = true;
-        _isinRange = false;
-        _triggeredDialog = false;
     }
 }

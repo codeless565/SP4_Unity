@@ -12,15 +12,56 @@ public class Merchant_GoodBye : MonoBehaviour
     public int startLine;
     public int endLine;
 
+	/* Getting the Buttons */
+	private GameObject m_buttons;
+
+    private float m_timer = 0.0f;
+    private bool _goBackIdle = false;
+    public bool isBackIdle
+    {
+        get
+        {
+            return _goBackIdle;
+        }
+        set
+        {
+            _goBackIdle = value;
+        }
+    }
+
     // Use this for initialization
     void Start ()
     {
-		
-	}
+		/* Getting the Text Box Renderer */
+		_theManager = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TextBoxManager>();
 	
-	// Update is called once per frame
-	void Update ()
-    {
-		
+		/* Buttons */
+		m_buttons = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Merchant_Interaction;
 	}
+
+    // Update is called once per frame
+    void Update ()
+    {
+
+        if (GetComponentInParent<MerchantStateMachine>().m_state != "GOODBYE")
+            return;
+		m_buttons.SetActive(false);
+
+		m_timer += Time.deltaTime;
+		if (m_timer <= 5.0f)
+		{
+			_theManager.ReloadScript(theText);
+			_theManager.currentLine = startLine;
+			_theManager.endAtLine = endLine;
+			_theManager.EnableTextBox();
+		}
+		else 
+		{
+			m_timer = 0.0f;
+			isBackIdle = true;
+		}
+
+        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
+    }
+
 }
