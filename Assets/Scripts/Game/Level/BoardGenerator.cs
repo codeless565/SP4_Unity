@@ -201,15 +201,15 @@ public class BoardGenerator : MonoBehaviour
         {
             for (int j = 0; j < tiles[i].Length; j++)
             {
-                // ... and instantiate a floor tile for it.
-                InstantiateFromArray(floorTiles, i, j);
-
                 // If the tile type is Wall...
                 if (tiles[i][j] == TileType.Wall)
                 {
-                    // ... instantiate a wall over the top.
+                    // ... instantiate a wall.
                     InstantiateFromArray(wallTiles, i, j);
+                    continue;
                 }
+                // If not, Instantiate a floor
+                InstantiateFromArray(floorTiles, i, j);
             }
         }
     }
@@ -270,10 +270,7 @@ public class BoardGenerator : MonoBehaviour
         Vector3 position = new Vector3(xCoord, yCoord, 0f);
 
         // Create an instance of the prefab from the random index of the array.
-        GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity) as GameObject;
-
-        // Set the tile's parent to the board holder.
-        tileInstance.transform.parent = boardHolder.transform;
+        GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity, boardHolder.transform) as GameObject;
     }
 
     public Room[] GetRooms()
