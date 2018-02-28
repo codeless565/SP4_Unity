@@ -189,7 +189,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
             m_timer -= Time.deltaTime;
             if (m_timer <= 0.0f)
             {
-                ++stamina;
+                stamina += playerLevel * 0.25f; // 1/4 player level per 5 seconds 
                 m_timer = 5.0f;
             }
         }
