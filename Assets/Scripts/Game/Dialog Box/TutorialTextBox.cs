@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialTextBox : MonoBehaviour
 {
     TextBoxManager textboxManager;
-
-    public TextAsset theText;
+    TutorialSpawn tutSpawn;
+    public TextAsset theTextMobile, theTextConsole;
     public int startLine;
     public int endLine;
 
@@ -14,11 +15,21 @@ public class TutorialTextBox : MonoBehaviour
     bool triedAttack, triedInteract, triedChangeW;
     public bool pauseBox;
 
+    //Arrows
+  //  public bool showHealthArrow, showStaminaArrow, showEXPArrow, showTimerArrow, showPPArrow, showLevelArrow, showMinimapArrow, showInventoryArrow;
+    public Image HealthArrow, StaminaArrow, EXPArrow, TimerArrow, PPArrow, MinimapArrow, InventoryArrow, LevelArrow;
+    public GameObject Arrows, ArrowShown;
     // Use this for initialization
     void Start()
     {
+      //  showEXPArrow = showHealthArrow = showInventoryArrow = showLevelArrow = showMinimapArrow = showPPArrow = showStaminaArrow = showTimerArrow = false;
+
         textboxManager = FindObjectOfType<TextBoxManager>();
-        textboxManager.ReloadScript(theText);
+#if UNITY_EDITOR || UNITY_STANDALONE
+        textboxManager.ReloadScript(theTextConsole);
+#elif UNITY_ANDROID || UNITY_IPHONE
+        textboxManager.ReloadScript(theTextMobile);
+#endif
         textboxManager.currentLine = startLine;
         textboxManager.endAtLine = endLine;
         textboxManager.EnableTextBox();
@@ -32,12 +43,18 @@ public class TutorialTextBox : MonoBehaviour
         triedChangeW = false;
 
         pauseBox = false;
+
+        ArrowShown = null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //KeyPressedUpdate();
+#if UNITY_EDITOR || UNITY_STANDALONE
+        KeyPressedUpdate();
+#elif UNITY_ANDROID || UNITY_IPHONE
+        AccMove();
+#endif
 
         if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
         {
@@ -63,94 +80,143 @@ public class TutorialTextBox : MonoBehaviour
 
     void KeyPressedUpdate()
     {
+        if (Arrows != null)
+        {
+            foreach (object obj in Arrows.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(false);
+            }
+        }
         switch (textboxManager.currentLine)
         {
-            case 2:
-                if(!MovedA || !MovedD || !MovedS || !MovedW)
-                {
-                        if (Input.GetKey(KeyCode.A))
-                        {
-                            MovedA = true;
-                        }
-                    
-                        if (Input.GetKey(KeyCode.D))
-                        {
-                            MovedD = true;
-                        }
-                  
-                        if (Input.GetKey(KeyCode.S))
-                        {
-                            MovedS = true;
-                        }
-                  
-                        if (Input.GetKey(KeyCode.W))
-                        {
-                            MovedW = true;
-                        }
-                        
-                   
-                }
-                else
-                {
-                    textboxManager.currentLine = 3;
-                    pauseBox = false;
-                    textboxManager.EnableTextBox();
-                }
+            case 1:
+                LevelArrow.gameObject.SetActive(true);
+                //ArrowShown = transform.Find("Arrows/LevelArrow").gameObject;
                 break;
 
+            case 2:
+                TimerArrow.gameObject.SetActive(true);
+                break;
+                
             case 4:
-                if(!triedAttack)
-                {
-                    if(Input.GetMouseButton(0))
-                    {
-                        triedAttack = true;
-                    }
-                }
-                else
-                {
-                    textboxManager.currentLine = 5;
-                    pauseBox = false;
-                    textboxManager.EnableTextBox();
-                }
+                MinimapArrow.gameObject.SetActive(true);
+                break;
+                
+            case 5:
+                HealthArrow.gameObject.SetActive(true);
                 break;
 
             case 6:
-                if(!triedChangeW)
-                {
-                    if (Input.GetKey(KeyCode.C))
-                    {
-                        triedChangeW = true;
-                    }
-                }
-                else
-                {
-                    textboxManager.currentLine = 7;
-                    pauseBox = false;
-                    textboxManager.EnableTextBox();
-                }
+                StaminaArrow.gameObject.SetActive(true);
+                break;
+
+
+            case 7:
+                EXPArrow.gameObject.SetActive(true);
                 break;
 
             case 8:
-                if (!triedInteract)
-                {
-                    if (Input.GetKey(KeyCode.I))
-                    {
-                        triedInteract = true;
-                    }
-                }
-                else
-                {
-                    textboxManager.currentLine = 9;
-                    pauseBox = false;
-                    textboxManager.EnableTextBox();
-                }
+                PPArrow.gameObject.SetActive(true);
                 break;
+
+            case 13:
+                InventoryArrow.gameObject.SetActive(true);
+                break;
+
+
+                //case 2:
+                //    if (!MovedA || !MovedD || !MovedS || !MovedW)
+                //    {
+                //        if (Input.GetKey(KeyCode.A))
+                //        {
+                //            MovedA = true;
+                //        }
+
+                //        if (Input.GetKey(KeyCode.D))
+                //        {
+                //            MovedD = true;
+                //        }
+
+                //        if (Input.GetKey(KeyCode.S))
+                //        {
+                //            MovedS = true;
+                //        }
+
+                //        if (Input.GetKey(KeyCode.W))
+                //        {
+                //            MovedW = true;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        textboxManager.currentLine = 3;
+                //        pauseBox = false;
+                //        textboxManager.EnableTextBox();
+                //    }
+                //    break;
+
+                //case 4:
+                //    if (!triedAttack)
+                //    {
+                //        if (Input.GetMouseButton(0))
+                //        {
+                //            triedAttack = true;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        textboxManager.currentLine = 5;
+                //        pauseBox = false;
+                //        textboxManager.EnableTextBox();
+                //    }
+                //    break;
+
+                //case 6:
+                //    if (!triedChangeW)
+                //    {
+                //        if (Input.GetKey(KeyCode.C))
+                //        {
+                //            triedChangeW = true;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        textboxManager.currentLine = 7;
+                //        pauseBox = false;
+                //        textboxManager.EnableTextBox();
+                //    }
+                //    break;
+
+                //case 8:
+                //    if (!triedInteract)
+                //    {
+                //        if (Input.GetKey(KeyCode.I))
+                //        {
+                //            triedInteract = true;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        textboxManager.currentLine = 9;
+                //        pauseBox = false;
+                //        textboxManager.EnableTextBox();
+                //    }
+                //    break;
         }
 
     }
 
+    void MobileTappedUpdate()
+    {
+
+    }
     void TutorialUpdate()
     {
+        switch(textboxManager.currentLine)
+        {
+            
+        }
         //if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
         //{
         //    if(!MovedA || !MovedD || !MovedS || !MovedW)
