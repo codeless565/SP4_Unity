@@ -7,6 +7,17 @@ public class CollisionExit : MonoBehaviour, CollisionBase
 {
     public void CollisionResponse(string tag)
     {
+        // Remove all Status Aliment before exiting as it may bring over to next level
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player.GetComponent<SlowDownTrapEffect>() != null)
+        {
+            Debug.Log("Deleting SlowDownTrapEffect");
+            player.GetComponent<SlowDownTrapEffect>().RemoveEffect();
+        }
+
+
+
         GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameClear();
     }
 }

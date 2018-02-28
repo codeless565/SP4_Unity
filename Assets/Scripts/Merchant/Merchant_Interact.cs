@@ -15,20 +15,16 @@ public class Merchant_Interact : MonoBehaviour
     public int endLine;
 
     /* Getting the Buttons */
-    [SerializeField]
     private GameObject m_buttons;
-
-    /* Limit Update Once */
-    private bool check;
 
     // Use this for initialization
     void Start ()
     {
         /* Getting the Text Box Renderer */
         _theManager = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TextBoxManager>();
-        check = false;
 
         /* Buttons */
+        m_buttons = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Merchant_Interaction;
         m_buttons.SetActive(false);
     }
 	
@@ -37,15 +33,11 @@ public class Merchant_Interact : MonoBehaviour
     {
         if (GetComponentInParent<MerchantStateMachine>().m_state != "INTERACT")
             return;
-
-        if (check)
-            return;
         
         _theManager.EnableTextBox();
         m_buttons.SetActive(true);
-        check = true;
             
-        //Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
+        Debug.Log(GetComponentInParent<MerchantStateMachine>().m_state);
     }
 
 
