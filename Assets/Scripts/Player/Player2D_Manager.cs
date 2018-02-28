@@ -99,6 +99,9 @@ public class Player2D_Manager : MonoBehaviour
         if (PlayerPrefs.GetInt("NumStoredItems") == 0)
             PlayerEquipmentInit();
 
+        PlayerSaviour.Instance.LoadEquipment(EquipmentList);
+        Requip();
+
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
         /* Player Movement */
@@ -107,7 +110,14 @@ public class Player2D_Manager : MonoBehaviour
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
     }
-
+    void Requip()
+    {
+        foreach (Item item in EquipmentList)
+        {
+            if(item != null)
+                EquipEQ(item);
+        }
+    }
     // Update is called once per frame
     void Update()
     {

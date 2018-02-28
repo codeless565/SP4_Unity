@@ -77,9 +77,12 @@ public class NormalMode : MonoBehaviour, GameMode
     {
         /* Save Player Inventory */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerInventory());
-        
+
         /* Save Player Stats */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
+
+        /* Save Player Equipment */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getEQList());
 
         /* Set next level */
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
@@ -108,6 +111,15 @@ public class NormalMode : MonoBehaviour, GameMode
         /* Clear player's stats */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getPlayerStats());
         PlayerPrefs.DeleteKey("Player_Stats");
+
+        /* Clear player's equipments */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getEQList());
+        int TotalEquipments = PlayerPrefs.GetInt("NumStoredEquipments");
+        for (int i = 0; i < TotalItems; ++i)
+        {
+            PlayerPrefs.DeleteKey("equipments " + i);
+        }
+        PlayerPrefs.DeleteKey("NumStoredEquipments");
 
         /* Set PreviousGameScene before going next scene*/
         PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");

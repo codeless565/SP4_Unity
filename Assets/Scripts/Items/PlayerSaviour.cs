@@ -18,6 +18,23 @@ public class PlayerSaviour{
 
     }
 
+    /* Save Equipment */
+    public void SavePref(Item[] _equipment)
+    {
+        int TotalItems = 0;
+        for (int i = 0; i < _equipment.Length; ++i)
+        {
+            TotalItems++;
+            string tempitem = "";
+            if (_equipment[i] != null)
+                tempitem = _equipment[i].Name + "," + _equipment[i].ItemRarity;
+
+            PlayerPrefs.SetString("equipment " + i, tempitem);
+        }
+
+        PlayerPrefs.SetInt("NumStoredEquipments", TotalItems);
+    }
+
     /* Save Inventory */
     public void SavePref(List<Item> _inventory)
     {
@@ -58,6 +75,25 @@ public class PlayerSaviour{
 
         PlayerPrefs.SetString("Player_Controls", tempstring);
     }
+
+    /* Load Equipment*/
+    public void LoadEquipment(Item[] _equipment)
+    {
+        int TotalItems = PlayerPrefs.GetInt("NumStoredEquipments");
+
+        if (TotalItems > 0)
+        {
+            for (int i = 0; i < TotalItems; ++i)
+            {
+                string[] tempitem = PlayerPrefs.GetString("equipment " + i).Split(new char[] { ',' });
+                Item newItem = null;
+                if (tempitem[0] != "")
+                    newItem = ItemDatabase.Instance.getItem(tempitem[0], tempitem[1]);
+                _equipment[i] = newItem;
+            }
+        }
+    }
+
 
     /* Load Inventory */
     public void LoadInv(List<Item> _inventory)
