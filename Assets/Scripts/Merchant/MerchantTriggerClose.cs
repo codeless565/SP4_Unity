@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* This is to Trigger the close Button */
+/* This is to Trigger the close Button in Merchant */
 public class MerchantTriggerClose : MonoBehaviour
 {
 
