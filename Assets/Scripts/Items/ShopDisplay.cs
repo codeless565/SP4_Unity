@@ -75,47 +75,48 @@ public class ShopDisplay : MonoBehaviour
 
         // Confirmation UI
         ItemNameRarity = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameRarity.transform.position = new Vector3(0.0f, 125.0f) + ShopConfirmationCanvas.transform.position;
+        ItemNameRarity.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 300.0f);
 
         ItemNameText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameText.transform.position = new Vector3(0.0f, 100.0f) + ShopConfirmationCanvas.transform.position;
+        ItemNameText.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 250.0f);
 
         ItemNameStats = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        ItemNameStats.transform.position = new Vector3(0.0f, 50.0f) + ShopConfirmationCanvas.transform.position;
+        ItemNameStats.GetComponent<RectTransform>().anchoredPosition = new Vector3(0.0f, 150.0f);
 
         CostText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        CostText.transform.position = new Vector3(- 100.0f, 25.0f) + ShopConfirmationCanvas.transform.position;
+        CostText.GetComponent<RectTransform>().anchoredPosition = new Vector3(-300.0f, 0.0f);
+
         GoldText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        GoldText.transform.position = new Vector3(100.0f, 25.0f) + ShopConfirmationCanvas.transform.position;
+        GoldText.GetComponent<RectTransform>().anchoredPosition = new Vector3(150.0f, 0.0f);
+
+        Quantity = 1;
+        QuantityText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
+        QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
+        QuantityText.GetComponent<RectTransform>().anchoredPosition = new Vector3(-300.0f, -100.0f);
+
+        QuantityAdd = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
+        QuantityAdd.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Plus;
+        QuantityAdd.GetComponent<Button>().onClick.RemoveAllListeners();
+        QuantityAdd.GetComponent<Button>().onClick.AddListener(AddQuantity);
+        QuantityAdd.GetComponent<RectTransform>().anchoredPosition = new Vector3(50.0f, -100.0f);
+
+        QuantitySubtract = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
+        QuantitySubtract.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Minus;
+        QuantitySubtract.GetComponent<Button>().onClick.RemoveAllListeners();
+        QuantitySubtract.GetComponent<Button>().onClick.AddListener(SubtractQuantity);
+        QuantitySubtract.GetComponent<RectTransform>().anchoredPosition = new Vector3(250.0f, -100.0f);
 
         BuyButton = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         BuyButton.GetComponentInChildren<Text>().text = "Buy";
         BuyButton.GetComponent<Button>().onClick.RemoveAllListeners();
         BuyButton.GetComponent<Button>().onClick.AddListener(BuyItem);
-        BuyButton.transform.position = new Vector3(-50.0f, -100.0f) + ShopConfirmationCanvas.transform.position;
+        BuyButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(-100.0f, -250.0f);
 
         CancelButton = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
         CancelButton.GetComponentInChildren<Text>().text = "Cancel";
         CancelButton.GetComponent<Button>().onClick.AddListener(CancelBuy);
-        CancelButton.transform.position = new Vector3(50.0f, -100.0f) + ShopConfirmationCanvas.transform.position;
+        CancelButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(100.0f, -250.0f);
 
-        Quantity = 1;
-        QuantityText = Instantiate(TextPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        QuantityText.transform.position = new Vector3(- 50.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
-        QuantityText.GetComponentInChildren<Text>().text = "Quantity: " + Quantity;
-
-        QuantityAdd = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        QuantityAdd.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Plus;
-        QuantityAdd.transform.position = new Vector3(50.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
-        QuantityAdd.GetComponent<Button>().onClick.RemoveAllListeners();
-        QuantityAdd.GetComponent<Button>().onClick.AddListener(AddQuantity);
-
-
-        QuantitySubtract = Instantiate(ButtonPrefab, ShopConfirmationCanvas.transform) as GameObject;
-        QuantitySubtract.GetComponent<Image>().sprite = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().Minus;
-        QuantitySubtract.transform.position = new Vector3(125.0f, - 25.0f) + ShopConfirmationCanvas.transform.position;
-        QuantitySubtract.GetComponent<Button>().onClick.RemoveAllListeners();
-        QuantitySubtract.GetComponent<Button>().onClick.AddListener(SubtractQuantity);
 
         Player = GameObject.FindGameObjectWithTag("Player");
     }
