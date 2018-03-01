@@ -39,15 +39,50 @@ public class PlayerSaviour{
     public void SavePref(List<Item> _inventory)
     {
         int TotalItems = 0;
-        for (int i = 0; i < _inventory.Count;++i)
+        foreach (Item item in _inventory)
         {
+            string tempitem = item.Name + "," + item.ItemRarity;
+            PlayerPrefs.SetString("item " + TotalItems, tempitem);
             TotalItems++;
-
-            string tempitem = _inventory[i].Name + "," + _inventory[i].ItemRarity;
-            PlayerPrefs.SetString("item " + i, tempitem);
         }
 
         PlayerPrefs.SetInt("NumStoredItems", TotalItems);
+    }
+
+    /* Save Achievements */
+    public void SavePref(Dictionary<string,Achievements> _achievements)
+    {
+        int TotalAchievements = 0;
+
+        foreach (KeyValuePair<string,Achievements> ach in _achievements)
+        {
+            string temppropname="";
+            foreach(AchievementsProperties prop in ach.Value.PropertiesList)
+            {
+                temppropname += prop.PropertyName+",";
+            }
+
+            string tempachievement = ach.Value.AchievementName + "," + ach.Value.AchievementDetails + "," + ach.Value.AchievementActive + "," + ach.Value.AchievementCompleted+"," + ach.Value.AchievementReward+","+temppropname;
+            PlayerPrefs.SetString("achievement " + TotalAchievements, tempachievement);
+            TotalAchievements++;
+        }
+
+        PlayerPrefs.SetInt("NumStoredAchievements", TotalAchievements);
+    }
+
+    /* Save Achievements Properties */
+    public void SavePref(Dictionary<string, AchievementsProperties> _achievements)
+    {
+        int TotalProperties = 0;
+
+        foreach (KeyValuePair<string, AchievementsProperties> ach in _achievements)
+        {
+            string tempproperty = ach.Value.PropertyName + "," + ach.Value.PropertyDetails + "," + ach.Value.Counter + "," + ach.Value.CompletionCounter + "," + ach.Value.PropertyComplete;
+            PlayerPrefs.SetString("property " + TotalProperties, tempproperty);
+            TotalProperties++;
+        }
+
+        PlayerPrefs.SetInt("NumStoredProperties", TotalProperties);
     }
 
     /* Save Stats */
@@ -57,11 +92,8 @@ public class PlayerSaviour{
                           + _stats.Stamina + "," + _stats.Defense + "," + _stats.movespeed + "," + _stats.gold   + "," 
                           + _stats.EXP     + "," + _stats.MaxEXP  + "," + _stats.MaxHealth + "," + _stats.MaxStamina;
 
-        //Debug.Log(tempstring);
-
         PlayerPrefs.SetString("Player_Stats", tempstring);
     }
-
 
     /* Save Controls */
     public void SavePref(KeyCode[] _controls)
@@ -93,7 +125,6 @@ public class PlayerSaviour{
             }
         }
     }
-
 
     /* Load Inventory */
     public void LoadInv(List<Item> _inventory)
@@ -152,6 +183,69 @@ public class PlayerSaviour{
         for (int i = 0; i < _controls.Length; ++i)
         {
             _controls[i] = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>().ReturnKey(controlstring[i]);
+        }
+    }
+    
+    /* Load Achievements */
+    public void LoadAchievements(Dictionary<string,Achievements> _achievement)
+    {
+        int TotalAchievements = PlayerPrefs.GetInt("NumStoredAchievements");
+
+        if (TotalAchievements > 0)
+        {
+            for (int i = 0; i < TotalAchievements; ++i)
+            {
+                string[] tempitem = PlayerPrefs.GetString("achievement " + i).Split(new char[] { ',' });
+
+                bool tempb;
+                bool.TryParse(tempitem[2], out tempb);
+                bool tempb2;
+                bool.TryParse(tempitem[3], out tempb2);
+                int temp;
+                int.TryParse(tempitem[4], out temp);
+
+                Achievements newAch = new Achievements(tempitem[0],tempitem[1],tempb,tempb2,temp);
+
+                if (tempitem[5] != "")
+                {
+                    for (int j=5;j<tempitem.Length;++j)
+                    {
+                        if (tempitem[j] == "")
+                            break;
+
+                        AchievementsProperties achprop = GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(tempitem[j]);
+                        newAch.AddProperty(achprop);
+                    }
+                }
+
+                _achievement.Add(newAch.AchievementName,newAch);
+            }
+        }
+    }
+
+    /* Load Properties */
+    public void LoadProperties(Dictionary<string, AchievementsProperties> _properties)
+    {
+        int TotalProperties = PlayerPrefs.GetInt("NumStoredProperties");
+
+        if (TotalProperties > 0)
+        {
+            for (int i = 0; i < TotalProperties; ++i)
+            {
+                string[] tempitem = PlayerPrefs.GetString("property " + i).Split(new char[] { ',' });
+
+                
+                float temp2 = 0.0f;
+                float.TryParse(tempitem[2], out temp2);
+                float temp3 = 0.0f;
+                float.TryParse(tempitem[3], out temp3);
+                bool tempb;
+                bool.TryParse(tempitem[4], out tempb);
+
+                AchievementsProperties newProp = new AchievementsProperties(tempitem[0],tempitem[1],temp2,temp3,tempb);
+
+                _properties.Add(newProp.PropertyName, newProp);
+            }
         }
     }
 }

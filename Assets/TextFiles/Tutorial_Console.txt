@@ -18,8 +18,6 @@ Collect items from chest!
 
 Click on inventory to change weapons/gears.
 
-Hey! There's a merchant! Walk to her to buy some goodies!
-
 There are a few different traps which you have to look out for...
 This trap slows your movement down..
 Bear trap deals instant damage to your health..

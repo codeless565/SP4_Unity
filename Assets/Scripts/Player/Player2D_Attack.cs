@@ -5,12 +5,18 @@ using UnityEngine;
 /* Attack System of Player in 2D */
 public class Player2D_Attack : MonoBehaviour
 {
+    /* Owner */
+    GameObject m_player;
+
     /* For Attacking */
     [SerializeField]
-    private GameObject melee; // game object to spawn at its location
+    private GameObject[] meleecombo; // game object to spawn at its location
     static public GameObject temp; // store the created game object
 
     private float m_timer; // for duration of sprite
+    public float m_comboResetTime = 3;
+    private float m_comboElaspeTimer;
+    private int m_comboCount;
 
     /* Direction the Attack will be facing */
     private float m_AngleToRotate;
@@ -33,6 +39,8 @@ public class Player2D_Attack : MonoBehaviour
 
     void Start()
     {
+        m_player = transform.parent.gameObject;
+
         m_timer = 0.1f;
         m_AngleToRotate = 0.0f;
 
@@ -41,30 +49,52 @@ public class Player2D_Attack : MonoBehaviour
 
         /* Default not interacting */
         m_bisInteracting = false;
+
+        m_comboCount = 0;
+        m_comboElaspeTimer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         PlayerAttack2D();
+
+        /* When a hitbox is created */
+        if (temp)
+        {
+            // Start timers
+            m_timer -= Time.deltaTime;
+
+            /* After timer is up, upspawn detection box */
+            if (m_timer <= 0.0F)
+            {
+                DestroyImmediate(temp);
+                m_timer = 0.1F;
+            }
+        }
     }
 
     /* Spawn HitBox to detect Collision */
     public void PlayerAttack2D()
     {
-        if (!m_bisInteracting)
+        if (!m_bisInteracting) // if is not interacting with merchant
         {
-            // Only when no created hitbox
+            // Only when no created hitbox has been created
             if (GetTrigger() && !temp)
             {
+                if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
+                
                 //create a hit
-                temp = Instantiate(melee, transform.position, transform.rotation);
-                temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 
+                temp = Instantiate(meleecombo[m_comboCount], transform.position, transform.rotation, m_player.transform);
 
                 /* Transformation to rotate the Hitbox */
                 m_AngleToRotate = Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
                 temp.transform.Rotate(0, 0, -m_AngleToRotate);
-                temp.transform.Translate(new Vector3(0.0f, 0.8f, 0.0f));
+                temp.transform.Translate(new Vector3(0.0f, 0.5f, 0.0f));
+
+                //Set Damage to Attack
+                temp.GetComponent<CollisionPlayerAttack>().Init(m_player.GetComponent<StatsBase>().Attack);
 
                 /* Set Animation in Parent to Start */
                 Player2D_Manager.attackClicked = true;
@@ -73,6 +103,10 @@ public class Player2D_Attack : MonoBehaviour
 #if UNITY_ANDROID || UNITY_IPHONE
                 Player2D_TriggerAttack._triggered = false;
 #endif
+
+                m_comboElaspeTimer = m_comboResetTime;
+                ++m_comboCount;
+                m_comboCount %= meleecombo.Length;
             }
 
             /* When a hitbox is created */
@@ -88,6 +122,13 @@ public class Player2D_Attack : MonoBehaviour
                     m_timer = 0.1F;
                 }
             }
+
+            m_comboElaspeTimer -= Time.deltaTime;
+            if (m_comboElaspeTimer <= 0)
+            {
+                m_comboCount = 0;
+            }
+
         }
     }
 
@@ -102,4 +143,5 @@ public class Player2D_Attack : MonoBehaviour
         return false;
 #endif
     }
+
 }

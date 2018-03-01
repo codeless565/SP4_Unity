@@ -27,4 +27,6 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject ProfileAlimentPoison;
     public GameObject ProfileAlimentSlow;
     public GameObject ProfileAlimentConfusion;
+
+    public GameObject Fireball;
 }

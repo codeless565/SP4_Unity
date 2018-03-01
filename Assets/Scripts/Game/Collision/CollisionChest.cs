@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class CollisionChest : MonoBehaviour, CollisionBase {
 
+    TutorialTextBox tut;
+
     private List<Item> m_ItemList = new List<Item>();
-    
+    void Start()
+    {
+        tut = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TutorialTextBox>();
+    } 
     public void CollisionResponse(string _tag)
     {
         //Give Item to player at random from the item database
@@ -16,6 +21,7 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
 
         float diceResult = Random.Range(0.0f, 1.0f);
         string selectedRarity;
+        tut.chestOpened = false;
 
         if (diceResult <= 0.4f)
             selectedRarity = "Common";
@@ -28,11 +34,12 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
         else
             selectedRarity = "Relic";
 
+
         m_ItemList = ItemDatabase.Instance.GenerateItem(selectedRarity);
 
         if (m_ItemList.Count <= 0)
         {
-            Debug.Log("Chest is Empty");
+            return;
         }
         else
         {
@@ -41,6 +48,7 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
 
             string Input = "You've got " + RandomItem.Name + "(" + RandomItem.ItemRarity + ")!";
             GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(Input);
+            tut.chestOpened = true;
         }
 
         Destroy(gameObject);
