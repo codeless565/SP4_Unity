@@ -56,6 +56,15 @@ public class TutorialTextBox : MonoBehaviour
         pauseBox = false;
     }
 
+    bool getTrigger()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        return Input.GetKeyDown(KeyCode.Return);
+#elif UNITY_ANDROID || UNITY_IPHONE
+           // return Input.GetTouch(0);
+#endif
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -65,7 +74,7 @@ public class TutorialTextBox : MonoBehaviour
     //    AccMove();
 #endif
 
-        if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
+        if (getTrigger() && !pauseBox && Time.timeScale == 1)
         {
             if (!textboxManager.isTyping)
             {
