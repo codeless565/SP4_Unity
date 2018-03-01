@@ -93,7 +93,6 @@ public class Player2D_Manager : MonoBehaviour
         /* Storing Player Info */
         PlayerSaviour.Instance.LoadInv(Inventory);
 
-        Debug.Log("Player Manager: " + PlayerPrefs.GetString("Player_Stats"));
         if (PlayerPrefs.GetString("Player_Stats") != "")
             PlayerSaviour.Instance.LoadPlayerStats(statsHolder);
 
@@ -117,13 +116,11 @@ public class Player2D_Manager : MonoBehaviour
     }
     void Requip()
     {
-        Debug.Log("Player Manager: HP - " + statsHolder.Health);
         foreach (Item item in EquipmentList)
         {
             if(item != null)
                 EquipEQ(item);
         }
-        Debug.Log("Player Manager: HP - " + statsHolder.Health);
     }
     // Update is called once per frame
     void Update()
@@ -440,11 +437,8 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (_equipment.ItemType == "Helmets")
         {
-            Debug.Log(_equipment.Health + " " + _equipment.MaxHealth);
             if (EquipmentList[(int)EQTYPE.HELMET] == null)
             {
-                Debug.Log("Player Manager: HP update - " + statsHolder.Health);
-
                 EquipmentList[(int)EQTYPE.HELMET] = _equipment;
             }
             else

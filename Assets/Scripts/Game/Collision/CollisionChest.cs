@@ -32,7 +32,7 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
 
         if (m_ItemList.Count <= 0)
         {
-            Debug.Log("Chest is Empty");
+            return;
         }
         else
         {
