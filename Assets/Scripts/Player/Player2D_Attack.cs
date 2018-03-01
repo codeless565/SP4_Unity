@@ -71,11 +71,13 @@ public class Player2D_Attack : MonoBehaviour
             // Only when no created hitbox
             if (GetTrigger() && !temp)
             {
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
+                if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
                 //create a hit
                 temp = Instantiate(melee, transform.position, transform.rotation);
                 temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
+                if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
 
                 /* Transformation to rotate the Hitbox */
                 m_AngleToRotate = Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;

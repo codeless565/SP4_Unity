@@ -70,14 +70,39 @@ public class TutorialMode : MonoBehaviour, GameMode
         }
     }
 
+    IEnumerator LoadingMainMenuScreen()
+    {
+        LoadingNextScreen.GetComponent<LoadingNextFloor>().Init();
+        AsyncOperation async = SceneManager.LoadSceneAsync("SceneMainMenu");
+        async.allowSceneActivation = false;
+
+        // If SceneGame is not loaded fully.
+        while (async.isDone == false)
+        {
+            LoadingNextScreen.GetComponent<LoadingNextFloor>().UpdateLoadAnimation();
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            if (async.progress >= 0.9f)
+            {
+                async.allowSceneActivation = true;
+                SceneManager.UnloadSceneAsync(4);
+            }
+            yield return null;
+        }
+    }
+
     public void GameClear()
     {
 		Time.timeScale = 1;
-        SceneManager.LoadScene("SceneMainMenu");
+        StartCoroutine(LoadingMainMenuScreen());
+       // SceneManager.LoadScene("SceneMainMenu");
     }
 
     public void GameOver()
     {
+        Time.timeScale = 1;
+
         /* Set PreviousGameScene before going next scene*/
         PlayerPrefs.SetString("PreviousGameScene", "SceneTutorial_2D");
         SceneManager.LoadScene("SceneGameOver");

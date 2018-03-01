@@ -25,19 +25,16 @@ public class TutorialTextBox : MonoBehaviour
     public bool pauseBox;
 
     //Arrows
-  //  public bool showHealthArrow, showStaminaArrow, showEXPArrow, showTimerArrow, showPPArrow, showLevelArrow, showMinimapArrow, showInventoryArrow;
     public Image HealthArrow, StaminaArrow, EXPArrow, TimerArrow, PPArrow, MinimapArrow, InventoryArrow, LevelArrow;
-    public GameObject Arrows, ArrowShown;
+    public GameObject Arrows;
+
     // Use this for initialization
     void Start()
     {
-      //  showEXPArrow = showHealthArrow = showInventoryArrow = showLevelArrow = showMinimapArrow = showPPArrow = showStaminaArrow = showTimerArrow = false;
-
         textboxManager = FindObjectOfType<TextBoxManager>();
         tutMode = GetComponent<TutorialMode>();
         statsMenu = GetComponent<Player2D_StatsMenu>();
         tutSpawn = GetComponent<TutorialSpawn>();
-        //checkChest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
         inventory = GetComponent<Inventory>();
         merchant = GetComponent<MerchantStateMachine>();
 
@@ -239,7 +236,7 @@ public class TutorialTextBox : MonoBehaviour
                 break;
 
             case 25:
-               // tutSpawn.ExitSpawn();
+                tutSpawn.ExitSpawn();
                 break;
 
         }
@@ -249,8 +246,7 @@ public class TutorialTextBox : MonoBehaviour
     void TutorialUpdate()
     {
         if(textboxManager.currentLine == 4 || textboxManager.currentLine == 10 || textboxManager.currentLine == 12 || 
-            textboxManager.currentLine == 15 || textboxManager.currentLine == 17 
-            || textboxManager.currentLine == 19)
+            textboxManager.currentLine == 15 || textboxManager.currentLine == 17 || textboxManager.currentLine == 19)
         {
             pauseBox = true;
             textboxManager.DisableTextBox();

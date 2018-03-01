@@ -56,41 +56,15 @@ public class TutorialSpawn : MonoBehaviour {
         MiniMap.GetComponent<ExplorationMap>().Init();
     }
 
-    public void MerchantSpawn()
-    {
-        if (mIsSpawned)
-            return;
-        /* Spawns merchant with the player in the same room at start of level, 
-           Merchant will be at the top right corner of the room */
-        //m_MerchantRoom = m_playerRoom;
-
-        //int ranXpos = m_rooms[m_MerchantRoom].xPos + m_rooms[m_MerchantRoom].roomWidth - 2;
-        //int ranYpos = m_rooms[m_MerchantRoom].yPos + m_rooms[m_MerchantRoom].roomHeight - 2;
-
-        //m_MerchantPos = new Vector2(ranXpos, ranYpos);
-
-        GameObject t_Merchant = Instantiate(Merchant, new Vector2(m_playerPos.x, m_playerPos.y + 6), Quaternion.identity, go_floorholder.transform);
-        mIsSpawned = true;
-        //if (t_Merchant.GetComponent<ObjectInfo>() != null)
-        //    t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_exitPos); //Set Starting Spawn location and detail to object
-    }
-
     public void ExitSpawn()
     {
+        if (exitIsSpawned)
+            return;
+
         go_exit = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().CloseDoor;
 
-       // int exitRoom;
-
-    //    do { exitRoom = Random.Range(0, m_rooms.Length - 1); }
-    //    while (exitRoom == m_playerRoom);
-
-    //    // Spawn the Exit on 1 of the tile in the room except the edges
-    //    int ranXpos = Random.Range(m_rooms[exitRoom].xPos + 1, m_rooms[exitRoom].xPos + m_rooms[exitRoom].roomWidth - 1);
-    //    int ranYpos = Random.Range(m_rooms[exitRoom].yPos + 1, m_rooms[exitRoom].yPos + m_rooms[exitRoom].roomHeight - 1);
-
-    //    m_exitPos = new Vector2(ranXpos, ranYpos);
-
-    //    GameObject t_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
+        GameObject t_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
+        exitIsSpawned = true;
     //    if (t_exit.GetComponent<ObjectInfo>() != null)
     //        t_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
     }
@@ -172,7 +146,7 @@ public class TutorialSpawn : MonoBehaviour {
         if (t1IsSpawned)
             return;
         GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
-        tempTrap = Instantiate(go_slowTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+        tempTrap = Instantiate(go_slowTrap, new Vector2(m_playerPos.x - 4, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
         t1IsSpawned = true;
     }
     public void TrapSpawn2()
@@ -182,7 +156,7 @@ public class TutorialSpawn : MonoBehaviour {
         if (t2IsSpawned)
             return;
         GameObject go_bearTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
-        tempTrap = Instantiate(go_bearTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+        tempTrap = Instantiate(go_bearTrap, new Vector2(m_playerPos.x - 2, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
         t2IsSpawned = true;
     }
     public void TrapSpawn3()
@@ -203,7 +177,7 @@ public class TutorialSpawn : MonoBehaviour {
             return;
         GameObject go_confusionTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ConfusionTrap;
 
-        tempTrap = Instantiate(go_confusionTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+        tempTrap = Instantiate(go_confusionTrap, new Vector2(m_playerPos.x +2, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
         t4IsSpawned = true;
     }
     // Getters
