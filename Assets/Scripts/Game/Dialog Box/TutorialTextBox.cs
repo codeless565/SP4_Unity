@@ -184,8 +184,7 @@ public class TutorialTextBox : MonoBehaviour
                      break;
 
             case 13: //spawn enemy
-                //if(!triedAttack)
-                //tutSpawn.EnemySpawn();
+                tutSpawn.EnemySpawn();
                 break;
 
             case 15: //trying stage for attacking
@@ -223,36 +222,23 @@ public class TutorialTextBox : MonoBehaviour
                 }
                 break;
 
-            case 20:
-                tutSpawn.MerchantSpawn();
+            case 21: //show slow trap
+                tutSpawn.TrapSpawn1();
                 break;
 
-            case 21: //trying stage for buying from merchant
-                if(merchant.merchantClosed)
-                {
-                    textboxManager.currentLine = 22;
-                    pauseBox = false;
-                    textboxManager.EnableTextBox();
-                }
+            case 22:
+                tutSpawn.TrapSpawn2();
                 break;
 
-            case 23: //show slow trap
-                tutSpawn.TrapSpawn(1);
+            case 23:
+                tutSpawn.TrapSpawn3();
                 break;
 
             case 24:
-                tutSpawn.TrapSpawn(2);
+                tutSpawn.TrapSpawn4();
                 break;
 
             case 25:
-                tutSpawn.TrapSpawn(3);
-                break;
-
-            case 26:
-                tutSpawn.TrapSpawn(4);
-                break;
-
-            case 27:
                // tutSpawn.ExitSpawn();
                 break;
 
@@ -264,7 +250,7 @@ public class TutorialTextBox : MonoBehaviour
     {
         if(textboxManager.currentLine == 4 || textboxManager.currentLine == 10 || textboxManager.currentLine == 12 || 
             textboxManager.currentLine == 15 || textboxManager.currentLine == 17 
-            || textboxManager.currentLine == 19 || textboxManager.currentLine == 21)
+            || textboxManager.currentLine == 19)
         {
             pauseBox = true;
             textboxManager.DisableTextBox();
