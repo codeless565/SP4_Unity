@@ -25,14 +25,11 @@ public class ItemDatabase
         TextAsset ItemDatabase = Resources.Load<TextAsset>("ItemDB");
         string[] rowdata = ItemDatabase.text.Split(new char[] { '\n' });
 
-        for (int i = 0; i < rowdata.Length - 1; ++i)
+        for (int i = 1; i < rowdata.Length - 1; ++i)
         {
             string[] linedata = rowdata[i].Split(new char[] { ',' });
             if (linedata[0] == "")
                 break;
-
-            if (linedata[0] == "Name")
-                continue;
 
             Item newItem = new Item();
             newItem.Name = linedata[0];

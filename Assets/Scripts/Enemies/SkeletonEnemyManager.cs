@@ -386,6 +386,8 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
         // Change State to ATTACK if Player is within range.
         if(distanceApart < enemyAttackRange)
         {
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("ENEMY_FIGHT", 1);
+
             skeletonState = EnemySkeletonState.ATTACK;
         }
         // Change State to IDLE if Player is outside of Chase Range.
@@ -437,8 +439,7 @@ public class SkeletonEnemyManager : MonoBehaviour, StatsBase
 
         /* Add EXP to Player when Die */
         playerStats.EXP += expReward;
-        Debug.Log(playerStats.EXP);
-        GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("KILL_ENEMY", 1);
+        GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("enemy_kill", 1);
         Destroy(gameObject);
     }
 

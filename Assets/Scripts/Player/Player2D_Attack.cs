@@ -58,6 +58,20 @@ public class Player2D_Attack : MonoBehaviour
     void Update()
     {
         PlayerAttack2D();
+
+        /* When a hitbox is created */
+        if (temp)
+        {
+            // Start timers
+            m_timer -= Time.deltaTime;
+
+            /* After timer is up, upspawn detection box */
+            if (m_timer <= 0.0F)
+            {
+                DestroyImmediate(temp);
+                m_timer = 0.1F;
+            }
+        }
     }
 
     /* Spawn HitBox to detect Collision */
@@ -68,8 +82,17 @@ public class Player2D_Attack : MonoBehaviour
             // Only when no created hitbox has been created
             if (GetTrigger() && !temp)
             {
+                if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
                 //create a hit
+<<<<<<< HEAD
                 temp = Instantiate(meleecombo[m_comboCount], transform.position, transform.rotation, m_player.transform);
+=======
+                temp = Instantiate(melee, transform.position, transform.rotation);
+                temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 
+                if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                    GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
+>>>>>>> ae02fb081e2e49e19205e312a6197fd97204fca0
 
                 /* Transformation to rotate the Hitbox */
                 m_AngleToRotate = Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
@@ -91,6 +114,7 @@ public class Player2D_Attack : MonoBehaviour
                 ++m_comboCount;
                 m_comboCount %= meleecombo.Length;
             }
+<<<<<<< HEAD
 
             /* When a hitbox is created */
             if (temp)
@@ -111,6 +135,8 @@ public class Player2D_Attack : MonoBehaviour
             {
                 m_comboCount = 0;
             }
+=======
+>>>>>>> ae02fb081e2e49e19205e312a6197fd97204fca0
         }
     }
 

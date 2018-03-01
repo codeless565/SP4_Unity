@@ -1,3 +1,4 @@
-Name,Details,Active,PropertyName,CompletionCounter
-Zombie Slayer,Kill 3 zombies,TRUE,KILL_ENEMY,3
-Adventurer,Move 1000m,true,PLAYER_MOVE,1000
+Name,Details,Active,Gold Reward,PropertyName,PropertyDetails,CompletionCounter,,,
+Skeleton Slayer,,TRUE,100000,ENEMY_KILL,Kill Skeleton,3,ENEMY_FIGHT,Engage 10  Skeletons,10
+Adventurer,,TRUE,500,PLAYER_MOVE,Move 1000m,1000,,,
+Fighter,,TRUE,0,PLAYER_ATTACK,Attack 10 times,10,,,

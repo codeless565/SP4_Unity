@@ -75,6 +75,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour
             {
                 m_progressBar.value = 1f;
                 async.allowSceneActivation = true;
+                SceneManager.UnloadSceneAsync(0);
             }
             yield return null;
         }
@@ -96,6 +97,7 @@ public class Levels_PopOutScreenControls : MonoBehaviour
             {
                 m_progressBar.value = 1f;
                 async.allowSceneActivation = true;
+                SceneManager.UnloadSceneAsync(0);
             }
             yield return null;
         }

@@ -14,7 +14,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     float stamina;
     float defense;
     public float movespeed;
-    public int gold = 9999999;
+    public int gold = 999999;
 
     private string m_name = "player2D";
     private float m_EXP;
