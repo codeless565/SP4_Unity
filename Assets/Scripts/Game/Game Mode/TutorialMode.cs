@@ -50,6 +50,8 @@ public class TutorialMode : MonoBehaviour, GameMode
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
+
+        //GetComponent<SkeletonEnemyManager>().Init(1);
     }
 
     public void GamePause()

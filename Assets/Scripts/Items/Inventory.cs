@@ -59,7 +59,6 @@ public class Inventory : MonoBehaviour
 
     public void OpenEquipment()
     {
-        InventroyClosed = false;
         switch (EquipmentDropdown.GetComponent<Dropdown>().value)
         {
             case 1:
@@ -101,8 +100,8 @@ public class Inventory : MonoBehaviour
     }
     public void OpenInventoryUI()
     {
-
-            gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
+        InventroyClosed = false;
+        gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
             OpenEquipment();
             Player.GetComponent<Player2D_Manager>().canMove = false;
         InventoryUI = true;
