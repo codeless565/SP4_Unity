@@ -32,15 +32,14 @@ public class Achievements {
 
     // Update is called once per frame
     public void Update () {
-        
-		for (int i = 0; i < PropertiesList.Count; ++i)
+        CompletedProps = 0;
+        for (int i = 0; i < PropertiesList.Count; ++i)
         {
             if (PropertiesList[i].PropertyComplete)
                 CompletedProps++;
         }
         if (CompletedProps == PropertiesList.Count)
             AchievementCompleted = true;
-
 	}
     
     public void AddProperty(AchievementsProperties _property)

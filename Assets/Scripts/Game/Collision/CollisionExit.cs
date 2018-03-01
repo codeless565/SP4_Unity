@@ -12,7 +12,6 @@ public class CollisionExit : MonoBehaviour, CollisionBase
 
         if (player.GetComponent<SlowDownTrapEffect>() != null)
         {
-            Debug.Log("Deleting SlowDownTrapEffect");
             player.GetComponent<SlowDownTrapEffect>().RemoveEffect();
         }
 

@@ -43,7 +43,6 @@ public class LevelingSystem : MonoBehaviour
     private bool LoadStats()
     {
         /* Check if there is an available save in PlayerPref to load stats from. */
-        Debug.Log("Level System: " + PlayerPrefs.GetString("Player_Stats"));
         return PlayerPrefs.GetString("Player_Stats") != "";
     }
 
