@@ -108,19 +108,11 @@ public class Player2D_Manager : MonoBehaviour
     }
     void Requip()
     {
-<<<<<<< HEAD
-        //Debug.Log("Player Manager: HP - " + statsHolder.Health);
-=======
->>>>>>> ae02fb081e2e49e19205e312a6197fd97204fca0
         foreach (Item item in EquipmentList)
         {
             if(item != null)
                 EquipEQ(item);
         }
-<<<<<<< HEAD
-        //Debug.Log("Player Manager: HP - " + statsHolder.Health);
-=======
->>>>>>> ae02fb081e2e49e19205e312a6197fd97204fca0
     }
     // Update is called once per frame
     void Update()
@@ -430,16 +422,8 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (_equipment.ItemType == "Helmets")
         {
-<<<<<<< HEAD
-            //Debug.Log(_equipment.Health + " " + _equipment.MaxHealth);
             if (EquipmentList[(int)EQTYPE.HELMET] == null)
             {
-                //Debug.Log("Player Manager: HP update - " + statsHolder.Health);
-
-=======
-            if (EquipmentList[(int)EQTYPE.HELMET] == null)
-            {
->>>>>>> ae02fb081e2e49e19205e312a6197fd97204fca0
                 EquipmentList[(int)EQTYPE.HELMET] = _equipment;
             }
             else
