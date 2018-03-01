@@ -58,22 +58,24 @@ public class TutorialTextBox : MonoBehaviour
 
     bool getTrigger()
     {
+        
 #if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetKeyDown(KeyCode.Return);
 #elif UNITY_ANDROID || UNITY_IPHONE
-           // return Input.GetTouch(0);
+        bool touched = false;
+           if(Input.GetTouch(0).phase == TouchPhase.Began)
+            touched = true;
+        if(Input.GetTouch(0).phase == TouchPhase.Ended)
+        touched = false;
+
+        return touched;
 #endif
     }
 
     // Update is called once per frame
     void Update()
     {
-#if UNITY_EDITOR || UNITY_STANDALONE
         KeyPressedUpdate();
-//#elif UNITY_ANDROID || UNITY_IPHONE
-    //    AccMove();
-#endif
-
         if (getTrigger() && !pauseBox && Time.timeScale == 1)
         {
             if (!textboxManager.isTyping)
