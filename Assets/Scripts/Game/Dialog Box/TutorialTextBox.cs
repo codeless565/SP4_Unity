@@ -6,13 +6,16 @@ using UnityEngine.UI;
 public class TutorialTextBox : MonoBehaviour
 {
     TextBoxManager textboxManager;
+    TutorialMode tutMode;
     TutorialSpawn tutSpawn;
+    Player2D_StatsMenu statsMenu;
     public TextAsset theTextMobile, theTextConsole;
     public int startLine;
     public int endLine;
 
     public bool MovedW, MovedA, MovedS, MovedD;
-    bool triedAttack, triedInteract, triedChangeW;
+
+    bool triedPause, triedPP, triedAttack, triedMove, triedCollecting, triedInventory, triedMerchant, triedTrap1, triedTrap2, triedTrap3, triedTrap4;
     public bool pauseBox;
 
     //Arrows
@@ -25,6 +28,9 @@ public class TutorialTextBox : MonoBehaviour
       //  showEXPArrow = showHealthArrow = showInventoryArrow = showLevelArrow = showMinimapArrow = showPPArrow = showStaminaArrow = showTimerArrow = false;
 
         textboxManager = FindObjectOfType<TextBoxManager>();
+        tutMode = GetComponent<TutorialMode>();
+        statsMenu = GetComponent<Player2D_StatsMenu>();
+        tutSpawn = GetComponent<TutorialSpawn>();
 #if UNITY_EDITOR || UNITY_STANDALONE
         textboxManager.ReloadScript(theTextConsole);
 #elif UNITY_ANDROID || UNITY_IPHONE
@@ -38,13 +44,8 @@ public class TutorialTextBox : MonoBehaviour
         MovedA = false;
         MovedS = false;
         MovedD = false;
-        triedAttack = false;
-        triedInteract = false;
-        triedChangeW = false;
-
+        triedPause= triedPP= triedAttack= triedMove= triedCollecting= triedInventory= triedMerchant= triedTrap1= triedTrap2= triedTrap3= triedTrap4 = false;
         pauseBox = false;
-
-        ArrowShown = null;
     }
 
     // Update is called once per frame
@@ -52,8 +53,8 @@ public class TutorialTextBox : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         KeyPressedUpdate();
-#elif UNITY_ANDROID || UNITY_IPHONE
-        AccMove();
+//#elif UNITY_ANDROID || UNITY_IPHONE
+    //    AccMove();
 #endif
 
         if (Input.GetKeyDown(KeyCode.Return) && !pauseBox && Time.timeScale == 1)
@@ -92,37 +93,93 @@ public class TutorialTextBox : MonoBehaviour
         {
             case 1:
                 LevelArrow.gameObject.SetActive(true);
-                //ArrowShown = transform.Find("Arrows/LevelArrow").gameObject;
                 break;
 
             case 2:
                 TimerArrow.gameObject.SetActive(true);
                 break;
-                
-            case 4:
-                MinimapArrow.gameObject.SetActive(true);
+
+            case 3:
+                TimerArrow.gameObject.SetActive(true); //show time arrow
                 break;
-                
+
+            case 4:
+               if(tutMode.b_isPaused)
+			    {
+				    textboxManager.currentLine = 5;
+                    triedPause = true;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                break;
+
             case 5:
-                HealthArrow.gameObject.SetActive(true);
+                 MinimapArrow.gameObject.SetActive(true); //tried pause show minimap arrow
                 break;
 
             case 6:
+                HealthArrow.gameObject.SetActive(true);
+                break;
+
+            case 7:
                 StaminaArrow.gameObject.SetActive(true);
                 break;
 
-
-            case 7:
+            case 8:
                 EXPArrow.gameObject.SetActive(true);
                 break;
 
-            case 8:
-                PPArrow.gameObject.SetActive(true);
-                break;
+            case 9:
+                 PPArrow.gameObject.SetActive(true);
+                 break;
+
+            case 10:
+                if (statsMenu.statsMenuClosed) //check opened pp
+                {
+                    textboxManager.currentLine = 11;
+                    triedPP = true;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                    break;
+
+            case 12:
+                if (!MovedA || !MovedD || !MovedS || !MovedW)
+                     {
+                         if (Input.GetKey(KeyCode.A))
+                         {
+                             MovedA = true;
+                         }
+
+                         if (Input.GetKey(KeyCode.D))
+                         {
+                             MovedD = true;
+                         }
+
+                         if (Input.GetKey(KeyCode.S))
+                         {
+                             MovedS = true;
+                         }
+
+                         if (Input.GetKey(KeyCode.W))
+                         {
+                             MovedW = true;
+                         }
+                     }
+                     else
+                     {
+                         textboxManager.currentLine = 13;
+                         pauseBox = false;
+                         textboxManager.EnableTextBox();
+                     }
+                     break;
 
             case 13:
-                InventoryArrow.gameObject.SetActive(true);
+                tutSpawn.EnemySpawn();
                 break;
+             //case 15:
+             //   InventoryArrow.gameObject.SetActive(true);
+             //   break;
 
 
                 //case 2:
@@ -213,33 +270,39 @@ public class TutorialTextBox : MonoBehaviour
     }
     void TutorialUpdate()
     {
-        switch(textboxManager.currentLine)
+        switch (textboxManager.currentLine)
         {
-            
+            case 4:
+                if (!triedPause)
+                {
+                    pauseBox = true;
+                    textboxManager.DisableTextBox();
+                }
+                break;
+
+            case 10:
+                if(!triedPP)
+                {
+                    pauseBox = true;
+                    textboxManager.DisableTextBox();
+                }
+                break;
+
+            case 12:
+                if (!MovedA || !MovedD || !MovedS || !MovedW)
+                {
+                    pauseBox = true;
+                    textboxManager.DisableTextBox();
+                }
+                break;
+            case 15:
+                if (!triedAttack)
+                {
+                    pauseBox = true;
+                    textboxManager.DisableTextBox();
+                }
+                break;
         }
-        //if(textboxManager.currentLine == 2 || textboxManager.currentLine == 4 || textboxManager.currentLine == 6 || textboxManager.currentLine == 8)
-        //{
-        //    if(!MovedA || !MovedD || !MovedS || !MovedW)
-        //    {
-        //        pauseBox = true;
-        //        textboxManager.DisableTextBox();
-        //    }
-        //    else if(!triedAttack)
-        //    {
-        //        pauseBox = true;
-        //        textboxManager.DisableTextBox();
-        //    }
-        //    else if(!triedChangeW)
-        //    {
-        //        pauseBox = true;
-        //        textboxManager.DisableTextBox();
-        //    }
-        //    else if(!triedInteract)
-        //    {
-        //        pauseBox = true;
-        //        textboxManager.DisableTextBox();
-        //    }
-        //}  
         //show text letter by letter
         StartCoroutine(textboxManager.TypeText(textboxManager.textLines[textboxManager.currentLine]));
 

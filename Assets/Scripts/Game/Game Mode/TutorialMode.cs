@@ -11,10 +11,10 @@ public class TutorialMode : MonoBehaviour, GameMode
     public GameObject PauseMenu;
     public Text FloorDetails;
 
-    bool b_isPaused;
+    public bool b_isPaused;
     int t_CurrFloor;
 
-    void Start()
+    void Awake()
     {
         GameStart();
 
@@ -70,6 +70,7 @@ public class TutorialMode : MonoBehaviour, GameMode
 
     public void GameClear()
     {
+		Time.timeScale = 1;
         SceneManager.LoadScene("SceneMainMenu");
     }
 

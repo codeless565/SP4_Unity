@@ -242,6 +242,9 @@ public class PetManager : MonoBehaviour, StatsBase
         //Initialize Stats from the leveling system
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, false);
+
+        // Ignore Collision between Player and Pet.
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), player.GetComponent<Collider2D>());
     }
 
     void Update ()
@@ -525,4 +528,13 @@ public class PetManager : MonoBehaviour, StatsBase
 
         return closestEnemy;
     }
+
+    //// Pet Collision
+    //void OnCollisionEnter2D(Collision2D _other)
+    //{
+    //    if (_other.gameObject.tag == "Player")
+    //        return;
+
+    //    Debug.Log("Is not Player.");
+    //}
 }
