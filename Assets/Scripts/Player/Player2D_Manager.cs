@@ -34,6 +34,9 @@ public class Player2D_Manager : MonoBehaviour
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
 
+    /* mobile things*/
+    public GameObject Mobile;
+
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -105,6 +108,17 @@ public class Player2D_Manager : MonoBehaviour
         m_confusedModifier = 1;
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        if (Mobile != null)
+        {
+            foreach (object obj in Mobile.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(true);
+            }
+        }
+#endif
     }
     void Requip()
     {
@@ -310,8 +324,8 @@ public class Player2D_Manager : MonoBehaviour
     void AccMove()
     {
         /* Player Movement */
-        inputX = Input.acceleration.x;
-        inputY = Input.acceleration.y;
+        inputX = Input.acceleration.x * 2f;
+        inputY = Input.acceleration.y * 2f;
 
         if (inputX > 0f || inputX < 0f)
         {
