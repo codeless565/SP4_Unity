@@ -276,10 +276,6 @@ public class Player2D_Manager : MonoBehaviour
             lastMove = new Vector2(0.0f, inputY);
             p_spriteManager.SetLastMove(0.0f, lastMove.y);
 
-
-            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
-
 			if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
             	GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }

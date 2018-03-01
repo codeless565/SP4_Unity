@@ -21,6 +21,8 @@ public class MerchantStateMachine : MonoBehaviour
         { _goBackIdle = value; }
     }
 
+    public bool merchantClosed;
+
 #if UNITY_ANDROID || UNITY_IPHONE
 {
     /* Interact and Attack Button */
@@ -51,6 +53,8 @@ public class MerchantStateMachine : MonoBehaviour
         Interact_Btn.SetActive(false);
 }
 #endif
+
+        merchantClosed = false;
     }
 
     /* Every Frame, Update what Merchant is doing */
@@ -96,6 +100,8 @@ public class MerchantStateMachine : MonoBehaviour
 
             bye.SetActive(false);
             idle.SetActive(true);
+
+            merchantClosed = true;
         }
     }
 
