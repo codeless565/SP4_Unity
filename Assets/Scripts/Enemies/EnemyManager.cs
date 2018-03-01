@@ -34,6 +34,10 @@ public class EnemyManager : MonoBehaviour, StatsBase
     private SpriteManager m_SpriteManager;
     private Vector3 m_EnemyDestination;
     private float m_fDistanceApart;
+    private float m_fChaseRange;
+    private float m_fAttackRange;
+	private float m_fChangeStateTimer;
+    private float m_fAttackTimer;
     private bool m_bCanAttack;
     private bool m_bCanPatrol;
 
@@ -229,6 +233,38 @@ public class EnemyManager : MonoBehaviour, StatsBase
     public float GetDistanceApart()
     {
         return m_fDistanceApart;
+    }
+    public void SetChaseRange(float _range)
+    {
+        m_fChaseRange = _range;
+    }
+    public float GetChaseRange()
+    {
+        return m_fChaseRange;
+    }
+    public void SetAttackRange(float _range)
+    {
+        m_fAttackRange = _range;
+    }
+    public float GetAttackRange()
+    {
+        return m_fAttackRange;
+    }
+	public void SetChangeStateTimer(float _timer)
+	{
+        m_fChangeStateTimer = _timer;
+	}
+    public float GetChangeStateTimer()
+    {
+        return m_fChangeStateTimer;
+    }
+    public void SetAttackTimer(float _timer)
+    {
+        m_fAttackTimer = _timer;
+    }
+    public float GetAttackTimer()
+    {
+        return m_fAttackTimer;
     }
     public void SetBoolCanAttack(bool _can)
     {

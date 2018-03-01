@@ -280,11 +280,16 @@ public class SpriteManager : MonoBehaviour
 
     /**************************/
 
-    /********bool setters******/
+    /********bool setters and getters******/
     public void SetAttack(bool attack)
     {
         attackPlaceHolder = attack;
     
+    }
+
+    public bool GetAttack()
+    {
+        return attackPlaceHolder;
     }
 
     public void SetDie(bool die)
@@ -295,6 +300,11 @@ public class SpriteManager : MonoBehaviour
     public void SetMoving(bool moving)
     {
         Moving = moving;
+    }
+
+    public bool GetMoving()
+    {
+        return Moving;
     }
     /**************************/
 
