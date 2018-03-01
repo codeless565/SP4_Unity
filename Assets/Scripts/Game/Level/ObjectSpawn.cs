@@ -104,6 +104,10 @@ public class ObjectSpawn : MonoBehaviour
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
+
+        //TODO 
+        if (GetComponent<CameraEffects>() != null)
+            GetComponent<CameraEffects>().Init(MainCamera.GetComponent<Camera>());
     }
 
     private void PetSpawn()

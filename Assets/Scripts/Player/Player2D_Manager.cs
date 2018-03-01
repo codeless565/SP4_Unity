@@ -137,13 +137,6 @@ public class Player2D_Manager : MonoBehaviour
     {
         Debug.Log("inventory" + invenDis.InventroyClosed);
         Debug.Log("move" + canMove);
-        /* When Player Dies, Stop Updating and go to Game Over Scene */
-        if (statsHolder.Health <= 0)
-        {
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
-            return;
-        }
-
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {

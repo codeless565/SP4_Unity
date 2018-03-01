@@ -19,7 +19,7 @@ public class GameTimer : MonoBehaviour {
         m_elapseTime = Gametime;
 
         if (_isBossLevel)
-            Gametime *= 10;
+            m_elapseTime *= 2;
     }
 	
 	void Update () {
@@ -28,7 +28,10 @@ public class GameTimer : MonoBehaviour {
 
         if (m_elapseTime <= 0)
         {
-            GetComponent<GameMode>().GameOver();
+            if (GetComponent<CameraEffects>() != null)
+                GetComponent<CameraEffects>().PlayGameOverEffect();
+            else
+                GetComponent<GameMode>().GameOver();
         }
     }
 

@@ -25,6 +25,10 @@ public class ArenaBossSpawn : MonoBehaviour
     private int m_arenaSizeRow;
     private int m_arenaSizeColum;
 
+    //Boss HUD
+    public GameObject BossHPBarPrefab;
+    public GameObject HUD;
+
     public void Init(int _currentFloor)
     {
         m_currentFloor = _currentFloor;
@@ -43,19 +47,29 @@ public class ArenaBossSpawn : MonoBehaviour
 
     private void PlayerSpawn()
     {
-        m_playerPos = new Vector2(m_arenaSizeRow * 0.5f, m_arenaSizeColum * 0.3f);
+        m_playerPos = new Vector2(m_arenaSizeRow * 0.5f, 1);
         GameObject t_player = Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
+
+        if (GetComponent<CameraEffects>() != null)
+            GetComponent<CameraEffects>().Init(MainCamera.GetComponent<Camera>());
     }
 
     private void BossSpawn()
     {
-        m_BossPos = new Vector2(m_arenaSizeRow * 0.5f, m_arenaSizeColum * 0.5f);
+        m_BossPos = new Vector2(m_arenaSizeRow * 0.5f, m_arenaSizeColum * 0.7f);
         GameObject t_boss = Instantiate(BossEntity, m_BossPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
 
         t_boss.GetComponent<BossStatsManager>().Init(m_currentFloor);
+
+        return;
+        // Non Implemented as of now TODO
+        
+        // Create Boss HP Bar on the player's HUD
+        BossHPBarPrefab = Instantiate(BossHPBarPrefab, HUD.transform) as GameObject;
+        BossHPBarPrefab.GetComponent<PlayerHealthBar>().Init(t_boss);
     }
 
 }

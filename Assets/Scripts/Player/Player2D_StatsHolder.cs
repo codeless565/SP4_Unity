@@ -171,7 +171,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     #endregion
 
     /* Initializing of Stats */
-    void Awake()
+    void Start()
     {
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, true);
@@ -185,6 +185,16 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
         lvlcheck = playerLevel;
 
         levelingSystem.UpdateStats(this); //if player levelsup, it will refresh hp, for now
+
+        /* When Player Dies, Stop Updating and go to Game Over Scene */
+        if (health <= 0)
+        {
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<CameraEffects>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CameraEffects>().PlayGameOverEffect();
+            else
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
+            return;
+        }
 
         /* If Stamina is not full, regen some Stamina over time */
         if (stamina <= m_MaxStamina)
