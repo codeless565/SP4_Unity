@@ -15,7 +15,7 @@ public class CollisionPlayerAttack : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<SkeletonEnemyManager>() != null || other.GetComponent<ProjectileObject>() != null)
+        if (other.GetComponent<EnemySkeleton>() != null || other.GetComponent<ProjectileObject>() != null)
         {
             //Get the Particle effect
             GameObject t_effect = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SwordClashEffect;

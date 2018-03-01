@@ -81,13 +81,13 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
 
                 // Instantiate Object, Set waypoint and Set room info into ObjectInfo
                 GameObject tempEnemy = Instantiate(go_enemy, tempPos, Quaternion.identity, go_floorholder.transform);
-                if (tempEnemy.GetComponent<SkeletonEnemyManager>() != null)
+                if (tempEnemy.GetComponent<EnemySkeleton>() != null)
                 {
                     //Set EXP Reward for enemy 
-                    tempEnemy.GetComponent<SkeletonEnemyManager>().EXPReward = tempEnemy.GetComponent<SkeletonEnemyManager>().EXPRewardScaling * currentLevel;
-                    tempEnemy.GetComponent<SkeletonEnemyManager>().Waypoint = Waypoint;
-                    tempEnemy.GetComponent<SkeletonEnemyManager>().CurrWaypointID = randomID;
-                    tempEnemy.GetComponent<SkeletonEnemyManager>().Init(currentLevel);
+                    //tempEnemy.GetComponent<EnemySkeleton>().EXPReward = tempEnemy.GetComponent<EnemySkeleton>().EXPRewardScaling * currentLevel;
+                    //tempEnemy.GetComponent<EnemySkeleton>().Waypoint = Waypoint;
+                    //tempEnemy.GetComponent<EnemySkeleton>().CurrWaypointID = randomID;
+                    tempEnemy.GetComponent<EnemySkeleton>().Init(currentLevel, Waypoint, randomID);
                 }
 
                 if (tempEnemy.GetComponent<ObjectInfo>() != null)
