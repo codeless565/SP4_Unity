@@ -12,6 +12,8 @@ public class NormalMode : MonoBehaviour, GameMode
     public GameObject PauseMenu;
     public Text FloorDetails;
 
+    bool m_isBossFloor;
+
     bool b_isPaused;
     int t_CurrFloor;
 
@@ -26,8 +28,8 @@ public class NormalMode : MonoBehaviour, GameMode
             PauseMenu.SetActive(false);
 
         FloorDetails.text = "Floor " + t_CurrFloor.ToString();
-        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
 
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor, m_isBossFloor);
     }
 
     // Interface Functions // 
@@ -39,12 +41,15 @@ public class NormalMode : MonoBehaviour, GameMode
         { t_CurrFloor = 1; }
 
         /* Initialize Level
+         * set different time if it is on Boss level;
          * Spawn Objects in Level */
+        m_isBossFloor = false;
         if (t_CurrFloor % 5 == 0)
         {
             // Spawn Boss Level
             GetComponent<ArenaGenerator>().Init();
             GetComponent<ArenaBossSpawn>().Init(t_CurrFloor);
+            m_isBossFloor = true;
         }
         else
         {
@@ -54,7 +59,7 @@ public class NormalMode : MonoBehaviour, GameMode
         }
 
         /* Start Timer */
-        GetComponent<GameTimer>().Init();
+        GetComponent<GameTimer>().Init(m_isBossFloor);
 
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();

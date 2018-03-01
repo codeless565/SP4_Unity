@@ -31,4 +31,13 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject ProfileAlimentConfusion;
 
     public GameObject Fireball;
+    public GameObject DeathBall;
+
+    //Particles
+    public GameObject SwordClashEffect;
+    public GameObject ShadowBlastEffect;
+    public GameObject LevelUpEffect;
+
+    //Sprites
+    public Sprite PlayerCounterBall;
 }

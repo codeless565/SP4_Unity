@@ -10,6 +10,7 @@ public class StateBossRage : StateBase
     float m_attackDelay;
     float m_attackTimer;
     GameObject m_Fireball;
+    GameObject m_Deathball;
     float m_spawnDisplacementDist;
 
     GameObject m_player;
@@ -19,6 +20,7 @@ public class StateBossRage : StateBase
         m_StateID = _stateID;
         m_go = _go;
         m_Fireball = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().Fireball;
+        m_Deathball = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().DeathBall;
         m_spawnDisplacementDist = m_go.transform.localScale.x * 0.5f;
     }
 
@@ -41,12 +43,19 @@ public class StateBossRage : StateBase
             if (m_attackTimer <= 0)
             {
                 //Instatiate a fire ball toward the player
-                Vector3 targetPos = m_player.transform.position;
+                Vector3 targetPos = m_player.transform.position + new Vector3(Random.Range(-2, 2), Random.Range(-2, 2));
                 Vector3 targetdir = Vector3.Normalize(targetPos - m_go.transform.position);
                 Vector3 spawnPoint = targetdir * m_spawnDisplacementDist + m_go.transform.position;
 
-                GameObject t_FireBall = Object.Instantiate(m_Fireball, spawnPoint, Quaternion.identity) as GameObject;
-                t_FireBall.GetComponent<ProjectileObject>().Init(m_go, targetdir, 1, 2);
+                // Randomly choose from 2 type of attack and spawn
+                GameObject t_FireBall;
+                int chance = Random.Range(0, 2);
+                if (chance == 0)
+                    t_FireBall = Object.Instantiate(m_Deathball, spawnPoint, Quaternion.identity) as GameObject; // Non Deflectable
+                else
+                    t_FireBall = Object.Instantiate(m_Fireball, spawnPoint, Quaternion.identity) as GameObject; // Deflectable
+
+                t_FireBall.GetComponent<Projectile>().Init(m_go, targetdir, 1, 2);
 
                 m_attackTimer = m_attackDelay;
             }

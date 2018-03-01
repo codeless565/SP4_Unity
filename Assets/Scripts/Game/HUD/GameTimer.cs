@@ -9,13 +9,17 @@ public class GameTimer : MonoBehaviour {
     public float Gametime = 100; //In Seconds
     private float m_elapseTime;
 
-	public void Init () {
+	public void Init (bool _isBossLevel)
+    {
         if (Gametime < 10)
             Gametime = 10;
         else if (Gametime > 300)
             Gametime = 300;
 
         m_elapseTime = Gametime;
+
+        if (_isBossLevel)
+            Gametime *= 10;
     }
 	
 	void Update () {

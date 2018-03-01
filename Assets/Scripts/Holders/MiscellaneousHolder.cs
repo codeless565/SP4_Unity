@@ -21,4 +21,6 @@ public class MiscellaneousHolder : MonoBehaviour
     public GameObject TextPrefab;
     public GameObject BorderPrefab;
     public GameObject HotKeyTextPrefab;
+
+    public ParticleSystem ParticlePrefab;
 }

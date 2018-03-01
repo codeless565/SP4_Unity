@@ -290,10 +290,13 @@ public class ObjectSpawn : MonoBehaviour
                 case 3: // Spawns a Confusion Trap
                     tempTrap = Instantiate(go_confusionTrap, tempPos, Quaternion.identity, go_floorholder.transform);
                     break;
-                default: // Spawns a Bear Trap (DEFAULT if no selection)
-                    Debug.Log("Spawned Bear");
+                case 4: // Spawns a Bear Trap (DEFAULT if no selection)
                     tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
                     break;
+                default: // Spawns a Bear Trap (DEFAULT if no selection)
+                    tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+
             }
 
             if (tempTrap.GetComponent<CollisionTrapPoison>() != null)
