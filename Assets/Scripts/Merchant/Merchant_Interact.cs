@@ -32,8 +32,9 @@ public class Merchant_Interact : MonoBehaviour
     {
         if (GetComponentInParent<MerchantStateMachine>().m_state != "INTERACT")
             return;
-		
-		_theManager.ReloadScript(theText);
+        GetComponentInParent<MerchantStateMachine>().m_merchantName.text = "";
+
+        _theManager.ReloadScript(theText);
 		_theManager.currentLine = startLine;
 		_theManager.endAtLine = endLine;
         _theManager.EnableTextBox();

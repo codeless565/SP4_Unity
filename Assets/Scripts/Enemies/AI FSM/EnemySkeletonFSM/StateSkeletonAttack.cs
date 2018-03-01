@@ -12,6 +12,10 @@ public class StateSkeletonAttack : StateBase
     string m_StateID;
     GameObject m_go;
 
+    // Dodge System 
+    private int randomValue;
+    private bool m_bbol;
+
     public StateSkeletonAttack(string _stateID, GameObject _go)
     {
         m_StateID = _stateID;
@@ -29,6 +33,9 @@ public class StateSkeletonAttack : StateBase
         m_EnemyManager.SetAttackRange(1f);
         // Setting Enemy Attack Timer
         m_EnemyManager.SetAttackTimer(1f);
+
+        randomValue = 0;
+        m_bbol = false;
     }
 
     public void UpdateState()
@@ -61,8 +68,31 @@ public class StateSkeletonAttack : StateBase
             if(m_EnemyManager.GetAttackTimer() <= 0f)
             {
                 m_EnemyManager.GetSpriteManager().SetAttack(true);
-       
-                m_EnemyManager.GetPlayerStats().Health -= Calculator.Instance.CalculateDamage(m_EnemyManager.GetPlayerStats().Attack, m_EnemyManager.GetPlayerStats().GetComponent<Player2D_StatsHolder>().Defense);
+                
+                /* Simple Dodge System */
+                randomValue = Random.Range(1,100);
+                switch(randomValue)
+                {
+                    case 1:
+                        m_bbol = false;
+                        break;
+
+                    default:
+                        m_bbol = true;
+                        break;
+                }
+
+                if (m_bbol)
+                {
+                    Debug.Log("IN ATTACK");
+                    m_EnemyManager.GetPlayerStats().Health -= Calculator.Instance.CalculateDamage(m_EnemyManager.GetPlayerStats().Attack, m_EnemyManager.GetPlayerStats().GetComponent<Player2D_StatsHolder>().Defense);
+                }
+                else if (!m_bbol)
+                {
+                    Debug.Log("IN DODGE");
+                    // TODO SPawn Dodge to tell that Player DOdged
+                }
+
                 m_EnemyManager.SetAttackTimer(1f);
             }
 

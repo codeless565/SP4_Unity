@@ -24,17 +24,13 @@ public class Player2D_Manager : MonoBehaviour
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
 
-    //[SerializeField]
-    //private UIbar healthBar, EXPbar, StaminaBar;
-
     /* Show Level Up */
     [SerializeField]
     private TextMesh m_levelup_mesh;
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
-
-
+    
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -55,6 +51,8 @@ public class Player2D_Manager : MonoBehaviour
     public float accOffsetX, accOffsetY;
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
+    
+    private JoyStick m_joyStick;
 
     /* Options */
     private ControlsManager cm;
@@ -118,11 +116,14 @@ public class Player2D_Manager : MonoBehaviour
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
 
+        /* Initialising */
         if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>() != null)
             achDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>();
-        Debug.Log("Player ach " + achDis);
         invenDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<Inventory>();
         tutDis = GameObject.FindGameObjectWithTag("GameScript");
+
+        m_joyStick = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().JoyStick;
+
     }
     void Requip()
     {
@@ -135,8 +136,6 @@ public class Player2D_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("inventory" + invenDis.InventroyClosed);
-        Debug.Log("move" + canMove);
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -224,17 +223,16 @@ public class Player2D_Manager : MonoBehaviour
         else if (bOptionState && !Input.GetKeyDown(cm.GetKey("options")))
             bOptionState = false;
 
-        
-            if ((achDis != null && achDis.AchOpened) || invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
-            {
-                Debug.Log("ach is open");
-                canMove = false;
-            }
-            else
-            {
-                canMove = true;
-            }
-       
+        /* When a specific Things is ongoing, the player will not move */
+        if ((achDis != null && achDis.AchOpened) || 
+        invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
+        {
+            canMove = false;
+        }
+        else
+        {
+            canMove = true;
+        }
 
         /* When canMove, move */
         if (canMove)
@@ -348,6 +346,43 @@ public class Player2D_Manager : MonoBehaviour
 
             if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+        if (inputY > 0f || inputY < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(0.0f, inputY);
+            p_spriteManager.SetLastMove(0.0f, lastMove.y);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+
+        /* Sprite Movement */
+        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
+    }
+
+    /* JoyStick Moving */
+    void JoyStickMove()
+    {
+        inputX = m_joyStick.Direction.x;
+        Debug.Log("JoyStick DirX: " + m_joyStick.Direction.x);
+        inputY = m_joyStick.Direction.y;
+        Debug.Log("JoyStick DirY: " + m_joyStick.Direction.y);
+
+
+        if (inputX > 0f || inputX < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(inputX, 0.0f);
+            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
 
             if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
@@ -368,6 +403,7 @@ public class Player2D_Manager : MonoBehaviour
 
         /* Sprite Movement */
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
+
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
