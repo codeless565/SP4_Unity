@@ -14,9 +14,13 @@ public class BossDefeatSpawn : MonoBehaviour
         m_Exit = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().Exit;
         m_BossChest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BossChest;
 
-        Vector3 ExitDisplacement = new Vector3(0, 3);
+        Vector3 ExitDisplacement = new Vector3(0, 1);
+        Vector3 ChestDisplacement = new Vector3(2, -1);
+        Vector3 ChestDisplacement2 = new Vector3(-2, -1);
 
+        // Spawns a Door and 2 Chest
         Instantiate(m_Exit, _bossPos + ExitDisplacement, Quaternion.identity, m_Floor.transform);
-        Instantiate(m_BossChest, _bossPos, Quaternion.identity, m_Floor.transform);
+        Instantiate(m_BossChest, _bossPos + ChestDisplacement, Quaternion.identity, m_Floor.transform);
+        Instantiate(m_BossChest, _bossPos + ChestDisplacement2, Quaternion.identity, m_Floor.transform);
     }
 }
