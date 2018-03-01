@@ -31,8 +31,10 @@ public class TextBoxManager : MonoBehaviour
     public bool cancelTyping;
     private float typeSpeed;
 
+    public bool tbOpened;
     // Use this for initialization
-    void Start()
+
+    public void Init()
     {
         /* Find Player */
         player = FindObjectOfType<Player2D_Manager>();
@@ -52,6 +54,8 @@ public class TextBoxManager : MonoBehaviour
 
         /* Rendering Text Box */
         isActive = false;
+        tbOpened = false;
+        Debug.Log("TutBox Start called");
     }
 
     bool getTrigger()
@@ -131,11 +135,14 @@ public class TextBoxManager : MonoBehaviour
     /* Render Text box */
     public void EnableTextBox()
     {
+        Debug.Log("TutBox Enabled called");
+
         textBox.SetActive(true);
 
         //Player can't move when Textbox is active
-        if (stopPlayerMovement)
-            player.canMove = false;
+       // if (stopPlayerMovement)
+            //player.canMove = false;
+            tbOpened = true;
 
         //show text letter by letter
         StartCoroutine(TypeText(textLines[currentLine]));
@@ -144,7 +151,8 @@ public class TextBoxManager : MonoBehaviour
     public void DisableTextBox()
     {
         textBox.SetActive(false);
-        player.canMove = true;
+        //player.canMove = true;
+        tbOpened = false;
     }
 
     public void ReloadScript(TextAsset theText)

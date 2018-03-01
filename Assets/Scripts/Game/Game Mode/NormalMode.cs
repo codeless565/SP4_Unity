@@ -15,6 +15,9 @@ public class NormalMode : MonoBehaviour, GameMode
     bool b_isPaused;
     int t_CurrFloor;
 
+    /* mobile things*/
+    //public GameObject Mobile;
+
     void Start ()
     {
         GameStart();
@@ -24,6 +27,7 @@ public class NormalMode : MonoBehaviour, GameMode
 
         FloorDetails.text = "Floor " + t_CurrFloor.ToString();
         LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
+
     }
 
     // Interface Functions // 
@@ -63,6 +67,18 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
+
+
+//#if UNITY_ANDROID || UNITY_IPHONE
+//        if (Mobile != null)
+//        {
+//            foreach (object obj in Mobile.transform)
+//            {
+//                Transform child = (Transform)obj;
+//                child.gameObject.SetActive(true);
+//            }
+//        }
+//#endif
     }
 
     public void GamePause()

@@ -25,6 +25,7 @@ public class MerchantStateMachine : MonoBehaviour
     /* GameObjects to Store states */
     public GameObject idle, interact, bye;
     public bool merchantClosed;
+
 #if UNITY_ANDROID || UNITY_IPHONE
     /* Interact and Attack Button */
     private GameObject Attack_Btn, Interact_Btn;
@@ -60,8 +61,8 @@ public class MerchantStateMachine : MonoBehaviour
         if (_isinRange && GetTriggerForInteraction() && m_state == "IDLE")
         {
             m_state = "INTERACT";
-            _player.GetComponent<Player2D_Manager>().canMove = false;
-            merchantClosed = false;
+            //_player.GetComponent<Player2D_Manager>().canMove = false;
+            //merchantClosed = false;
 #if UNITY_ANDROID || UNITY_IPHONE
             MerchantTriggerInteract.m_interact = false;
 #endif
@@ -94,10 +95,10 @@ public class MerchantStateMachine : MonoBehaviour
         {
             m_state = "IDLE";
             _goBackIdle = false;
-            _player.GetComponent<Player2D_Manager>().canMove = true;
+            //_player.GetComponent<Player2D_Manager>().canMove = true;
             bye.SetActive(false);
             idle.SetActive(true);
-            merchantClosed = true;
+            //merchantClosed = true;
         }
     }
 

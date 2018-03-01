@@ -14,6 +14,8 @@ public class TutorialMode : MonoBehaviour, GameMode
     public bool b_isPaused;
     int t_CurrFloor;
 
+    /* mobile things*/
+    public GameObject Mobile;
     void Awake()
     {
         GameStart();
@@ -51,7 +53,19 @@ public class TutorialMode : MonoBehaviour, GameMode
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
 
-        //GetComponent<SkeletonEnemyManager>().Init(1);
+        GetComponent<TextBoxManager>().Init();
+
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        if (Mobile != null)
+        {
+            foreach (object obj in Mobile.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(true);
+            }
+        }
+#endif
     }
 
     public void GamePause()

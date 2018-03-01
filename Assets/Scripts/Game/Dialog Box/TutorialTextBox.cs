@@ -38,7 +38,6 @@ public class TutorialTextBox : MonoBehaviour
         statsMenu = GetComponent<Player2D_StatsMenu>();
         tutSpawn = GetComponent<TutorialSpawn>();
         inventory = GetComponent<Inventory>();
-        merchant = GetComponent<MerchantStateMachine>();
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         textboxManager.ReloadScript(theTextConsole);
