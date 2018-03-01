@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionChest : MonoBehaviour, CollisionBase {
+public class CollisionTutChest : MonoBehaviour, CollisionBase
+{
+
+    TutorialTextBox tut;
 
     private List<Item> m_ItemList = new List<Item>();
-
+    void Start()
+    {
+        tut = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TutorialTextBox>();
+        Debug.Log(tut);
+    }
     public void CollisionResponse(string _tag)
     {
         //Give Item to player at random from the item database
@@ -16,6 +23,7 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
 
         float diceResult = Random.Range(0.0f, 1.0f);
         string selectedRarity;
+        tut.chestOpened = false;
 
         if (diceResult <= 0.4f)
             selectedRarity = "Common";
@@ -42,6 +50,7 @@ public class CollisionChest : MonoBehaviour, CollisionBase {
 
             string Input = "You've got " + RandomItem.Name + "(" + RandomItem.ItemRarity + ")!";
             GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(Input);
+            tut.chestOpened = true;
         }
 
         Destroy(gameObject);

@@ -209,6 +209,8 @@ public class BossStatsManager : MonoBehaviour, StatsBase
             /* Kill Boss if he has no more hp 
                and spawn royalChests
              */
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("CONGRADULATION!");
+            GetComponent<BossDefeatSpawn>().InitSpawn(transform.position);
             Destroy(gameObject);
         }
 
