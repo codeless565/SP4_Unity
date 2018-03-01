@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AchievementsManager : MonoBehaviour {
-    public Dictionary<string, AchievementsProperties> PropertiesList;
-    public Dictionary<string, Achievements> AchievementsList;
+    public Dictionary<string, AchievementsProperties> PropertiesList = new Dictionary<string, AchievementsProperties>();
+    public Dictionary<string, Achievements> AchievementsList = new Dictionary<string, Achievements>();
 
     // Use this for initialization
-    void Start () {
-        PropertiesList = new Dictionary<string, AchievementsProperties>();
-        AchievementsList = new Dictionary<string, Achievements>();
-
-        Load();
-	}
+    public void Init() {
+        if (PlayerPrefs.GetInt("NumStoredAchievements") == 0)
+        {
+            Load();
+        }
+        else
+        {
+            PlayerSaviour.Instance.LoadProperties(PropertiesList);
+            PlayerSaviour.Instance.LoadAchievements(AchievementsList);
+        }
+    }
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		foreach (KeyValuePair<string,Achievements> ach in AchievementsList)
         {
-            
             if (ach.Value.AchievementActive)
             {
                 ach.Value.Update();
@@ -43,22 +48,6 @@ public class AchievementsManager : MonoBehaviour {
         return null;
     }
 
-    public void AddProperties(string achievement,AchievementsProperties achievementproperty)
-    {
-        if (!AchievementsList.ContainsKey(achievement))
-            return;
-
-        if (PropertiesList.ContainsKey(achievementproperty.PropertyName))
-        {
-            AchievementsList[achievement].AddProperty(achievementproperty);           
-        }
-        else
-        {
-            PropertiesList.Add(achievementproperty.PropertyName, achievementproperty);
-            AchievementsList[achievement].AddProperty(achievementproperty);
-        }
-    }
-
     public void UpdateProperties(string _propname, int value)
     {
         if (!PropertiesList.ContainsKey(_propname.ToUpper()))
@@ -81,10 +70,12 @@ public class AchievementsManager : MonoBehaviour {
             
             bool tempActive=false;
             bool.TryParse(tempString[2], out tempActive);
+            int temp = 0;
+            int.TryParse(tempString[3], out temp);
             
-            Achievements newAchievement = new Achievements(tempString[0], tempString[1], tempActive);
+            Achievements newAchievement = new Achievements(tempString[0], tempString[1], tempActive,temp);
 
-            for (int j = 3; j<tempString.Length;j+=3)
+            for (int j = 4; j<tempString.Length;j+=3)
             {
                 if (tempString[j] != "")
                 {

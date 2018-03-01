@@ -54,6 +54,7 @@ public class NormalMode : MonoBehaviour, GameMode
 
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();
+        GetComponent<AchievementsManager>().Init();
         GetComponent<PlayerHUD>().Init();
         GetComponent<Player2D_StatsMenu>().Init();
 
@@ -91,6 +92,13 @@ public class NormalMode : MonoBehaviour, GameMode
         /* Save Player Equipment */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getEQList());
 
+        /* Save Player Equipment */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().AchievementsList);
+
+        /* Save Player Equipment */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().PropertiesList);
+
+
         /* Set next level */
         PlayerPrefs.SetInt("CurrentLevel", t_CurrFloor + 1);
 
@@ -122,11 +130,29 @@ public class NormalMode : MonoBehaviour, GameMode
         /* Clear player's equipments */
         PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("Player").GetComponent<Player2D_Manager>().getEQList());
         int TotalEquipments = PlayerPrefs.GetInt("NumStoredEquipments");
-        for (int i = 0; i < TotalItems; ++i)
+        for (int i = 0; i < TotalEquipments; ++i)
         {
-            PlayerPrefs.DeleteKey("equipments " + i);
+            PlayerPrefs.DeleteKey("equipment " + i);
         }
         PlayerPrefs.DeleteKey("NumStoredEquipments");
+
+        /* Clear Player Achievements */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().AchievementsList);
+        int TotalAchievements = PlayerPrefs.GetInt("NumStoredAchievements");
+        for (int i = 0; i < TotalAchievements; ++i)
+        {
+            PlayerPrefs.DeleteKey("achievement " + i);
+        }
+        PlayerPrefs.DeleteKey("NumStoredAchievements");
+
+        /* Clear Player Properties */
+        PlayerSaviour.Instance.SavePref(GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().PropertiesList);
+        int TotalProperties = PlayerPrefs.GetInt("NumStoredProperties");
+        for (int i = 0; i < TotalAchievements; ++i)
+        {
+            PlayerPrefs.DeleteKey("property " + i);
+        }
+        PlayerPrefs.DeleteKey("NumStoredProperties");
 
         /* Set PreviousGameScene before going next scene*/
         PlayerPrefs.SetString("PreviousGameScene", "SceneGame_2D");

@@ -1,4 +1,4 @@
-Name,Details,Active,PropertyName,PropertyDetails,CompletionCounter,,,
-Skeleton Slayer,,TRUE,ENEMY_KILL,Kill Skeleton,3,ENEMY_FIGHT,Engage 10  Skeletons,10
-Adventurer,,TRUE,PLAYER_MOVE,Move 1000m,1000,,,
-Fighter,,true,PLAYER_ATTACK,Attack 10 times,10,,,
+Name,Details,Active,Gold Reward,PropertyName,PropertyDetails,CompletionCounter,,,
+Skeleton Slayer,,TRUE,100000,ENEMY_KILL,Kill Skeleton,3,ENEMY_FIGHT,Engage 10  Skeletons,10
+Adventurer,,TRUE,500,PLAYER_MOVE,Move 1000m,1000,,,
+Fighter,,TRUE,0,PLAYER_ATTACK,Attack 10 times,10,,,

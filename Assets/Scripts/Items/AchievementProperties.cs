@@ -29,6 +29,15 @@ public class AchievementsProperties
         PropertyComplete = false;
     }
 
+    public AchievementsProperties(string _name, string _details, float _counter, float _completioncounter, bool _complete)
+    {
+        PropertyName = _name;
+        PropertyDetails = _details;
+        Counter = _counter;
+        CompletionCounter = _completioncounter;
+        PropertyComplete = _complete;
+    }
+
     // Update is called once per frame
     public void Update()
     {

@@ -73,7 +73,6 @@ public class CollisionRoyalChest : MonoBehaviour, CollisionBase
 
             for (int i = 0; i < AmtOfEnemy; ++i)
             {
-                Debug.Log("Spawning " + i);
                 int randomID;
                 Vector2 tempPos;
 
