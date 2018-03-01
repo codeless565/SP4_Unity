@@ -57,6 +57,7 @@ public class Player2D_Attack : MonoBehaviour
             // Only when no created hitbox
             if (GetTrigger() && !temp)
             {
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
                 //create a hit
                 temp = Instantiate(melee, transform.position, transform.rotation);
                 temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 

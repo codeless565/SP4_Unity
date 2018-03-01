@@ -14,7 +14,7 @@ public class AchievementDisplay : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         CanvasActive = false;
-        TextLayout = new GameObject[8];
+        TextLayout = new GameObject[GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().AchievementsList.Count];
 
         TextPrefab = GameObject.FindGameObjectWithTag("Holder").GetComponent<MiscellaneousHolder>().TextPrefab;
         for(int i =0;i<TextLayout.Length;++i)
@@ -44,15 +44,24 @@ public class AchievementDisplay : MonoBehaviour {
         {
             if (i.Value.AchievementActive)
             {
-                string temp =   GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(i.Value.PropertiesList[0].PropertyName).Counter + "/" +
-                                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(i.Value.PropertiesList[0].PropertyName).CompletionCounter;
+                string temp = "";
+                for (int k=0;k<i.Value.PropertiesList.Count;++k)
+                {
+                    string tempp = " \t" + GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(i.Value.PropertiesList[k].PropertyName).PropertyDetails + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" +
+                                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(i.Value.PropertiesList[k].PropertyName).Counter + "/" +
+                                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().GetProperty(i.Value.PropertiesList[k].PropertyName).CompletionCounter + "\n";
+                    temp += tempp;   
+                }
+
+                
                 for (int j = 0; j < TextLayout.Length; ++j)
                 {
                     if (TextLayout[j].GetComponent<Text>().text == "")
                     {
                         TextLayout[j].GetComponent<Text>().text = i.Value.AchievementName + "\n \t"
-                                                                  + i.Value.AchievementDetails + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-                                                                  + temp; ;
+                                                                  + i.Value.AchievementDetails + "\n"
+                                                                  + temp;
+                        
                         break;
                     }
                 }
