@@ -193,8 +193,6 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
                 m_timer = 5.0f;
             }
         }
-        Debug.Log(Health);
-
     }
 
     void LateUpdate()
