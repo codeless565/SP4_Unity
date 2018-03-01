@@ -25,6 +25,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     LevelingSystem levelingSystem;
 
     float hpcheck;
+    float lvlcheck;
 
     private float m_timer = 5.0f;
 
@@ -181,6 +182,8 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     void Update()
     {
         hpcheck = health;
+        lvlcheck = playerLevel;
+
         levelingSystem.UpdateStats(this); //if player levelsup, it will refresh hp, for now
 
         /* If Stamina is not full, regen some Stamina over time */
@@ -198,7 +201,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     void LateUpdate()
     {
         /* Check if player has received damaged in this frame, if so, play animation on profile and flash Red */
-        if (health < hpcheck)
+        if (health < hpcheck && playerLevel == lvlcheck)
         {
             if (GameObject.FindGameObjectWithTag("PlayerProfileDamage") == null)
             {
