@@ -54,6 +54,22 @@ public class TextBoxManager : MonoBehaviour
         isActive = false;
     }
 
+    bool getTrigger()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        return Input.GetKeyDown(KeyCode.Return);
+
+#elif UNITY_ANDROID || UNITY_IPHONE
+		 bool touched = false;
+           if(Input.GetTouch(0).phase == TouchPhase.Began)
+            touched = true;
+        if(Input.GetTouch(0).phase == TouchPhase.Ended)
+        touched = false;
+
+        return touched;
+#endif
+    }
+
     void Update()
     {
         if (!isActive)
@@ -66,13 +82,13 @@ public class TextBoxManager : MonoBehaviour
             DisableTextBox();
 
         /* Go to next Line */
-        if (Input.GetKeyDown(KeyCode.Return) /* Or tap the screen */)
+        if (getTrigger())
         {
             if (!isTyping)
             {
                 ++currentLine;
 
-                /* When more then the line to generate, close Dialouge */
+                /* When more than the line to generate, close Dialouge */
                 if (currentLine > endAtLine)
                 {
                     DisableTextBox();

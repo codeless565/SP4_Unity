@@ -34,6 +34,9 @@ public class Player2D_Manager : MonoBehaviour
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
 
+    /* mobile things*/
+    public GameObject Mobile;
+
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -50,7 +53,7 @@ public class Player2D_Manager : MonoBehaviour
     public Item[] getEQList() { return EquipmentList; }
 
     /* Player Movement */
-    private float inputX, inputY;
+    public float inputX, inputY;
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
 
@@ -105,6 +108,17 @@ public class Player2D_Manager : MonoBehaviour
         m_confusedModifier = 1;
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        if (Mobile != null)
+        {
+            foreach (object obj in Mobile.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(true);
+            }
+        }
+#endif
     }
     void Requip()
     {
@@ -310,8 +324,41 @@ public class Player2D_Manager : MonoBehaviour
     void AccMove()
     {
         /* Player Movement */
-        inputX = Input.acceleration.x;
-        inputY = Input.acceleration.y;
+        inputX = Input.acceleration.x * 2f;
+        inputY = Input.acceleration.y * 2f;
+
+        if (inputX > 0f || inputX < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(inputX, 0.0f);
+            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+        if (inputY > 0f || inputY < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(0.0f, inputY);
+            p_spriteManager.SetLastMove(0.0f, lastMove.y);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+
+        /* Sprite Movement */
+        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */

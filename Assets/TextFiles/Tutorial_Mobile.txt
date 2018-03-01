@@ -1,18 +1,23 @@
 Hi, welcome to ***.
 This shows which floor you're on..
 You have to finish this level within this time period..
-You can tap on timer to pause game.
+You can click on timer to pause game.
+
 This is a mini-map
 This is your health bar..
 your stamina bar..
 and your EXP bar.
 You can tap on Player Profile to see your stats
+
 Tilt phone to move player
+
 Oh no! An enemy!
 Tap this button to Hit Enemy. Try it!
+
 Collect items from chest!
+
 Tap on inventory to change weapons/gears.
-Hey! There's a merchant! Walk to her to buy some goodies!
+
 There are a few different traps which you have to look out for...
 This trap slows your movement down..
 Bear trap deals instant damage to your health..

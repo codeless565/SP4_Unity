@@ -13,8 +13,10 @@ public class StructureObjectHolder : MonoBehaviour {
     public GameObject BoarderWall;
     public GameObject StoneWall;
 
+    public GameObject TutorialChest;
     public GameObject WoodenChest;
     public GameObject RoyalChest;
+    public GameObject BossChest;
 
     public GameObject EnemySkeleton;
 
