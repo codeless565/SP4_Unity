@@ -50,7 +50,7 @@ public class Player2D_Manager : MonoBehaviour
     public Item[] getEQList() { return EquipmentList; }
 
     /* Player Movement */
-    private float inputX, inputY;
+    public float inputX, inputY;
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
 

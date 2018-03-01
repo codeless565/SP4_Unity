@@ -13,6 +13,8 @@ public class TutorialTextBox : MonoBehaviour
     Inventory inventory;
     MerchantStateMachine merchant;
 
+    Player2D_Manager player;
+
     public bool chestOpened;
 
     public TextAsset theTextMobile, theTextConsole;
@@ -163,27 +165,41 @@ public class TutorialTextBox : MonoBehaviour
             case 12: //trying stage for moving
                 if (!MovedA || !MovedD || !MovedS || !MovedW)
                      {
-                         if (Input.GetKey(KeyCode.A))
-                         {
-                             MovedA = true;
-                         }
 
-                         if (Input.GetKey(KeyCode.D))
-                         {
-                             MovedD = true;
-                         }
+#if UNITY_EDITOR || UNITY_STANDALONE
+                    if (Input.GetKey(KeyCode.A))
+                    {
+                        MovedA = true;
+                    }
 
-                         if (Input.GetKey(KeyCode.S))
-                         {
-                             MovedS = true;
-                         }
+                    if (Input.GetKey(KeyCode.D))
+                    {
+                        MovedD = true;
+                    }
 
-                         if (Input.GetKey(KeyCode.W))
-                         {
-                             MovedW = true;
-                         }
-                     }
-                     else
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        MovedS = true;
+                    }
+
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        MovedW = true;
+                    }
+
+#elif UNITY_ANDROID || UNITY_IPHONE
+       if( player.inputX > 0)
+                    MovedD = true;
+       if( player.inputX < 0)
+                    MovedA = true;
+       if( player.inputY > 0)
+                    MovedW = true;
+       if( player.inputY < 0)
+                    MovedS = true;
+#endif
+
+                }
+                else
                      {
                          textboxManager.currentLine = 13;
                          pauseBox = false;
