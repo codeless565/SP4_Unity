@@ -60,11 +60,13 @@ public class TextBoxManager : MonoBehaviour
         return Input.GetKeyDown(KeyCode.Return);
 
 #elif UNITY_ANDROID || UNITY_IPHONE
-		//Touch touch;
-		//bool touched = false;
-		//if(Input.GetTouch(0).)
-			//touched = true;
-          //  return touched;
+		 bool touched = false;
+           if(Input.GetTouch(0).phase == TouchPhase.Began)
+            touched = true;
+        if(Input.GetTouch(0).phase == TouchPhase.Ended)
+        touched = false;
+
+        return touched;
 #endif
     }
 

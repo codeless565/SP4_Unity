@@ -312,6 +312,39 @@ public class Player2D_Manager : MonoBehaviour
         /* Player Movement */
         inputX = Input.acceleration.x;
         inputY = Input.acceleration.y;
+
+        if (inputX > 0f || inputX < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(inputX, 0.0f);
+            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+        if (inputY > 0f || inputY < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(0.0f, inputY);
+            p_spriteManager.SetLastMove(0.0f, lastMove.y);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+
+        /* Sprite Movement */
+        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
     }
 
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
