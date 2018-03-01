@@ -37,21 +37,25 @@ public class ArenaBossSpawn : MonoBehaviour
         GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
 
         //Player and Exit
-        PlayerSpawn(m_arenaSizeRow, m_arenaSizeColum);
+        PlayerSpawn();
+        BossSpawn();
     }
 
-    private void PlayerSpawn(int _arenaSizeR, int _arenaSizeC)
+    private void PlayerSpawn()
     {
-        m_playerPos = new Vector2(_arenaSizeR * 0.5f, _arenaSizeC * 0.5f);
+        m_playerPos = new Vector2(m_arenaSizeRow * 0.5f, m_arenaSizeColum * 0.3f);
         GameObject t_player = Instantiate(Player, m_playerPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
     }
 
-    private void BossSpawn(int _arenaSizeR, int _arenaSizeC)
+    private void BossSpawn()
     {
+        m_BossPos = new Vector2(m_arenaSizeRow * 0.5f, m_arenaSizeColum * 0.5f);
+        GameObject t_boss = Instantiate(BossEntity, m_BossPos, Quaternion.identity, go_floorholder.transform); //Create Player Object
 
+        t_boss.GetComponent<BossStatsManager>().Init(m_currentFloor);
     }
 
 }

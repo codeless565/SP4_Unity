@@ -7,6 +7,7 @@ public class CollisionPlayerMelee : MonoBehaviour, CollisionBase
 {
     /* Check if Attacked, used in enemy scripts to deduct health */
     private bool m_bisAttacked = false;
+
     public bool Attacked
     {
         get
