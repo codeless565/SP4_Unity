@@ -28,8 +28,8 @@ public class Player2D_Manager : MonoBehaviour
 	//private UIbar healthBar, EXPbar, StaminaBar;
 
     /* Show Level Up */
-   // [SerializeField]
-   // private TextMesh m_levelup_mesh;
+    [SerializeField]
+    private TextMesh m_levelup_mesh;
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
@@ -61,14 +61,6 @@ public class Player2D_Manager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        /* UI of Player */
-        //healthBar.MaxValue = statsHolder.MaxHealth;
-        //healthBar.Value = statsHolder.Health;
-        //EXPbar.MaxValue = statsHolder.MaxEXP;
-        //EXPbar.Value = statsHolder.EXP;
-        //StaminaBar.MaxValue = statsHolder.MaxStamina;
-        //StaminaBar.Value = statsHolder.Stamina;
-
         /* Stats Things */
         statsHolder = GetComponent<Player2D_StatsHolder>();
         m_bCheckLevelUp = false;
@@ -128,16 +120,6 @@ public class Player2D_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /* UI of Player */
-        //healthBar.MaxValue = statsHolder.MaxHealth;
-        //healthBar.Value = statsHolder.Health;
-        //EXPbar.MaxValue = statsHolder.MaxEXP;
-        //EXPbar.Value = statsHolder.EXP;
-        //StaminaBar.MaxValue = statsHolder.MaxStamina;
-        //StaminaBar.Value = statsHolder.Stamina;
-               
-
-
         /* When Player Dies, Stop Updating and go to Game Over Scene */
         if (statsHolder.Health <= 0)
         {
@@ -211,13 +193,12 @@ public class Player2D_Manager : MonoBehaviour
         else if (bA6State && !Input.GetKeyDown(KeyCode.Alpha6))
             bA6State = false;
 
-        /* When canMove, move */
-        if (canMove)
-            Movement2D();
-
         /* Attack Animation */
         PlayerAttack2D();
 
+        /* When canMove, move */
+        if (canMove)
+            Movement2D();
 
         bool bIState = false;
         if (!bIState && Input.GetKeyDown(cm.GetKey("inventory")))
@@ -263,7 +244,7 @@ public class Player2D_Manager : MonoBehaviour
             {
                 /* Decrease Stamina */
                 statsHolder.Stamina -= 0.05f;
-                m_Sprint = 2;
+                m_Sprint = m_maxSprint;
             }
             else
                 m_Sprint = 1;
@@ -281,7 +262,9 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(inputX, 0.0f);
             p_spriteManager.SetLastMove(lastMove.x, 0.0f);
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
         if (inputY > 0f || inputY < 0f)
         {
@@ -292,7 +275,9 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0.0f, inputY);
             p_spriteManager.SetLastMove(0.0f, lastMove.y);
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
 
         /* Sprite Movement */
@@ -307,17 +292,14 @@ public class Player2D_Manager : MonoBehaviour
         // Change Animation
         if (attackClicked)
         {
-            //p_spriteManager.Attack2D();
-           // Debug.Log("attacking!!!  " + animTimer + "  " + m_fAniTime);
             canMove = false;
             animTimer += Time.deltaTime;
             p_spriteManager.SetAttack(true);
 
             if (animTimer >= m_fAniTime)
             {
-              //  Debug.Log("");
-               attackClicked = false;
-              //  p_spriteManager.SetSlash(false);
+                attackClicked = false;
+
                 canMove = true;
                 animTimer -= m_fAniTime;
             }

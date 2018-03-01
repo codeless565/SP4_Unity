@@ -47,6 +47,20 @@ public class Player2D_Attack : MonoBehaviour
     void Update()
     {
         PlayerAttack2D();
+
+        /* When a hitbox is created */
+        if (temp)
+        {
+            // Start timers
+            m_timer -= Time.deltaTime;
+
+            /* After timer is up, upspawn detection box */
+            if (m_timer <= 0.0F)
+            {
+                DestroyImmediate(temp);
+                m_timer = 0.1F;
+            }
+        }
     }
 
     /* Spawn HitBox to detect Collision */
@@ -60,6 +74,7 @@ public class Player2D_Attack : MonoBehaviour
                 //create a hit
                 temp = Instantiate(melee, transform.position, transform.rotation);
                 temp.transform.parent = GameObject.FindGameObjectWithTag("Player").transform; // parenting 
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_ATTACK", 1);
 
                 /* Transformation to rotate the Hitbox */
                 m_AngleToRotate = Mathf.Atan2(Direction.x, Direction.y) * Mathf.Rad2Deg;
@@ -73,20 +88,6 @@ public class Player2D_Attack : MonoBehaviour
 #if UNITY_ANDROID || UNITY_IPHONE
                 Player2D_TriggerAttack._triggered = false;
 #endif
-            }
-
-            /* When a hitbox is created */
-            if (temp)
-            {
-                // Start timers
-                m_timer -= Time.deltaTime;
-
-                /* After timer is up, upspawn detection box */
-                if (m_timer <= 0.0F)
-                {
-                    DestroyImmediate(temp);
-                    m_timer = 0.1F;
-                }
             }
         }
     }

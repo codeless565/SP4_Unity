@@ -60,7 +60,6 @@ public class MerchantStateMachine : MonoBehaviour
         if (_isinRange && GetTriggerForInteraction() && m_state == "IDLE")
         {
             m_state = "INTERACT";
-            _player.GetComponent<Player2D_Manager>().canMove = false;
 
 #if UNITY_ANDROID || UNITY_IPHONE
             MerchantTriggerInteract.m_interact = false;
@@ -94,7 +93,6 @@ public class MerchantStateMachine : MonoBehaviour
         {
             m_state = "IDLE";
             _goBackIdle = false;
-            _player.GetComponent<Player2D_Manager>().canMove = true;
 
             bye.SetActive(false);
             idle.SetActive(true);
