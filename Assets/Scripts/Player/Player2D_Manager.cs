@@ -120,7 +120,7 @@ public class Player2D_Manager : MonoBehaviour
         /* When Player Dies, Stop Updating and go to Game Over Scene */
         if (statsHolder.Health <= 0)
         {
-            //GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
             return;
         }
 

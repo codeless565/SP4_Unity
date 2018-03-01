@@ -36,13 +36,13 @@ public class NormalMode : MonoBehaviour, GameMode
 
         /* Initialize Level
          * Spawn Objects in Level */
-        //if (t_CurrFloor % 10 == 0)
-        //{
-        //    // Spawn Boss Level
-        //    GetComponent<ArenaGenerator>().Init();
-        //    GetComponent<ArenaBossSpawn>().Init(t_CurrFloor);
-        //}
-        //else
+        if (t_CurrFloor % 5 == 0)
+        {
+            // Spawn Boss Level
+            GetComponent<ArenaGenerator>().Init();
+            GetComponent<ArenaBossSpawn>().Init(t_CurrFloor);
+        }
+        else
         {
             // Spawn Normal Level
             GetComponent<BoardGenerator>().Init();
