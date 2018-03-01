@@ -24,8 +24,13 @@ public class TutorialSpawn : MonoBehaviour {
     private int m_arenaSizeRow;
     private int m_arenaSizeColum;
 
-	//enemy
+	//spawn one
 	bool eIsSpawned = false;
+    bool cIsSpawned = false;
+    bool mIsSpawned = false;
+    bool tIsSpawned = false;
+    bool exitIsSpawned = false;
+
     public void Init()
     {
         m_currentFloor = 1;
@@ -33,9 +38,7 @@ public class TutorialSpawn : MonoBehaviour {
         go_floorholder = gameObject.GetComponent<ArenaGenerator>().boardHolder;
         m_arenaSizeRow = gameObject.GetComponent<ArenaGenerator>().rows;
         m_arenaSizeColum = gameObject.GetComponent<ArenaGenerator>().columns;
-
-        GameObject go_chest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
-        GameObject go_royalchest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().RoyalChest;
+        
         
         //Player and Exit
         PlayerSpawn(m_arenaSizeRow, m_arenaSizeColum);
@@ -52,8 +55,10 @@ public class TutorialSpawn : MonoBehaviour {
         MiniMap.GetComponent<ExplorationMap>().Init();
     }
 
-    private void MerchantSpawn(int _arenaSizeR, int _arenaSizeC)
+    public void MerchantSpawn()
     {
+        if (mIsSpawned)
+            return;
         /* Spawns merchant with the player in the same room at start of level, 
            Merchant will be at the top right corner of the room */
         //m_MerchantRoom = m_playerRoom;
@@ -63,59 +68,45 @@ public class TutorialSpawn : MonoBehaviour {
 
         //m_MerchantPos = new Vector2(ranXpos, ranYpos);
 
-        //GameObject t_Merchant = Instantiate(Merchant, m_MerchantPos, Quaternion.identity, go_floorholder.transform);
+        GameObject t_Merchant = Instantiate(Merchant, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+        mIsSpawned = true;
         //if (t_Merchant.GetComponent<ObjectInfo>() != null)
         //    t_Merchant.GetComponent<ObjectInfo>().Init(m_MerchantRoom, m_rooms[m_MerchantRoom], m_exitPos); //Set Starting Spawn location and detail to object
     }
 
-    private void ExitSpawn(int _arenaSizeR, int _arenaSizeC)
+    public void ExitSpawn()
     {
-        //go_exit = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().CloseDoor;
+        go_exit = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().CloseDoor;
 
-        //int exitRoom;
+       // int exitRoom;
 
-        //do { exitRoom = Random.Range(0, m_rooms.Length - 1); }
-        //while (exitRoom == m_playerRoom);
+    //    do { exitRoom = Random.Range(0, m_rooms.Length - 1); }
+    //    while (exitRoom == m_playerRoom);
 
-        //// Spawn the Exit on 1 of the tile in the room except the edges
-        //int ranXpos = Random.Range(m_rooms[exitRoom].xPos + 1, m_rooms[exitRoom].xPos + m_rooms[exitRoom].roomWidth - 1);
-        //int ranYpos = Random.Range(m_rooms[exitRoom].yPos + 1, m_rooms[exitRoom].yPos + m_rooms[exitRoom].roomHeight - 1);
+    //    // Spawn the Exit on 1 of the tile in the room except the edges
+    //    int ranXpos = Random.Range(m_rooms[exitRoom].xPos + 1, m_rooms[exitRoom].xPos + m_rooms[exitRoom].roomWidth - 1);
+    //    int ranYpos = Random.Range(m_rooms[exitRoom].yPos + 1, m_rooms[exitRoom].yPos + m_rooms[exitRoom].roomHeight - 1);
 
-        //m_exitPos = new Vector2(ranXpos, ranYpos);
+    //    m_exitPos = new Vector2(ranXpos, ranYpos);
 
-        //GameObject t_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
-        //if (t_exit.GetComponent<ObjectInfo>() != null)
-        //    t_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
+    //    GameObject t_exit = Instantiate(go_exit, m_exitPos, Quaternion.identity, go_floorholder.transform);
+    //    if (t_exit.GetComponent<ObjectInfo>() != null)
+    //        t_exit.GetComponent<ObjectInfo>().Init(exitRoom, m_rooms[exitRoom], m_exitPos); //Set Starting Spawn location and detail to object
     }
 
-    private void ItemSpawn(GameObject _Item, int _arenaSizeR, int _arenaSizeC)
+    public void ItemSpawn()
     {
-        //int tempRoom;
-        //Vector2 tempPos = new Vector2(0, 0);
+        if (cIsSpawned)
+            return;
 
-        //for (int i = 0; i < amt; ++i)
-        //{
-        //    do
-        //    {
-        //        tempRoom = Random.Range(0, m_rooms.Length - 1);
+        GameObject go_item = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
 
-        //        int ranXpos = Random.Range(m_rooms[tempRoom].xPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
-        //                                   m_rooms[tempRoom].xPos + m_rooms[tempRoom].roomWidth - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
+        GameObject tempItem = Instantiate(go_item, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
 
-        //        int ranYpos = Random.Range(m_rooms[tempRoom].yPos + 1, // +1 to avoid spawning on edge of the room and potentially block the entrance
-        //                                   m_rooms[tempRoom].yPos + m_rooms[tempRoom].roomHeight - 1); // -1 to avoid spawning on edge of the room and potentially block the entrance
-
-        //        tempPos.Set(ranXpos, ranYpos);
-
-        //    } while (tempPos == m_playerPos || tempPos == m_exitPos);
-
-        //    GameObject tempItem = Instantiate(_Item, tempPos, Quaternion.identity, go_floorholder.transform);
-        //    if (tempItem.GetComponent<ObjectInfo>() != null)
-        //        tempItem.GetComponent<ObjectInfo>().Init(tempRoom, m_rooms[tempRoom], tempPos); //Set Starting Spawn location and detail to object
-        //}
+        cIsSpawned = true;
     }
 
-    public void EnemySpawn(/*int _arenaSizeR, int _arenaSizeC*/)
+    public void EnemySpawn()
     {
         //spawn enemy and init their level based on the curr floor's level
         /* floor just set to 1
@@ -174,16 +165,16 @@ public class TutorialSpawn : MonoBehaviour {
 
     }
 
-    private void TrapSpawn(int _arenaSizeR, int _arenaSizeC)
+    public void TrapSpawn(int trapChoice)
     {
         ///* Get all traps from holder */
-        //GameObject go_bearTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
-        //GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
-        //GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
-        //GameObject go_confusionTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ConfusionTrap;
+        GameObject go_bearTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().BearTrap;
+        GameObject go_poisonTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().PoisonTrap;
+        GameObject go_slowTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().SlowTrap;
+        GameObject go_confusionTrap = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ConfusionTrap;
 
         ///* Initialize repeatable variable for use */
-        //GameObject tempTrap;
+        GameObject tempTrap;
         //int trapChoice;
         //int tempRoom;
         //Vector2 tempPos = new Vector2(0, 0);
@@ -208,23 +199,32 @@ public class TutorialSpawn : MonoBehaviour {
 
         //    /* Randomly choose 1 type of trap to spawn */
         //    trapChoice = Random.Range(1, 4);
+        if (tIsSpawned)
+            return;
 
-        //    switch (trapChoice)
-        //    {
-        //        case 1: // Spawns a Poison Trap
-        //            tempTrap = Instantiate(go_poisonTrap, tempPos, Quaternion.identity, go_floorholder.transform);
-        //            break;
-        //        case 2: // Spawns a Slow Trap
-        //            tempTrap = Instantiate(go_slowTrap, tempPos, Quaternion.identity, go_floorholder.transform);
-        //            break;
-        //        case 3: // Spawns a Confusion Trap
-        //            tempTrap = Instantiate(go_confusionTrap, tempPos, Quaternion.identity, go_floorholder.transform);
-        //            break;
-        //        default: // Spawns a Bear Trap (DEFAULT if no selection)
-        //            Debug.Log("Spawned Bear");
-        //            tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
-        //            break;
-        //    }
+        switch (trapChoice)
+        {
+            case 1: // Spawns a Slow Trap
+                tIsSpawned = false;
+                tempTrap = Instantiate(go_slowTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+                tIsSpawned = true;
+                break;
+            case 2: // Spawns a Bear Trap (DEFAULT if no selection)
+                tIsSpawned = false;
+                tempTrap = Instantiate(go_bearTrap, new Vector2(m_playerPos.x, m_playerPos.y + 3), Quaternion.identity, go_floorholder.transform);
+                tIsSpawned = true;
+                break;
+            case 3: // Spawns a Poison Trap
+                tIsSpawned = false;
+                tempTrap = Instantiate(go_poisonTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+                tIsSpawned = true;
+                break;
+            case 4: // Spawns a Confusion Trap
+                tIsSpawned = false;
+                tempTrap = Instantiate(go_confusionTrap, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
+                tIsSpawned = true;
+                break;
+        }
 
         //    if (tempTrap.GetComponent<CollisionTrapPoison>() != null)
         //        tempTrap.GetComponent<CollisionTrapPoison>().CurrentFloor = m_currentFloor;

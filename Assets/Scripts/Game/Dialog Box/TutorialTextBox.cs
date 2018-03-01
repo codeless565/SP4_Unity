@@ -8,7 +8,13 @@ public class TutorialTextBox : MonoBehaviour
     TextBoxManager textboxManager;
     TutorialMode tutMode;
     TutorialSpawn tutSpawn;
+	//public GameObject checkChest;
     Player2D_StatsMenu statsMenu;
+    Inventory inventory;
+    MerchantStateMachine merchant;
+
+    public bool chestOpened;
+
     public TextAsset theTextMobile, theTextConsole;
     public int startLine;
     public int endLine;
@@ -31,6 +37,10 @@ public class TutorialTextBox : MonoBehaviour
         tutMode = GetComponent<TutorialMode>();
         statsMenu = GetComponent<Player2D_StatsMenu>();
         tutSpawn = GetComponent<TutorialSpawn>();
+        //checkChest = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
+        inventory = GetComponent<Inventory>();
+        merchant = GetComponent<MerchantStateMachine>();
+
 #if UNITY_EDITOR || UNITY_STANDALONE
         textboxManager.ReloadScript(theTextConsole);
 #elif UNITY_ANDROID || UNITY_IPHONE
@@ -44,6 +54,7 @@ public class TutorialTextBox : MonoBehaviour
         MovedA = false;
         MovedS = false;
         MovedD = false;
+        chestOpened = false;
         triedPause= triedPP= triedAttack= triedMove= triedCollecting= triedInventory= triedMerchant= triedTrap1= triedTrap2= triedTrap3= triedTrap4 = false;
         pauseBox = false;
     }
@@ -100,21 +111,20 @@ public class TutorialTextBox : MonoBehaviour
                 break;
 
             case 3:
-                TimerArrow.gameObject.SetActive(true); //show time arrow
+                TimerArrow.gameObject.SetActive(true);
                 break;
 
-            case 4:
+            case 4: //trying stage for pausing
                if(tutMode.b_isPaused)
 			    {
 				    textboxManager.currentLine = 5;
-                    triedPause = true;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
                 }
                 break;
 
             case 5:
-                 MinimapArrow.gameObject.SetActive(true); //tried pause show minimap arrow
+                 MinimapArrow.gameObject.SetActive(true);
                 break;
 
             case 6:
@@ -133,17 +143,16 @@ public class TutorialTextBox : MonoBehaviour
                  PPArrow.gameObject.SetActive(true);
                  break;
 
-            case 10:
+            case 10: //trying stage for opening PP menu
                 if (statsMenu.statsMenuClosed) //check opened pp
                 {
                     textboxManager.currentLine = 11;
-                    triedPP = true;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
                 }
                     break;
 
-            case 12:
+            case 12: //trying stage for moving
                 if (!MovedA || !MovedD || !MovedS || !MovedW)
                      {
                          if (Input.GetKey(KeyCode.A))
@@ -174,135 +183,93 @@ public class TutorialTextBox : MonoBehaviour
                      }
                      break;
 
-            case 13:
-                tutSpawn.EnemySpawn();
+            case 13: //spawn enemy
+                //if(!triedAttack)
+                //tutSpawn.EnemySpawn();
                 break;
-             //case 15:
-             //   InventoryArrow.gameObject.SetActive(true);
-             //   break;
 
+            case 15: //trying stage for attacking
+                if(Input.GetMouseButton(0))
+                {
+                    textboxManager.currentLine = 16;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                break;
 
-                //case 2:
-                //    if (!MovedA || !MovedD || !MovedS || !MovedW)
-                //    {
-                //        if (Input.GetKey(KeyCode.A))
-                //        {
-                //            MovedA = true;
-                //        }
+            case 16: //spawn chest
+                tutSpawn.ItemSpawn();
+                break;
 
-                //        if (Input.GetKey(KeyCode.D))
-                //        {
-                //            MovedD = true;
-                //        }
+            case 17: //trying stage for chest collectiond
+                if(chestOpened)
+                {
+                    textboxManager.currentLine = 18;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                    break;
 
-                //        if (Input.GetKey(KeyCode.S))
-                //        {
-                //            MovedS = true;
-                //        }
+            case 18:
+                InventoryArrow.gameObject.SetActive(true);
+                break;
 
-                //        if (Input.GetKey(KeyCode.W))
-                //        {
-                //            MovedW = true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        textboxManager.currentLine = 3;
-                //        pauseBox = false;
-                //        textboxManager.EnableTextBox();
-                //    }
-                //    break;
+            case 19: //trying stage for opening inventory
+                if(inventory.InventroyClosed)
+                {
+                    textboxManager.currentLine = 20;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                break;
 
-                //case 4:
-                //    if (!triedAttack)
-                //    {
-                //        if (Input.GetMouseButton(0))
-                //        {
-                //            triedAttack = true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        textboxManager.currentLine = 5;
-                //        pauseBox = false;
-                //        textboxManager.EnableTextBox();
-                //    }
-                //    break;
+            case 20:
+                tutSpawn.MerchantSpawn();
+                break;
 
-                //case 6:
-                //    if (!triedChangeW)
-                //    {
-                //        if (Input.GetKey(KeyCode.C))
-                //        {
-                //            triedChangeW = true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        textboxManager.currentLine = 7;
-                //        pauseBox = false;
-                //        textboxManager.EnableTextBox();
-                //    }
-                //    break;
+            case 21: //trying stage for buying from merchant
+                if(merchant.merchantClosed)
+                {
+                    textboxManager.currentLine = 22;
+                    pauseBox = false;
+                    textboxManager.EnableTextBox();
+                }
+                break;
 
-                //case 8:
-                //    if (!triedInteract)
-                //    {
-                //        if (Input.GetKey(KeyCode.I))
-                //        {
-                //            triedInteract = true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        textboxManager.currentLine = 9;
-                //        pauseBox = false;
-                //        textboxManager.EnableTextBox();
-                //    }
-                //    break;
+            case 23: //show slow trap
+                tutSpawn.TrapSpawn(1);
+                break;
+
+            case 24:
+                tutSpawn.TrapSpawn(2);
+                break;
+
+            case 25:
+                tutSpawn.TrapSpawn(3);
+                break;
+
+            case 26:
+                tutSpawn.TrapSpawn(4);
+                break;
+
+            case 27:
+               // tutSpawn.ExitSpawn();
+                break;
+
         }
 
     }
 
-    void MobileTappedUpdate()
-    {
-
-    }
     void TutorialUpdate()
     {
-        switch (textboxManager.currentLine)
+        if(textboxManager.currentLine == 4 || textboxManager.currentLine == 10 || textboxManager.currentLine == 12 || 
+            textboxManager.currentLine == 15 || textboxManager.currentLine == 17 
+            || textboxManager.currentLine == 19 || textboxManager.currentLine == 21)
         {
-            case 4:
-                if (!triedPause)
-                {
-                    pauseBox = true;
-                    textboxManager.DisableTextBox();
-                }
-                break;
-
-            case 10:
-                if(!triedPP)
-                {
-                    pauseBox = true;
-                    textboxManager.DisableTextBox();
-                }
-                break;
-
-            case 12:
-                if (!MovedA || !MovedD || !MovedS || !MovedW)
-                {
-                    pauseBox = true;
-                    textboxManager.DisableTextBox();
-                }
-                break;
-            case 15:
-                if (!triedAttack)
-                {
-                    pauseBox = true;
-                    textboxManager.DisableTextBox();
-                }
-                break;
+            pauseBox = true;
+            textboxManager.DisableTextBox();
         }
+      
         //show text letter by letter
         StartCoroutine(textboxManager.TypeText(textboxManager.textLines[textboxManager.currentLine]));
 

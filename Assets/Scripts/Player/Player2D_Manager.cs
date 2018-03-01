@@ -281,7 +281,9 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(inputX, 0.0f);
             p_spriteManager.SetLastMove(lastMove.x, 0.0f);
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+			if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+            	GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
         if (inputY > 0f || inputY < 0f)
         {
@@ -292,7 +294,9 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(0.0f, inputY);
             p_spriteManager.SetLastMove(0.0f, lastMove.y);
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+
+			if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+            	GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
 
         /* Sprite Movement */

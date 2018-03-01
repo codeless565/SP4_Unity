@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour
     bool InventoryUI;
     bool EquipmentDisplay;
     bool UsesDisplay;
-
+    public bool InventroyClosed;
     Color ButtonActiveColour = Color.red;
     Color ButtonInactiveColour = Color.cyan;
 
@@ -28,6 +28,7 @@ public class Inventory : MonoBehaviour
         EquipmentDisplay = true;
         UsesDisplay = false;
         InventoryUI = false;
+        InventroyClosed = false;
 
         EquipmentDropdown.GetComponent<Image>().color = ButtonActiveColour;
         UsesButton.GetComponent<Image>().color = ButtonInactiveColour;
@@ -58,6 +59,7 @@ public class Inventory : MonoBehaviour
 
     public void OpenEquipment()
     {
+        InventroyClosed = false;
         switch (EquipmentDropdown.GetComponent<Dropdown>().value)
         {
             case 1:
@@ -95,6 +97,7 @@ public class Inventory : MonoBehaviour
         gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
         InventoryUI = false;
         Player.GetComponent<Player2D_Manager>().canMove = true;
+        InventroyClosed = true;
     }
     public void OpenInventoryUI()
     {
