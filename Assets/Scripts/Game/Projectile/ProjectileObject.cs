@@ -39,7 +39,7 @@ public class ProjectileObject : MonoBehaviour, Projectile
             GameObject t_effect = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().ShadowBlastEffect;
 
             // Create blast effect
-            GameObject tempEffect = Instantiate(t_effect, other.transform.position, Quaternion.identity) as GameObject;
+            GameObject tempEffect = Instantiate(t_effect, transform.position, Quaternion.identity) as GameObject;
 
             other.GetComponent<StatsBase>().Health -= m_damage;
             Destroy(gameObject); // if it hits wall also destroy
