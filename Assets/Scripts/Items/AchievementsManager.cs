@@ -71,12 +71,12 @@ public class AchievementsManager : MonoBehaviour {
         TextAsset AchievementFile = Resources.Load<TextAsset>("Achievements");
         string[] achievementsstring = AchievementFile.text.Split(new char[] { '\n' });
 
-        for (int i = 0; i < achievementsstring.Length-1; ++i) 
+        for (int i = 1; i < achievementsstring.Length-1; ++i) 
         {
             string[] tempString = achievementsstring[i].Split(new char[] { ',' });
             
-            if (tempString[0] == "Name")
-                continue;
+            if (tempString[0] == "")
+                break;
             
             bool tempActive=false;
             bool.TryParse(tempString[2], out tempActive);
