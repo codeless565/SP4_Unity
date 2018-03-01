@@ -363,15 +363,22 @@ public class InventoryDisplay : MonoBehaviour {
 
         if (Indexes.Count == 1)
         {
-            Player.GetComponent<Player2D_Manager>().Inventory.RemoveAt(Indexes[0]);
+            if (Player.GetComponent<Player2D_Manager>().CheckEQEquipped(SelectedItem))
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(SelectedItem.Name + " is currently equipped!");
+            else
+            {
+                Player.GetComponent<Player2D_Manager>().Inventory.RemoveAt(Indexes[0]);
+                Player.GetComponent<Player2D_Manager>().getPlayerStats().gold += (SelectedItem.ItemCost / 2); GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Successfully sold " + SelectedItem.Name + " for " + SelectedItem.ItemCost / 2);
+            }
         }
         else
         {
             Player.GetComponent<Player2D_Manager>().Inventory.RemoveAt(Indexes[Indexes.Count-1]);
             Player.GetComponent<Player2D_Manager>().Inventory[Indexes[0]].Quantity--;
+            Player.GetComponent<Player2D_Manager>().getPlayerStats().gold += (SelectedItem.ItemCost / 2);
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Successfully sold " + SelectedItem.Name + " for " + SelectedItem.ItemCost / 2);
         }
-        Player.GetComponent<Player2D_Manager>().getPlayerStats().gold += (SelectedItem.ItemCost/2);
-        GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("Successfully sold " + SelectedItem.Name + " for " + SelectedItem.ItemCost / 2);
+        
 
         ConfirmationCanvas = false;
     }

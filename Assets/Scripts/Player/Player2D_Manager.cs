@@ -501,6 +501,16 @@ public class Player2D_Manager : MonoBehaviour
         return true;
     }
 
+    public bool CheckEQEquipped(Item _eq)
+    {
+        foreach (Item item in EquipmentList)
+        {
+            if (item == _eq)
+                return true;
+        }
+        return false;
+    }
+
     /* Stats will be added when Equipped */
     public void AddStats(Item item)
     {
