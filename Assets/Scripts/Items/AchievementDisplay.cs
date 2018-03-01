@@ -14,7 +14,7 @@ public class AchievementDisplay : MonoBehaviour {
     public bool AchOpened;
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
         AchOpened = false;
         CanvasActive = false;
         TextLayout = new GameObject[GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().AchievementsList.Count];

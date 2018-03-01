@@ -64,6 +64,7 @@ public class NormalMode : MonoBehaviour, GameMode
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();
         GetComponent<AchievementsManager>().Init();
+        GetComponent<AchievementDisplay>().Init();
         GetComponent<PlayerHUD>().Init();
         GetComponent<Player2D_StatsMenu>().Init();
 

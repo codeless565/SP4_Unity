@@ -52,6 +52,7 @@ public class Player2D_Manager : MonoBehaviour
 
     /* Player Movement */
     public float inputX, inputY;
+    public float accOffsetX, accOffsetY;
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
 
@@ -106,14 +107,20 @@ public class Player2D_Manager : MonoBehaviour
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
         /* Player Movement */
+#if UNITY_EDITOR || UNITY_STANDALONE
         inputX = inputY = 0;
+#elif UNITY_ANDROID || UNITY_IPHONE
+        accOffsetX = Input.acceleration.x;
+        accOffsetY = Input.acceleration.y;
+#endif
+
         m_confusedModifier = 1;
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
 
-        if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+        if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>() != null)
             achDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>();
-
+        Debug.Log("Player ach " + achDis);
         invenDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<Inventory>();
         tutDis = GameObject.FindGameObjectWithTag("GameScript");
     }
@@ -224,32 +231,17 @@ public class Player2D_Manager : MonoBehaviour
         else if (bOptionState && !Input.GetKeyDown(cm.GetKey("options")))
             bOptionState = false;
 
-
-        if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-        {
-
-            if (achDis.AchOpened)
+        
+            if ((achDis != null && achDis.AchOpened) || invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
             {
+                Debug.Log("ach is open");
                 canMove = false;
             }
             else
             {
                 canMove = true;
             }
-        }
-
-        Debug.Log("tutdis: " + tutDis + "  " + tutDis.GetComponent<TextBoxManager>().tbOpened);
-        Debug.Log("PlayerCanMove: " + canMove);
-
-        if (invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
-        {
-            Debug.Log("Checking isopened");
-            canMove = false;
-        }
-        else
-        {
-            canMove = true;
-        }
+       
 
         /* When canMove, move */
         if (canMove)
@@ -348,8 +340,8 @@ public class Player2D_Manager : MonoBehaviour
     void AccMove()
     {
         /* Player Movement */
-        inputX = Input.acceleration.x * 2f;
-        inputY = Input.acceleration.y * 2f;
+        inputX =  Input.acceleration.x * 2f - accOffsetX;
+        inputY =  Input.acceleration.y * 2f - accOffsetY;
 
         if (inputX > 0f || inputX < 0f)
         {

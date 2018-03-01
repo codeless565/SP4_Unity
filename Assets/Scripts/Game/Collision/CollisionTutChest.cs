@@ -10,13 +10,13 @@ public class CollisionTutChest : MonoBehaviour, CollisionBase
     private List<Item> m_ItemList = new List<Item>();
     void Start()
     {
-        tut = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TutorialTextBox>();
+      
         Debug.Log(tut);
     }
     public void CollisionResponse(string _tag)
     {
         //Give Item to player at random from the item database
-
+  tut = GameObject.FindGameObjectWithTag("GameScript").GetComponent<TutorialTextBox>();
         /* Rarity: C U M A R 
          * Type: Weapons, Helmets, Chestpieces, Leggings, Shoes, Uses         
          */
@@ -50,6 +50,7 @@ public class CollisionTutChest : MonoBehaviour, CollisionBase
 
             string Input = "You've got " + RandomItem.Name + "(" + RandomItem.ItemRarity + ")!";
             GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(Input);
+            Debug.Log("chest set to true");
             tut.chestOpened = true;
         }
 

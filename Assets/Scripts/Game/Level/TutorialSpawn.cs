@@ -74,7 +74,7 @@ public class TutorialSpawn : MonoBehaviour {
         if (cIsSpawned)
             return;
 
-        GameObject go_item = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().WoodenChest;
+        GameObject go_item = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().TutorialChest;
 
         GameObject tempItem = Instantiate(go_item, new Vector2(m_playerPos.x, m_playerPos.y + 2), Quaternion.identity, go_floorholder.transform);
 

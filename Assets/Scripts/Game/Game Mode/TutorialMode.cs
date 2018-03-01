@@ -53,6 +53,7 @@ public class TutorialMode : MonoBehaviour, GameMode
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
 
+        GetComponent<TutorialTextBox>().Init();
         GetComponent<TextBoxManager>().Init();
 
 

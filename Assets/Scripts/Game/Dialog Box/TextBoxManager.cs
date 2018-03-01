@@ -36,6 +36,7 @@ public class TextBoxManager : MonoBehaviour
 
     public void Init()
     {
+        Debug.Log("TutBox Start called");
         /* Find Player */
         player = FindObjectOfType<Player2D_Manager>();
         typeSpeed = 0.01f;
@@ -50,12 +51,12 @@ public class TextBoxManager : MonoBehaviour
         if (endAtLine == 0)
         {
             endAtLine = textLines.Length - 1;
+        
         }
-
+        Debug.Log("end at " + endAtLine);
         /* Rendering Text Box */
         isActive = false;
-        tbOpened = false;
-        Debug.Log("TutBox Start called");
+       // tbOpened = false;
     }
 
     bool getTrigger()

@@ -31,7 +31,7 @@ public class TutorialTextBox : MonoBehaviour
     public GameObject Arrows;
 
     // Use this for initialization
-    void Start()
+   public void Init()
     {
         textboxManager = FindObjectOfType<TextBoxManager>();
         tutMode = GetComponent<TutorialMode>();
@@ -113,6 +113,8 @@ public class TutorialTextBox : MonoBehaviour
         {
             case 1:
                 LevelArrow.gameObject.SetActive(true);
+                //pauseBox = false;
+                //textboxManager.EnableTextBox();
                 break;
 
             case 2:
@@ -276,6 +278,8 @@ public class TutorialTextBox : MonoBehaviour
         {
             pauseBox = true;
             textboxManager.DisableTextBox();
+
+            Debug.Log("textbox is disabled at tut up");
         }
       
         //show text letter by letter
