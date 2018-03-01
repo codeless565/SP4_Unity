@@ -31,7 +31,7 @@ public class TutorialMode : MonoBehaviour, GameMode
     {
         //check player's curr florr and init accordingly
         t_CurrFloor = 1;// set from player's curr floor
-        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, -1);
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, -1, false);
 
         /* Initialize Level */
         GetComponent<ArenaGenerator>().Init();
@@ -40,7 +40,7 @@ public class TutorialMode : MonoBehaviour, GameMode
         GetComponent<TutorialSpawn>().Init();
 
         /* Start Timer */
-        GetComponent<GameTimer>().Init();
+        GetComponent<GameTimer>().Init(false);
 
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();

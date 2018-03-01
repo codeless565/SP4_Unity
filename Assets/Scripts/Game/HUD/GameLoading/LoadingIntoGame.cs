@@ -39,7 +39,7 @@ public class LoadingIntoGame : MonoBehaviour
 
         if (GameStartDelay <= 0)
         {
-            GameScripts.GetComponent<GameTimer>().Init();
+            GameScripts.GetComponent<GameTimer>().Init(m_isBossFloor);
             Destroy(gameObject);
         }
     }
