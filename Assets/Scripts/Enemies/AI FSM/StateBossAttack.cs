@@ -45,7 +45,7 @@ public class StateBossAttack : StateBase
             if (m_attackTimer <= 0)
             {
                 //Instatiate a fire ball toward the player
-                Vector3 targetPos = m_player.transform.position;
+                Vector3 targetPos = m_player.transform.position + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
                 Vector3 targetdir = Vector3.Normalize(targetPos - m_go.transform.position);
                 Vector3 spawnPoint = targetdir * m_spawnDisplacementDist + m_go.transform.position;
 
