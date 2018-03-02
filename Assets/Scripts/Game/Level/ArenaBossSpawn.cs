@@ -64,12 +64,14 @@ public class ArenaBossSpawn : MonoBehaviour
 
         t_boss.GetComponent<BossStatsManager>().Init(m_currentFloor);
 
-        return;
         // Non Implemented as of now TODO
-        
+
         // Create Boss HP Bar on the player's HUD
-        BossHPBarPrefab = Instantiate(BossHPBarPrefab, HUD.transform) as GameObject;
-        BossHPBarPrefab.GetComponent<PlayerHealthBar>().Init(t_boss);
+        if (BossHPBarPrefab != null)
+        {
+            BossHPBarPrefab = Instantiate(BossHPBarPrefab, HUD.transform) as GameObject;
+            BossHPBarPrefab.GetComponent<PlayerHealthBar>().Init(t_boss);
+        }
     }
 
 }

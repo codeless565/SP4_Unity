@@ -16,6 +16,7 @@ public class PlayerHUD : MonoBehaviour
     {
         /* This Script is to be called after the spawning of the player */
         m_player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log("HUD" +m_player);
 
         // Initialize all HUD's Script
         Profile      .GetComponent<PlayerProfile>()   .Init(m_player);

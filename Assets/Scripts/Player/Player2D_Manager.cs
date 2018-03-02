@@ -131,6 +131,9 @@ public class Player2D_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (statsHolder.Health <= 0)
+            return;
+
         // Hot bar key press
         bool bA1State = false;
         if (!bA1State && Input.GetKeyDown(KeyCode.Alpha1))

@@ -235,7 +235,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
 
         if (playerLevel != lvlcheck)
         {
-            Instantiate(LevelingEffect, transform.position, Quaternion.identity, transform);
+            Instantiate(LevelingEffect, transform.position, Quaternion.identity);
         }
     }
 

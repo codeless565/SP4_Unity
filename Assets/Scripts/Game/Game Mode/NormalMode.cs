@@ -74,17 +74,6 @@ public class NormalMode : MonoBehaviour, GameMode
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
 
-
-//#if UNITY_ANDROID || UNITY_IPHONE
-//        if (Mobile != null)
-//        {
-//            foreach (object obj in Mobile.transform)
-//            {
-//                Transform child = (Transform)obj;
-//                child.gameObject.SetActive(true);
-//            }
-//        }
-//#endif
     }
 
     public void GamePause()
