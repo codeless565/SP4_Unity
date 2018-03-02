@@ -303,6 +303,8 @@ public class EnemyManager : MonoBehaviour, StatsBase
         // Check HP if it's 0 or not.
         if(m_fHealth <= 0f)
         {
+            m_PlayerStats.GetComponent<Player2D_StatsHolder>().EXP += expReward;
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("enemy_kill", 1);
             // Kill it if there's 0 HP
             Destroy(gameObject);
         }

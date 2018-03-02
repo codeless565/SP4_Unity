@@ -42,6 +42,11 @@ public class ProjectileObject : MonoBehaviour, Projectile
             GameObject tempEffect = Instantiate(t_effect, transform.position, Quaternion.identity) as GameObject;
 
             other.GetComponent<StatsBase>().Health -= m_damage;
+
+            if (other.GetComponent<Player2D_StatsHolder>() != null)
+                if (other.GetComponent<Player2D_StatsHolder>().Health <= 0)
+                    PlayerPrefs.SetString("KilledBy", "Projectile");
+            
             Destroy(gameObject); // if it hits wall also destroy
        }
 

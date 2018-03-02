@@ -115,7 +115,7 @@ public class ShopDisplay : MonoBehaviour
         CancelButton.GetComponent<RectTransform>().anchoredPosition = new Vector3(100.0f, -250.0f);
 
 
-        Player = GameObject.FindGameObjectWithTag("Player");
+        Player = GameObject.FindGameObjectWithTag("Player"); 
     }
 
     // Update is called once per frame

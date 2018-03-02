@@ -8,6 +8,15 @@ public class ParticleDestroy : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        if (GetComponent<ParticleSystem>() == null)
+        {
+            if (transform.parent.GetComponent<ParticleSystem>() != null)
+            {
+                m_Duration = transform.parent.GetComponent<ParticleSystem>().main.duration;
+                return;
+            }
+        }
+
         m_Duration = GetComponent<ParticleSystem>().main.duration;
     }
 	
@@ -16,6 +25,13 @@ public class ParticleDestroy : MonoBehaviour
     {
         m_Duration -= Time.deltaTime;
         if (m_Duration <= 0)
+        {
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+                return;
+            }
             Destroy(gameObject);
+        }
 	}
 }

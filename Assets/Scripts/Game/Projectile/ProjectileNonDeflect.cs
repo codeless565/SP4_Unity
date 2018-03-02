@@ -60,7 +60,18 @@ public class ProjectileNonDeflect : MonoBehaviour, Projectile
 
             //Deal damage if other has stats
             if (other.GetComponent<StatsBase>() != null)
+            {
                 other.GetComponent<StatsBase>().Health -= m_damage;
+
+                if (other.GetComponent<Player2D_StatsHolder>() != null)
+                    if (other.GetComponent<Player2D_StatsHolder>().Health <= 0)
+                    {
+                        if (b_AttackedByPlayer)
+                            PlayerPrefs.SetString("KilledBy", "NonDeflectSelf");
+                        else
+                            PlayerPrefs.SetString("KilledBy", "NonDeflect");
+                    }
+            }
         }
 
         Destroy(gameObject); // if it hits wall also destroy

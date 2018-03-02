@@ -31,6 +31,7 @@ public class PetsManager : MonoBehaviour, StatsBase
     private float m_fDistanceApart;
     private float m_fFollowRange;
     private float m_fGuardRange;
+    private float m_fHealRange;
 
     #region StatsBaseSetterANDGetter
     // StatsBase Setter & Getter //
@@ -224,6 +225,14 @@ public class PetsManager : MonoBehaviour, StatsBase
     {
         return m_fGuardRange;
     }
+    public void SetHealRange(float _range)
+    {
+        m_fHealRange = _range;
+    }
+    public float GetHealRange()
+    {
+        return m_fHealRange;
+    }
     // State Machine
     public void SetStateMachine(StateMachine _machine)
     {
@@ -239,14 +248,5 @@ public class PetsManager : MonoBehaviour, StatsBase
     {
         m_LevelingSystem = GetComponent<LevelingSystem>();
         m_LevelingSystem.Init(this, false);
-    }
-
-    void Update()
-    {
-        // Check HP if it's 0 or not
-        if(m_fHealth <= 0f)
-        {
-            // Go into Recovery State.
-        }
     }
 }

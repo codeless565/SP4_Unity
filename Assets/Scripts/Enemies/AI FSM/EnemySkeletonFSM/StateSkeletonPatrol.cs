@@ -48,6 +48,12 @@ public class StateSkeletonPatrol : StateBase
         // States //
         if (m_EnemyManager.GetPlayer() != null)
         {
+            // Change State to CHASE when Player is in range.
+            if (m_EnemyManager.GetDistanceApart() <= m_EnemyManager.GetChaseRange() || m_EnemyManager.m_Waypoint.Length == null)
+            {
+                m_EnemyManager.GetStateMachine().SetNextState("StateSkeletonChase");
+            }
+
             // Patrolling
             m_fDistanceToWaypoint = (m_go.GetComponent<Transform>().position - m_EnemyManager.m_Waypoint[m_EnemyManager.m_currWaypointID]).magnitude;
             if (m_fDistanceToWaypoint <= m_EnemyManager.MoveSpeed * Time.deltaTime / m_fMaxSpeed) //if it is possible to reach the waypoint by this frame
@@ -59,12 +65,6 @@ public class StateSkeletonPatrol : StateBase
             {
                 Vector3 dir = (m_EnemyManager.m_Waypoint[m_EnemyManager.m_currWaypointID] - m_EnemyManager.GetComponent<Transform>().position).normalized;
                 m_EnemyManager.GetComponent<Transform>().position += dir * m_EnemyManager.MoveSpeed * Time.deltaTime / m_fMaxSpeed;
-            }
-
-            // Change State to CHASE when Player is in range.
-            if (m_EnemyManager.GetDistanceApart() <= m_EnemyManager.GetChaseRange())
-            {
-                m_EnemyManager.GetStateMachine().SetNextState("StateSkeletonChase");
             }
         }
         else

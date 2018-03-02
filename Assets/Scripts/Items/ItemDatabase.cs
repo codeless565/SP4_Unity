@@ -77,19 +77,19 @@ public class ItemDatabase
                     {
                         case 1:
                             OtherRarityItem.ItemRarity = "Uncommon";
-                            multipler = OtherRarityItem.Level / 10 * 1.5f;
+                            multipler = 1.5f;
                             break;
                         case 2:
                             OtherRarityItem.ItemRarity = "Magic";
-                            multipler = OtherRarityItem.Level / 10 * 2.0f;
+                            multipler = 2.0f;
                             break;
                         case 3:
                             OtherRarityItem.ItemRarity = "Ancient";
-                            multipler = OtherRarityItem.Level / 10 * 2.5f;
+                            multipler = 2.5f;
                             break;
                         case 4:
                             OtherRarityItem.ItemRarity = "Relic";
-                            multipler = OtherRarityItem.Level / 10 * 3.0f;
+                            multipler = 3.0f;
                             break;
                     }
                     OtherRarityItem.Level = newItem.Level;
@@ -101,7 +101,7 @@ public class ItemDatabase
                     OtherRarityItem.Attack *= multipler;
                     OtherRarityItem.Defense *= multipler;
                     OtherRarityItem.MoveSpeed *= multipler;
-
+                    
                     ItemList.Add(OtherRarityItem);
                 }
             }
@@ -127,7 +127,7 @@ public class ItemDatabase
                         specialmultipler = 10.0f;
 
                     OtherRarityItem.ItemRarity = "Relic";
-                    multipler = OtherRarityItem.Level / 10 * 3.0f * specialmultipler;
+                    multipler = 3.0f * specialmultipler;
 
                     OtherRarityItem.Health *= multipler;
                     OtherRarityItem.MaxHealth *= multipler;
