@@ -42,18 +42,15 @@ public class MerchantStateMachine : MonoBehaviour
         idle.SetActive(true);
         interact.SetActive(false);
         bye.SetActive(false);
-    
+
+#if UNITY_ANDROID || UNITY_IPHONE
         /* Default Btn Layout */
         Attack_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Attack_Btn;
         Attack_Btn.SetActive(true);
         
         Interact_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Interact_Btn;
         Interact_Btn.SetActive(false);
-
-        /* Default Merchant Name */
-        //Debug.Log("INSTART");
-        m_merchantName.text = "";
-        //Debug.Log("IN START :" + m_merchantName.text);
+#endif
     }
 
     /* Every Frame, Update what Merchant is doing */
@@ -64,9 +61,9 @@ public class MerchantStateMachine : MonoBehaviour
         {
             m_state = "INTERACT";
 
-//#if UNITY_ANDROID || UNITY_IPHONE
-//            MerchantTriggerInteract.m_interact = false;
-//#endif
+#if UNITY_ANDROID || UNITY_IPHONE
+            MerchantTriggerInteract.m_interact = false;
+#endif
 
             interact.SetActive(true);
             idle.SetActive(false);
@@ -109,17 +106,14 @@ public class MerchantStateMachine : MonoBehaviour
         if (other.GetComponent<Player2D_Manager>() == null)
             return;
 
-        //m_merchantName.text = "Merchant";
-        //Debug.Log("Merchant name : " + m_merchantName.text);
-
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
-        //_player.GetComponent<Player2D_Attack>().Interact = true;
+        _player.GetComponent<Player2D_Attack>().Interact = true;
 
-//#if UNITY_ANDROID || UNITY_IPHONE
+#if UNITY_ANDROID || UNITY_IPHONE
         /* Change Attack Button to Interact Button */
         Interact_Btn.SetActive(true);
         Attack_Btn.SetActive(false);
-//#endif
+#endif
     }
 
     /* Response to Player Staying in trigger box of Merchant */
@@ -127,24 +121,18 @@ public class MerchantStateMachine : MonoBehaviour
     {
         /* Update every frame to see for Interact Btn pressed */
         _isinRange = true;
-        Debug.Log("ON stay : " + _isinRange);
-
     }
 
     /* When Player exits the area of Interaction */
     void OnTriggerExit2D(Collider2D other)
     {
-        //m_merchantName.text = "";
-        //Debug.Log("Merchant name : " + m_merchantName.text);
         _isinRange = false;
-        Debug.Log("ON exit : " + _isinRange);
-        //_player.GetComponent<Player2D_Attack>().Interact = true;
 
-//#if UNITY_ANDROID || UNITY_IPHONE
+#if UNITY_ANDROID || UNITY_IPHONE
         /* Change Attack Button to Interact Button */
         Attack_Btn.SetActive(true);
         Interact_Btn.SetActive(false);
-//#endif
+#endif
     }
 
     /* Get Trigger for Merchant Interaction */
@@ -152,6 +140,7 @@ public class MerchantStateMachine : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetMouseButtonDown(0);
+        //return MerchantTriggerInteract.m_interact;
 #elif UNITY_ANDROID || UNITY_IPHONE
         return MerchantTriggerInteract.m_interact;
 #else

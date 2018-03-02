@@ -81,7 +81,7 @@ public class JoyStick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     public void OnPointerUp(PointerEventData eventData)
     {
         ///* Reset the Direction used to move Player */
-        //InputDirection = Vector2.zero;
+        InputDirection = Vector2.zero;
         /* Reset the location of the JoyStick */
         m_JoyStick.rectTransform.anchoredPosition = Vector2.zero;
     }
