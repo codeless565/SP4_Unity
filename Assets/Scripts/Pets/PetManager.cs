@@ -61,7 +61,8 @@ public class PetManager : MonoBehaviour, StatsBase
     private GameObject player;
     private float addPlayerHP;
     public GameObject playerHealingSprite;
-
+    
+    #region StatsBaseSetterANDGetter
     // Stats Setter and Getter //
     public string Name
     {
@@ -203,7 +204,7 @@ public class PetManager : MonoBehaviour, StatsBase
             movespeed = value;
         }
     }
-
+    #endregion
 
     void Start ()
     {
