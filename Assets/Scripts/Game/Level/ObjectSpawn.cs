@@ -74,7 +74,6 @@ public class ObjectSpawn : MonoBehaviour
 
         //if(m_currentFloor % 2 == 0)
         //{
-            PetSpawn();
         //}
 
         // Chests
@@ -104,6 +103,11 @@ public class ObjectSpawn : MonoBehaviour
 
         MainCamera.GetComponent<CameraController>().SetPlayer(t_player); //Spawn Player and Set the Instantiated player into Camera
         MiniMap.GetComponent<ExplorationMap>().Init();
+
+        if (GetComponent<CameraEffects>() != null)
+            GetComponent<CameraEffects>().Init(MainCamera.GetComponent<Camera>());
+
+        PetSpawn();
     }
 
     private void PetSpawn()
@@ -111,10 +115,10 @@ public class ObjectSpawn : MonoBehaviour
         // Spawn Pet with the Player in the same room. Pet will be beside Player.
         m_PetRoom = m_playerRoom;
 
-        int ranXpos = m_rooms[m_PetRoom].xPos + m_rooms[m_PetRoom].roomWidth + 1;
-        int ranYpos = m_rooms[m_PetRoom].yPos + m_rooms[m_PetRoom].roomHeight + 1;
+        int Xpos = m_rooms[m_PetRoom].xPos + m_rooms[m_PetRoom].roomWidth -1;
+        int Ypos = m_rooms[m_PetRoom].yPos + m_rooms[m_PetRoom].roomHeight -1;
 
-        m_petPos = new Vector2(ranXpos, ranYpos);
+        m_petPos = new Vector2(Xpos, Ypos);
         GameObject t_Pet = Instantiate(Pet, m_petPos, Quaternion.identity, go_floorholder.transform);
 
         if (t_Pet.GetComponent<ObjectInfo>() != null)
@@ -227,13 +231,13 @@ public class ObjectSpawn : MonoBehaviour
 
             // Instantiate Object, Set waypoint and Set room info into ObjectInfo
             GameObject tempEnemy = Instantiate(go_enemy, tempPos, Quaternion.identity, go_floorholder.transform);
-            if (tempEnemy.GetComponent<SkeletonEnemyManager>() != null)
+            if (tempEnemy.GetComponent<EnemySkeleton>() != null)
             {
                 //Set EXP Reward for enemy 
-                tempEnemy.GetComponent<SkeletonEnemyManager>().EXPReward = tempEnemy.GetComponent<SkeletonEnemyManager>().EXPRewardScaling * m_currentFloor;
-                tempEnemy.GetComponent<SkeletonEnemyManager>().Waypoint = Waypoint;
-                tempEnemy.GetComponent<SkeletonEnemyManager>().CurrWaypointID = randomID;
-                tempEnemy.GetComponent<SkeletonEnemyManager>().Init(m_currentFloor);
+                //tempEnemy.GetComponent<EnemySkeleton>().EXPReward = tempEnemy.GetComponent<SkeletonEnemyManager>().EXPRewardScaling * m_currentFloor;
+                //tempEnemy.GetComponent<EnemySkeleton>().Waypoint = Waypoint;
+                //tempEnemy.GetComponent<EnemySkeleton>().CurrWaypointID = randomID;
+                tempEnemy.GetComponent<EnemySkeleton>().Init(m_currentFloor, Waypoint, randomID);
             }
 
             if (tempEnemy.GetComponent<ObjectInfo>() != null)
@@ -290,10 +294,13 @@ public class ObjectSpawn : MonoBehaviour
                 case 3: // Spawns a Confusion Trap
                     tempTrap = Instantiate(go_confusionTrap, tempPos, Quaternion.identity, go_floorholder.transform);
                     break;
-                default: // Spawns a Bear Trap (DEFAULT if no selection)
-                    Debug.Log("Spawned Bear");
+                case 4: // Spawns a Bear Trap (DEFAULT if no selection)
                     tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
                     break;
+                default: // Spawns a Bear Trap (DEFAULT if no selection)
+                    tempTrap = Instantiate(go_bearTrap, tempPos, Quaternion.identity, go_floorholder.transform);
+                    break;
+
             }
 
             if (tempTrap.GetComponent<CollisionTrapPoison>() != null)

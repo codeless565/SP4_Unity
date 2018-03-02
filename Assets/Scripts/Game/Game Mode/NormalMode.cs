@@ -12,8 +12,13 @@ public class NormalMode : MonoBehaviour, GameMode
     public GameObject PauseMenu;
     public Text FloorDetails;
 
+    bool m_isBossFloor;
+
     bool b_isPaused;
     int t_CurrFloor;
+
+    /* mobile things*/
+    //public GameObject Mobile;
 
     void Start ()
     {
@@ -23,7 +28,8 @@ public class NormalMode : MonoBehaviour, GameMode
             PauseMenu.SetActive(false);
 
         FloorDetails.text = "Floor " + t_CurrFloor.ToString();
-        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor);
+
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, t_CurrFloor, m_isBossFloor);
     }
 
     // Interface Functions // 
@@ -35,12 +41,15 @@ public class NormalMode : MonoBehaviour, GameMode
         { t_CurrFloor = 1; }
 
         /* Initialize Level
+         * set different time if it is on Boss level;
          * Spawn Objects in Level */
+        m_isBossFloor = false;
         if (t_CurrFloor % 5 == 0)
         {
             // Spawn Boss Level
             GetComponent<ArenaGenerator>().Init();
             GetComponent<ArenaBossSpawn>().Init(t_CurrFloor);
+            m_isBossFloor = true;
         }
         else
         {
@@ -50,11 +59,12 @@ public class NormalMode : MonoBehaviour, GameMode
         }
 
         /* Start Timer */
-        GetComponent<GameTimer>().Init();
+        GetComponent<GameTimer>().Init(m_isBossFloor);
 
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();
         GetComponent<AchievementsManager>().Init();
+        GetComponent<AchievementDisplay>().Init();
         GetComponent<PlayerHUD>().Init();
         GetComponent<Player2D_StatsMenu>().Init();
 
@@ -63,6 +73,18 @@ public class NormalMode : MonoBehaviour, GameMode
 
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
+
+
+//#if UNITY_ANDROID || UNITY_IPHONE
+//        if (Mobile != null)
+//        {
+//            foreach (object obj in Mobile.transform)
+//            {
+//                Transform child = (Transform)obj;
+//                child.gameObject.SetActive(true);
+//            }
+//        }
+//#endif
     }
 
     public void GamePause()

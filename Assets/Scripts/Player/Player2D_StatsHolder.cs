@@ -25,6 +25,9 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     LevelingSystem levelingSystem;
 
     float hpcheck;
+    float lvlcheck;
+
+    GameObject LevelingEffect;
 
     private float m_timer = 5.0f;
 
@@ -170,18 +173,32 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     #endregion
 
     /* Initializing of Stats */
-    void Awake()
+    void Start()
     {
+        /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, true);
 
-        /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
+
+        LevelingEffect = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().LevelUpEffect;
     }
     
     void Update()
     {
         hpcheck = health;
+        lvlcheck = playerLevel;
+
         levelingSystem.UpdateStats(this); //if player levelsup, it will refresh hp, for now
+
+        /* When Player Dies, Stop Updating and go to Game Over Scene */
+        if (health <= 0)
+        {
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<CameraEffects>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CameraEffects>().PlayGameOverEffect();
+            else
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
+            return;
+        }
 
         /* If Stamina is not full, regen some Stamina over time */
         if (stamina <= m_MaxStamina)
@@ -198,7 +215,7 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     void LateUpdate()
     {
         /* Check if player has received damaged in this frame, if so, play animation on profile and flash Red */
-        if (health < hpcheck)
+        if (health < hpcheck && playerLevel == lvlcheck)
         {
             if (GameObject.FindGameObjectWithTag("PlayerProfileDamage") == null)
             {
@@ -214,6 +231,11 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
             {
                 GameObject.FindGameObjectWithTag("PlayerProfileDamage").GetComponent<PlayerProfileStatusAliment>().KillTime = 1;
             }
+        }
+
+        if (playerLevel != lvlcheck)
+        {
+            Instantiate(LevelingEffect, transform.position, Quaternion.identity, transform);
         }
     }
 

@@ -24,16 +24,13 @@ public class Player2D_Manager : MonoBehaviour
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
 
-	//[SerializeField]
-	//private UIbar healthBar, EXPbar, StaminaBar;
-
     /* Show Level Up */
     [SerializeField]
     private TextMesh m_levelup_mesh;
     private float m_fLevelUpTimer = 0.0F;
     private float m_fLevelUpMaxTimer = 2.0F;
     private bool m_bCheckLevelUp;
-
+    
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -50,13 +47,20 @@ public class Player2D_Manager : MonoBehaviour
     public Item[] getEQList() { return EquipmentList; }
 
     /* Player Movement */
-    private float inputX, inputY;
+    public float inputX, inputY;
+    public float accOffsetX, accOffsetY;
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
+    
+    private JoyStick m_joyStick;
 
     /* Options */
     private ControlsManager cm;
-    
+
+    AchievementDisplay achDis;
+    Inventory invenDis;
+    GameObject tutDis;
+
     // --------------------------------------------------------------------------------------------------------- //
     // Use this for initialization
     void Start()
@@ -81,7 +85,7 @@ public class Player2D_Manager : MonoBehaviour
         // initialising the equipments
         for (int i = 0; i < EquipmentList.Length; ++i)
             EquipmentList[i] = null;
-        
+
         /* Storing Player Info */
         PlayerSaviour.Instance.LoadInv(Inventory);
 
@@ -101,29 +105,37 @@ public class Player2D_Manager : MonoBehaviour
         cm = GameObject.FindGameObjectWithTag("GameScript").GetComponent<ControlsManager>();
 
         /* Player Movement */
+#if UNITY_EDITOR || UNITY_STANDALONE
         inputX = inputY = 0;
+#elif UNITY_ANDROID || UNITY_IPHONE
+        inputX = Input.acceleration.x;
+        inputY = Input.acceleration.y;
+#endif
+
         m_confusedModifier = 1;
         m_Sprint = 1.0f; // cannot be zero
         m_maxSprint = 2.0f; // cannot be zero
+
+        /* Initialising */
+        if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>() != null)
+            achDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>();
+        invenDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<Inventory>();
+        tutDis = GameObject.FindGameObjectWithTag("GameScript");
+
+        m_joyStick = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().JoyStick;
+
     }
     void Requip()
     {
         foreach (Item item in EquipmentList)
         {
-            if(item != null)
+            if (item != null)
                 EquipEQ(item);
         }
     }
     // Update is called once per frame
     void Update()
     {
-        /* When Player Dies, Stop Updating and go to Game Over Scene */
-        if (statsHolder.Health <= 0)
-        {
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<GameMode>().GameOver();
-            return;
-        }
-
         // Check Timer to despawn level up
         if (m_bCheckLevelUp)
         {
@@ -193,10 +205,6 @@ public class Player2D_Manager : MonoBehaviour
         /* Attack Animation */
         PlayerAttack2D();
 
-        /* When canMove, move */
-        if (canMove)
-            Movement2D();
-
         bool bIState = false;
         if (!bIState && Input.GetKeyDown(cm.GetKey("inventory")))
         {
@@ -214,6 +222,22 @@ public class Player2D_Manager : MonoBehaviour
         }
         else if (bOptionState && !Input.GetKeyDown(cm.GetKey("options")))
             bOptionState = false;
+
+        /* When a specific Things is ongoing, the player will not move */
+        if ((achDis != null && achDis.AchOpened) || 
+        invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
+        {
+            canMove = false;
+        }
+        else
+        {
+            canMove = true;
+        }
+
+        /* When canMove, move */
+        if (canMove)
+            Movement2D();
+
     }
 
     /* Key Board Movement of the Player */
@@ -231,7 +255,7 @@ public class Player2D_Manager : MonoBehaviour
             inputX = 1;
         if (Input.GetKey(cm.GetKey("moveleft")))
             inputX = -1;
-        
+
         /* Player Sprint */
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             && (inputX != 0 || inputY != 0))
@@ -262,9 +286,6 @@ public class Player2D_Manager : MonoBehaviour
 
             if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
-
-			if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-            	GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
         if (inputY > 0f || inputY < 0f)
         {
@@ -276,13 +297,13 @@ public class Player2D_Manager : MonoBehaviour
             lastMove = new Vector2(0.0f, inputY);
             p_spriteManager.SetLastMove(0.0f, lastMove.y);
 
-			if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-            	GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
         }
 
         /* Sprite Movement */
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
-        
+
     }
 
     /* Attack Animation of Player */
@@ -310,8 +331,26 @@ public class Player2D_Manager : MonoBehaviour
     void AccMove()
     {
         /* Player Movement */
-        inputX = Input.acceleration.x;
-        inputY = Input.acceleration.y;
+        // inputX =  Input.acceleration.x * 2f;
+        // inputY =  Input.acceleration.y * 2f;
+
+        /* Player Sprint */
+        /* More then 20% Stamina , Can Sprint */
+        if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
+        {
+            /* Decrease Stamina */
+            inputX = Input.acceleration.x;
+            inputY = Input.acceleration.y;
+            if (inputY > 0.8f || inputY < -0.8f || inputX > 0.8f || inputX < -0.8f)
+            {
+                statsHolder.Stamina -= 0.01f;
+            }
+        }
+        else
+        {
+            inputX = Mathf.Clamp(Input.acceleration.x, -0.5f, 0.5f);
+            inputY = Mathf.Clamp(Input.acceleration.y, -0.5f, 0.5f);
+        }
 
         if (inputX > 0f || inputX < 0f)
         {
@@ -322,9 +361,6 @@ public class Player2D_Manager : MonoBehaviour
             p_spriteManager.SetMoving(true);
             lastMove = new Vector2(inputX, 0.0f);
             p_spriteManager.SetLastMove(lastMove.x, 0.0f);
-
-            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
 
             if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
                 GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
@@ -347,6 +383,47 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
     }
 
+    /* JoyStick Moving */
+    void JoyStickMove()
+    {
+        inputX = m_joyStick.Direction.x;
+        Debug.Log("JoyStick DirX: " + m_joyStick.Direction.x);
+        inputY = m_joyStick.Direction.y;
+        Debug.Log("JoyStick DirY: " + m_joyStick.Direction.y);
+
+
+        if (inputX > 0f || inputX < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(inputX, 0.0f);
+            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+        if (inputY > 0f || inputY < 0f)
+        {
+            /* If have then move by Confusion */
+            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
+
+            /* Sprite Movement */
+            p_spriteManager.SetMoving(true);
+            lastMove = new Vector2(0.0f, inputY);
+            p_spriteManager.SetLastMove(0.0f, lastMove.y);
+
+            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
+        }
+
+        /* Sprite Movement */
+        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
+
+    }
+
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
     void Movement2D()
     {
@@ -355,7 +432,7 @@ public class Player2D_Manager : MonoBehaviour
 #elif UNITY_ANDROID || UNITY_IPHONE
         AccMove();
 #endif
-        
+
         /* Getting the Direction of the Player ( both key and mobile ) */
         if (inputX != 0f && inputY != 0f)
             Player2D_Attack.Direction.Set(inputX, inputY);
@@ -371,16 +448,16 @@ public class Player2D_Manager : MonoBehaviour
     /* HotKeys */
     public void HotKeyResponse(int keynum)
     {
-        
-        if (GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1] != null && Inventory.Contains(GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1]))
+
+        if (GetComponent<InventoryBar>().getPlayerHotBar()[keynum - 1] != null && Inventory.Contains(GetComponent<InventoryBar>().getPlayerHotBar()[keynum - 1]))
         {
-            AddStats(GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1]);
-            
+            AddStats(GetComponent<InventoryBar>().getPlayerHotBar()[keynum - 1]);
+
 
             List<int> ListOfItemIndex = new List<int>();
-            for (int i = 0; i <Inventory.Count;++i)
+            for (int i = 0; i < Inventory.Count; ++i)
             {
-                if (Inventory[i] == GetComponent<InventoryBar>().getPlayerHotBar()[keynum-1])
+                if (Inventory[i] == GetComponent<InventoryBar>().getPlayerHotBar()[keynum - 1])
                 {
                     ListOfItemIndex.Add(i);
                 }
@@ -591,7 +668,7 @@ public class Player2D_Manager : MonoBehaviour
                 p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.LONGSPEAR);
             else if (_equipment.Name.Contains("Spear"))
                 p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.SPEAR);
-            
+
             else if (_equipment.Name.Contains("Long Sword"))
                 p_spriteManager.SetWeaponEquip(SpriteManager.S_Weapon.LONGSWORD);
             else if (_equipment.Name.Contains("Arrow"))

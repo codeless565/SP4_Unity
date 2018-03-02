@@ -25,15 +25,23 @@ public class EnemyManager : MonoBehaviour, StatsBase
     // Leveling Variables //
     LevelingSystem m_LevelingSystem;
 
+    // StateMachine //
+    StateMachine m_StateMachine;
+
     // Enemy Variables //
     private Player2D_StatsHolder m_PlayerStats;
     private GameObject m_Player;
     private SpriteManager m_SpriteManager;
     private Vector3 m_EnemyDestination;
     private float m_fDistanceApart;
+    private float m_fChaseRange;
+    private float m_fAttackRange;
+	private float m_fChangeStateTimer;
+    private float m_fAttackTimer;
     private bool m_bCanAttack;
     private bool m_bCanPatrol;
 
+    #region StatsBaseSetterANDGetter
     // StatsBase Setter & Getter //
     public string Name
     {
@@ -165,6 +173,7 @@ public class EnemyManager : MonoBehaviour, StatsBase
             m_fMoveSpeed = value;
         }
     }
+    #endregion
 
     // EXP Setter //
     public float EXPReward
@@ -180,7 +189,8 @@ public class EnemyManager : MonoBehaviour, StatsBase
         set { m_currWaypointID = value; }
     }
 
-    // Enemy Variables Setter & Getter //
+    #region VariablesSetterANDGetter
+    // Variables Setter & Getter //
     // Player
     public void SetPlayerStats(Player2D_StatsHolder _statsHolder)
     {
@@ -224,6 +234,38 @@ public class EnemyManager : MonoBehaviour, StatsBase
     {
         return m_fDistanceApart;
     }
+    public void SetChaseRange(float _range)
+    {
+        m_fChaseRange = _range;
+    }
+    public float GetChaseRange()
+    {
+        return m_fChaseRange;
+    }
+    public void SetAttackRange(float _range)
+    {
+        m_fAttackRange = _range;
+    }
+    public float GetAttackRange()
+    {
+        return m_fAttackRange;
+    }
+	public void SetChangeStateTimer(float _timer)
+	{
+        m_fChangeStateTimer = _timer;
+	}
+    public float GetChangeStateTimer()
+    {
+        return m_fChangeStateTimer;
+    }
+    public void SetAttackTimer(float _timer)
+    {
+        m_fAttackTimer = _timer;
+    }
+    public float GetAttackTimer()
+    {
+        return m_fAttackTimer;
+    }
     public void SetBoolCanAttack(bool _can)
     {
         m_bCanAttack = _can;
@@ -240,6 +282,15 @@ public class EnemyManager : MonoBehaviour, StatsBase
     {
         return m_bCanPatrol;
     }
+    public void SetStateMachine(StateMachine _machine)
+    {
+        m_StateMachine = _machine;
+    }
+    public StateMachine GetStateMachine()
+    {
+        return m_StateMachine;
+    }
+    #endregion
 
     public void Init()
     {
@@ -252,7 +303,10 @@ public class EnemyManager : MonoBehaviour, StatsBase
         // Check HP if it's 0 or not.
         if(m_fHealth <= 0f)
         {
-            // Change State to DIE
+            m_PlayerStats.GetComponent<Player2D_StatsHolder>().EXP += expReward;
+            GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("enemy_kill", 1);
+            // Kill it if there's 0 HP
+            Destroy(gameObject);
         }
     }
 }

@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour
     public InputField SearchBar;
     public GameObject InventoryPage;
 
-    bool InventoryUI;
+    public bool InventoryUI;
     bool EquipmentDisplay;
     bool UsesDisplay;
     public bool InventroyClosed;
@@ -95,16 +95,16 @@ public class Inventory : MonoBehaviour
         gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(false);
         gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
         InventoryUI = false;
-        Player.GetComponent<Player2D_Manager>().canMove = true;
+        //Player.GetComponent<Player2D_Manager>().canMove = true;
         InventroyClosed = true;
     }
     public void OpenInventoryUI()
     {
-        InventroyClosed = false;
         gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
             OpenEquipment();
-            Player.GetComponent<Player2D_Manager>().canMove = false;
+            //Player.GetComponent<Player2D_Manager>().canMove = false;
         InventoryUI = true;
+        InventroyClosed = false;
     }
 
     public void OpenInventoryFromKey()
@@ -114,14 +114,14 @@ public class Inventory : MonoBehaviour
         {
             gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(true);
             OpenEquipment();
-            Player.GetComponent<Player2D_Manager>().canMove = false;
+            //Player.GetComponent<Player2D_Manager>().canMove = false;
         }
         else
         {
             gameObject.GetComponent<InventoryDisplay>().InventoryDisplayCanvas.SetActive(false);
             gameObject.GetComponent<InventoryDisplay>().setConfirmationDisplay(false);
             InventoryUI = false;
-            Player.GetComponent<Player2D_Manager>().canMove = true;
+           // Player.GetComponent<Player2D_Manager>().canMove = true;
         }
 
     }

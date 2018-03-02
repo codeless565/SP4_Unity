@@ -13,6 +13,8 @@ public class TutorialTextBox : MonoBehaviour
     Inventory inventory;
     MerchantStateMachine merchant;
 
+    Player2D_Manager player;
+
     public bool chestOpened;
 
     public TextAsset theTextMobile, theTextConsole;
@@ -29,14 +31,13 @@ public class TutorialTextBox : MonoBehaviour
     public GameObject Arrows;
 
     // Use this for initialization
-    void Start()
+   public void Init()
     {
         textboxManager = FindObjectOfType<TextBoxManager>();
         tutMode = GetComponent<TutorialMode>();
         statsMenu = GetComponent<Player2D_StatsMenu>();
         tutSpawn = GetComponent<TutorialSpawn>();
         inventory = GetComponent<Inventory>();
-        merchant = GetComponent<MerchantStateMachine>();
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         textboxManager.ReloadScript(theTextConsole);
@@ -112,6 +113,8 @@ public class TutorialTextBox : MonoBehaviour
         {
             case 1:
                 LevelArrow.gameObject.SetActive(true);
+                //pauseBox = false;
+                //textboxManager.EnableTextBox();
                 break;
 
             case 2:
@@ -163,27 +166,41 @@ public class TutorialTextBox : MonoBehaviour
             case 12: //trying stage for moving
                 if (!MovedA || !MovedD || !MovedS || !MovedW)
                      {
-                         if (Input.GetKey(KeyCode.A))
-                         {
-                             MovedA = true;
-                         }
 
-                         if (Input.GetKey(KeyCode.D))
-                         {
-                             MovedD = true;
-                         }
+#if UNITY_EDITOR || UNITY_STANDALONE
+                    if (Input.GetKey(KeyCode.A))
+                    {
+                        MovedA = true;
+                    }
 
-                         if (Input.GetKey(KeyCode.S))
-                         {
-                             MovedS = true;
-                         }
+                    if (Input.GetKey(KeyCode.D))
+                    {
+                        MovedD = true;
+                    }
 
-                         if (Input.GetKey(KeyCode.W))
-                         {
-                             MovedW = true;
-                         }
-                     }
-                     else
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        MovedS = true;
+                    }
+
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        MovedW = true;
+                    }
+
+#elif UNITY_ANDROID || UNITY_IPHONE
+       if( player.inputX > 0)
+                    MovedD = true;
+       if( player.inputX < 0)
+                    MovedA = true;
+       if( player.inputY > 0)
+                    MovedW = true;
+       if( player.inputY < 0)
+                    MovedS = true;
+#endif
+
+                }
+                else
                      {
                          textboxManager.currentLine = 13;
                          pauseBox = false;
@@ -261,6 +278,8 @@ public class TutorialTextBox : MonoBehaviour
         {
             pauseBox = true;
             textboxManager.DisableTextBox();
+
+            Debug.Log("textbox is disabled at tut up");
         }
       
         //show text letter by letter

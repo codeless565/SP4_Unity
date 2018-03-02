@@ -9,13 +9,17 @@ public class GameTimer : MonoBehaviour {
     public float Gametime = 100; //In Seconds
     private float m_elapseTime;
 
-	public void Init () {
+	public void Init (bool _isBossLevel)
+    {
         if (Gametime < 10)
             Gametime = 10;
         else if (Gametime > 300)
             Gametime = 300;
 
         m_elapseTime = Gametime;
+
+        if (_isBossLevel)
+            m_elapseTime *= 2;
     }
 	
 	void Update () {
@@ -24,7 +28,12 @@ public class GameTimer : MonoBehaviour {
 
         if (m_elapseTime <= 0)
         {
-            GetComponent<GameMode>().GameOver();
+            PlayerPrefs.SetString("KilledBy", "Time");
+
+            if (GetComponent<CameraEffects>() != null)
+                GetComponent<CameraEffects>().PlayGameOverEffect();
+            else
+                GetComponent<GameMode>().GameOver();
         }
     }
 

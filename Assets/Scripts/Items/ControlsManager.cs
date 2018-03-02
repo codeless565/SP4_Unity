@@ -64,7 +64,7 @@ public class ControlsManager : MonoBehaviour
                 {
                     GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement(ControlsKeyCodes[SelectedControl] + " has been changed to " + ReturnKey(Input.inputString));
                     ControlsKeyCodes[SelectedControl] = ReturnKey(Input.inputString);
-                    player.GetComponent<Player2D_Manager>().canMove = true;
+                    //player.GetComponent<Player2D_Manager>().canMove = true;
                     editingkey = false;
                     CanvasActive = false;
                     PlayerSaviour.Instance.SavePref(ControlsKeyCodes);
@@ -74,12 +74,12 @@ public class ControlsManager : MonoBehaviour
         }
 
         if(CanvasActive)
-            player.GetComponent<Player2D_Manager>().canMove = false;
+            //player.GetComponent<Player2D_Manager>().canMove = false;
 
         if (!CanvasActive)
         {
             editingkey = false;
-            player.GetComponent<Player2D_Manager>().canMove = true;
+           // player.GetComponent<Player2D_Manager>().canMove = true;
         }
 
     }

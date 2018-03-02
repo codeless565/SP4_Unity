@@ -41,7 +41,8 @@ public class Merchant_GoodBye : MonoBehaviour
 			_theManager.currentLine = startLine;
 			_theManager.endAtLine = endLine;
 			_theManager.EnableTextBox();
-		}
+            GetComponentInParent<MerchantStateMachine>().m_merchantName.text = "";
+        }
 		else 
 		{
 			m_timer = 3.0f;

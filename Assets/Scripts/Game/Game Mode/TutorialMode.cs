@@ -14,6 +14,8 @@ public class TutorialMode : MonoBehaviour, GameMode
     public bool b_isPaused;
     int t_CurrFloor;
 
+    /* mobile things*/
+    public GameObject Mobile;
     void Awake()
     {
         GameStart();
@@ -29,7 +31,7 @@ public class TutorialMode : MonoBehaviour, GameMode
     {
         //check player's curr florr and init accordingly
         t_CurrFloor = 1;// set from player's curr floor
-        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, -1);
+        LoadingInScreen.GetComponent<LoadingIntoGame>().Init(gameObject, -1, false);
 
         /* Initialize Level */
         GetComponent<ArenaGenerator>().Init();
@@ -38,7 +40,7 @@ public class TutorialMode : MonoBehaviour, GameMode
         GetComponent<TutorialSpawn>().Init();
 
         /* Start Timer */
-        GetComponent<GameTimer>().Init();
+        GetComponent<GameTimer>().Init(false);
 
         /* Initialize Player Required Scripts */
         GetComponent<ControlsManager>().Init();
@@ -51,7 +53,20 @@ public class TutorialMode : MonoBehaviour, GameMode
         GetComponent<Shop>().Init();
         GetComponent<ShopDisplay>().Init();
 
-        //GetComponent<SkeletonEnemyManager>().Init(1);
+        GetComponent<TutorialTextBox>().Init();
+        GetComponent<TextBoxManager>().Init();
+
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        if (Mobile != null)
+        {
+            foreach (object obj in Mobile.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(true);
+            }
+        }
+#endif
     }
 
     public void GamePause()

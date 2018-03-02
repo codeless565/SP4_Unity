@@ -25,31 +25,31 @@ public class MerchantStateMachine : MonoBehaviour
     /* GameObjects to Store states */
     public GameObject idle, interact, bye;
     public bool merchantClosed;
-#if UNITY_ANDROID || UNITY_IPHONE
+
+    /* Merchant Text Mesh */
+    [SerializeField]
+    public TextMesh m_merchantName;
+    
     /* Interact and Attack Button */
     private GameObject Attack_Btn, Interact_Btn;
-#endif
 
     void Start()
     {
-        _player = GameObject.FindGameObjectWithTag("Player");
+        _player = GameObject.FindGameObjectWithTag("MeleeHitbox");
 
         /* Default state */
         m_state = "IDLE";
         idle.SetActive(true);
         interact.SetActive(false);
         bye.SetActive(false);
-        merchantClosed = false;
 
-        /* Default Btn Layout */
 #if UNITY_ANDROID || UNITY_IPHONE
-{
+        /* Default Btn Layout */
         Attack_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Attack_Btn;
         Attack_Btn.SetActive(true);
         
         Interact_Btn = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().Interact_Btn;
         Interact_Btn.SetActive(false);
-}
 #endif
     }
 
@@ -60,8 +60,7 @@ public class MerchantStateMachine : MonoBehaviour
         if (_isinRange && GetTriggerForInteraction() && m_state == "IDLE")
         {
             m_state = "INTERACT";
-            _player.GetComponent<Player2D_Manager>().canMove = false;
-            merchantClosed = false;
+
 #if UNITY_ANDROID || UNITY_IPHONE
             MerchantTriggerInteract.m_interact = false;
 #endif
@@ -94,10 +93,9 @@ public class MerchantStateMachine : MonoBehaviour
         {
             m_state = "IDLE";
             _goBackIdle = false;
-            _player.GetComponent<Player2D_Manager>().canMove = true;
+
             bye.SetActive(false);
             idle.SetActive(true);
-            merchantClosed = true;
         }
     }
 
@@ -109,14 +107,13 @@ public class MerchantStateMachine : MonoBehaviour
             return;
 
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
-        _player.GetComponentInChildren<Player2D_Attack>().Interact = true;
+        Debug.Log("Merchant: " + other);
+        other.transform.GetChild(0).GetComponent<Player2D_Attack>().Interact = true;
 
 #if UNITY_ANDROID || UNITY_IPHONE
-{
         /* Change Attack Button to Interact Button */
         Interact_Btn.SetActive(true);
         Attack_Btn.SetActive(false);
-}
 #endif
     }
 
@@ -130,15 +127,18 @@ public class MerchantStateMachine : MonoBehaviour
     /* When Player exits the area of Interaction */
     void OnTriggerExit2D(Collider2D other)
     {
-        _player.GetComponentInChildren<Player2D_Attack>().Interact = false;
-		_isinRange = false;
-        
+        _isinRange = false;
+
+        if (other.GetComponent<Player2D_Manager>() == null)
+            return;
+
+        if (other.transform.GetChild(0).GetComponent<Player2D_Attack>() != null)
+            other.transform.GetChild(0).GetComponent<Player2D_Attack>().Interact = false;
+
 #if UNITY_ANDROID || UNITY_IPHONE
-{
         /* Change Attack Button to Interact Button */
         Attack_Btn.SetActive(true);
         Interact_Btn.SetActive(false);
-}
 #endif
     }
 
@@ -147,6 +147,7 @@ public class MerchantStateMachine : MonoBehaviour
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         return Input.GetMouseButtonDown(0);
+        //return MerchantTriggerInteract.m_interact;
 #elif UNITY_ANDROID || UNITY_IPHONE
         return MerchantTriggerInteract.m_interact;
 #else

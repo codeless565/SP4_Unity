@@ -94,7 +94,7 @@ public class Player2D_Attack : MonoBehaviour
                 temp.transform.Translate(new Vector3(0.0f, 0.5f, 0.0f));
 
                 //Set Damage to Attack
-                temp.GetComponent<CollisionPlayerAttack>().Init(m_player.GetComponent<StatsBase>().Attack);
+                temp.GetComponent<CollisionPlayerAttack>().Init(m_player.GetComponent<StatsBase>().Attack, m_player);
 
                 /* Set Animation in Parent to Start */
                 Player2D_Manager.attackClicked = true;

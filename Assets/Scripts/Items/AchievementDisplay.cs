@@ -11,8 +11,11 @@ public class AchievementDisplay : MonoBehaviour {
 
     GameObject[] TextLayout;
 
+    public bool AchOpened;
+
 	// Use this for initialization
-	void Start () {
+	public void Init () {
+        AchOpened = false;
         CanvasActive = false;
         TextLayout = new GameObject[GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().AchievementsList.Count];
 
@@ -72,11 +75,13 @@ public class AchievementDisplay : MonoBehaviour {
 
     public void OpenCanvas()
     {
+        AchOpened = true;
         CanvasActive = true;
         ShowAchievements();
     }
     public void CloseCanvas()
     {
+        AchOpened = false;
         CanvasActive = false;
     }
 }
