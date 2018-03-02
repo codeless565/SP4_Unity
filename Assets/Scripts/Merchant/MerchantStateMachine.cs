@@ -107,7 +107,8 @@ public class MerchantStateMachine : MonoBehaviour
             return;
 
         //* When Near for Interaction, player is not able to attack/move as it will focus on interaction */
-        _player.GetComponent<Player2D_Attack>().Interact = true;
+        Debug.Log("Merchant: " + other);
+        other.transform.GetChild(0).GetComponent<Player2D_Attack>().Interact = true;
 
 #if UNITY_ANDROID || UNITY_IPHONE
         /* Change Attack Button to Interact Button */
@@ -127,6 +128,12 @@ public class MerchantStateMachine : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         _isinRange = false;
+
+        if (other.GetComponent<Player2D_Manager>() == null)
+            return;
+
+        if (other.transform.GetChild(0).GetComponent<Player2D_Attack>() != null)
+            other.transform.GetChild(0).GetComponent<Player2D_Attack>().Interact = false;
 
 #if UNITY_ANDROID || UNITY_IPHONE
         /* Change Attack Button to Interact Button */
