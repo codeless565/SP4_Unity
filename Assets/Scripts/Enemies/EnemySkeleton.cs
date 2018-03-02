@@ -10,7 +10,6 @@ public class EnemySkeleton : MonoBehaviour
     private EnemyManager m_EnemyManager;
 	private StateMachine m_StateMachine;
 	private SpriteManager m_SpriteManager;
-    private Vector3 m_EnemyDestination;
 
     public void Init(int _level, Vector3[] _wayPoints, int _wayPointCurrID)
     {
@@ -111,7 +110,5 @@ public class EnemySkeleton : MonoBehaviour
     {
         // StateMachine
         m_EnemyManager.GetStateMachine().Update();
-
-        //Debug.Log("States: " + m_EnemyManager.GetStateMachine().CurrentState);
     }
 }
