@@ -1,24 +1,24 @@
 Name,Type,Rarity,Level,Cost,Experience,Health,MaxHealth,Stamina,MaxStamina,Attack,Defence,Movespeed,Sprite name,b_mass,b_special,,,,Item type,Item Rarity
-Long Sword,Weapons,Common,0,1,0,0,0,0,0,100,0,0,weaponlongsword,TRUE,FALSE,,,,Weapons,Common
-Rapier,Weapons,Common,0,0,0,0,0,0,0,300,0,0,weaponrapier,FALSE,TRUE,,,,Helmets,Uncommon
-Bow,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponbow,TRUE,TRUE,,,,Chestpieces,Magic
-Dagger,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weapondagger,TRUE,TRUE,,,,Leggings,Ancient
-Long Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponlongspear,TRUE,TRUE,,,,Shoes,Relic
-Spear,Weapons,Common,0,0,0,0,0,0,0,0,0,0,weaponspear,TRUE,TRUE,,,,Uses,
+Long Sword,Weapons,Common,0,500,0,0,100,0,0,500,0,0,weaponlongsword,TRUE,FALSE,,,,Weapons,Common
+Rapier,Weapons,Common,0,150,0,0,100,0,0,300,0,0,weaponrapier,FALSE,TRUE,,,,Helmets,Uncommon
+Bow,Weapons,Common,0,300,0,0,100,0,0,50,0,0,weaponbow,TRUE,TRUE,,,,Chestpieces,Magic
+Dagger,Weapons,Common,0,100,0,0,100,0,0,200,0,0,weapondagger,TRUE,TRUE,,,,Leggings,Ancient
+Long Spear,Weapons,Common,0,1000,0,0,100,0,0,800,0,0,weaponlongspear,TRUE,TRUE,,,,Shoes,Relic
+Spear,Weapons,Common,0,700,0,0,100,0,0,700,0,0,weaponspear,TRUE,TRUE,,,,Uses,
 Arrow,Uses,Common,0,0,0,0,0,0,0,0,0,0,arrow,TRUE,FALSE,,,,,
-HP Potion,Uses,Common,0,0,0,40,0,0,0,0,0,0,hp,FALSE,FALSE,,,,,
-MP Potion,Uses,Common,0,1000,0,0,0,100,0,0,0,0,mp,TRUE,FALSE,,,,b_mass,COMMON Items that will automatically have upgraded rarity up to Relic
-Leather Helmet,Helmets,Common,0,1000,0,0,100,0,0,0,0,0,helmetleather,TRUE,TRUE,,,,b_special,non-Uses Items with special name
-Chain Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetchain,TRUE,TRUE,,,,Use 'true and 'false!!!,
-Plated Helmet,Helmets,Common,0,0,0,0,0,0,0,0,0,0,helmetplate,TRUE,TRUE,,,,,
-Robe Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecerobe,TRUE,TRUE,,,, ,
-Purple Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,0,chestpiecepurple,TRUE,TRUE,,,,,
-Plated Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceplate,TRUE,TRUE,,,,,
-Leather Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather2,TRUE,TRUE,,,,,
-White Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpieceleather,TRUE,TRUE,,,,,
-Chain Chestpiece,Chestpieces,Common,0,0,0,0,0,0,0,0,0,,chestpiecechain,TRUE,TRUE,,,,,
-Robe Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,0,leggingsrobe,TRUE,TRUE,,,,,
-Green Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsgreen,TRUE,TRUE,,,,,
-Plated Leggings,Leggings,Common,0,0,0,0,0,0,0,0,0,,leggingsplate,TRUE,TRUE,,,,,
-Leather Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,0,shoesleather,TRUE,TRUE,,,,,
-Plated Shoes,Shoes,Common,0,0,0,0,0,0,0,0,0,,shoesplate,TRUE,TRUE,,,,,
+HP Potion,Uses,Common,0,500,0,40,0,0,0,0,0,0,hp,FALSE,FALSE,,,,,
+MP Potion,Uses,Common,0,500,0,0,0,100,0,0,0,0,mp,TRUE,FALSE,,,,b_mass,COMMON Items that will automatically have upgraded rarity up to Relic
+Leather Helmet,Helmets,Common,0,500,0,0,0,0,25,0,25,0,helmetleather,TRUE,TRUE,,,,b_special,non-Uses Items with special name
+Chain Helmet,Helmets,Common,0,1000,0,0,0,0,50,0,50,0,helmetchain,TRUE,TRUE,,,,Use 'true and 'false!!!,
+Plated Helmet,Helmets,Common,0,5000,0,0,0,0,100,0,100,0,helmetplate,TRUE,TRUE,,,,,
+Robe Chestpiece,Chestpieces,Common,0,500,0,0,100,0,0,0,25,0,chestpiecerobe,TRUE,TRUE,,,, ,
+Purple Chestpiece,Chestpieces,Common,0,700,0,0,300,0,0,0,50,0,chestpiecepurple,TRUE,TRUE,,,,,
+Plated Chestpiece,Chestpieces,Common,0,5000,0,0,1000,0,0,0,100,0,chestpieceplate,TRUE,TRUE,,,,,
+Leather Chestpiece,Chestpieces,Common,0,500,0,0,100,0,0,0,25,0,chestpieceleather2,TRUE,TRUE,,,,,
+White Chestpiece,Chestpieces,Common,0,700,0,0,300,0,0,0,50,0,chestpieceleather,TRUE,TRUE,,,,,
+Chain Chestpiece,Chestpieces,Common,0,1000,0,0,500,0,0,0,75,0,chestpiecechain,TRUE,TRUE,,,,,
+Robe Leggings,Leggings,Common,0,500,0,0,0,0,25,0,25,0,leggingsrobe,TRUE,TRUE,,,,,
+Green Leggings,Leggings,Common,0,1000,0,0,0,0,50,0,50,0,leggingsgreen,TRUE,TRUE,,,,,
+Plated Leggings,Leggings,Common,0,5000,0,0,0,0,100,0,100,0,leggingsplate,TRUE,TRUE,,,,,
+Leather Shoes,Shoes,Common,0,500,0,0,0,0,25,0,25,0,shoesleather,TRUE,TRUE,,,,,
+Plated Shoes,Shoes,Common,0,5000,0,0,0,0,100,0,100,0,shoesplate,TRUE,TRUE,,,,,
