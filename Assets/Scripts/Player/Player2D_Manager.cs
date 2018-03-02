@@ -108,8 +108,8 @@ public class Player2D_Manager : MonoBehaviour
 #if UNITY_EDITOR || UNITY_STANDALONE
         inputX = inputY = 0;
 #elif UNITY_ANDROID || UNITY_IPHONE
-        accOffsetX = Input.acceleration.x;
-        accOffsetY = Input.acceleration.y;
+        inputX = Input.acceleration.x;
+        inputY = Input.acceleration.y;
 #endif
 
         m_confusedModifier = 1;
@@ -331,8 +331,26 @@ public class Player2D_Manager : MonoBehaviour
     void AccMove()
     {
         /* Player Movement */
-        inputX =  Input.acceleration.x * 2f - accOffsetX;
-        inputY =  Input.acceleration.y * 2f - accOffsetY;
+        // inputX =  Input.acceleration.x * 2f;
+        // inputY =  Input.acceleration.y * 2f;
+
+        /* Player Sprint */
+        /* More then 20% Stamina , Can Sprint */
+        if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
+        {
+            /* Decrease Stamina */
+            inputX = Input.acceleration.x;
+            inputY = Input.acceleration.y;
+            if (inputY > 0.8f || inputY < -0.8f || inputX > 0.8f || inputX < -0.8f)
+            {
+                statsHolder.Stamina -= 0.01f;
+            }
+        }
+        else
+        {
+            inputX = Mathf.Clamp(Input.acceleration.x, -0.5f, 0.5f);
+            inputY = Mathf.Clamp(Input.acceleration.y, -0.5f, 0.5f);
+        }
 
         if (inputX > 0f || inputX < 0f)
         {

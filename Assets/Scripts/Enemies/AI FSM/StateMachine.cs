@@ -31,20 +31,11 @@ public class StateMachine
     public void AddState(StateBase _newState)
     {
         if (_newState == null)
-        {
-            Debug.Log("AddState - State is null");
             return;
-        }
         if (m_stateMap.ContainsKey(_newState.StateID))
-        {
-            Debug.Log("AddState - State already exists");
             return;
-        }
         if (m_currState == null)
-        {
-            Debug.Log("AddState - Currstate is changed to newstate");
             m_currState = m_nextState = _newState;
-        }
 
         m_stateMap.Add(_newState.StateID, _newState);
     }
@@ -53,7 +44,6 @@ public class StateMachine
     {
         if (m_stateMap.ContainsKey(_nextStateID))
         {
-            Debug.Log("SetNextState - changing state");
             m_nextState = m_stateMap[_nextStateID];
         }
     }

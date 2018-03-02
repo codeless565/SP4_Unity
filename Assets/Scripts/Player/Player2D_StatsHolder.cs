@@ -27,6 +27,8 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     float hpcheck;
     float lvlcheck;
 
+    GameObject LevelingEffect;
+
     private float m_timer = 5.0f;
 
     /* Setters and Getters */
@@ -173,10 +175,12 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
     /* Initializing of Stats */
     void Start()
     {
+        /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
         levelingSystem = GetComponent<LevelingSystem>();
         levelingSystem.Init(this, true);
 
-        /* Stats will be updated accordingly with the leveling system with function <LevelingSystem.Update()> */
+
+        LevelingEffect = GameObject.FindGameObjectWithTag("Holder").GetComponent<StructureObjectHolder>().LevelUpEffect;
     }
     
     void Update()
@@ -227,6 +231,11 @@ public class Player2D_StatsHolder : MonoBehaviour, StatsBase
             {
                 GameObject.FindGameObjectWithTag("PlayerProfileDamage").GetComponent<PlayerProfileStatusAliment>().KillTime = 1;
             }
+        }
+
+        if (playerLevel != lvlcheck)
+        {
+            Instantiate(LevelingEffect, transform.position, Quaternion.identity, transform);
         }
     }
 
