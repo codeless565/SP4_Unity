@@ -10,6 +10,8 @@ public class PetDeerManager : MonoBehaviour
     private PetsManager m_PetsManager;
     private StateMachine m_StateMachine;
 
+    public GameObject m_PlayerHealingSprite;
+
     void Start()
     {
         // Pet Manager
@@ -27,6 +29,7 @@ public class PetDeerManager : MonoBehaviour
         m_PetsManager.SetDistanceApart(0f);
         m_PetsManager.SetGuardRange(0f);
         m_PetsManager.SetFollowRange(0f);
+        m_PetsManager.SetHealRange(0f);
 
         // StateMachine
         m_StateMachine = new StateMachine();
@@ -34,6 +37,7 @@ public class PetDeerManager : MonoBehaviour
         m_PetsManager.GetStateMachine().AddState(new StateDeerGuard("StateDeerGuard", gameObject));
         m_PetsManager.GetStateMachine().AddState(new StateDeerFollow("StateDeerFollow", gameObject));
         m_PetsManager.GetStateMachine().AddState(new StateDeerTeleport("StateDeerTeleport", gameObject));
+        m_PetsManager.GetStateMachine().AddState(new StateDeerHeal("StateDeerHeal", gameObject));
         m_PetsManager.GetStateMachine().SetNextState("StateDeerGuard");
 
         m_PetsManager.EXPReward = m_PetsManager.EXPRewardScaling * m_PetsManager.Level;
@@ -45,6 +49,10 @@ public class PetDeerManager : MonoBehaviour
         // StateMachine
         m_PetsManager.GetStateMachine().Update();
 
-        Debug.Log("State: " + m_PetsManager.GetStateMachine().CurrentState);
+        // Check if Player HP is 0.2 of its Max HP, if so, Change State to HEAL.
+        if(m_PetsManager.GetPlayerStats().Health <= (m_PetsManager.GetPlayerStats().MaxHealth * 0.1f))
+        {
+            m_PetsManager.GetStateMachine().SetNextState("StateDeerHeal");
+        }
     }
 }
