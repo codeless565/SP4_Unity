@@ -249,13 +249,4 @@ public class PetsManager : MonoBehaviour, StatsBase
         m_LevelingSystem = GetComponent<LevelingSystem>();
         m_LevelingSystem.Init(this, false);
     }
-
-    void Update()
-    {
-        // Check HP if it's 0 or not
-        if(m_fHealth <= 0f)
-        {
-            // Go into Recovery State.
-        }
-    }
 }

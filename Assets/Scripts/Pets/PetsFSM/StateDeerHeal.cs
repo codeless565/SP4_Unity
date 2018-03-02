@@ -21,7 +21,6 @@ public class StateDeerHeal : MonoBehaviour, StateBase
         m_StateID = _stateID;
         m_go = _go;
         m_PetsManager = _go.GetComponent<PetsManager>();
-        m_PetDeerManager = _go.GetComponent<PetDeerManager>();
     }
 
     public void EnterState()
@@ -51,13 +50,10 @@ public class StateDeerHeal : MonoBehaviour, StateBase
             {
                 // Count Down
                 m_fHealTimer -= Time.deltaTime;
-                // Render Healing Sprite
-                m_PetDeerManager.m_PlayerHealingSprite.SetActive(true);
 
                 if (m_fHealTimer <= 0f)
                 {
                     m_fHealTimer = 5f;
-                    m_PetDeerManager.m_PlayerHealingSprite.SetActive(false);
              
                     // Heal Player 
                     m_bHasHeal = true;
@@ -72,10 +68,9 @@ public class StateDeerHeal : MonoBehaviour, StateBase
                 {
                     // Increase Player HP
                     m_PetsManager.GetPlayerStats().Health += m_fAddPlayerHP;
-                    // Decrease from Pet HP
-                    m_PetsManager.Health -= m_fAddPlayerHP;
                 }
 
+                m_bHasHeal = false;
                 m_PetsManager.GetStateMachine().SetNextState("StateDeerGuard");
             }
         }

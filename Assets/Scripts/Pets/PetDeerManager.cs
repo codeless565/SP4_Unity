@@ -10,8 +10,6 @@ public class PetDeerManager : MonoBehaviour
     private PetsManager m_PetsManager;
     private StateMachine m_StateMachine;
 
-    public GameObject m_PlayerHealingSprite;
-
     void Start()
     {
         // Pet Manager
