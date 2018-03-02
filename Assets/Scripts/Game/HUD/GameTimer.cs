@@ -28,6 +28,8 @@ public class GameTimer : MonoBehaviour {
 
         if (m_elapseTime <= 0)
         {
+            PlayerPrefs.SetString("KilledBy", "Time");
+
             if (GetComponent<CameraEffects>() != null)
                 GetComponent<CameraEffects>().PlayGameOverEffect();
             else
