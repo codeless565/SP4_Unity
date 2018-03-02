@@ -47,7 +47,7 @@ public class StateDeerFollow : MonoBehaviour, StateBase
         if (m_PetsManager.GetPlayer() != null)
         {
             // Pet will walk to Player
-            m_go.GetComponent<Transform>().position = Vector2.MoveTowards(m_go.GetComponent<Transform>().position, m_PetsManager.GetPlayer().GetComponent<Transform>().position, Time.deltaTime);
+            m_go.GetComponent<Transform>().position = Vector2.MoveTowards(m_go.GetComponent<Transform>().position, m_PetsManager.GetPlayer().GetComponent<Transform>().position, Time.deltaTime * (m_PetsManager.MoveSpeed * 0.4f));
 
             // Change to GUARD when Player is out of range.
             if (m_PetsManager.GetDistanceApart() < m_PetsManager.GetGuardRange())
