@@ -226,13 +226,4 @@ public class BossStatsManager : MonoBehaviour, StatsBase
         }
     }
 
-    private void PlayerHitEnemy()
-    {
-        if (GetComponent<CollisionPlayerMelee>().Attacked)
-        {
-            m_health -= Calculator.Instance.CalculateDamage(m_playerStats.Attack, m_defense);
-            GetComponent<CollisionPlayerMelee>().Attacked = false;
-        }
-    }
-
 }

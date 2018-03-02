@@ -8,10 +8,10 @@ public class TutorialTextBox : MonoBehaviour
     TextBoxManager textboxManager;
     TutorialMode tutMode;
     TutorialSpawn tutSpawn;
-	//public GameObject checkChest;
     Player2D_StatsMenu statsMenu;
     Inventory inventory;
     MerchantStateMachine merchant;
+    GameObject enemy;
 
     Player2D_Manager player;
 
@@ -29,6 +29,9 @@ public class TutorialTextBox : MonoBehaviour
     //Arrows
     public Image HealthArrow, StaminaArrow, EXPArrow, TimerArrow, PPArrow, MinimapArrow, InventoryArrow, LevelArrow;
     public GameObject Arrows;
+
+    //Timer
+    float walkTimer = 10.0f;
 
     // Use this for initialization
    public void Init()
@@ -187,18 +190,19 @@ public class TutorialTextBox : MonoBehaviour
                     {
                         MovedW = true;
                     }
-
+                    
 #elif UNITY_ANDROID || UNITY_IPHONE
-       if( player.inputX > 0)
-                    MovedD = true;
-       if( player.inputX < 0)
-                    MovedA = true;
-       if( player.inputY > 0)
-                    MovedW = true;
-       if( player.inputY < 0)
-                    MovedS = true;
+                    if(walkTimer > 0)
+                        walkTimer -= Time.deltaTime;
+                    else
+                    {
+                        MovedD = true;
+                        MovedA = true;
+                        MovedW = true;
+                        MovedS = true;
+                    }
+                    
 #endif
-
                 }
                 else
                      {
@@ -210,15 +214,17 @@ public class TutorialTextBox : MonoBehaviour
 
             case 13: //spawn enemy
                 tutSpawn.EnemySpawn();
+                enemy = GameObject.FindGameObjectWithTag("Enemy");
                 break;
 
             case 15: //trying stage for attacking
-                if(Input.GetMouseButton(0))
+                if (enemy.GetComponent<EnemyManager>().Health <= 0)
                 {
                     textboxManager.currentLine = 16;
                     pauseBox = false;
                     textboxManager.EnableTextBox();
-                }
+                }  
+//#endif
                 break;
 
             case 16: //spawn chest

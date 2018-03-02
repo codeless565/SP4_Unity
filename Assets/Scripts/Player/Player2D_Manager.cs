@@ -23,14 +23,10 @@ public class Player2D_Manager : MonoBehaviour
 
     /* Getting Player Stats */
     private Player2D_StatsHolder statsHolder;
-
-    /* Show Level Up */
-    [SerializeField]
-    private TextMesh m_levelup_mesh;
-    private float m_fLevelUpTimer = 0.0F;
-    private float m_fLevelUpMaxTimer = 2.0F;
-    private bool m_bCheckLevelUp;
     
+    public GameObject mobile;
+    GameObject AttackBtn, InteractBtn;
+
     /* List storing Player equipment */
     public List<Item> Inventory = new List<Item>();
     public List<Item> getPlayerInventory() { return Inventory; }
@@ -52,7 +48,6 @@ public class Player2D_Manager : MonoBehaviour
     static public int m_confusedModifier;
     private float m_Sprint, m_maxSprint; // sprint 
     
-    private JoyStick m_joyStick;
 
     /* Options */
     private ControlsManager cm;
@@ -67,13 +62,14 @@ public class Player2D_Manager : MonoBehaviour
     {
         /* Stats Things */
         statsHolder = GetComponent<Player2D_StatsHolder>();
-        m_bCheckLevelUp = false;
+
 
         /* Animation */
         animTimer = 0.0f;
         m_fAniTime = 0.1f;
         attackClicked = false;
         p_spriteManager = GetComponent<SpriteManager>();
+        
 
         // set default equipments(will be moved to savefile)
         p_spriteManager.SetHeadEquip(SpriteManager.S_Wardrobe.HEADP_DEFAULT);
@@ -121,8 +117,7 @@ public class Player2D_Manager : MonoBehaviour
             achDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementDisplay>();
         invenDis = GameObject.FindGameObjectWithTag("GameScript").GetComponent<Inventory>();
         tutDis = GameObject.FindGameObjectWithTag("GameScript");
-
-        m_joyStick = GameObject.FindGameObjectWithTag("Holder").GetComponent<MerchantHolder>().JoyStick;
+        
 
     }
     void Requip()
@@ -136,17 +131,6 @@ public class Player2D_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Check Timer to despawn level up
-        if (m_bCheckLevelUp)
-        {
-            m_fLevelUpTimer += Time.deltaTime;
-            if (m_fLevelUpTimer > m_fLevelUpMaxTimer)
-            {
-                m_fLevelUpTimer -= m_fLevelUpMaxTimer;
-                m_bCheckLevelUp = false;
-            }
-        }
-
         // Hot bar key press
         bool bA1State = false;
         if (!bA1State && Input.GetKeyDown(KeyCode.Alpha1))
@@ -224,7 +208,7 @@ public class Player2D_Manager : MonoBehaviour
             bOptionState = false;
 
         /* When a specific Things is ongoing, the player will not move */
-        if ((achDis != null && achDis.AchOpened) || 
+        if ((achDis != null && achDis.AchOpened) ||
         invenDis.InventoryUI || tutDis.GetComponent<TextBoxManager>().tbOpened)
         {
             canMove = false;
@@ -238,6 +222,17 @@ public class Player2D_Manager : MonoBehaviour
         if (canMove)
             Movement2D();
 
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (mobile != null)
+        {
+            foreach (object obj in mobile.transform)
+            {
+                Transform child = (Transform)obj;
+                child.gameObject.SetActive(false);
+            }
+        }
+
+#endif
     }
 
     /* Key Board Movement of the Player */
@@ -330,17 +325,14 @@ public class Player2D_Manager : MonoBehaviour
     /* For Mobile */
     void AccMove()
     {
-        /* Player Movement */
-        // inputX =  Input.acceleration.x * 2f;
-        // inputY =  Input.acceleration.y * 2f;
-
         /* Player Sprint */
         /* More then 20% Stamina , Can Sprint */
         if (statsHolder.Stamina >= statsHolder.MaxStamina * 0.2f)
         {
-            /* Decrease Stamina */
+            /* Player Movement */
             inputX = Input.acceleration.x;
             inputY = Input.acceleration.y;
+            /* Decrease Stamina */
             if (inputY > 0.8f || inputY < -0.8f || inputX > 0.8f || inputX < -0.8f)
             {
                 statsHolder.Stamina -= 0.01f;
@@ -383,54 +375,13 @@ public class Player2D_Manager : MonoBehaviour
         p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
     }
 
-    /* JoyStick Moving */
-    void JoyStickMove()
-    {
-        inputX = m_joyStick.Direction.x;
-        Debug.Log("JoyStick DirX: " + m_joyStick.Direction.x);
-        inputY = m_joyStick.Direction.y;
-        Debug.Log("JoyStick DirY: " + m_joyStick.Direction.y);
-
-
-        if (inputX > 0f || inputX < 0f)
-        {
-            /* If have then move by Confusion */
-            transform.Translate(new Vector3(inputX * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0.0f, 0f));
-
-            /* Sprite Movement */
-            p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(inputX, 0.0f);
-            p_spriteManager.SetLastMove(lastMove.x, 0.0f);
-
-            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
-        }
-        if (inputY > 0f || inputY < 0f)
-        {
-            /* If have then move by Confusion */
-            transform.Translate(new Vector3(0.0f, inputY * statsHolder.MoveSpeed * m_confusedModifier * m_Sprint * Time.deltaTime, 0f));
-
-            /* Sprite Movement */
-            p_spriteManager.SetMoving(true);
-            lastMove = new Vector2(0.0f, inputY);
-            p_spriteManager.SetLastMove(0.0f, lastMove.y);
-
-            if (GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>() != null)
-                GameObject.FindGameObjectWithTag("GameScript").GetComponent<AchievementsManager>().UpdateProperties("PLAYER_MOVE", 1 * (int)m_Sprint);
-        }
-
-        /* Sprite Movement */
-        p_spriteManager.SetMove(inputX * m_confusedModifier, inputY * m_confusedModifier);
-
-    }
-
     /* Movement of Player - Camera is Fixed, Player will move according to its direction */
     void Movement2D()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         KeyMove();
 #elif UNITY_ANDROID || UNITY_IPHONE
-        AccMove();
+            AccMove();
 #endif
 
         /* Getting the Direction of the Player ( both key and mobile ) */
