@@ -336,12 +336,14 @@ public class Player2D_Manager : MonoBehaviour
             if (inputY > 0.8f || inputY < -0.8f || inputX > 0.8f || inputX < -0.8f)
             {
                 statsHolder.Stamina -= 0.01f;
+                m_Sprint = m_maxSprint;
             }
         }
         else
         {
             inputX = Mathf.Clamp(Input.acceleration.x, -0.5f, 0.5f);
             inputY = Mathf.Clamp(Input.acceleration.y, -0.5f, 0.5f);
+            m_Sprint = 1;
         }
 
         if (inputX > 0f || inputX < 0f)
