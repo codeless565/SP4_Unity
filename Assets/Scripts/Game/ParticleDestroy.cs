@@ -28,7 +28,7 @@ public class ParticleDestroy : MonoBehaviour
         {
             if (transform.parent != null)
             {
-                Destroy(transform.parent);
+                Destroy(transform.parent.gameObject);
                 return;
             }
             Destroy(gameObject);

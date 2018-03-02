@@ -180,6 +180,9 @@ public class BossStatsManager : MonoBehaviour, StatsBase
 
     Player2D_StatsHolder m_playerStats;
 
+    float hpCheck;
+    bool dead;
+
     // Use this for initialization
     public void Init(int _level)
     {
@@ -196,9 +199,8 @@ public class BossStatsManager : MonoBehaviour, StatsBase
         m_StateMachine.AddState(new StateBossRage("StateRage", gameObject));
         m_StateMachine.SetNextState("StateIdle");
 
+        dead = false;
     }
-
-    float hpCheck;
 
     // Update is called once per frame
     void Update()
@@ -209,9 +211,16 @@ public class BossStatsManager : MonoBehaviour, StatsBase
             /* Kill Boss if he has no more hp 
                and spawn royalChests
              */
-            GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("CONGRADULATION!");
-            GetComponent<BossDefeatSpawn>().InitSpawn(transform.position);
-            Destroy(gameObject);
+            DeathAnimation();
+
+            if (!dead)
+            {
+                GameObject.FindGameObjectWithTag("GameScript").GetComponent<CreateAnnouncement>().MakeAnnouncement("CONGRADULATION!");
+                GetComponent<BossDefeatSpawn>().InitSpawn(transform.position);
+                dead = true;
+            }
+            return;
+            //Destroy(gameObject);
         }
 
         m_StateMachine.Update();
@@ -226,13 +235,13 @@ public class BossStatsManager : MonoBehaviour, StatsBase
         }
     }
 
-    private void PlayerHitEnemy()
+
+    void DeathAnimation()
     {
-        if (GetComponent<CollisionPlayerMelee>().Attacked)
-        {
-            m_health -= Calculator.Instance.CalculateDamage(m_playerStats.Attack, m_defense);
-            GetComponent<CollisionPlayerMelee>().Attacked = false;
-        }
+        GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, GetComponent<SpriteRenderer>().color.a - Time.deltaTime);
+
+        if (GetComponent<SpriteRenderer>().color.a <= 0)
+            Destroy(gameObject);
     }
 
 }
